@@ -19,8 +19,37 @@
   #:use-module (gnu packages golang-xyz)
   #:use-module (gnu packages man)
   #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages rust)
   #:use-module (px packages golang-xyz)
   #:use-module (px self))
+
+(define-public binsider
+  (package
+    (name "binsider")
+    (version "0.3.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/orhun/binsider")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1z6mw5xzhnmpixvyq3c1gzr1qvrhy3kpqvpyhg0rj7z7f9jwbwk5"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:install-source? #f
+       #:tests? #f
+       #:rust ,rust-1.88))
+    (inputs
+     (px-cargo-inputs 'binsider))
+    (home-page "https://binsider.dev")
+    (synopsis "TUI for analyzing ELF binaries")
+    (description
+     "Binsider is a terminal user interface for analyzing ELF binaries.  It
+enables static and dynamic analysis, string extraction, library inspection,
+and hexdump generation through an interactive command-line environment.")
+    (license (list license:expat license:asl2.0))))
 
 (define-public broot
   (package
