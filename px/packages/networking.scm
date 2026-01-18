@@ -29,6 +29,7 @@
   #:use-module (gnu packages fontutils)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages gl)
+  #:use-module (gnu packages jemalloc)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages xdisorg)
@@ -36,6 +37,7 @@
   #:use-module (gnu packages nss)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages rust)
+  #:use-module (gnu packages sqlite)
   #:use-module (gnu packages vpn)
   #:use-module (gnu packages web)
   #:use-module (gnu packages xml)
@@ -411,6 +413,43 @@ service and command-line interface for connecting to IVPN servers using
 OpenVPN or WireGuard protocols.  Features include kill-switch, multi-hop
 connections, and custom DNS settings.")
     (license license:gpl3+)))
+
+(define-public oha
+  (package
+    (name "oha")
+    (version "1.12.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "oha" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "095dfi7xrcgrisdgb1s2richwpxy7i4sdhwd46ikwfsb3w060yps"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:install-source? #f
+       #:tests? #f
+       #:rust ,rust-1.86
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'override-jemalloc
+           (lambda* (#:key inputs #:allow-other-keys)
+             (let ((jemalloc (assoc-ref inputs "jemalloc")))
+               (setenv "CARGO_FEATURE_UNPREFIXED_MALLOC_ON_SUPPORTED_PLATFORMS" "1")
+               (setenv "JEMALLOC_OVERRIDE"
+                       (string-append jemalloc "/lib/libjemalloc.so"))))))))
+    (native-inputs (list pkg-config))
+    (inputs
+     (cons* jemalloc
+            sqlite
+            (px-cargo-inputs 'oha)))
+    (home-page "https://github.com/hatoo/oha")
+    (synopsis "HTTP load generator with real-time TUI")
+    (description
+     "Oha is an HTTP load generator inspired by rakyll/hey, written in Rust.
+It sends configurable load to web applications and displays real-time
+statistics in a terminal user interface powered by ratatui.")
+    (license license:expat)))
 
 (define-public sniffnet
   (package
