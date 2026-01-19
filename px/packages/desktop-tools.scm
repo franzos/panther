@@ -17,6 +17,7 @@
   #:use-module (guix gexp)
   #:use-module (guix utils)
   #:use-module (nonguix build-system chromium-binary)
+  #:use-module (gnu packages backup)
   #:use-module (gnu packages boost)
   #:use-module (gnu packages bash)
   #:use-module (gnu packages check)
@@ -36,6 +37,7 @@
   #:use-module (gnu packages ncurses)
   #:use-module (gnu packages mate)
   #:use-module (gnu packages maths)
+  #:use-module (gnu packages multiprecision)
   #:use-module (gnu packages pdf)
   #:use-module (gnu packages perl)
   #:use-module (gnu packages pkg-config)
@@ -51,6 +53,7 @@
   #:use-module (gnu packages xorg)
   #:use-module (gnu packages kde-frameworks)
   #:use-module (gnu packages serialization)
+  #:use-module (gnu packages xml)
   #:use-module (px packages qt)
   #:use-module (px packages common)
   #:use-module (px packages library)
@@ -61,58 +64,60 @@
 (define-public albert-launcher
   (package
     (name "albert-launcher")
-    (version "v0.16.1-0")
+    (version "33.0.1")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
              (url "https://github.com/albertlauncher/albert")
-             (commit "579d063b8e90fd854fd4738480c2d8dc833f908e")
+             (commit (string-append "v" version))
              (recursive? #t)))
        (sha256
-        (base32 "1cqh4nsvxwarxm7v0fyzabph3c2ff3ap0q2xi2h4c0s2snrk4qh4"))
+        (base32 "19y74xv4acs65d2f80fc7qi1n3pvx7i0za57jdrb8iybbjyg4wnc"))
        (file-name (git-file-name name version))))
     (build-system cmake-build-system)
     (arguments
-     '(#:tests? #f
-       #:configure-flags '("-DBUILD_VIRTUALBOX=OFF"
-                           "-DCMAKE_INSTALL_LIBDIR=libs")
-       #:phases (modify-phases %standard-phases
-                  (add-after 'unpack 'patch-cmakelists
-                    (lambda _
-                      ;; path-main-cpp-add-plugin-dirs
-                      (substitute* '("src/app/main.cpp")
-                        (("QStringList dirs = \\{")
-                         (string-append "QStringList dirs = {\"" %output
-                                        "/libs\", ")))
-                      ;; Adding X11Extras to target_link_libraries of widgetboxmodel plugin
-                      (substitute* '("plugins/widgetboxmodel/CMakeLists.txt")
-                        (("COMPONENTS Widgets")
-                         "COMPONENTS Widgets X11Extras"))
-                      (substitute* '("plugins/widgetboxmodel/CMakeLists.txt")
-                        (("Qt5::Widgets")
-                         "Qt5::Widgets Qt5::X11Extras X11"))
-                      ;; Adding X11Extras to target_link_libraries of qmlboxmodel plugin
-                      (substitute* '("plugins/qmlboxmodel/CMakeLists.txt")
-                        (("COMPONENTS Widgets")
-                         "COMPONENTS Widgets X11Extras"))
-                      (substitute* '("plugins/qmlboxmodel/CMakeLists.txt")
-                        (("Qt5::Widgets")
-                         "Qt5::Widgets Qt5::X11Extras X11"))
-                      #t)))))
-    (native-inputs `(("libx11" ,libx11)
-                     ("muparser" ,muparser)
-                     ("pkg-config" ,pkg-config)
-                     ("python3" ,python)
-                     ("qtbase" ,qtbase-5)
-                     ("qtcharts" ,qtcharts)
-                     ("qtdeclarative" ,qtdeclarative-5)
-                     ("qtsvg" ,qtsvg-5)
-                     ("qtx11extras" ,qtx11extras)))
+     (list
+      #:tests? #f
+      #:configure-flags #~(list "-DBUILD_TESTS=OFF")
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'set-plugin-path
+            (lambda _
+              ;; Add output lib/albert directory to plugin search path
+              (substitute* "src/app/qtpluginprovider.cpp"
+                (("paths << \"../lib\";")
+                 (string-append "paths << \"" #$output "/lib/albert\";\n"
+                                "    paths << \"../lib\";")))))
+          (add-after 'install 'wrap-albert
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (let* ((out (assoc-ref outputs "out"))
+                     (bin (string-append out "/bin/albert"))
+                     (qt (assoc-ref inputs "qtbase")))
+                (wrap-program bin
+                  `("QT_PLUGIN_PATH" ":" prefix
+                    (,(string-append qt "/lib/qt6/plugins"))))))))))
+    (native-inputs (list git-minimal libxml2 pkg-config qttools))
+    (inputs (list bash-minimal
+                  gmp
+                  libarchive
+                  libqalculate
+                  libx11
+                  mpfr
+                  muparser
+                  python
+                  qcoro-qt6
+                  qtbase
+                  qtdeclarative
+                  qtkeychain-qt6
+                  qtscxml
+                  qtsvg))
     (home-page "https://albertlauncher.github.io/")
-    (synopsis "Albert is a unified and efficient access to your machine.")
+    (synopsis "Fast and flexible keyboard launcher")
     (description
-     "Albert is a desktop agnostic launcher. Its goals are usability and beauty, performance and extensibility. It is written in C++ and based on the Qt framework.")
+     "Albert is a desktop agnostic, plugin-based keyboard launcher.  Its goals
+are usability and beauty, performance and extensibility.  It is written in C++
+and based on the Qt6 framework.")
     (license license:gpl3+)))
 
 (define-public qlipper
