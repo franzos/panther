@@ -13,15 +13,64 @@
   #:use-module (guix utils)
   #:use-module (ice-9 match)
   #:use-module (nonguix build-system binary)
+  #:use-module (gnu packages base)
   #:use-module (gnu packages compression)
+  #:use-module (gnu packages gcc)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages golang)
   #:use-module (gnu packages golang-xyz)
   #:use-module (gnu packages man)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages rust)
+  #:use-module (gnu packages tls)
   #:use-module (px packages golang-xyz)
   #:use-module (px self))
+
+(define-public codex
+  (package
+    (name "codex")
+    (version "0.87.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/openai/codex/releases/download/rust-v"
+             version "/codex-"
+             (match (or (%current-system) (%current-target-system))
+               ("x86_64-linux" "x86_64-unknown-linux-gnu")
+               ("aarch64-linux" "aarch64-unknown-linux-gnu")) ".tar.gz"))
+       (sha256
+        (base32
+         (match (or (%current-system) (%current-target-system))
+           ("x86_64-linux" "1iwwpjg3wr2jyczvd4dfqfqbb4qbn49s5qkxpmaa4wiis42w9mbw")
+           ("aarch64-linux" "1hqicw12v9n07fac3bs506pgbnswl43aiiq0b0m3yx0zpg5ywzrn"))))))
+    (build-system binary-build-system)
+    (arguments
+     (list
+      #:install-plan
+      #~`((,(string-append "codex-"
+                           #$(match (or (%current-system) (%current-target-system))
+                               ("x86_64-linux" "x86_64-unknown-linux-gnu")
+                               ("aarch64-linux" "aarch64-unknown-linux-gnu")))
+           "bin/codex"))
+      #:patchelf-plan
+      #~`((,(string-append "codex-"
+                           #$(match (or (%current-system) (%current-target-system))
+                               ("x86_64-linux" "x86_64-unknown-linux-gnu")
+                               ("aarch64-linux" "aarch64-unknown-linux-gnu")))
+           ("glibc" "gcc:lib" "openssl")))))
+    (inputs `(("glibc" ,glibc)
+               ("gcc:lib" ,gcc "lib")
+               ("openssl" ,openssl)))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
+    (home-page "https://github.com/openai/codex")
+    (synopsis "AI coding agent from OpenAI")
+    (description
+     "Codex CLI is an AI-powered coding agent from OpenAI that runs locally
+on your computer.  It assists with software development tasks directly within
+a terminal environment, providing code suggestions, explanations, and
+automated coding assistance.")
+    (license license:asl2.0)))
 
 (define-public binsider
   (package
