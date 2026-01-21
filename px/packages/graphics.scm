@@ -7,22 +7,33 @@
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix gexp)
+  #:use-module (guix build-system cargo)
   #:use-module (guix build-system meson)
   #:use-module (nonguix build-system binary)
+  #:use-module (gnu packages assembly)
   #:use-module (gnu packages base)
   #:use-module (gnu packages bash)
+  #:use-module (gnu packages cmake)
   #:use-module (gnu packages compression)
+  #:use-module (gnu packages fontutils)
+  #:use-module (gnu packages freedesktop)
+  #:use-module (gnu packages gcc)
+  #:use-module (gnu packages gl)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages image-processing)
+  #:use-module (gnu packages linux)
+  #:use-module (gnu packages perl)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
   #:use-module (gnu packages tls)
+  #:use-module (gnu packages vulkan)
   #:use-module (gnu packages webkit)
-  #:use-module (gnu packages gcc)
-  #:use-module (gnu packages gl)
-  #:use-module (gnu packages vulkan))
+  #:use-module (gnu packages xdisorg)
+  #:use-module (gnu packages xml)
+  #:use-module (gnu packages xorg)
+  #:use-module (px self))
 
 (define-public rapidraw
   (package
@@ -158,4 +169,67 @@ It can display very large images quickly and supports a wide range of image
 formats including TIFF, PNG, JPEG, RAW, OpenEXR, FITS, and many scientific
 and technical formats.  It handles various pixel types from 1-bit mono to
 128-bit double precision complex.")
+    (license license:expat)))
+
+(define-public oculante
+  (package
+    (name "oculante")
+    (version "0.9.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "oculante" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0jdwz5i01bmvm9n5bhs3wly6295s13ca5jv9991ysmbpd1n83bq4"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:install-source? #f
+       #:tests? #f
+       #:phases
+       (modify-phases %standard-phases
+         (add-before 'build 'set-cmake-policy
+           (lambda _
+             ;; Workaround for bundled glslang having old cmake_minimum_required
+             (setenv "CMAKE_POLICY_VERSION_MINIMUM" "3.5")))
+         (add-after 'install 'wrap-program
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (let ((out (assoc-ref outputs "out"))
+                   (mesa (assoc-ref inputs "mesa"))
+                   (vulkan (assoc-ref inputs "vulkan-loader"))
+                   (wayland (assoc-ref inputs "wayland"))
+                   (libxkbcommon (assoc-ref inputs "libxkbcommon")))
+               (wrap-program (string-append out "/bin/oculante")
+                 `("LD_LIBRARY_PATH" ":" prefix
+                   (,(string-append mesa "/lib")
+                    ,(string-append vulkan "/lib")
+                    ,(string-append wayland "/lib")
+                    ,(string-append libxkbcommon "/lib"))))))))))
+    (native-inputs
+     (list cmake
+           nasm
+           perl
+           pkg-config))
+    (inputs
+     (cons* alsa-lib
+            expat
+            fontconfig
+            freetype
+            gtk+
+            libxcb
+            libxkbcommon
+            mesa
+            vulkan-loader
+            wayland
+            `(,zstd "lib")
+            (px-cargo-inputs 'oculante)))
+    (home-page "https://github.com/woelper/oculante")
+    (synopsis "Minimalistic image viewer with analysis and editing tools")
+    (description
+     "Oculante is a fast, minimalistic, cross-platform image viewer with
+analysis and editing capabilities.  It supports numerous image formats
+including common formats like PNG, JPEG, GIF, and specialized formats like
+RAW, PSD, HDR, HEIC, and AVIF.  Features include GPU-accelerated rendering,
+color analysis tools, basic editing operations, and support for animated
+images.")
     (license license:expat)))
