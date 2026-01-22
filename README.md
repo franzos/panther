@@ -122,6 +122,59 @@ herd status foot-server   # Check status
 
 ## System Services
 
+### IOTA Node
+
+Run an IOTA full node or validator node.
+
+**Prerequisites:**
+
+1. Create configuration file (e.g., `/etc/iota/fullnode.yaml`)
+2. Download genesis blob for your network (mainnet/testnet/devnet)
+3. For validators: generate key pairs
+
+**Usage:**
+
+```scheme
+(use-modules (px services iota))
+
+;; Basic full node
+(service iota-node-service-type
+         (iota-node-configuration
+          (config-file "/etc/iota/fullnode.yaml")))
+
+;; With custom settings
+(service iota-node-service-type
+         (iota-node-configuration
+          (config-file "/etc/iota/validator.yaml")
+          (data-directory "/var/lib/iota")
+          (log-file "/var/log/iota-node.log")
+          (log-level "info,iota_core=debug,consensus=debug")))
+```
+
+**Service management:**
+
+```bash
+herd status iota-node   # Check status
+herd start iota-node    # Start node
+herd stop iota-node     # Stop node
+```
+
+**Configuration options:**
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `config-file` | (required) | Path to fullnode.yaml or validator.yaml |
+| `user` | `"iota"` | System user to run as |
+| `group` | `"iota"` | System group |
+| `data-directory` | `"/var/lib/iota"` | Database and state storage |
+| `log-file` | `"/var/log/iota-node.log"` | Log output location |
+| `log-level` | `"info,iota_core=debug,..."` | Rust log levels |
+
+**Required ports:**
+
+- TCP/9000 - JSON-RPC
+- UDP/8084 - P2P sync
+
 ### Tailscale
 
 Tailscale is a zero-config VPN built on WireGuard.
