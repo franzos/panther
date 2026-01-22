@@ -47,6 +47,7 @@
                   (lambda (port)
                     (format port "#!~a
 export DISABLE_AUTOUPDATER=1
+export DISABLE_INSTALLATION_CHECKS=1
 exec ~a \"$@\"
 "
                             (search-input-file inputs "bin/bash")
