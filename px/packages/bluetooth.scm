@@ -34,7 +34,7 @@
 (define-public overskride
   (package
     (name "overskride")
-    (version "0.6.5")
+    (version "0.6.6")
     (source
      (origin
        (method git-fetch)
@@ -43,7 +43,7 @@
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0v8bqyhhqrg6cf83xb58gql383ks408xjq9rjn1wc4vwzllffzmb"))))
+        (base32 "1wkvf09q6ds7njn0zhxpkqzvy01vhxksll5b4bzazc7nbv9iz9i4"))))
     (build-system meson-build-system)
     (arguments
      `(#:glib-or-gtk? #t
