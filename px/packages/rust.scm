@@ -1,0 +1,68 @@
+;;; Package Repository for GNU Guix
+;;; Copyright © 2025 Franz Geffke <mail@gofranz.com>
+
+(define-module (px packages rust)
+  #:use-module ((guix licenses) #:prefix license:)
+  #:use-module (guix packages)
+  #:use-module (guix download)
+  #:use-module (guix gexp)
+  #:use-module (guix utils)
+  #:use-module (gnu packages rust))
+
+;; Helper to construct rust source URI
+(define* (rust-uri version #:key (dist "static"))
+  (string-append "https://" dist ".rust-lang.org/dist/"
+                 "rustc-" version "-src.tar.gz"))
+
+;; Bootstrap a new rust version from a base rust
+(define* (rust-bootstrapped-package base-rust version checksum)
+  "Bootstrap rust VERSION with source checksum CHECKSUM using BASE-RUST."
+  (package
+    (inherit base-rust)
+    (version version)
+    (source
+     (origin
+       (inherit (package-source base-rust))
+       (uri (rust-uri version))
+       (sha256 (base32 checksum))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments base-rust)
+       ((#:disallowed-references _ '())
+        (list (this-package-native-input "rustc-bootstrap")))))
+    (native-inputs
+     (modify-inputs (package-native-inputs base-rust)
+       (replace "rustc-bootstrap" base-rust)
+       (replace "cargo-bootstrap" (list base-rust "cargo"))))))
+
+(define-public rust-1.89
+  (let ((base-rust
+         (rust-bootstrapped-package rust-1.88 "1.89.0"
+          "0395ax8d138ch65fzm1y9xf2s4661am5k3yj3cav16fx83sgjxi5")))
+    (package
+      (inherit base-rust)
+      (source
+       (origin
+         (inherit (package-source base-rust))
+         (snippet
+          '(begin
+             (for-each delete-file-recursively
+                       '("src/llvm-project"
+                         "vendor/jemalloc-sys-0.5.3+5.3.0-patched/jemalloc"
+                         "vendor/jemalloc-sys-0.5.4+5.3.0-patched/jemalloc"
+                         "vendor/openssl-src-111.28.2+1.1.1w/openssl"
+                         "vendor/openssl-src-300.5.0+3.5.0/openssl"
+                         "vendor/tikv-jemalloc-sys-0.5.4+5.3.0-patched/jemalloc"
+                         "vendor/tikv-jemalloc-sys-0.6.0+5.3.0-1-ge13ca993e8ccb9ba9847cc330696e02839f328f7/jemalloc"))
+             ;; Remove vendored dynamically linked libraries.
+             ;; find . -not -type d -executable -exec file {} \+ | grep ELF
+             ;; Also remove the bundled (mostly Windows) libraries.
+             (for-each delete-file
+                       (find-files "vendor" "\\.(a|dll|exe|lib)$"))
+             ;; Adjust vendored dependency to explicitly use rustix with libc backend.
+             (substitute* '("vendor/tempfile-3.14.0/Cargo.toml"
+                            "vendor/tempfile-3.16.0/Cargo.toml"
+                            "vendor/tempfile-3.19.0/Cargo.toml"
+                            "vendor/tempfile-3.19.1/Cargo.toml"
+                            "vendor/tempfile-3.20.0/Cargo.toml")
+               (("features = \\[\"fs\"" all)
+                (string-append all ", \"use-libc\""))))))))))
