@@ -7830,6 +7830,10 @@
   (crate-source "newline-converter" "0.3.0"
                 "0zyw2hyjl89rj1zmp9n8fq69pbfp9zl1cbal73agxjxixjbv1dj7"))
 
+(define rust-niri-ipc-25.11.0
+  (crate-source "niri-ipc" "25.11.0"
+                "16ij0mh28nfshzkbmdml6ysrqdsqfs1ndkskx0n2ix9pwjs9xg8j"))
+
 (define rust-nix-0.22.3
   (crate-source "nix" "0.22.3"
                 "1bsgc8vjq07a1wg9vz819bva3dvn58an4r87h80dxrfqkqanz4g4"))
@@ -11653,6 +11657,10 @@
   (crate-source "swash" "0.1.19"
                 "18ic5i3zzayd4f05k66y1mrrrpgdf21c2n27myajrpcx6lzrzmfb"))
 
+(define rust-swayipc-3.0.3
+  (crate-source "swayipc" "3.0.3"
+                "0dn733vl3fhqvs1ljfhwcgxgdn7z3xwyydba0r98ps4q5v5m131b"))
+
 (define rust-swayipc-async-2.0.1
   (crate-source "swayipc-async" "2.0.1"
                 "0x2gb68ah524sjfmgmmaph642n3vimvf5zqday3qarcydz6swbl1"))
@@ -11664,6 +11672,10 @@
 (define rust-swayipc-types-1.3.0
   (crate-source "swayipc-types" "1.3.0"
                 "1cynzj51jlvbbhxzyk4gjchamqyh8kwjd5yz9b0cq9fqb503pd24"))
+
+(define rust-swayipc-types-1.4.3
+  (crate-source "swayipc-types" "1.4.3"
+                "0kra65b7mry2wjxgvyf9qg1nkmx81dw8s4gm0j6jx80xkn4pg4m5"))
 
 (define rust-swayipc-types-2.0.1
   (crate-source "swayipc-types" "2.0.1"
@@ -12071,6 +12083,10 @@
   (crate-source "thiserror" "2.0.17"
                 "1j2gixhm2c3s6g96vd0b01v0i0qz1101vfmw0032mdqj1z58fdgn"))
 
+(define rust-thiserror-2.0.18
+  (crate-source "thiserror" "2.0.18"
+                "1i7vcmw9900bvsmay7mww04ahahab7wmr8s925xc083rpjybb222"))
+
 (define rust-thiserror-2.0.9
   (crate-source "thiserror" "2.0.9"
                 "1k5j0ri0kjrnlblv5ikaglbkg1sxxwh0qrxbidxgc38rs0zn8wph"))
@@ -12110,6 +12126,10 @@
 (define rust-thiserror-impl-2.0.17
   (crate-source "thiserror-impl" "2.0.17"
                 "04y92yjwg1a4piwk9nayzjfs07sps8c4vq9jnsfq9qvxrn75rw9z"))
+
+(define rust-thiserror-impl-2.0.18
+  (crate-source "thiserror-impl" "2.0.18"
+                "1mf1vrbbimj1g6dvhdgzjmn6q09yflz2b92zs1j9n3k7cxzyxi7b"))
 
 (define rust-thiserror-impl-2.0.9
   (crate-source "thiserror-impl" "2.0.9"
@@ -15362,6 +15382,10 @@
   (crate-source "zmij" "1.0.15"
                 "1lh3l2yqwdylg4mkn9y9pmpmng34g2k328d6km8c3qsg3w2krxll"))
 
+(define rust-zmij-1.0.16
+  (crate-source "zmij" "1.0.16"
+                "0r8swld9cwnyvdfamq4063ngwxdzckg4922ayk7likma4mc19kfz"))
+
 (define rust-zopfli-0.8.1
   (crate-source "zopfli" "0.8.1"
                 "0ip9azz9ldk19m0m1hdppz3n5zcz0cywbg1vx59g4p5c3cwry0g5"))
@@ -15831,6 +15855,76 @@
                 "0xk8maai7gyxda673mmw3pj1hdizy5fpi7287vaywykkk19sk4zm"))
 
 (define-cargo-inputs lookup-cargo-inputs
+                     (arbtt-capture-wl =>
+                                       (list
+                                        rust-android-system-properties-0.1.5
+                                        rust-anstream-0.6.21
+                                        rust-anstyle-1.0.13
+                                        rust-anstyle-parse-0.2.7
+                                        rust-anstyle-query-1.1.5
+                                        rust-anstyle-wincon-3.0.11
+                                        rust-anyhow-1.0.100
+                                        rust-autocfg-1.5.0
+                                        rust-bitflags-2.10.0
+                                        rust-block2-0.6.2
+                                        rust-bumpalo-3.19.1
+                                        rust-cc-1.2.53
+                                        rust-cfg-if-1.0.4
+                                        rust-cfg-aliases-0.2.1
+                                        rust-chrono-0.4.43
+                                        rust-clap-4.5.54
+                                        rust-clap-builder-4.5.54
+                                        rust-clap-derive-4.5.49
+                                        rust-clap-lex-0.7.7
+                                        rust-colorchoice-1.0.4
+                                        rust-core-foundation-sys-0.8.7
+                                        rust-ctrlc-3.5.1
+                                        rust-dispatch2-0.3.0
+                                        rust-find-msvc-tools-0.1.8
+                                        rust-heck-0.5.0
+                                        rust-iana-time-zone-0.1.64
+                                        rust-iana-time-zone-haiku-0.1.2
+                                        rust-is-terminal-polyfill-1.70.2
+                                        rust-itoa-1.0.17
+                                        rust-js-sys-0.3.85
+                                        rust-libc-0.2.180
+                                        rust-log-0.4.29
+                                        rust-memchr-2.7.6
+                                        rust-niri-ipc-25.11.0
+                                        rust-nix-0.30.1
+                                        rust-num-traits-0.2.19
+                                        rust-objc2-0.6.3
+                                        rust-objc2-encode-4.1.0
+                                        rust-once-cell-1.21.3
+                                        rust-once-cell-polyfill-1.70.2
+                                        rust-proc-macro2-1.0.105
+                                        rust-quote-1.0.43
+                                        rust-rustversion-1.0.22
+                                        rust-serde-1.0.228
+                                        rust-serde-core-1.0.228
+                                        rust-serde-derive-1.0.228
+                                        rust-serde-json-1.0.149
+                                        rust-shlex-1.3.0
+                                        rust-strsim-0.11.1
+                                        rust-swayipc-3.0.3
+                                        rust-swayipc-types-1.4.3
+                                        rust-syn-2.0.114
+                                        rust-thiserror-2.0.18
+                                        rust-thiserror-impl-2.0.18
+                                        rust-unicode-ident-1.0.22
+                                        rust-utf8parse-0.2.2
+                                        rust-wasm-bindgen-0.2.108
+                                        rust-wasm-bindgen-macro-0.2.108
+                                        rust-wasm-bindgen-macro-support-0.2.108
+                                        rust-wasm-bindgen-shared-0.2.108
+                                        rust-windows-core-0.62.2
+                                        rust-windows-implement-0.60.2
+                                        rust-windows-interface-0.59.3
+                                        rust-windows-link-0.2.1
+                                        rust-windows-result-0.4.1
+                                        rust-windows-strings-0.5.1
+                                        rust-windows-sys-0.61.2
+                                        rust-zmij-1.0.16))
                      (binsider =>
                                (list rust-addr2line-0.25.1
                                      rust-adler2-2.0.1

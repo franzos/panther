@@ -57,6 +57,7 @@
   #:use-module (px packages qt)
   #:use-module (px packages common)
   #:use-module (px packages library)
+  #:use-module (px packages haskell)
   #:use-module (px packages themes)
   #:use-module (px self)
   #:use-module (srfi srfi-1))
@@ -586,3 +587,30 @@ interface to control NetworkManager connections.  It supports dmenu, rofi,
 wofi, bemenu, and other dmenu-compatible launchers.  Features include managing
 WiFi and wired connections, VPN support, and Bluetooth tethering.")
     (license license:expat)))
+
+(define-public arbtt-capture-wl
+  (package
+    (name "arbtt-capture-wl")
+    (version "0.0.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/franzos/arbtt-capture-wl")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1wi1kb1rlvchjrhyl8b9c7rjxi4rn3jvrmy0fv15gry3sqbwxymw"))))
+      (build-system cargo-build-system)
+      (arguments
+       `(#:install-source? #f))
+      (inputs
+       (cons* arbtt (px-cargo-inputs 'arbtt-capture-wl)))
+      (home-page "https://github.com/franzos/arbtt-capture-wl")
+      (synopsis "arbtt capture for Wayland compositors")
+      (description
+       "arbtt-capture-wl is a Wayland-native window tracker for the arbtt
+(Automatic Rule-Based Time Tracker) system.  It captures active window
+information from Wayland compositors like niri and sway, writing to the
+standard arbtt log format for analysis with arbtt-stats.")
+    (license license:gpl3)))
