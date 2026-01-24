@@ -7,6 +7,7 @@
   #:use-module (guix download)
   #:use-module (guix gexp)
   #:use-module (guix utils)
+  #:use-module (guix platform)
   #:use-module (gnu packages rust))
 
 ;; Helper to construct rust source URI
@@ -97,3 +98,63 @@
                             "vendor/tempfile-3.20.0/Cargo.toml")
                (("features = \\[\"fs\"" all)
                 (string-append all ", \"use-libc\""))))))))))
+
+;; Rust 1.91 has bootstrap changes - cargo is now built as stage2 tool
+(define-public rust-1.91
+  (let ((base-rust
+         (rust-bootstrapped-package rust-1.90 "1.91.0"
+          "12iysk87bmhlcdcbr939y8cdfcx0an4z9ixjlbq16c3ma60m4zrj")))
+    (package
+      (inherit base-rust)
+      (source
+       (origin
+         (inherit (package-source base-rust))
+         (snippet
+          '(begin
+             (for-each delete-file-recursively
+                       '("src/llvm-project"
+                         "vendor/jemalloc-sys-0.5.3+5.3.0-patched/jemalloc"
+                         "vendor/jemalloc-sys-0.5.4+5.3.0-patched/jemalloc"
+                         "vendor/openssl-src-111.28.2+1.1.1w/openssl"
+                         "vendor/openssl-src-300.5.0+3.5.0/openssl"
+                         "vendor/openssl-src-300.5.2+3.5.2/openssl"
+                         "vendor/tikv-jemalloc-sys-0.5.4+5.3.0-patched/jemalloc"
+                         "vendor/tikv-jemalloc-sys-0.6.0+5.3.0-1-ge13ca993e8ccb9ba9847cc330696e02839f328f7/jemalloc"))
+             (for-each delete-file
+                       (find-files "vendor" "\\.(a|dll|exe|lib)$"))
+             (substitute* '("vendor/tempfile-3.14.0/Cargo.toml"
+                            "vendor/tempfile-3.16.0/Cargo.toml"
+                            "vendor/tempfile-3.19.1/Cargo.toml"
+                            "vendor/tempfile-3.20.0/Cargo.toml"
+                            "vendor/tempfile-3.21.0/Cargo.toml")
+               (("features = \\[\"fs\"" all)
+                (string-append all ", \"use-libc\"")))))))
+      (arguments
+       (substitute-keyword-arguments (package-arguments base-rust)
+         ((#:phases phases)
+          `(modify-phases ,phases
+             (replace 'build
+               (lambda* (#:key parallel-build? #:allow-other-keys)
+                 (let ((job-spec (string-append
+                                  "-j" (if parallel-build?
+                                           (number->string (parallel-job-count))
+                                           "1"))))
+                   (invoke "./x.py" job-spec "build" "--stage=2"
+                           "library/std"
+                           "src/tools/cargo"))))
+             (replace 'install
+               (lambda* (#:key outputs #:allow-other-keys)
+                 (let* ((out (assoc-ref outputs "out"))
+                        (cargo-out (assoc-ref outputs "cargo"))
+                        (build (string-append
+                                "build/"
+                                ,(platform-rust-target
+                                   (lookup-platform-by-target-or-system
+                                     (or (%current-target-system)
+                                         (%current-system)))))))
+                   (install-file (string-append build "/stage2/bin/rustc")
+                                 (string-append out "/bin"))
+                   (copy-recursively (string-append build "/stage2/lib")
+                                     (string-append out "/lib"))
+                   (install-file (string-append build "/stage2-tools-bin/cargo")
+                                 (string-append cargo-out "/bin"))))))))))))
