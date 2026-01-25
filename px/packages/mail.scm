@@ -12,11 +12,14 @@
   #:use-module (gnu packages)
   #:use-module (gnu packages base)
   #:use-module (gnu packages compression)
+  #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages tls)
   #:use-module (gnu packages man)
   #:use-module (gnu packages sqlite)
   #:use-module (gnu packages documentation)
   #:use-module (gnu packages version-control)
   #:use-module (gnu packages rust)
+  #:use-module (px packages rust)
   #:use-module (px self))
 
 (define-public pimsync
@@ -77,6 +80,69 @@ modern and efficient way to interact with email accounts.  It supports IMAP,
 Maildir, Notmuch, SMTP, and Sendmail backends, along with OAuth 2.0
 authorization for various email providers including Gmail, Outlook, and iCloud.")
     (license license:expat)))
+
+(define-public bichon
+  (package
+    (name "bichon")
+    (version "0.3.6")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/rustmailer/bichon")
+             (commit version)))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1awzl8bsjx886pmjbax2z9yrjqhjg48ldr9d4y40873r8y08x4n8"))
+       (snippet
+        #~(begin
+            (use-modules (guix build utils))
+            ;; Replace git dependency with path to workspace crate
+            (substitute* "Cargo.toml"
+              (("outlook-pst = \\{ git.*\\}")
+               "outlook-pst = { path = \"outlook-pst-src/crates/pst\" }"))
+            ;; Set a fixed GIT_HASH since git isn't available during build
+            (substitute* "build.rs"
+              (("Command::new\\(\"git\"\\)")
+               "Command::new(\"echo\")")
+              (("\\.args\\(&\\[\"rev-parse\".*\\]\\)")
+               ".arg(\"0.3.6\")"))))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:install-source? #f
+       #:tests? #f
+       #:rust ,rust-1.91
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'setup-outlook-pst
+           (lambda* (#:key inputs #:allow-other-keys)
+             ;; Find outlook-pst input and symlink to its directory
+             (for-each (lambda (pair)
+                         (let ((name (car pair))
+                               (path (cdr pair)))
+                           (when (and (string? path)
+                                      (string-contains name "outlook-pst"))
+                             (symlink path "outlook-pst-src"))))
+                       inputs)))
+         (add-after 'setup-outlook-pst 'create-web-placeholder
+           (lambda _
+             ;; Create a minimal web/dist folder with placeholder for RustEmbed
+             (mkdir-p "web/dist")
+             (call-with-output-file "web/dist/index.html"
+               (lambda (port)
+                 (display "<!DOCTYPE html><html><body>Web UI</body></html>" port))))))))
+    (native-inputs
+     (list pkg-config))
+    (inputs
+     (cons* openssl `(,zstd "lib") (px-cargo-inputs 'bichon)))
+    (home-page "https://github.com/rustmailer/bichon")
+    (synopsis "Email archiver with full-text search and web interface")
+    (description
+     "Bichon is a lightweight email archiver that synchronizes emails from IMAP
+servers, indexes them for full-text search, and provides a REST API and web
+interface.  It supports multiple accounts, tag-based organization, and email
+export in EML format.")
+    (license license:agpl3)))
 
 (define-public claws-mail-theme-breeze
   (package
