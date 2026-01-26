@@ -4,12 +4,13 @@
 (define-module (px packages gradle)
   #:use-module (guix packages)
   #:use-module (guix download)
-  #:use-module (nongnu packages gradle))
+  #:use-module (nongnu packages gradle)
+  #:export (gradle-8 gradle-7))
 
 (define-public gradle-8
   (package
     (inherit gradle)
-    (version "8.14.3")
+    (version "8.14.4")
     (source
      (origin
        (method url-fetch)
@@ -17,7 +18,7 @@
              "https://services.gradle.org/distributions/gradle-"
              version "-bin.zip"))
        (sha256
-        (base32 "0c9mbwngm85wj4mydl49pn6iamzfpr3djaf2dsan0c292ci10wdx"))))))
+        (base32 "039q203g9kg0c91v39lv7k1pz88q9s63fqmgknibav8glyc14xzi"))))))
 
 (define-public gradle-7
   (package
