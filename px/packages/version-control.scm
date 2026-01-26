@@ -13,6 +13,7 @@
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages tls)
   #:use-module (gnu packages perl)
+  #:use-module (px packages rust)
   #:use-module (px self))
 
 (define-public gh
@@ -63,18 +64,19 @@ with git and your code.")
 (define-public jj-vcs
   (package
     (name "jj-vcs")
-    (version "0.28.2")
+    (version "0.37.0")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "jj-cli" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "09fymwchmq08i7ycb0kf5w2m1z0h6hh8kzj7ad2z29d1yb7z8pnm"))))
+        (base32 "115mhyxil71yw4icnki2id1xvpa21kla7dss4dp69jf9mr68n14w"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
-       #:tests? #f))  ; Tests require testutils module
+       #:tests? #f  ; Tests require testutils module
+       #:rust ,rust-1.89))
     (native-inputs (list pkg-config))
     (inputs (cons* openssl (px-cargo-inputs 'jj-cli)))
     (home-page "https://github.com/jj-vcs/jj")
