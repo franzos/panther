@@ -58,6 +58,7 @@
   #:use-module (px packages common)
   #:use-module (px packages library)
   #:use-module (px packages haskell)
+  #:use-module (px packages rust)
   #:use-module (px packages themes)
   #:use-module (px self)
   #:use-module (srfi srfi-1))
@@ -478,7 +479,7 @@ displays through both laptop backlights and external monitors via DDC.")
 (define-public rio
   (package
     (name "rio")
-    (version "0.2.29")
+    (version "0.2.37")
     (source
      (origin
        (method git-fetch)
@@ -487,12 +488,12 @@ displays through both laptop backlights and external monitors via DDC.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "028vw27yv8lrz30xzipzdz4d6qbjlyrsa1pr0diawihrjcamdkl4"))))
+        (base32 "15djbn6hhrz9ya447y3pl3nbvimkbhp10z7jln35q2zwjxfmb2z6"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
        #:tests? #f
-       #:rust ,rust-1.88
+       #:rust ,rust-1.90
        #:cargo-build-flags '("--release" "-p" "rioterm")
        #:phases
        (modify-phases %standard-phases
