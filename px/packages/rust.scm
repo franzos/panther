@@ -8,6 +8,7 @@
   #:use-module (guix gexp)
   #:use-module (guix utils)
   #:use-module (guix platform)
+  #:use-module (gnu packages llvm)
   #:use-module (gnu packages rust))
 
 ;; Helper to construct rust source URI
@@ -158,3 +159,37 @@
                                      (string-append out "/lib"))
                    (install-file (string-append build "/stage2-tools-bin/cargo")
                                  (string-append cargo-out "/bin"))))))))))))
+
+(define-public rust-1.92
+  (let ((base-rust
+         (rust-bootstrapped-package rust-1.91 "1.92.0"
+          "1f6305lkp4vwj132fq232mfxdcxg0d5vymc2fpf5y9vybjkjq3cy")))
+    (package
+      (inherit base-rust)
+      (source
+       (origin
+         (inherit (package-source base-rust))
+         (snippet
+          '(begin
+             (for-each delete-file-recursively
+                       '("src/llvm-project"
+                         "vendor/jemalloc-sys-0.5.3+5.3.0-patched/jemalloc"
+                         "vendor/jemalloc-sys-0.5.4+5.3.0-patched/jemalloc"
+                         "vendor/openssl-src-111.28.2+1.1.1w/openssl"
+                         "vendor/openssl-src-300.5.0+3.5.0/openssl"
+                         "vendor/openssl-src-300.5.3+3.5.4/openssl"
+                         "vendor/tikv-jemalloc-sys-0.5.4+5.3.0-patched/jemalloc"
+                         "vendor/tikv-jemalloc-sys-0.6.0+5.3.0-1-ge13ca993e8ccb9ba9847cc330696e02839f328f7/jemalloc"))
+             (for-each delete-file
+                       (find-files "vendor" "\\.(a|dll|exe|lib)$"))
+             (substitute* '("vendor/tempfile-3.14.0/Cargo.toml"
+                            "vendor/tempfile-3.16.0/Cargo.toml"
+                            "vendor/tempfile-3.19.1/Cargo.toml"
+                            "vendor/tempfile-3.20.0/Cargo.toml"
+                            "vendor/tempfile-3.21.0/Cargo.toml"
+                            "vendor/tempfile-3.23.0/Cargo.toml")
+               (("features = \\[\"fs\"" all)
+                (string-append all ", \"use-libc\"")))))))
+      ;; Rust 1.92 requires LLVM >= 20
+      (inputs (modify-inputs (package-inputs base-rust)
+                             (replace "llvm" llvm-20))))))
