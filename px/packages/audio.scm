@@ -75,7 +75,7 @@ hardware such as ISPs.  This is version 0.5.2, packaged for PipeWire compatibili
 (define-public pipewire
   (package
     (name "pipewire")
-    (version "1.4.9")
+    (version "1.4.10")
     (source (origin
               (method git-fetch)
               (uri (git-reference
@@ -84,7 +84,7 @@ hardware such as ISPs.  This is version 0.5.2, packaged for PipeWire compatibili
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "0mwn3aad8dg5ynxvgnvqi5wxqfy1xhhs2h0nf8awgsp5brihmkfz"))))
+                "14rsdbcsyyhjh7hvbq3d84f6s0fllvq6vpg39cxcd7l8fn4zc2zw"))))
     (build-system meson-build-system)
     (arguments
      (list
