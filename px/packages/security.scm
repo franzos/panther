@@ -37,11 +37,36 @@
       #~(modify-phases %standard-phases
           (delete 'configure)
           (add-after 'unpack 'patch-paths
-            (lambda* (#:key inputs #:allow-other-keys)
-              ;; Patch shebang and ensure script uses tools from PATH
-              (substitute* "chkrootkit"
-                (("#!/bin/sh")
-                 (string-append "#!" (search-input-file inputs "bin/sh"))))
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (let ((libexec (string-append (assoc-ref outputs "out")
+                                            "/libexec/chkrootkit")))
+                ;; Patch shebang
+                (substitute* "chkrootkit"
+                  (("#!/bin/sh")
+                   (string-append "#!" (search-input-file inputs "bin/sh"))))
+                ;; Replace ./helper-binaries with absolute paths
+                (substitute* "chkrootkit"
+                  (("\\./strings-static")
+                   (string-append libexec "/strings-static"))
+                  (("\\./ifpromisc")
+                   (string-append libexec "/ifpromisc"))
+                  (("\\./chkutmp")
+                   (string-append libexec "/chkutmp"))
+                  (("\\./chklastlog")
+                   (string-append libexec "/chklastlog"))
+                  (("\\./chkwtmp")
+                   (string-append libexec "/chkwtmp"))
+                  (("\\./chkproc")
+                   (string-append libexec "/chkproc"))
+                  (("\\./chkdirs")
+                   (string-append libexec "/chkdirs")))
+                ;; Remove hardcoded FHS paths that don't exist on Guix
+                (substitute* "chkrootkit"
+                  (("pth=\"\\$pth /sbin /usr/sbin /lib /usr/lib /usr/libexec \\.\"")
+                   "pth=\"$pth\""))
+                ;; Fix grep warning about unnecessary backslash before /
+                (substitute* "chkrootkit"
+                  (("\\^\\\\/" ) "^/")))
               ;; Fix Makefile check for linux/if.h (path differs in Guix)
               (substitute* "Makefile"
                 (("if \\[ -f \"/usr/include/linux/if.h\" \\]")
@@ -71,8 +96,11 @@
           (add-after 'install 'wrap-program
             (lambda* (#:key inputs outputs #:allow-other-keys)
               (let* ((out (assoc-ref outputs "out"))
-                     (libexec (string-append out "/libexec/chkrootkit")))
-                (wrap-program (string-append out "/bin/chkrootkit")
+                     (libexec (string-append out "/libexec/chkrootkit"))
+                     (bin (string-append out "/bin"))
+                     (wrapper (string-append bin "/chkrootkit")))
+                ;; First wrap with PATH
+                (wrap-program wrapper
                   `("PATH" ":" prefix
                     (,libexec
                      ,(dirname (search-input-file inputs "bin/grep"))
@@ -81,16 +109,33 @@
                      ,(dirname (search-input-file inputs "bin/netstat"))
                      ,(dirname (search-input-file inputs "bin/awk"))
                      ,(dirname (search-input-file inputs "bin/file"))
-                     ,(dirname (search-input-file inputs "bin/head")))))))))))
+                     ,(dirname (search-input-file inputs "bin/sed"))
+                     ;; coreutils: cut, echo, head, id, ls, uname
+                     ,(dirname (search-input-file inputs "bin/ls"))
+                     ,(dirname (search-input-file inputs "bin/strings")))))
+                ;; Create outer wrapper to filter "No such file or directory" from stderr
+                ;; These come from find searching FHS paths that don't exist on Guix
+                (let ((wrapped (string-append wrapper "-wrapped")))
+                  (rename-file wrapper wrapped)
+                  (call-with-output-file wrapper
+                    (lambda (port)
+                      (format port "#!~a
+exec ~a \"$@\" 2> >(grep -v 'No such file or directory' >&2)
+"
+                              (search-input-file inputs "bin/bash")
+                              wrapped)))
+                  (chmod wrapper #o755))))))))
     (inputs
      (list bash-minimal
+           binutils
            coreutils
            file
            findutils
            gawk
            grep
            net-tools
-           procps))
+           procps
+           sed))
     (home-page "https://www.chkrootkit.org/")
     (synopsis "Locally check for signs of a rootkit")
     (description
