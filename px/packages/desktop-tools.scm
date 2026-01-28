@@ -311,14 +311,14 @@ brand icons for easy, scalable vector graphics on websites and beyond.")
 (define-public px-terminal-launcher
   (package
     (name "px-terminal-launcher")
-    (version "v0.6.2")
+    (version "v0.6.3")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "https://source.pantherx.org/" name "_" version
                            ".tgz"))
        (sha256
-        (base32 "0b5fjnrb2kggrkfgsc3qkjmrxvp6c54xczhw1mfaq39li3z6sg5c"))))
+        (base32 "00dpg31wwi03wqgd25hfpbvr1icy1vk4chg8lpgpd2pmz12iy7vh"))))
     (build-system qt-build-system)
     (arguments
      ;; make qtsvg work
@@ -336,7 +336,8 @@ brand icons for easy, scalable vector graphics on websites and beyond.")
                   qtbase
                   qtsvg
                   qtcharts
-                  networkmanager-qt))
+                  networkmanager-qt
+                  pulseaudio-qt))
     (home-page "https://www.pantherx.dev")
     (synopsis "PantherX Terminal Launcher")
     (description "PantherX Terminal Launcher")
