@@ -308,41 +308,6 @@ brand icons for easy, scalable vector graphics on websites and beyond.")
     (description "Qt-based tray application")
     (license license:gpl2+)))
 
-(define-public px-terminal-launcher
-  (package
-    (name "px-terminal-launcher")
-    (version "v0.6.3")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (string-append "https://source.pantherx.org/" name "_" version
-                           ".tgz"))
-       (sha256
-        (base32 "00dpg31wwi03wqgd25hfpbvr1icy1vk4chg8lpgpd2pmz12iy7vh"))))
-    (build-system qt-build-system)
-    (arguments
-     ;; make qtsvg work
-     (list #:tests? #f
-           #:phases
-           #~(modify-phases %standard-phases
-               (add-after 'install 'wrap-executable
-                 (lambda* (#:key inputs outputs #:allow-other-keys)
-                   (let ((out (assoc-ref outputs "out"))
-                         (plugin-path (getenv "QT_PLUGIN_PATH")))
-                     (wrap-program (string-append out "/bin/launcher")
-                       `("QT_PLUGIN_PATH" ":" prefix (,plugin-path)))))))))
-    (native-inputs (list qttools pkg-config extra-cmake-modules))
-    (inputs (list capnproto
-                  qtbase
-                  qtsvg
-                  qtcharts
-                  networkmanager-qt
-                  pulseaudio-qt))
-    (home-page "https://www.pantherx.dev")
-    (synopsis "PantherX Terminal Launcher")
-    (description "PantherX Terminal Launcher")
-    (license license:expat)))
-
 (define-public slack-desktop
   (package
     (name "slack-desktop")
