@@ -281,7 +281,7 @@ publish/subscribe, RPC-style request/reply, or service discovery.")
      #:hash-algo hash-algorithm)))
 
 (define-public tailscale
-  (let ((version "1.92.5"))
+  (let ((version "1.94.1"))
     (package
       (name "tailscale")
       (version version)
@@ -289,11 +289,11 @@ publish/subscribe, RPC-style request/reply, or service discovery.")
                 (method go-fetch-vendored)
                 (uri (go-git-reference
                       (url "https://github.com/tailscale/tailscale")
-                      (commit "v1.92.5")
-                      (sha (base32 "0i96m98ambmb532isi44qzzh7qm16lg78k5y6pdg2l0x3zxq6ijb"))))
+                      (commit "v1.94.1")
+                      (sha (base32 "0n5k8adplcffjwlpiy35nrklc0sf9ms18zlilcis5g1s3kdh4klf"))))
                 (sha256
                  (base32
-                  "1dy3lg9pjd9fq8f8f0pcpcyprz2nn76czjza4vxjaf8h974q922j"))))
+                  "1mdrq6yj3jnn6gp03lv1k7zapzp5iqshp8cxvlxrxd16dh8806j6"))))
       (build-system go-build-system)
       (arguments
        `(#:import-path "tailscale.com/cmd/tailscale"
