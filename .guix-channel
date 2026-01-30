@@ -5,7 +5,7 @@
  (version 0)
  (name pantherx)
  (url "https://codeberg.org/gofranz/panther.git")
- (news-file "etc/news.scm")
+ (news-file "etc/news.txt")
  (dependencies
   (channel
    (name nonguix)
