@@ -84,7 +84,7 @@ authorization for various email providers including Gmail, Outlook, and iCloud."
 (define-public bichon
   (package
     (name "bichon")
-    (version "0.3.6")
+    (version "0.3.7")
     (source
      (origin
        (method git-fetch)
@@ -93,7 +93,7 @@ authorization for various email providers including Gmail, Outlook, and iCloud."
              (commit version)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1awzl8bsjx886pmjbax2z9yrjqhjg48ldr9d4y40873r8y08x4n8"))
+        (base32 "04nqqkw2fhdd4c97iw2jimkzy0wfkp81ca9gryz3zc8n2b5kk8pd"))
        (snippet
         #~(begin
             (use-modules (guix build utils))
@@ -106,7 +106,7 @@ authorization for various email providers including Gmail, Outlook, and iCloud."
               (("Command::new\\(\"git\"\\)")
                "Command::new(\"echo\")")
               (("\\.args\\(&\\[\"rev-parse\".*\\]\\)")
-               ".arg(\"0.3.6\")"))))))
+               ".arg(\"0.3.7\")"))))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
