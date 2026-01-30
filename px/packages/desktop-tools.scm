@@ -16,21 +16,27 @@
   #:use-module (guix packages)
   #:use-module (guix gexp)
   #:use-module (guix utils)
+  #:use-module (nonguix build-system binary)
   #:use-module (nonguix build-system chromium-binary)
   #:use-module (gnu packages backup)
+  #:use-module (gnu packages base)
   #:use-module (gnu packages boost)
   #:use-module (gnu packages bash)
   #:use-module (gnu packages check)
+  #:use-module (gnu packages compression)
   #:use-module (gnu packages cmake)
   #:use-module (gnu packages cups)
   #:use-module (gnu packages fontutils)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages gcc)
+  #:use-module (gnu packages ghostscript)
   #:use-module (gnu packages gl)
   #:use-module (gnu packages glib)
+  #:use-module (gnu packages gtk)
   #:use-module (gnu packages networking)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gnuzilla)
+  #:use-module (gnu packages gstreamer)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages llvm)
   #:use-module (gnu packages lxqt)
@@ -41,6 +47,7 @@
   #:use-module (gnu packages pdf)
   #:use-module (gnu packages perl)
   #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages pulseaudio)
   #:use-module (gnu packages python)
   #:use-module (gnu packages qt)
   #:use-module (gnu packages rust)
@@ -48,11 +55,13 @@
   #:use-module (gnu packages version-control)
   #:use-module (gnu packages video)
   #:use-module (gnu packages vulkan)
+  #:use-module (gnu packages wm)
   #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages xfce)
   #:use-module (gnu packages xorg)
   #:use-module (gnu packages kde-frameworks)
   #:use-module (gnu packages serialization)
+  #:use-module (gnu packages tls)
   #:use-module (gnu packages xml)
   #:use-module (px packages qt)
   #:use-module (px packages common)
@@ -391,6 +400,115 @@ integration with various productivity tools.")
 gamers that works on desktop and phone.  It features voice chat, text chat,
 and rich media support for gaming communities.")
     (license (nonfree:nonfree "https://discord.com/terms"))))
+
+(define-public appflowy
+  (package
+    (name "appflowy")
+    (version "0.11.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/AppFlowy-IO/AppFlowy/releases/download/"
+             version "/AppFlowy-" version "-linux-x86_64.deb"))
+       (sha256
+        (base32 "1nhq8h7ap6hr8c9pi9rlpvi193wd87axwzd2yjhr3h28xclgpbzf"))))
+    (supported-systems '("x86_64-linux"))
+    (build-system binary-build-system)
+    (arguments
+     `(#:validate-runpath? #f
+       #:patchelf-plan
+       '(("lib/AppFlowy/AppFlowy"
+          ("glib" "gtk+" "pango" "harfbuzz" "atk" "cairo" "gdk-pixbuf"
+           "fontconfig" "libepoxy" "gcc:lib"))
+         ("lib/AppFlowy/lib/libflutter_linux_gtk.so"
+          ("glib" "gtk+" "pango" "atk" "fontconfig" "libepoxy" "gcc:lib")))
+       #:install-plan
+       '(("lib" "lib")
+         ("share" "share"))
+       #:phases
+       (modify-phases %standard-phases
+         (replace 'unpack
+           (lambda* (#:key inputs #:allow-other-keys)
+             (invoke "ar" "x" (assoc-ref inputs "source"))
+             (invoke "tar" "-xf" "data.tar.xz")
+             (copy-recursively "usr/" ".")
+             (delete-file-recursively "usr")))
+         (add-after 'install 'fix-desktop-file
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let ((out (assoc-ref outputs "out")))
+               (substitute* (string-append out "/share/applications/AppFlowy.desktop")
+                 (("Exec=AppFlowy")
+                  (string-append "Exec=" out "/bin/appflowy"))
+                 (("Icon=.*")
+                  (string-append "Icon=" out "/lib/AppFlowy/data/flutter_assets/assets/images/flowy_logo.svg\n"))))))
+         (add-after 'install 'create-wrapper
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (bin (string-append out "/bin"))
+                    (lib-path (string-join
+                               (list (string-append out "/lib/AppFlowy/lib")
+                                     (string-append (assoc-ref inputs "gstreamer") "/lib")
+                                     (string-append (assoc-ref inputs "gst-plugins-base") "/lib")
+                                     (string-append (assoc-ref inputs "keybinder") "/lib")
+                                     (string-append (assoc-ref inputs "libnotify") "/lib")
+                                     (string-append (assoc-ref inputs "libepoxy") "/lib")
+                                     (string-append (assoc-ref inputs "xz") "/lib")
+                                     (string-append (assoc-ref inputs "libva") "/lib")
+                                     (string-append (assoc-ref inputs "libvdpau") "/lib")
+                                     (string-append (assoc-ref inputs "libdrm") "/lib")
+                                     (string-append (assoc-ref inputs "gnutls") "/lib")
+                                     (string-append (assoc-ref inputs "lcms") "/lib")
+                                     (string-append (assoc-ref inputs "libarchive") "/lib")
+                                     (string-append (assoc-ref inputs "alsa-lib") "/lib")
+                                     (string-append (assoc-ref inputs "pulseaudio") "/lib")
+                                     (string-append (assoc-ref inputs "mesa") "/lib")
+                                     (string-append (assoc-ref inputs "libxscrnsaver") "/lib")
+                                     (string-append (assoc-ref inputs "libxv") "/lib"))
+                               ":"))
+                    (bash (string-append (assoc-ref inputs "bash-minimal") "/bin/bash")))
+               (mkdir-p bin)
+               (call-with-output-file (string-append bin "/appflowy")
+                 (lambda (port)
+                   (format port "#!~a~%export LD_LIBRARY_PATH=\"~a:$LD_LIBRARY_PATH\"~%export GDK_BACKEND=x11~%exec ~a/lib/AppFlowy/AppFlowy \"$@\"~%"
+                           bash lib-path out)))
+               (chmod (string-append bin "/appflowy") #o755)))))))
+    (native-inputs `(("binutils" ,binutils)))
+    (inputs `(("alsa-lib" ,alsa-lib)
+              ("atk" ,atk)
+              ("bash-minimal" ,bash-minimal)
+              ("cairo" ,cairo)
+              ("fontconfig" ,fontconfig)
+              ("gcc:lib" ,gcc "lib")
+              ("gdk-pixbuf" ,gdk-pixbuf)
+              ("glib" ,glib)
+              ("gnutls" ,gnutls)
+              ("gst-plugins-base" ,gst-plugins-base)
+              ("gstreamer" ,gstreamer)
+              ("gtk+" ,gtk+)
+              ("keybinder" ,keybinder)
+              ("lcms" ,lcms)
+              ("libarchive" ,libarchive)
+              ("libdrm" ,libdrm)
+              ("libnotify" ,libnotify)
+              ("mesa" ,mesa)
+              ("harfbuzz" ,harfbuzz)
+              ("libepoxy" ,libepoxy)
+              ("libva" ,libva)
+              ("libvdpau" ,libvdpau)
+              ("libxscrnsaver" ,libxscrnsaver)
+              ("libxv" ,libxv)
+              ("pango" ,pango)
+              ("pulseaudio" ,pulseaudio)
+              ("xz" ,xz)))
+    (home-page "https://appflowy.io/")
+    (synopsis "Open-source alternative to Notion")
+    (description
+     "AppFlowy is an open-source alternative to Notion, providing a privacy-first
+workspace for notes, tasks, and projects.  It features a rich text editor,
+databases, kanban boards, and AI integration while keeping your data secure
+and under your control.")
+    (license license:agpl3+)))
 
 (define-public wluma
   (package
