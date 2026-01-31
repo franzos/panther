@@ -174,9 +174,9 @@
           (add-before 'build 'setup-cargo-home-config
             (lambda _
               ;; The meson build runs from build/ and sets CARGO_HOME to cargo-home/
-              ;; The source is at ../papers-47.3/ relative to build/
+              ;; The source is at ../papers-<version>/ relative to build/
               (let* ((build-dir (getcwd))
-                     (source-dir (string-append build-dir "/../papers-47.3"))
+                     (source-dir (string-append build-dir "/../papers-" #$version))
                      (source-config (string-append source-dir "/.cargo/config.toml"))
                      (cargo-home (string-append build-dir "/cargo-home")))
                 (format #t "Build dir: ~a~%" build-dir)
