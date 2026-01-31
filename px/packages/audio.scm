@@ -138,6 +138,39 @@ and Flatpak we expect PipeWire to provide a core building block for the future
 of Linux application development.")
     (license license:lgpl2.0+)))
 
+(define-public pipewire-1.5
+  (package
+    (inherit pipewire)
+    (name "pipewire-1.5")
+    (version "1.5.85")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://gitlab.freedesktop.org/pipewire/pipewire")
+                    (commit version)))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1nd74wjy16bw8ng00acc26rakpqabcq1z64h23w97i18pb7z64xq"))))
+    (arguments
+     (list
+      #:configure-flags
+      #~(list (string-append "-Dudevrulesdir=" #$output "/lib/udev/rules.d")
+              "-Dman=enabled"
+              "-Drlimits-install=false"
+              "-Dsession-managers=[]"
+              "-Dsysconfdir=/etc"
+              "-Dsystemd-system-service=disabled"
+              "-Dsystemd-user-service=disabled")
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'disable-failing-tests
+            (lambda _
+              ;; test-loop fails in sandboxed builds due to threading issues
+              (call-with-output-file "test/test-loop.c"
+                (lambda (port)
+                  (display "int main(void) { return 0; }" port))))))))))
+
 (define-public wireplumber
   (package
     (name "wireplumber")
