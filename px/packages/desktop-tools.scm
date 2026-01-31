@@ -9,6 +9,7 @@
                 #:prefix nonfree:)
   #:use-module (guix build-system cargo)
   #:use-module (guix build-system cmake)
+  #:use-module (guix build-system go)
   #:use-module (guix build-system qt)
   #:use-module (guix build-system copy)
   #:use-module (guix download)
@@ -58,6 +59,8 @@
   #:use-module (gnu packages wm)
   #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages xfce)
+  #:use-module (gnu packages golang-build)
+  #:use-module (gnu packages golang-xyz)
   #:use-module (gnu packages xorg)
   #:use-module (gnu packages kde-frameworks)
   #:use-module (gnu packages serialization)
@@ -699,3 +702,75 @@ WiFi and wired connections, VPN support, and Bluetooth tethering.")
 information from Wayland compositors like niri and sway, writing to the
 standard arbtt log format for analysis with arbtt-stats.")
     (license license:gpl3)))
+
+(define-public darkman
+  (package
+    (name "darkman")
+    (version "2.3.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://gitlab.com/WhyNotHugo/darkman")
+             (commit "b7c84de3990977eb4ace8c9719ae708a45739d0d")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32
+         "1rkwjs3rjrzw6gkcm4q91d0axhdhnrwfp4f503dji2jvs8wqa33m"))
+       (modules '((guix build utils)))
+       (snippet
+        '(begin
+           (substitute* "Makefile"
+             ;; Avoid building the binary again when installing.
+             (("install: build") "install: darkman.1")
+             ;; Don't install the systemd service.
+             (("install.*contrib/darkman.service") "true")
+             ;; Don't install the openrc service.
+             (("install.*openrc") "true")
+             ;; The binary will be installed by `go install'.
+             ((".@install.*bin.*") ""))))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:tests? #f ; No tests.
+      #:install-source? #f
+      #:import-path "gitlab.com/WhyNotHugo/darkman/cmd/darkman"
+      #:unpack-path "gitlab.com/WhyNotHugo/darkman"
+      #:build-flags
+      #~(list (string-append "-ldflags= -X main.Version=" #$version))
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'patch-paths
+            (lambda* (#:key unpack-path #:allow-other-keys)
+              (substitute*
+                  (find-files (string-append "src/" unpack-path "/contrib/dbus/")
+                              "\\.service$")
+                (("/usr") #$output))))
+          (replace 'install
+            (lambda* (#:key unpack-path #:allow-other-keys)
+              (with-directory-excursion (string-append "src/" unpack-path)
+                (let ((darkman (string-append #$output "/bin/darkman")))
+                  (with-output-to-file "_darkman.zsh"
+                    (lambda ()
+                      (invoke darkman "completion" "zsh")))
+                  (with-output-to-file "darkman.bash"
+                    (lambda ()
+                      (invoke darkman "completion" "bash")))
+                  (with-output-to-file "darkman.fish"
+                    (lambda ()
+                      (invoke darkman "completion" "fish"))))
+                (invoke "make" "install" (string-append "PREFIX=" #$output))))))))
+    (native-inputs
+     (list gnu-make
+           go-github-com-goccy-go-yaml
+           go-github-com-godbus-dbus-v5
+           go-github-com-lmittmann-tint
+           go-github-com-sj14-astral
+           go-github-com-spf13-cobra))
+    (home-page "https://gitlab.com/WhyNotHugo/darkman")
+    (synopsis "Control dark-mode and light-mode transitions")
+    (description
+     "Darkman is a framework for dark-mode and light-mode transitions on Unix-like
+desktops.  This version fixes a bug where scripts were incorrectly detected as
+non-executable.")
+    (license license:bsd-0)))
