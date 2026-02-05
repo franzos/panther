@@ -513,6 +513,111 @@ databases, kanban boards, and AI integration while keeping your data secure
 and under your control.")
     (license license:agpl3+)))
 
+(define-public rustdesk
+  (package
+    (name "rustdesk")
+    (version "1.4.5")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/rustdesk/rustdesk/releases/download/"
+             version "/rustdesk-" version "-x86_64.deb"))
+       (file-name (string-append "rustdesk-" version "-x86_64.deb"))
+       (sha256
+        (base32 "10qw313jgrcsy4wiac1mvh9jcsjrnaavddk4zw5q71aq5wnfl5v1"))))
+    (supported-systems '("x86_64-linux"))
+    (build-system binary-build-system)
+    (arguments
+     `(#:validate-runpath? #f
+       #:patchelf-plan
+       '(("share/rustdesk/rustdesk"
+          ("glib" "gtk+" "pango" "at-spi2-core" "cairo" "gdk-pixbuf" "gcc:lib"))
+         ("share/rustdesk/lib/libflutter_linux_gtk.so"
+          ("glib" "gtk+" "pango" "at-spi2-core" "fontconfig" "libepoxy" "gcc:lib"))
+         ("share/rustdesk/lib/librustdesk.so"
+          ("glib" "gtk+" "gdk-pixbuf" "cairo" "libx11" "libxfixes" "libxtst"
+           "xdotool" "pulseaudio" "libxkbcommon" "libxcb" "gstreamer"
+           "gst-plugins-base" "dbus" "linux-pam" "zlib" "gcc:lib")))
+       #:install-plan
+       '(("share" "share")
+         ("etc" "etc"))
+       #:phases
+       (modify-phases %standard-phases
+         (replace 'unpack
+           (lambda* (#:key inputs #:allow-other-keys)
+             (invoke "ar" "x" (assoc-ref inputs "source"))
+             (invoke "tar" "-xf" "data.tar.xz")
+             (copy-recursively "usr/" ".")
+             (delete-file-recursively "usr")))
+         (add-after 'install 'fix-desktop-file
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let ((out (assoc-ref outputs "out")))
+               (substitute* (string-append out "/share/applications/rustdesk.desktop")
+                 (("Exec=rustdesk")
+                  (string-append "Exec=" out "/bin/rustdesk"))
+                 (("Icon=rustdesk")
+                  (string-append "Icon=" out "/share/icons/hicolor/scalable/apps/rustdesk.svg")))
+               (substitute* (string-append out "/share/applications/rustdesk-link.desktop")
+                 (("Exec=rustdesk")
+                  (string-append "Exec=" out "/bin/rustdesk"))))))
+         (add-after 'install 'create-wrapper
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (bin (string-append out "/bin"))
+                    (lib-path (string-join
+                               (list (string-append out "/share/rustdesk/lib")
+                                     (string-append (assoc-ref inputs "gstreamer") "/lib")
+                                     (string-append (assoc-ref inputs "gst-plugins-base") "/lib")
+                                     (string-append (assoc-ref inputs "libepoxy") "/lib")
+                                     (string-append (assoc-ref inputs "pulseaudio") "/lib")
+                                     (string-append (assoc-ref inputs "libxkbcommon") "/lib")
+                                     (string-append (assoc-ref inputs "xdotool") "/lib")
+                                     (string-append (assoc-ref inputs "libxcb") "/lib")
+                                     (string-append (assoc-ref inputs "dbus") "/lib")
+                                     (string-append (assoc-ref inputs "linux-pam") "/lib")
+                                     (string-append (assoc-ref inputs "mesa") "/lib"))
+                               ":"))
+                    (bash (string-append (assoc-ref inputs "bash-minimal") "/bin/bash")))
+               (mkdir-p bin)
+               (call-with-output-file (string-append bin "/rustdesk")
+                 (lambda (port)
+                   (format port "#!~a~%export LD_LIBRARY_PATH=\"~a:$LD_LIBRARY_PATH\"~%exec ~a/share/rustdesk/rustdesk \"$@\"~%"
+                           bash lib-path out)))
+               (chmod (string-append bin "/rustdesk") #o755)))))))
+    (native-inputs `(("binutils" ,binutils)))
+    (inputs `(("at-spi2-core" ,at-spi2-core)
+              ("bash-minimal" ,bash-minimal)
+              ("cairo" ,cairo)
+              ("dbus" ,dbus)
+              ("fontconfig" ,fontconfig)
+              ("gcc:lib" ,gcc "lib")
+              ("gdk-pixbuf" ,gdk-pixbuf)
+              ("glib" ,glib)
+              ("gst-plugins-base" ,gst-plugins-base)
+              ("gstreamer" ,gstreamer)
+              ("gtk+" ,gtk+)
+              ("libepoxy" ,libepoxy)
+              ("libx11" ,libx11)
+              ("libxcb" ,libxcb)
+              ("libxfixes" ,libxfixes)
+              ("libxkbcommon" ,libxkbcommon)
+              ("libxtst" ,libxtst)
+              ("linux-pam" ,linux-pam)
+              ("mesa" ,mesa)
+              ("pango" ,pango)
+              ("pulseaudio" ,pulseaudio)
+              ("xdotool" ,xdotool)
+              ("zlib" ,zlib)))
+    (home-page "https://rustdesk.com/")
+    (synopsis "Open-source remote desktop software")
+    (description
+     "RustDesk is an open-source remote desktop software that provides secure and
+fast remote access to computers.  It works out of the box with no configuration
+required, supports self-hosted servers, and is a privacy-focused alternative to
+TeamViewer and AnyDesk.")
+    (license license:agpl3+)))
+
 (define-public wluma
   (package
     (name "wluma")
