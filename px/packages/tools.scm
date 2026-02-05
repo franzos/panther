@@ -19,6 +19,7 @@
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages golang)
   #:use-module (gnu packages golang-xyz)
+  #:use-module (gnu packages linux)
   #:use-module (gnu packages man)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages rust)
@@ -29,7 +30,7 @@
 (define-public codex
   (package
     (name "codex")
-    (version "0.92.0")
+    (version "0.97.0")
     (source
      (origin
        (method url-fetch)
@@ -42,8 +43,8 @@
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "0g7vws56n3hds2f7xm240zba5jlxik9jq0np5i79b0l02vab431j")
-           ("aarch64-linux" "0r0nc0213y941pphp19ys2bwa7kgl1pmf143s9fbgdly3g0zjzfp"))))))
+           ("x86_64-linux" "17dh40zzp8ys6avl0s512vn7xnsxlpkzil7ln2g6019s1sgs4dk6")
+           ("aarch64-linux" "1qhgnz8vyldcklyqz3p7qhkinfhshfshbkrwv2kjmhzzfrra8286"))))))
     (build-system binary-build-system)
     (arguments
      (list
@@ -58,9 +59,10 @@
                            #$(match (or (%current-system) (%current-target-system))
                                ("x86_64-linux" "x86_64-unknown-linux-gnu")
                                ("aarch64-linux" "aarch64-unknown-linux-gnu")))
-           ("glibc" "gcc:lib" "openssl")))))
+           ("glibc" "gcc:lib" "libcap" "openssl")))))
     (inputs `(("glibc" ,glibc)
                ("gcc:lib" ,gcc "lib")
+               ("libcap" ,libcap)
                ("openssl" ,openssl)))
     (supported-systems '("x86_64-linux" "aarch64-linux"))
     (home-page "https://github.com/openai/codex")
