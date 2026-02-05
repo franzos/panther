@@ -78,7 +78,7 @@
 (define-public albert-launcher
   (package
     (name "albert-launcher")
-    (version "34.0.3")
+    (version "34.0.5")
     (source
      (origin
        (method git-fetch)
@@ -87,7 +87,7 @@
              (commit (string-append "v" version))
              (recursive? #t)))
        (sha256
-        (base32 "1wlsd334xgj5xv27ay6hm129s12nq9mzaafh8pdk3lircvxw6wxx"))
+        (base32 "0bfqb972w22xy4z151bmy0fn8ania1cj7zys2byvgp7s2vg5808g"))
        (file-name (git-file-name name version))))
     (build-system cmake-build-system)
     (arguments
