@@ -77,7 +77,7 @@ automated coding assistance.")
 (define-public binsider
   (package
     (name "binsider")
-    (version "0.3.1")
+    (version "0.3.2")
     (source
      (origin
        (method git-fetch)
@@ -86,7 +86,7 @@ automated coding assistance.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1z6mw5xzhnmpixvyq3c1gzr1qvrhy3kpqvpyhg0rj7z7f9jwbwk5"))))
+        (base32 "1gfw9g4852zqhhqwcmvrzffg4ywpsphsg4fjs85brriypllyjzaj"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
