@@ -120,6 +120,32 @@ herd stop foot-server     # Stop server
 herd status foot-server   # Check status
 ```
 
+### Podman Healthcheckd
+
+Runs podman container healthchecks on systems without systemd.
+
+**Usage:**
+
+```scheme
+(use-modules (px services containers))
+
+;; Default configuration
+(service home-podman-healthcheckd-service-type)
+
+;; With custom log level
+(service home-podman-healthcheckd-service-type
+         (home-podman-healthcheckd-configuration
+          (log-level "debug")))
+```
+
+**Service management:**
+
+```bash
+herd start podman-healthcheckd    # Start daemon
+herd stop podman-healthcheckd     # Stop daemon
+herd status podman-healthcheckd   # Check status
+```
+
 ## System Services
 
 ### IOTA Node
