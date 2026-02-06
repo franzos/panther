@@ -1391,6 +1391,10 @@
   (crate-source "bytes" "1.11.0"
                 "1cww1ybcvisyj8pbzl4m36bni2jaz0narhczp1348gqbvkxh8lmk"))
 
+(define rust-bytes-1.11.1
+  (crate-source "bytes" "1.11.1"
+                "0czwlhbq8z29wq0ia87yass2mzy1y0jcasjb8ghriiybnwrqfx0y"))
+
 (define rust-bytes-1.4.0
   (crate-source "bytes" "1.4.0"
                 "1gkh3fk4fm9xv5znlib723h5md5sxsvbd5113sbxff6g1lmgvcl9"))
@@ -6586,6 +6590,10 @@
   (crate-source "is-terminal" "0.4.13"
                 "0jwgjjz33kkmnwai3nsdk1pz9vb6gkqvw1d1vq7bs3q48kinh7r6"))
 
+(define rust-is-terminal-0.4.17
+  (crate-source "is-terminal" "0.4.17"
+                "0ilfr9n31m0k6fsm3gvfrqaa62kbzkjqpwcd9mc46klfig1w2h1n"))
+
 (define rust-is-terminal-0.4.9
   (crate-source "is-terminal" "0.4.9"
                 "12xgvc7nsrp3pn8hcxajfhbli2l5wnh3679y2fmky88nhj4qj26b"))
@@ -10023,6 +10031,10 @@
   (crate-source "proc-macro2" "1.0.105"
                 "1rvgs5qdznlrqrgicmv24nybnrnv8kyvk2vi7s52ddna1q71hpak"))
 
+(define rust-proc-macro2-1.0.106
+  (crate-source "proc-macro2" "1.0.106"
+                "0d09nczyaj67x4ihqr5p7gxbkz38gxhk4asc0k8q23g9n85hzl4g"))
+
 (define rust-proc-macro2-1.0.66
   (crate-source "proc-macro2" "1.0.66"
                 "1ngawak3lh5p63k5x2wk37qy65q1yylk1phwhbmb5pcv7zdk3yqq"))
@@ -10306,6 +10318,10 @@
 (define rust-quote-1.0.43
   (crate-source "quote" "1.0.43"
                 "02n41mlr81qmczac7m5kjy51y8b7yrb8ym4ncmjycampjjjxjx6w"))
+
+(define rust-quote-1.0.44
+  (crate-source "quote" "1.0.44"
+                "1r7c7hxl66vz3q9qizgjhy77pdrrypqgk4ghc7260xvvfb7ypci1"))
 
 (define rust-r-efi-5.2.0
   (crate-source "r-efi" "5.2.0"
@@ -10647,6 +10663,10 @@
   (crate-source "regex" "1.12.2"
                 "1m14zkg6xmkb0q5ah3y39cmggclsjdr1wpxfa4kf5wvm3wcw0fw4"))
 
+(define rust-regex-1.12.3
+  (crate-source "regex" "1.12.3"
+                "0xp2q0x7ybmpa5zlgaz00p8zswcirj9h8nry3rxxsdwi9fhm81z1"))
+
 (define rust-regex-1.9.4
   (crate-source "regex" "1.9.4"
                 "0a8sg48nhskdygki42z9r6q8z7by4876bpay56qs8psfhpzjxphj"))
@@ -10670,6 +10690,10 @@
 (define rust-regex-automata-0.4.13
   (crate-source "regex-automata" "0.4.13"
                 "070z0j23pjfidqz0z89id1fca4p572wxpcr20a0qsv68bbrclxjj"))
+
+(define rust-regex-automata-0.4.14
+  (crate-source "regex-automata" "0.4.14"
+                "13xf7hhn4qmgfh784llcp2kzrvljd13lb2b1ca0mwnf15w9d87bf"))
 
 (define rust-regex-automata-0.4.4
   (crate-source "regex-automata" "0.4.4"
@@ -10718,6 +10742,10 @@
 (define rust-regex-syntax-0.8.8
   (crate-source "regex-syntax" "0.8.8"
                 "0n7ggnpk0r32rzgnycy5xrc1yp2kq19m6pz98ch3c6dkaxw9hbbs"))
+
+(define rust-regex-syntax-0.8.9
+  (crate-source "regex-syntax" "0.8.9"
+                "0k0a47r1rcl794wj8a948niakbg081s5pp5nlgcbmmr2iy3qfs59"))
 
 (define rust-relative-path-1.9.3
   (crate-source "relative-path" "1.9.3"
@@ -16421,6 +16449,10 @@
 (define rust-zmij-1.0.16
   (crate-source "zmij" "1.0.16"
                 "0r8swld9cwnyvdfamq4063ngwxdzckg4922ayk7likma4mc19kfz"))
+
+(define rust-zmij-1.0.19
+  (crate-source "zmij" "1.0.19"
+                "0i9lpsfa4sgq52dnrli9z3sc2rllwawyc6jp6x38jf4hma65zw1z"))
 
 (define rust-zmij-1.0.2
   (crate-source "zmij" "1.0.2"
@@ -22934,6 +22966,43 @@
                                     rust-zerocopy-0.8.27
                                     rust-zerocopy-derive-0.8.27
                                     rust-zeroize-1.8.2))
+                     (podman-healthcheckd =>
+                                          (list rust-aho-corasick-1.1.4
+                                           rust-bytes-1.11.1
+                                           rust-env-logger-0.10.2
+                                           rust-errno-0.3.14
+                                           rust-futures-core-0.3.31
+                                           rust-futures-sink-0.3.31
+                                           rust-hermit-abi-0.5.2
+                                           rust-humantime-2.3.0
+                                           rust-is-terminal-0.4.17
+                                           rust-itoa-1.0.17
+                                           rust-libc-0.2.180
+                                           rust-log-0.4.29
+                                           rust-memchr-2.7.6
+                                           rust-mio-1.1.1
+                                           rust-pin-project-lite-0.2.16
+                                           rust-proc-macro2-1.0.106
+                                           rust-quote-1.0.44
+                                           rust-regex-1.12.3
+                                           rust-regex-automata-0.4.14
+                                           rust-regex-syntax-0.8.9
+                                           rust-serde-1.0.228
+                                           rust-serde-core-1.0.228
+                                           rust-serde-derive-1.0.228
+                                           rust-serde-json-1.0.149
+                                           rust-signal-hook-registry-1.4.8
+                                           rust-syn-2.0.114
+                                           rust-termcolor-1.4.1
+                                           rust-tokio-1.49.0
+                                           rust-tokio-macros-2.6.0
+                                           rust-tokio-util-0.7.18
+                                           rust-unicode-ident-1.0.22
+                                           rust-wasi-0.11.1+wasi-snapshot-preview1
+                                           rust-winapi-util-0.1.11
+                                           rust-windows-link-0.2.1
+                                           rust-windows-sys-0.61.2
+                                           rust-zmij-1.0.19))
                      (rioterm =>
                               (list rust-ab-glyph-0.2.32
                                rust-ab-glyph-rasterizer-0.1.10
