@@ -23,6 +23,7 @@
   #:use-module (gnu packages man)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages rust)
+  #:use-module (gnu packages sqlite)
   #:use-module (gnu packages tls)
   #:use-module (px packages golang-xyz)
   #:use-module (px self))
@@ -176,6 +177,30 @@ navigate large directory structures.")
 plugins to track coding activity.  It provides automatic time tracking for
 programmers, with dashboards showing metrics and insights about coding habits.")
     (license license:bsd-3)))
+
+(define-public envstash
+  (package
+    (name "envstash")
+    (version "0.1.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "envstash" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1p8jlkqk9h6d1q8393gbkiyx9fsj475nh71sji5xvprb1wai9371"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:install-source? #f))
+    (inputs
+     (cons* sqlite (px-cargo-inputs 'envstash)))
+    (home-page "https://github.com/franzos/envstash")
+    (synopsis "Manage .env files across git branches with versioning")
+    (description
+     "Envstash is a CLI tool for managing .env files across git branches.  It
+provides versioning, diffing, restore, and sharing of environment variables with
+optional encryption using GPG or password-based AES-256-GCM.")
+    (license license:gpl3)))
 
 (define-public witr
   (package
