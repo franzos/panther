@@ -113,7 +113,7 @@ privacy. See our website for more information.")
 (define-public xray-core
   (package
     (name "xray-core")
-    (version "26.2.4")
+    (version "26.2.6")
     (source
      (origin
        (method url-fetch)
@@ -122,7 +122,7 @@ privacy. See our website for more information.")
              "/Xray-linux-64.zip"))
        (file-name (string-append "Xray-linux-64-" version ".zip"))
        (sha256
-        (base32 "1kywgxgg8g8bjy080fwiax1sn2wyj0w1vimv56i0n5vvdn25gjy6"))))
+        (base32 "11g3z34sncmpid8fry7g0gh0nhfc5n2d9hm1zw3a81z2ardm7ki9"))))
     (build-system binary-build-system)
     (arguments
      `(#:install-plan '(("xray" "/bin/")
