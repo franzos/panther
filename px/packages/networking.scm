@@ -417,14 +417,14 @@ connections, and custom DNS settings.")
 (define-public oha
   (package
     (name "oha")
-    (version "1.12.1")
+    (version "1.13.0")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "oha" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "095dfi7xrcgrisdgb1s2richwpxy7i4sdhwd46ikwfsb3w060yps"))))
+        (base32 "1bmx7mgbhfnfnjc5frszrn8g7r5529qan1ccb9qkgmjrhka2672p"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
