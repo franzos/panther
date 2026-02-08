@@ -181,17 +181,20 @@ programmers, with dashboards showing metrics and insights about coding habits.")
 (define-public envstash
   (package
     (name "envstash")
-    (version "0.1.3")
+    (version "0.1.4")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "envstash" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "1p8jlkqk9h6d1q8393gbkiyx9fsj475nh71sji5xvprb1wai9371"))))
+        (base32 "0jn7dcc4q94s3z4pxpy1rqwisz8858vj1s13iddikp74537f8p64"))))
     (build-system cargo-build-system)
     (arguments
-     `(#:install-source? #f))
+     `(#:install-source? #f
+       #:cargo-test-flags
+       '("--release" "--"
+         "--skip=cli::commands::transport::tests::paste_0x0_round_trip")))
     (inputs
      (cons* sqlite (px-cargo-inputs 'envstash)))
     (home-page "https://github.com/franzos/envstash")
