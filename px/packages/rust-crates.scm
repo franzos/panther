@@ -19447,6 +19447,7 @@
                                      rust-cipher-0.4.4
                                      rust-clap-4.5.57
                                      rust-clap-builder-4.5.57
+                                     rust-clap-complete-4.5.65
                                      rust-clap-derive-4.5.55
                                      rust-clap-lex-0.7.7
                                      rust-colorchoice-1.0.4
@@ -19494,6 +19495,7 @@
                                      rust-idna-adapter-1.2.1
                                      rust-indexmap-2.13.0
                                      rust-inout-0.1.4
+                                     rust-is-executable-1.0.5
                                      rust-is-terminal-polyfill-1.70.2
                                      rust-itoa-1.0.17
                                      rust-jobserver-0.1.34
@@ -19596,16 +19598,26 @@
                                      rust-windows-strings-0.5.1
                                      rust-windows-sys-0.52.0
                                      rust-windows-sys-0.59.0
+                                     rust-windows-sys-0.60.2
                                      rust-windows-sys-0.61.2
                                      rust-windows-targets-0.52.6
+                                     rust-windows-targets-0.53.5
                                      rust-windows-aarch64-gnullvm-0.52.6
+                                     rust-windows-aarch64-gnullvm-0.53.1
                                      rust-windows-aarch64-msvc-0.52.6
+                                     rust-windows-aarch64-msvc-0.53.1
                                      rust-windows-i686-gnu-0.52.6
+                                     rust-windows-i686-gnu-0.53.1
                                      rust-windows-i686-gnullvm-0.52.6
+                                     rust-windows-i686-gnullvm-0.53.1
                                      rust-windows-i686-msvc-0.52.6
+                                     rust-windows-i686-msvc-0.53.1
                                      rust-windows-x86-64-gnu-0.52.6
+                                     rust-windows-x86-64-gnu-0.53.1
                                      rust-windows-x86-64-gnullvm-0.52.6
+                                     rust-windows-x86-64-gnullvm-0.53.1
                                      rust-windows-x86-64-msvc-0.52.6
+                                     rust-windows-x86-64-msvc-0.53.1
                                      rust-winnow-0.7.14
                                      rust-wit-bindgen-0.46.0
                                      rust-writeable-0.6.2
