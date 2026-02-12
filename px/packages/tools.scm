@@ -31,7 +31,7 @@
 (define-public codex
   (package
     (name "codex")
-    (version "0.98.0")
+    (version "0.101.0")
     (source
      (origin
        (method url-fetch)
@@ -44,8 +44,8 @@
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "0h0d961m60ybashw2lnkxyynidj8zgxnffhvcm8mf5b425vpjrmj")
-           ("aarch64-linux" "00a78qcafn8ha10c1brkd4xd0sh8fqzbw7a45r3iirqh92fcs3ib"))))))
+           ("x86_64-linux" "0dl2lnjz64ggz1bk8yb776283x8fc6cld92brqwnmpvhp3ijswz9")
+           ("aarch64-linux" "0x14l1prms163ylfhm88y4ygd36ib794q3wyy0a1f3j2l2mr7j77"))))))
     (build-system binary-build-system)
     (arguments
      (list
@@ -60,11 +60,12 @@
                            #$(match (or (%current-system) (%current-target-system))
                                ("x86_64-linux" "x86_64-unknown-linux-gnu")
                                ("aarch64-linux" "aarch64-unknown-linux-gnu")))
-           ("glibc" "gcc:lib" "libcap" "openssl")))))
+           ("glibc" "gcc:lib" "libcap" "openssl" "zlib")))))
     (inputs `(("glibc" ,glibc)
                ("gcc:lib" ,gcc "lib")
                ("libcap" ,libcap)
-               ("openssl" ,openssl)))
+               ("openssl" ,openssl)
+               ("zlib" ,zlib)))
     (supported-systems '("x86_64-linux" "aarch64-linux"))
     (home-page "https://github.com/openai/codex")
     (synopsis "AI coding agent from OpenAI")
