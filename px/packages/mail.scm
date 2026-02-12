@@ -25,7 +25,7 @@
 (define-public pimsync
   (package
     (name "pimsync")
-    (version "0.5.5")
+    (version "0.5.6")
     (source
      (origin
        (method git-fetch)
@@ -34,7 +34,7 @@
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "12vqlz8sc4yh5h4vnhcab87xcjgfv468nrjrm914fnxl780m5isl"))))
+        (base32 "01qxg0mk7if96rmb0q88wgjpnv1fb8iw2dbzwlm0ars1mi3xpmr3"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f

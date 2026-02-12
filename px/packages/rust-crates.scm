@@ -3434,9 +3434,17 @@
   (crate-source "domain" "0.11.0"
                 "1ygyzv3r59d9lzpdlb7mzlp8pbx7bqgy7ijk07m2lvba9bqdf7d1"))
 
+(define rust-domain-0.11.1
+  (crate-source "domain" "0.11.1"
+                "07fhv36a67zspjll1642v7gad635x70w3pqmzf350zfzh9gz2zvz"))
+
 (define rust-domain-macros-0.11.0
   (crate-source "domain-macros" "0.11.0"
                 "0w3b6zviddzz2j5l83c9wb6lxl6msnpg7p4dgzmzvdfdsbgpy68f"))
+
+(define rust-domain-macros-0.11.1
+  (crate-source "domain-macros" "0.11.1"
+                "1dzmx31kqr3ans8vp0dipyb02i97mmk515cisq96h7s1mnb6f6ld"))
 
 (define rust-downcast-0.11.0
   (crate-source "downcast" "0.11.0"
@@ -7848,6 +7856,10 @@
   (crate-source "libdav" "0.10.0"
                 "1zx0nbdwj0ang3la3pmlnv7g53q5xmh3h7mq0jq4p9qiyi0dcciz"))
 
+(define rust-libdav-0.10.2
+  (crate-source "libdav" "0.10.2"
+                "1ghjckhk8xsmmr67v2migfz3v9s6gag59rq9w4h3mzsaz7gnvvxr"))
+
 (define rust-libdav-0.9.1
   (crate-source "libdav" "0.9.1"
                 "1646mcnalav3jiprn3xyslyncmcvn34jzw5qn0h4k1x0bppczqhm"))
@@ -11680,6 +11692,10 @@
   (crate-source "roxmltree" "0.21.0"
                 "0gzmajlaxffndf7d39aq6znlqb8a22pkr2kvlpq7bscm0xx3wgln"))
 
+(define rust-roxmltree-0.21.1
+  (crate-source "roxmltree" "0.21.1"
+                "1fxc3jgvl2rk05bw0hj86azqg6mzlijh06gyi9pw69b1qw84p5pi"))
+
 (define rust-rpassword-5.0.1
   (crate-source "rpassword" "5.0.1"
                 "1yry1kmgjcb4qd5wak91203493x42ak3dz9hy1c0r9kyib7kdjgz"))
@@ -15354,6 +15370,10 @@
 (define rust-vstorage-0.4.0
   (crate-source "vstorage" "0.4.0"
                 "0x2cgp40b4ifnvlzz0pkjvi5dfll091ray5158xymdy90mwh47v9"))
+
+(define rust-vstorage-0.6.0
+  (crate-source "vstorage" "0.6.0"
+                "1r76s7dd8jgs1j3yqr0iffshnksiiw104sa44cqkv7zamb1q6fiz"))
 
 (define rust-vte-0.11.1
   (crate-source "vte" "0.11.1"
@@ -26489,7 +26509,7 @@
                                     rust-bitflags-2.9.4
                                     rust-block-buffer-0.10.4
                                     rust-bumpalo-3.19.0
-                                    rust-bytes-1.10.1
+                                    rust-bytes-1.11.1
                                     rust-calcard-0.2.0
                                     rust-camino-1.2.1
                                     rust-cc-1.2.40
@@ -26507,8 +26527,8 @@
                                     rust-crypto-common-0.1.6
                                     rust-deranged-0.5.4
                                     rust-digest-0.10.7
-                                    rust-domain-0.11.0
-                                    rust-domain-macros-0.11.0
+                                    rust-domain-0.11.1
+                                    rust-domain-macros-0.11.1
                                     rust-encoding-rs-0.8.35
                                     rust-equivalent-1.0.2
                                     rust-errno-0.3.14
@@ -26549,7 +26569,7 @@
                                     rust-lazy-static-1.5.0
                                     rust-lexopt-0.3.1
                                     rust-libc-0.2.176
-                                    rust-libdav-0.10.0
+                                    rust-libdav-0.10.2
                                     rust-libjmap-0.1.1
                                     rust-linux-raw-sys-0.11.0
                                     rust-lock-api-0.4.14
@@ -26561,7 +26581,7 @@
                                     rust-miniz-oxide-0.8.9
                                     rust-mio-1.0.4
                                     rust-moka-0.12.11
-                                    rust-num-conv-0.1.0
+                                    rust-num-conv-0.2.0
                                     rust-num-traits-0.2.19
                                     rust-object-0.37.3
                                     rust-octseq-0.5.2
@@ -26589,13 +26609,12 @@
                                     rust-rand-core-0.9.3
                                     rust-redox-syscall-0.5.18
                                     rust-ring-0.17.14
-                                    rust-roxmltree-0.21.0
+                                    rust-roxmltree-0.21.1
                                     rust-rustc-demangle-0.1.26
                                     rust-rustc-version-0.4.1
                                     rust-rustix-1.1.2
                                     rust-rustls-0.23.32
                                     rust-rustls-native-certs-0.8.1
-                                    rust-rustls-pemfile-2.2.0
                                     rust-rustls-pki-types-1.12.0
                                     rust-rustls-webpki-0.103.7
                                     rust-rustversion-1.0.22
@@ -26629,8 +26648,8 @@
                                     rust-tempfile-3.23.0
                                     rust-thiserror-2.0.17
                                     rust-thiserror-impl-2.0.17
-                                    rust-time-0.3.44
-                                    rust-time-core-0.1.6
+                                    rust-time-0.3.47
+                                    rust-time-core-0.1.8
                                     rust-tokio-1.47.1
                                     rust-tokio-macros-2.5.0
                                     rust-tokio-rustls-0.26.4
@@ -26648,7 +26667,7 @@
                                     rust-uuid-1.18.1
                                     rust-version-check-0.9.5
                                     rust-vparser-1.1.0
-                                    rust-vstorage-0.4.0
+                                    rust-vstorage-0.6.0
                                     rust-want-0.3.1
                                     rust-wasi-0.11.1+wasi-snapshot-preview1
                                     rust-wasi-0.14.7+wasi-0.2.4
