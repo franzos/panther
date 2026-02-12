@@ -4813,6 +4813,10 @@
   (crate-source "git2" "0.19.0"
                 "091pv7866z1qjq800ys0wjv8n73wrv7fqdrddxcnq36w8lzbf0xr"))
 
+(define rust-git2-0.20.0
+  (crate-source "git2" "0.20.0"
+                "1zwav0r76njd9chqxh7wj4r4zfn08nzsisrg05liyd6cjf4piniz"))
+
 (define rust-git2-0.20.1
   (crate-source "git2" "0.20.1"
                 "1fgf67h78yrw2gm1n8ghgr0jwsbkvmjfhnbng9zrm2n68jxbh82j"))
@@ -7638,6 +7642,10 @@
   (crate-source "lazy-regex" "3.4.2"
                 "0abvvbncsj2dzlhhxid8sknq37ik0am4affbpih9xqfygphrh60r"))
 
+(define rust-lazy-regex-3.5.1
+  (crate-source "lazy-regex" "3.5.1"
+                "01zrq4jw849j1nwjaf11j7b1am5bsabxrhy30ppcir5daxl3phf5"))
+
 (define rust-lazy-regex-proc-macros-3.4.1
   (crate-source "lazy-regex-proc_macros" "3.4.1"
                 "1886sbdzfsqmgnyzsw1hmjdy58xks44j23sy1aqpxqc1xysiv82b"))
@@ -7645,6 +7653,10 @@
 (define rust-lazy-regex-proc-macros-3.4.2
   (crate-source "lazy-regex-proc_macros" "3.4.2"
                 "011yb7m86fj8j9rk851hc5y9q6m7vs02q4hjgr8aklc3vaqchpf3"))
+
+(define rust-lazy-regex-proc-macros-3.5.1
+  (crate-source "lazy-regex-proc_macros" "3.5.1"
+                "0f2l9ppkvclc20a4ixkfq50j3h2dpaj8cg2nx966jhaxvdl5ra9j"))
 
 (define rust-lazy-static-1.4.0
   (crate-source "lazy_static" "1.4.0"
@@ -14681,6 +14693,10 @@
   (crate-source "trash" "5.2.1"
                 "0bzxzyjywb6sdyfshr9fp3fbpjf7gfhznh9ybrlb8rh3q9icmrd8"))
 
+(define rust-trash-5.2.2
+  (crate-source "trash" "5.2.2"
+                "0wdq8ax8z47cabs7j9hkghli3pyzaxq8z18diw5dd1bd1imnqx12"))
+
 (define rust-trash-5.2.3
   (crate-source "trash" "5.2.3"
                 "1wsgyriw10wl4h46pgs589laq4vwh8q5ma4aflwpl08j212k98v5"))
@@ -19401,7 +19417,6 @@
                                   rust-aligned-vec-0.6.4
                                   rust-allocator-api2-0.2.21
                                   rust-android-system-properties-0.1.5
-                                  rust-ansi-colours-1.2.3
                                   rust-anstream-0.6.21
                                   rust-anstyle-1.0.13
                                   rust-anstyle-parse-0.2.7
@@ -19498,8 +19513,6 @@
                                   rust-fallible-streaming-iterator-0.1.9
                                   rust-fancy-regex-0.11.0
                                   rust-fastrand-2.3.0
-                                  rust-fax-0.2.6
-                                  rust-fax-derive-0.2.0
                                   rust-fdeflate-0.3.7
                                   rust-file-size-1.0.3
                                   rust-find-msvc-tools-0.1.4
@@ -19516,7 +19529,7 @@
                                   rust-getrandom-0.2.16
                                   rust-getrandom-0.3.4
                                   rust-gif-0.13.3
-                                  rust-git2-0.20.2
+                                  rust-git2-0.20.0
                                   rust-glassbench-0.4.4
                                   rust-glob-0.3.3
                                   rust-half-2.7.1
@@ -19537,7 +19550,7 @@
                                   rust-id-arena-2.2.1
                                   rust-idna-1.1.0
                                   rust-idna-adapter-1.2.1
-                                  rust-image-0.25.8
+                                  rust-image-0.25.6
                                   rust-image-webp-0.2.4
                                   rust-imagesize-0.13.0
                                   rust-imgref-1.12.0
@@ -19553,6 +19566,7 @@
                                   rust-itertools-0.12.1
                                   rust-itoa-1.0.15
                                   rust-jobserver-0.1.34
+                                  rust-jpeg-decoder-0.3.2
                                   rust-jpeg-encoder-0.5.1
                                   rust-js-sys-0.3.82
                                   rust-jxl-bitstream-0.2.3
@@ -19569,8 +19583,8 @@
                                   rust-kqueue-1.1.1
                                   rust-kqueue-sys-1.0.4
                                   rust-kurbo-0.11.3
-                                  rust-lazy-regex-3.4.2
-                                  rust-lazy-regex-proc-macros-3.4.2
+                                  rust-lazy-regex-3.5.1
+                                  rust-lazy-regex-proc-macros-3.5.1
                                   rust-lazy-static-1.5.0
                                   rust-lebe-0.5.3
                                   rust-lfs-core-0.17.0
@@ -19589,7 +19603,7 @@
                                   rust-lock-api-0.4.14
                                   rust-log-0.4.28
                                   rust-loop9-0.1.5
-                                  rust-lru-0.16.2
+                                  rust-lru-0.16.3
                                   rust-mach2-0.4.3
                                   rust-maybe-rayon-0.1.1
                                   rust-memchr-2.7.6
@@ -19598,7 +19612,6 @@
                                   rust-minimad-0.13.1
                                   rust-miniz-oxide-0.8.9
                                   rust-mio-1.1.0
-                                  rust-moxcms-0.7.9
                                   rust-mutate-once-0.1.2
                                   rust-new-debug-unreachable-1.0.6
                                   rust-nix-0.26.4
@@ -19616,13 +19629,11 @@
                                   rust-num-traits-0.2.19
                                   rust-objc-sys-0.3.5
                                   rust-objc2-0.5.2
-                                  rust-objc2-0.6.3
                                   rust-objc2-app-kit-0.2.2
                                   rust-objc2-core-data-0.2.2
                                   rust-objc2-core-image-0.2.2
                                   rust-objc2-encode-4.1.0
                                   rust-objc2-foundation-0.2.2
-                                  rust-objc2-foundation-0.3.2
                                   rust-objc2-metal-0.2.2
                                   rust-objc2-quartz-core-0.2.2
                                   rust-once-cell-1.21.3
@@ -19644,7 +19655,6 @@
                                   rust-pkg-config-0.3.32
                                   rust-plist-1.8.0
                                   rust-png-0.17.16
-                                  rust-png-0.18.0
                                   rust-potential-utf-0.1.4
                                   rust-powerfmt-0.2.0
                                   rust-ppv-lite86-0.2.21
@@ -19652,7 +19662,6 @@
                                   rust-proc-status-0.1.1
                                   rust-profiling-1.0.17
                                   rust-profiling-procmacros-1.0.17
-                                  rust-pxfm-0.1.25
                                   rust-qoi-0.4.1
                                   rust-quick-error-2.0.1
                                   rust-quick-xml-0.38.3
@@ -19727,7 +19736,7 @@
                                   rust-thiserror-2.0.17
                                   rust-thiserror-impl-1.0.69
                                   rust-thiserror-impl-2.0.17
-                                  rust-tiff-0.10.3
+                                  rust-tiff-0.9.1
                                   rust-time-0.3.44
                                   rust-time-core-0.1.6
                                   rust-time-macros-0.2.24
@@ -19745,7 +19754,7 @@
                                   rust-toml-writer-1.0.4
                                   rust-tracing-0.1.41
                                   rust-tracing-core-0.1.34
-                                  rust-trash-5.2.5
+                                  rust-trash-5.2.2
                                   rust-ttf-parser-0.25.1
                                   rust-umask-2.1.0
                                   rust-unicode-bidi-0.3.18
