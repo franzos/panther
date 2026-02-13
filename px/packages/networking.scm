@@ -42,6 +42,7 @@
   #:use-module (gnu packages web)
   #:use-module (gnu packages xml)
   #:use-module (px packages golang-xyz)
+  #:use-module (px packages rust)
   #:use-module (px self)
   #:use-module (ice-9 match))
 
@@ -498,3 +499,82 @@ statistics, and allows filtering by protocol, IP address, and port. Features
 include geolocation of remote hosts, custom notifications, and export of
 captured data.")
     (license (list license:expat license:asl2.0))))
+
+(define-public halloy
+  (package
+    (name "halloy")
+    (version "2026.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/squidowl/halloy/archive/refs/tags/"
+             version ".tar.gz"))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "06b2h75j4wkbz3m1c2la13xv6bff5rbaw0d9g8c31b90zbw9jarw"))))
+    (build-system cargo-build-system)
+    (arguments
+     (list
+      #:install-source? #f
+      #:tests? #f
+      #:rust rust-1.92
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'configure 'patch-git-deps-to-paths
+            (lambda _
+              (define (find-vendor-dir pattern)
+                (let ((dirs (find-files "guix-vendor" pattern
+                                        #:directories? #t
+                                        #:fail-on-error? #f)))
+                  (if (pair? dirs) (car dirs) #f)))
+              (let ((iced-dir (find-vendor-dir "^rust-iced-0\\.15"))
+                    (cryoglyph-dir (find-vendor-dir "^rust-cryoglyph-0\\.1\\.0\\.3836"))
+                    (winit-dir (find-vendor-dir "^rust-winit-0\\.30.*05b8ff")))
+                ;; Patch halloy's [patch.crates-io] git refs to local paths
+                (substitute* "Cargo.toml"
+                  (("iced = \\{ git = [^}]+\\}")
+                   (string-append "iced = { path = \"" iced-dir "\" }"))
+                  (("iced_core = \\{ git = [^}]+\\}")
+                   (string-append "iced_core = { path = \"" iced-dir "/core\" }"))
+                  (("iced_wgpu = \\{ git = [^}]+\\}")
+                   (string-append "iced_wgpu = { path = \"" iced-dir "/wgpu\" }")))
+                ;; Patch iced workspace's own git deps (cryoglyph, winit)
+                (let ((iced-cargo (string-append iced-dir "/Cargo.toml")))
+                  (when (file-exists? iced-cargo)
+                    (substitute* iced-cargo
+                      (("cryoglyph = \\{ git = [^}]+\\}")
+                       (string-append "cryoglyph = { path = \"../../"
+                                      cryoglyph-dir "\" }"))
+                      (("winit = \\{ git = [^}]+\\}")
+                       (string-append "winit = { path = \"../../"
+                                      winit-dir "\" }")))))
+                (when (file-exists? "Cargo.lock")
+                  (delete-file "Cargo.lock")))))
+          (add-after 'install 'wrap-program
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (let ((out (assoc-ref outputs "out"))
+                    (mesa (assoc-ref inputs "mesa"))
+                    (wayland (assoc-ref inputs "wayland"))
+                    (libxkbcommon (assoc-ref inputs "libxkbcommon")))
+                (wrap-program (string-append out "/bin/halloy")
+                  `("LD_LIBRARY_PATH" ":" prefix
+                    (,(string-append mesa "/lib")
+                     ,(string-append wayland "/lib")
+                     ,(string-append libxkbcommon "/lib"))))))))))
+    (native-inputs (list pkg-config))
+    (inputs
+     (cons* alsa-lib
+            fontconfig
+            libxkbcommon
+            mesa
+            openssl
+            wayland
+            (px-cargo-inputs 'halloy)))
+    (home-page "https://halloy.chat")
+    (synopsis "IRC client written in Rust")
+    (description
+     "Halloy is an open-source IRC client written in Rust with the Iced GUI
+framework.  It supports IRCv3 features including SASL authentication, DCC
+transfers, auto-completion, desktop notifications, and custom themes.")
+    (license license:gpl3+)))
