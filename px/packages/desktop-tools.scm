@@ -879,3 +879,53 @@ standard arbtt log format for analysis with arbtt-stats.")
 desktops.  This version fixes a bug where scripts were incorrectly detected as
 non-executable.")
     (license license:bsd-0)))
+
+(define-public icebreaker
+  (package
+    (name "icebreaker")
+    (version "2026.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/hecrj/icebreaker/archive/refs/tags/"
+             version ".tar.gz"))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "19qx02ixnbmqg39fp9s428xvyw2n2236ipsfsla600d4fpswayyz"))))
+    (build-system cargo-build-system)
+    (arguments
+     (list
+      #:install-source? #f
+      #:tests? #f
+      #:rust rust-1.92
+      #:cargo-install-paths ''(".")
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'install 'wrap-program
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (let ((out (assoc-ref outputs "out"))
+                    (mesa (assoc-ref inputs "mesa"))
+                    (wayland (assoc-ref inputs "wayland"))
+                    (libxkbcommon (assoc-ref inputs "libxkbcommon")))
+                (wrap-program (string-append out "/bin/icebreaker")
+                  `("LD_LIBRARY_PATH" ":" prefix
+                    (,(string-append mesa "/lib")
+                     ,(string-append wayland "/lib")
+                     ,(string-append libxkbcommon "/lib"))))))))))
+    (native-inputs (list pkg-config))
+    (inputs
+     (cons* fontconfig
+            libxkbcommon
+            mesa
+            wayland
+            `(,zstd "lib")
+            (px-cargo-inputs 'icebreaker)))
+    (home-page "https://github.com/hecrj/icebreaker")
+    (synopsis "Local AI chat app powered by Rust and iced")
+    (description
+     "Icebreaker is a desktop application for local AI conversations.  It uses
+the iced GUI framework for a responsive interface, llama.cpp for model inference,
+and Hugging Face for model sourcing, all running locally without external
+dependencies.")
+    (license license:expat)))
