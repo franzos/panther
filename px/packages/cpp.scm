@@ -252,3 +252,24 @@ and produces a rendered layout, but does not depend on any image, draw, or font
 library, making it easy to embed in applications with custom rendering
 backends.")
     (license license:bsd-3)))
+
+(define-public litehtml-git
+  (let ((commit "8836bc1bc35ca0cfd71dc0386ef841d5cbc3bd5e")
+        (revision "0"))
+    (package
+      (inherit litehtml)
+      (name "litehtml-git")
+      (version (git-version "0.9" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/litehtml/litehtml")
+               (commit commit)))
+         (file-name (git-file-name name version))
+         (sha256
+          (base32 "11r5px87b1yh7vplv1fr9xz23q1l533c70bzwd4gdqrj7zw17wbq"))
+         (snippet
+          #~(begin (use-modules (guix build utils))
+                   ;; Remove bundled gumbo-parser
+                   (delete-file-recursively "src/gumbo"))))))))
