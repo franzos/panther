@@ -6,6 +6,7 @@
                 #:prefix license:)
   #:use-module (guix build-system qt)
   #:use-module (guix packages)
+  #:use-module (guix gexp)
   #:use-module (guix download)
   #:use-module (guix utils)
   #:use-module (guix build-system cmake)
@@ -17,10 +18,12 @@
   #:use-module (gnu packages networking) ;; libnice
   #:use-module (gnu packages cpp) ;; cli11
   #:use-module (gnu packages compression) ;; xz
-  #:use-module (gnu packages web) ;; rapidjson, websocketpp
+  #:use-module (gnu packages web) ;; rapidjson, websocketpp, gumbo-parser
   #:use-module (gnu packages tls) ;; openssl
   #:use-module (gnu packages networking) ;; asio
   #:use-module (px packages gstreamer) ;; gst-plugins-good-qmlgl
+  #:use-module (gnu packages check) ;; googletest
+  #:use-module (guix git-download)
   #:use-module (px packages monitoring) ;; sentry
   #:use-module (ice-9 match))
 
@@ -212,7 +215,40 @@ install(TARGETS webrtc-cpp-demo
     (native-inputs (list pkg-config))
     (home-page "https://github.com/socketio/socket.io-client-cpp")
     (synopsis "Socket.IO C++ client library")
-    (description "A Socket.IO client library written in C++11 with support for 
-modern Socket.IO server versions. Provides real-time bidirectional 
+    (description "A Socket.IO client library written in C++11 with support for
+modern Socket.IO server versions. Provides real-time bidirectional
 event-based communication.")
     (license license:expat)))
+
+(define-public litehtml
+  (package
+    (name "litehtml")
+    (version "0.9")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/litehtml/litehtml")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1kk1ga3wv7k14pg0b101vc576s4zf31dx8gqbflk4yip78mwfkv4"))
+       (snippet
+        #~(begin (use-modules (guix build utils))
+                 ;; Remove bundled gumbo-parser
+                 (delete-file-recursively "src/gumbo")))))
+    (build-system cmake-build-system)
+    (arguments
+     `(#:tests? #f
+       #:configure-flags
+       '("-DEXTERNAL_GUMBO=ON"
+         "-DLITEHTML_BUILD_TESTING=OFF")))
+    (inputs (list gumbo-parser))
+    (home-page "https://github.com/litehtml/litehtml")
+    (synopsis "Lightweight HTML/CSS rendering engine")
+    (description
+     "litehtml is a lightweight HTML/CSS rendering engine.  It parses HTML/CSS
+and produces a rendered layout, but does not depend on any image, draw, or font
+library, making it easy to embed in applications with custom rendering
+backends.")
+    (license license:bsd-3)))
