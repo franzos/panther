@@ -76,14 +76,14 @@ system.")
 (define-public cpr
   (package
     (name "cpr")
-    (version "1.14.1")
+    (version "1.14.2")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "https://github.com/libcpr/cpr/archive/" version
                            ".tar.gz"))
        (sha256
-        (base32 "0g72n6r6qmhly6msnjv63p2jx8gzbq0615sd62k2qgb8k1ycqg11"))))
+        (base32 "0azn7hsc867hbvprlqkvgjp6gmqjilqaap45p85yigw3f2s2kddr"))))
     (arguments
      `(#:tests? #f
        #:configure-flags '("-DCPR_USE_SYSTEM_CURL=ON" "-DCPR_BUILD_TESTS=OFF")))
