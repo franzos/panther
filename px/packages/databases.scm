@@ -45,15 +45,15 @@
 (define-public dbeaver
   (package
     (name "dbeaver")
-    (version "25.3.4")
+    (version "25.3.5")
     (source
      (origin
        (method url-fetch)
        (uri (string-append
              "https://github.com/dbeaver/dbeaver/releases/download/"
-             version "/dbeaver-ce-" version "-linux.gtk.x86_64.tar.gz"))
+             version "/dbeaver-ce-" version "-linux-x86_64.tar.gz"))
        (sha256
-        (base32 "0l94x7l5mg6ipvknb8vqrrfvqpa5npqfn9yv6l3kplm7fjyyk9la"))))
+        (base32 "0zxfdj2mzppp01pv0xbk3hyhswjj3x4d2vwai635n8agdcrwnj55"))))
     (build-system binary-build-system)
     (arguments
      (list
