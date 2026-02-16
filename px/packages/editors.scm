@@ -245,12 +245,12 @@ building and debugging modern web and cloud applications.")
 (define-public cursor
   (package
     (name "cursor")
-    (version "2.3.15")
+    (version "2.4.37")
     (source
      (origin
        (method url-fetch)
-       (uri "https://downloads.cursor.com/production/bb2dbaacf30bb7eb9fd48a37812a8f326defa533/linux/x64/deb/amd64/deb/cursor_2.3.15_amd64.deb")
-       (sha256 (base32 "1830yjcwfiiqsi8wzvcbwb3nqz47lih2mqjfdk7hm3kz7lbvidq4"))))
+       (uri "https://downloads.cursor.com/production/7b9c34466f5c119e93c3e654bb80fe9306b6cc79/linux/x64/deb/amd64/deb/cursor_2.4.37_amd64.deb")
+       (sha256 (base32 "0k06d2qvlph0l3bn98zhnn5pfiyijma6wg1jyw30jdaw5d0hd55l"))))
     (build-system binary-build-system)
     (arguments
      `(#:patchelf-plan `(("usr/share/cursor/cursor"
