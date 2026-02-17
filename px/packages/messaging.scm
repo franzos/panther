@@ -33,7 +33,7 @@
   #:use-module ((nonguix licenses) :prefix license:)
   #:use-module (nongnu packages messaging))
 
-(define-public px-zoom
+(define-public zoom-px
   (package
     (inherit zoom)
     (name "zoom")
@@ -47,6 +47,8 @@
                   (wrap-program (string-append #$output "/lib/zoom/zopen")
                     `("LD_LIBRARY_PATH" prefix
                       ,(list lib-zoom
+                             (string-append lib-zoom "/cef")
+                             (string-append lib-zoom "/Qt/lib")
                              #$@(map (lambda (pkg)
                                        (file-append (this-package-input pkg) "/lib"))
                                      '("fontconfig-minimal"
@@ -72,6 +74,8 @@
                          ":")))
                     `("LD_LIBRARY_PATH" prefix
                       ,(list lib-zoom
+                             (string-append lib-zoom "/cef")
+                             (string-append lib-zoom "/Qt/lib")
                              (string-append #$(this-package-input "nss") "/lib/nss")
                              #$@(map (lambda (pkg)
                                        (file-append (this-package-input pkg) "/lib"))
@@ -112,6 +116,8 @@
                          ":")))
                     `("LD_LIBRARY_PATH" prefix
                       ,(list lib-zoom
+                             (string-append lib-zoom "/cef")
+                             (string-append lib-zoom "/Qt/lib")
                              (string-append #$(this-package-input "nss") "/lib/nss")
                              #$@(map (lambda (pkg)
                                        (file-append (this-package-input pkg) "/lib"))
