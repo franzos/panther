@@ -201,6 +201,18 @@ herd stop iota-node     # Stop node
 - TCP/9000 - JSON-RPC
 - UDP/8084 - P2P sync
 
+### RealtimeKit
+
+RealtimeKit grants real-time scheduling to user processes on request. Required by PipeWire and PulseAudio for low-latency audio.
+
+**Usage:**
+
+```scheme
+(use-modules (px services audio))
+
+(service rtkit-daemon-service-type)
+```
+
 ### Tailscale
 
 Tailscale is a zero-config VPN built on WireGuard.
