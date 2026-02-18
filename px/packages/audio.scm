@@ -155,3 +155,43 @@ threads to @code{SCHED_OTHER} should the system overload.  The daemon runs as
 an unprivileged user and uses capabilities, resource limits, and chroot to
 minimize its security impact.")
     (license license:gpl3+)))
+
+(define-public voxtype
+  (package
+    (name "voxtype")
+    (version "0.6.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/peteonrails/voxtype")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "124ln8qly1s5z766npbaanznrqhq50m7mdp219dabfx0fbim8965"))
+       (snippet
+        #~(begin
+            (use-modules (guix build utils))
+            ;; Replace unstable is_multiple_of with stable modulo operator
+            (substitute* "src/daemon.rs"
+              (("count\\.is_multiple_of\\(120\\)")
+               "count % 120 == 0"))))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:install-source? #f
+       #:cargo-test-flags
+       '("--release" "--"
+         "--skip=test_network")))
+    (native-inputs (list clang cmake git pkg-config))
+    (inputs (cons* alsa-lib sqlite (px-cargo-inputs 'voxtype)))
+    (home-page "https://github.com/peteonrails/voxtype")
+    (synopsis "Push-to-talk voice-to-text for Wayland")
+    (description
+     "Voxtype is a voice-to-text application optimized for Linux.  Hold a hotkey
+while speaking, release to transcribe and output the text at your cursor
+position.  It supports multiple transcription engines including Whisper,
+Parakeet, Moonshine, SenseVoice, Paraformer, Dolphin, and Omnilingual.
+Features include meeting mode for continuous transcription, multilingual
+support, and multiple output modes.  This package is built for CPU; GPU
+acceleration (Vulkan, CUDA) is available but not yet enabled.")
+    (license license:expat)))
