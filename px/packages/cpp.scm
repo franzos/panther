@@ -21,6 +21,9 @@
   #:use-module (gnu packages web) ;; rapidjson, websocketpp, gumbo-parser
   #:use-module (gnu packages tls) ;; openssl
   #:use-module (gnu packages networking) ;; asio
+  #:use-module (gnu packages curl)
+  #:use-module (gnu packages gtk) ;; gtkmm, cairo, pango
+  #:use-module (gnu packages gnome) ;; libadwaita
   #:use-module (px packages gstreamer) ;; gst-plugins-good-qmlgl
   #:use-module (gnu packages check) ;; googletest
   #:use-module (guix git-download)
@@ -273,3 +276,40 @@ backends.")
           #~(begin (use-modules (guix build utils))
                    ;; Remove bundled gumbo-parser
                    (delete-file-recursively "src/gumbo"))))))))
+
+(define-public litebrowser
+  (let ((commit "966ec791c6e61b11f8b3ccc2dee585be5db1993e")
+        (revision "0"))
+    (package
+      (name "litebrowser")
+      (version (git-version "0.0.0" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/litehtml/litebrowser-linux")
+               (commit commit)
+               (recursive? #t)))
+         (file-name (git-file-name name version))
+         (sha256
+          (base32 "14m07k99k6m0xipyzqpziskm219qn5f5mld9vxfk2gir8f0sja85"))))
+      (build-system cmake-build-system)
+      (arguments
+       (list
+        #:tests? #f
+        #:phases
+        #~(modify-phases %standard-phases
+            (add-after 'install 'install-binary
+              (lambda* (#:key outputs #:allow-other-keys)
+                (let ((bin (string-append (assoc-ref outputs "out") "/bin")))
+                  (mkdir-p bin)
+                  (install-file "litebrowser" bin)))))))
+      (native-inputs (list pkg-config))
+      (inputs (list gtkmm curl cairo pango libadwaita))
+      (home-page "https://github.com/litehtml/litebrowser-linux")
+      (synopsis "Lightweight browser based on the litehtml engine")
+      (description
+       "Litebrowser is a simple browser based on the litehtml HTML/CSS rendering
+engine.  It uses GTK4 for the UI, Cairo and Pango for rendering, and libcurl
+for HTTP requests.")
+      (license license:bsd-3))))
