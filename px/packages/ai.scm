@@ -7,11 +7,15 @@
   #:use-module (gnu packages bash)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages gcc)
+  #:use-module (guix build-system cargo)
   #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix gexp)
   #:use-module (guix packages)
   #:use-module (nonguix build-system binary)
-  #:use-module (nonguix licenses))
+  #:use-module (nonguix licenses)
+  #:use-module (px packages rust)
+  #:use-module (px self))
 
 (define-public claude-code
   (package
@@ -107,4 +111,33 @@ handle entire workflows.  This package disables auto-updates.")
      "Ollama allows you to run large language models locally.
 It provides a simple API for creating, running and managing models,
 as well as a library of pre-built models that can be easily used.")
+    (license license:expat)))
+
+(define-public tku
+  (package
+    (name "tku")
+    (version "0.1.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/franzos/tku")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1mrzqgp73dyxyhdr58q31xdjq474syq690qdd298q48xmy600hdf"))))
+    (build-system cargo-build-system)
+    (arguments
+     (list
+      #:rust rust-1.89
+      #:install-source? #f
+      #:tests? #t))
+    (inputs
+     (px-cargo-inputs 'tku))
+    (home-page "https://github.com/franzos/tku")
+    (synopsis "Token usage CLI for AI coding assistants")
+    (description
+     "TKU is a command-line tool for tracking token usage and costs across
+multiple AI coding assistants. It scans local session files, fetches live
+pricing, and shows aggregated reports by day, month, session, or model.")
     (license license:expat)))
