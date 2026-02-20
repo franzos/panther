@@ -16,11 +16,13 @@
   #:use-module (gnu packages glib)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages llvm)
+  #:use-module (gnu packages gl)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages polkit)
   #:use-module (gnu packages sqlite)
   #:use-module (gnu packages version-control)
   #:use-module (gnu packages vim)
+  #:use-module (gnu packages vulkan)
   #:use-module (px self))
 
 (define-public easyeffects-presets-framework
@@ -195,3 +197,39 @@ Features include meeting mode for continuous transcription, multilingual
 support, and multiple output modes.  This package is built for CPU; GPU
 acceleration (Vulkan, CUDA) is available but not yet enabled.")
     (license license:expat)))
+
+(define-public voxtype-vulkan
+  (package
+    (inherit voxtype)
+    (name "voxtype-vulkan")
+    (arguments
+     `(#:install-source? #f
+       #:cargo-build-flags '("--release" "--features" "gpu-vulkan")
+       #:cargo-test-flags
+       '("--release" "--features" "gpu-vulkan" "--"
+         "--skip=test_network")
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'patch-cargo-checksums 'fix-shader-compilation
+           (lambda _
+             (substitute*
+              "guix-vendor/rust-whisper-rs-sys-0.14.1.tar.gz/whisper.cpp/ggml/src/ggml-vulkan/vulkan-shaders/vulkan-shaders-gen.cpp"
+              ;; The hardcoded /bin/sh path doesn't exist in the Guix build
+              ;; sandbox.  Use execlp to search PATH for sh instead.
+              (("execl\\(\"/bin/sh\", \"sh\"")
+               "execlp(\"sh\", \"sh\"")))))))
+    (native-inputs
+     (modify-inputs (package-native-inputs voxtype)
+       (prepend shaderc vulkan-headers)))
+    (inputs
+     (modify-inputs (package-inputs voxtype)
+       (prepend vulkan-loader mesa)))
+    (synopsis "Push-to-talk voice-to-text for Wayland (Vulkan GPU)")
+    (description
+     "Voxtype is a voice-to-text application optimized for Linux.  Hold a hotkey
+while speaking, release to transcribe and output the text at your cursor
+position.  It supports multiple transcription engines including Whisper,
+Parakeet, Moonshine, SenseVoice, Paraformer, Dolphin, and Omnilingual.
+Features include meeting mode for continuous transcription, multilingual
+support, and multiple output modes.  This package is built with Vulkan GPU
+acceleration for AMD, NVIDIA, and Intel GPUs.")))
