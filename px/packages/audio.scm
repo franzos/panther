@@ -210,6 +210,23 @@ acceleration (Vulkan, CUDA) is available but not yet enabled.")
          "--skip=test_network")
        #:phases
        (modify-phases %standard-phases
+         (add-after 'unpack 'patch-vulkan-detection
+           (lambda* (#:key inputs #:allow-other-keys)
+             (let ((vulkan-loader (assoc-ref inputs "vulkan-loader")))
+               (substitute* "src/setup/gpu.rs"
+                 ;; Patch Vulkan runtime check to find libvulkan in the store
+                 (("\"/usr/lib/libvulkan\\.so\\.1\"")
+                  (string-append "\"" vulkan-loader "/lib/libvulkan.so.1\""))
+                 ;; Always report Vulkan as active backend (compiled with
+                 ;; gpu-vulkan feature; FHS path checks don't apply on Guix)
+                 (("pub fn detect_current_backend\\(\\) -> Option<Backend> \\{")
+                  "pub fn detect_current_backend() -> Option<Backend> {\n        return Some(Backend::Vulkan);")
+                 (("pub fn detect_available_backends\\(\\) -> Vec<Backend> \\{")
+                  "pub fn detect_available_backends() -> Vec<Backend> {\n        return vec![Backend::Vulkan];")
+                 ;; Vulkan is always active; no binary switching needed
+                 ;; Keep the let-binding so subsequent references compile
+                 (("let vulkan_path = Path::new\\(VOXTYPE_LIB_DIR\\)\\.join\\(\"voxtype-vulkan\"\\);")
+                  "println!(\"Vulkan GPU acceleration is already active in this build.\"); return Ok(());\n            let vulkan_path = Path::new(VOXTYPE_LIB_DIR).join(\"voxtype-vulkan\");")))))
          (add-after 'patch-cargo-checksums 'fix-shader-compilation
            (lambda _
              (substitute*
@@ -217,7 +234,20 @@ acceleration (Vulkan, CUDA) is available but not yet enabled.")
               ;; The hardcoded /bin/sh path doesn't exist in the Guix build
               ;; sandbox.  Use execlp to search PATH for sh instead.
               (("execl\\(\"/bin/sh\", \"sh\"")
-               "execlp(\"sh\", \"sh\"")))))))
+               "execlp(\"sh\", \"sh\""))))
+         (add-after 'install 'wrap-binary
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (let ((out (assoc-ref outputs "out"))
+                   (mesa (assoc-ref inputs "mesa")))
+               (wrap-program (string-append out "/bin/voxtype")
+                 ;; Point to hardware GPU Vulkan drivers
+                 `("VK_ICD_FILENAMES" ":" prefix
+                   (,(string-append mesa
+                                    "/share/vulkan/icd.d/radeon_icd.x86_64.json")
+                    ,(string-append mesa
+                                    "/share/vulkan/icd.d/intel_icd.x86_64.json")
+                    ,(string-append mesa
+                                    "/share/vulkan/icd.d/nouveau_icd.x86_64.json"))))))))))
     (native-inputs
      (modify-inputs (package-native-inputs voxtype)
        (prepend shaderc vulkan-headers)))
