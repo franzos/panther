@@ -1,5 +1,5 @@
 ;;; GNU Guix --- Functional package management for GNU
-;;; Copyright © 2025 Franz Geffke <franz@pantherx.org>
+;;; Copyright © 2026 Franz Geffke <mail@gofranz.com>
 ;;;
 ;;; This file is part of Panther.
 
@@ -71,19 +71,19 @@ language.  This package includes the CLI client, node software, indexer,
 and related tools.")
     (license license:asl2.0)))
 
-(define-public iota-wallet
+(define-public jota
   (package
-    (name "iota-wallet")
-    (version "0.1.4")
+    (name "jota")
+    (version "0.2.3")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
-             (url "https://github.com/franzos/iota-wallet")
+             (url "https://github.com/franzos/jota")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "182babxx6y35vx4lwylpbmfly8w3snaqv1j42c2qjbskrkvm096r"))))
+        (base32 "0zn92s5wxsbk401vg7c544d474qwydaafwmhk7h9d66bja8yryqq"))))
     (build-system cargo-build-system)
     (arguments
      (list
@@ -96,23 +96,24 @@ and related tools.")
             (lambda* (#:key inputs outputs #:allow-other-keys)
               (let ((bin (string-append (assoc-ref outputs "out") "/bin")))
                 (mkdir-p bin)
-                (install-file "target/release/iota-wallet" bin)
-                (install-file "target/release/iota-wallet-gui" bin)
+                (install-file "target/release/jota" bin)
+                (install-file "target/release/jota-gui" bin)
                 (let ((wayland-lib (string-append (assoc-ref inputs "wayland") "/lib"))
                       (xkbcommon-lib (string-append (assoc-ref inputs "libxkbcommon") "/lib"))
                       (vulkan-lib (string-append (assoc-ref inputs "vulkan-loader") "/lib"))
-                      (gui-binary (string-append bin "/iota-wallet-gui")))
+                      (gui-binary (string-append bin "/jota-gui")))
                   (invoke "patchelf" "--add-rpath"
                           (string-join (list wayland-lib xkbcommon-lib vulkan-lib) ":")
                           gui-binary))))))))
     (native-inputs (list patchelf pkg-config))
     (inputs
-     (cons* libxkbcommon
+     (cons* eudev
+            libxkbcommon
             sqlite
             vulkan-loader
             wayland
-            (px-cargo-inputs 'iota-wallet)))
-    (home-page "https://github.com/franzos/iota-wallet")
+            (px-cargo-inputs 'jota)))
+    (home-page "https://github.com/franzos/jota")
     (synopsis "Monero-inspired wallet for IOTA Rebased")
     (description
      "A desktop wallet for IOTA Rebased with both an interactive CLI and a
