@@ -60,17 +60,19 @@ local storage and remote servers using the CalDAV and CardDAV protocols.")
 (define-public himalaya
   (package
     (name "himalaya")
-    (version "1.1.0")
+    (version "1.2.0")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "himalaya" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "0j9j5qydnr98w5qd0xv56yvqj5gm259ps129q5scq9f93sb3ysz6"))))
+        (base32 "1ca2gmpf9hr5nl9fg2s9j2x2m7xcnc8ifccmblnqfx8h6aq24jiz"))))
     (build-system cargo-build-system)
     (arguments
-     `(#:install-source? #f))
+     `(#:install-source? #f
+       #:tests? #f
+       #:rust ,rust-1.89))
     (inputs (px-cargo-inputs 'himalaya))
     (home-page "https://pimalaya.org/")
     (synopsis "CLI to manage emails")
