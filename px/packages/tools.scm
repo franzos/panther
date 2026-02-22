@@ -209,7 +209,7 @@ optional encryption using GPG or password-based AES-256-GCM.")
 (define-public witr
   (package
     (name "witr")
-    (version "0.2.7")
+    (version "0.3.0")
     (source
      (origin
        (method git-fetch)
@@ -218,7 +218,7 @@ optional encryption using GPG or password-based AES-256-GCM.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0f2c3xcpgc6ls0nw0wmi5rix7dp7wq9y47g46cxv0fc5l9rcmcsp"))))
+        (base32 "0q0gz67bxkbwg0x6kz2625wvwrbxlhi8w95pnsbxs94fbda4b8aw"))))
     (build-system go-build-system)
     (arguments
      (list
