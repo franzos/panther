@@ -1,5 +1,5 @@
 ;;; Package Repository for GNU Guix
-;;; Copyright © 2026 Franz Geffke <franz@pantherx.org>
+;;; Copyright © 2026 Franz Geffke <mail@gofranz.com>
 ;;;
 ;;; This is free software; you can redistribute it and/or modify it
 ;;; under the terms of the GNU General Public License as published by
