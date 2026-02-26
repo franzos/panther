@@ -206,6 +206,35 @@ provides versioning, diffing, restore, and sharing of environment variables with
 optional encryption using GPG or password-based AES-256-GCM.")
     (license license:gpl3)))
 
+(define-public vatic
+  (package
+    (name "vatic")
+    (version "0.1.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/franzos/vatic")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1jmv9jszlqf7wairq7qhcarw41zmhc3aq45s5sl3yc2mah5krys6"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:install-source? #f
+       #:tests? #f))
+    (native-inputs (list pkg-config))
+    (inputs
+     (cons* openssl sqlite (px-cargo-inputs 'vatic)))
+    (home-page "https://github.com/franzos/vatic")
+    (synopsis "TOML-configured AI agent framework with scheduled jobs")
+    (description
+     "Vatic is a TOML-configured AI agent framework.  It runs prompts through
+LLM backends like Claude CLI and Ollama on cron schedules or channel triggers,
+with templated prompts, conversation memory, and multiple output targets
+including Telegram, Matrix, and email.")
+    (license license:gpl3)))
+
 (define-public witr
   (package
     (name "witr")
