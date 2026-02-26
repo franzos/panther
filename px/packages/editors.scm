@@ -446,7 +446,7 @@ predictive code completion, and integrations with development workflows.")
 (define-public zed
   (package
     (name "zed")
-    (version "0.224.11")
+    (version "0.225.9")
     (source #f)
     (build-system binary-build-system)
     (arguments
@@ -475,7 +475,7 @@ predictive code completion, and integrations with development workflows.")
                     (zed-cli (string-append out "/opt/zed/bin/zed"))
                     (zed-editor (string-append out "/opt/zed/libexec/zed-editor")))
                ;; Fix .desktop file
-               (substitute* (string-append out "/opt/zed/share/applications/zed.desktop")
+               (substitute* (string-append out "/opt/zed/share/applications/dev.zed.Zed.desktop")
                  (("Exec=zed") (string-append "Exec=" out "/bin/zed"))
                  (("Icon=zed") (string-append "Icon=" out "/opt/zed/share/icons/hicolor/512x512/apps/zed.png")))
                ;; Create bin directory and wrapper
@@ -495,8 +495,8 @@ predictive code completion, and integrations with development workflows.")
                ;; Symlinks: zed -> CLI, zed-editor -> editor
                (symlink zed-cli (string-append out "/bin/zed"))
                (symlink zed-editor (string-append out "/bin/zed-editor"))
-               (symlink (string-append out "/opt/zed/share/applications/zed.desktop")
-                        (string-append out "/share/applications/zed.desktop"))
+               (symlink (string-append out "/opt/zed/share/applications/dev.zed.Zed.desktop")
+                        (string-append out "/share/applications/dev.zed.Zed.desktop"))
                (symlink (string-append out "/opt/zed/share/icons/hicolor")
                         (string-append out "/share/icons/hicolor")))
              #t)))))
@@ -508,7 +508,7 @@ predictive code completion, and integrations with development workflows.")
                         "https://github.com/zed-industries/zed/releases/download/v"
                         version "/zed-linux-x86_64.tar.gz"))
                   (sha256
-                   (base32 "0vx0f8i30w7s781x0jir5p1hs20w91j157fk44qf2qn6bpnn4hbi"))))
+                   (base32 "118ya4rax3cph60miggm63kxf2ifp6mgx6vwkfv3wxziky2ih9yh"))))
               ("bash-minimal" ,bash-minimal)
               ("glib" ,glib)
               ("gtk+" ,gtk+)
