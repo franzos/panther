@@ -182,14 +182,14 @@ programmers, with dashboards showing metrics and insights about coding habits.")
 (define-public envstash
   (package
     (name "envstash")
-    (version "0.1.7")
+    (version "0.1.8")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "envstash" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "1v56zvk6bcx1s5qpd2kldz2x6z8waz9kslgr7lgz6srl5lb30r14"))))
+        (base32 "1cv5rwi77nwkl6n2ymxn5a2gmypr9pzwl50qc4bv401vsm5d4k6c"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
