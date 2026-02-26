@@ -75,7 +75,7 @@ handle entire workflows.  This package disables auto-updates.")
 (define-public ollama
   (package
     (name "ollama")
-    (version "0.16.1")
+    (version "0.17.0")
     (source
      (origin
        (method url-fetch)
@@ -83,7 +83,7 @@ handle entire workflows.  This package disables auto-updates.")
              "https://github.com/ollama/ollama/releases/download/v"
              version "/ollama-linux-amd64.tar.zst"))
        (sha256
-        (base32 "0y7wgk69p71s0mms6xd56ylrhwyxj65nm043iwcyw0ii3mxqirkv"))))
+        (base32 "0a2q9ky82rlhnhrakn4133a549arasxy44ni7mmly99ms2jfc3sk"))))
     (build-system binary-build-system)
     (arguments
      (list
