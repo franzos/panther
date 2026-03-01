@@ -418,19 +418,19 @@ connections, and custom DNS settings.")
 (define-public oha
   (package
     (name "oha")
-    (version "1.13.0")
+    (version "1.14.0")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "oha" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "1bmx7mgbhfnfnjc5frszrn8g7r5529qan1ccb9qkgmjrhka2672p"))))
+        (base32 "1pr71vifz2mqybq2n8mnaik6mgirrs4jfr2na5d1mj5494xqvkbn"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
        #:tests? #f
-       #:rust ,rust-1.86
+       #:rust ,rust-1.87
        #:phases
        (modify-phases %standard-phases
          (add-after 'unpack 'override-jemalloc
