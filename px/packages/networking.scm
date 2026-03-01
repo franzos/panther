@@ -503,7 +503,7 @@ captured data.")
 (define-public halloy
   (package
     (name "halloy")
-    (version "2026.2")
+    (version "2026.3")
     (source
      (origin
        (method url-fetch)
@@ -512,7 +512,7 @@ captured data.")
              version ".tar.gz"))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "06b2h75j4wkbz3m1c2la13xv6bff5rbaw0d9g8c31b90zbw9jarw"))))
+        (base32 "0ipra69hwhyf3pzbmqidmski3758qmw3ckqbmfycfv8fh2gm3sd6"))))
     (build-system cargo-build-system)
     (arguments
      (list
@@ -529,7 +529,7 @@ captured data.")
                                         #:fail-on-error? #f)))
                   (if (pair? dirs) (car dirs) #f)))
               (let ((iced-dir (find-vendor-dir "^rust-iced-0\\.15"))
-                    (cryoglyph-dir (find-vendor-dir "^rust-cryoglyph-0\\.1\\.0\\.3836"))
+                    (cryoglyph-dir (find-vendor-dir "^rust-cryoglyph-0\\.1\\.0\\.1d68"))
                     (winit-dir (find-vendor-dir "^rust-winit-0\\.30.*05b8ff")))
                 ;; Patch halloy's [patch.crates-io] git refs to local paths
                 (substitute* "Cargo.toml"
