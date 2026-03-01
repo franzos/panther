@@ -31,7 +31,7 @@
 (define-public codex
   (package
     (name "codex")
-    (version "0.105.0")
+    (version "0.106.0")
     (source
      (origin
        (method url-fetch)
@@ -44,8 +44,8 @@
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "0bc5yssbrj1rb68x8svpbscpmxlqc598msd7k6zm29iwfl4bmb1h")
-           ("aarch64-linux" "02wgfdgxlwgzvh91a0r7wx07ii6psv053lrjbmaqahh6ic1iljcx"))))))
+           ("x86_64-linux" "00filr2ai3gd47k18cnrg9ab698yv321ya5vahk0vflgifzlx8dj")
+           ("aarch64-linux" "1j9bpfxpq6fkypp4hbbx18jjr7wsihqqb1pxj6yi1wnw9hajbgnx"))))))
     (build-system binary-build-system)
     (arguments
      (list
