@@ -161,7 +161,7 @@ minimize its security impact.")
 (define-public voxtype
   (package
     (name "voxtype")
-    (version "0.6.2")
+    (version "0.6.3")
     (source
      (origin
        (method git-fetch)
@@ -170,7 +170,7 @@ minimize its security impact.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1rd2gdwyn1a4q84qwsi2yf8nxsdfcjlxlwldw0nyklnvyy4w1pq7"))
+        (base32 "1j7hvry4yaih90m1vn421xdrzhn2njbvs3671lj3ym694k10g1nr"))
        (snippet
         #~(begin
             (use-modules (guix build utils))
