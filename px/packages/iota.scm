@@ -74,7 +74,7 @@ and related tools.")
 (define-public jota
   (package
     (name "jota")
-    (version "0.2.3")
+    (version "0.2.4")
     (source
      (origin
        (method git-fetch)
@@ -83,7 +83,7 @@ and related tools.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0zn92s5wxsbk401vg7c544d474qwydaafwmhk7h9d66bja8yryqq"))))
+        (base32 "0h2ac1dk95yymk91b4gcvs7k2xggh41fkcadkw2gc4vh2z48ydgi"))))
     (build-system cargo-build-system)
     (arguments
      (list
