@@ -211,7 +211,7 @@ optional encryption using GPG or password-based AES-256-GCM.")
 (define-public vatic
   (package
     (name "vatic")
-    (version "0.1.0")
+    (version "0.1.1")
     (source
      (origin
        (method git-fetch)
@@ -220,7 +220,7 @@ optional encryption using GPG or password-based AES-256-GCM.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1jmv9jszlqf7wairq7qhcarw41zmhc3aq45s5sl3yc2mah5krys6"))))
+        (base32 "0rpmij1pgfymhpx2zgyk67qiqkxz9d0772ccy3ifianjjvz6cfs1"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
