@@ -182,16 +182,14 @@ programmers, with dashboards showing metrics and insights about coding habits.")
 (define-public envstash
   (package
     (name "envstash")
-    (version "0.1.9")
+    (version "0.1.10")
     (source
      (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/franzos/envstash")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
+       (method url-fetch)
+       (uri (crate-uri "envstash" version))
+       (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "1s312lifilyqqx9xwm0gs07n4lpxzaf3fwx3fzmaifvalwk2wzdx"))))
+        (base32 "1ipc12w4cgpky350jd72pv6an01qyq0iasvg7wvpsy1dyf9pcf36"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
