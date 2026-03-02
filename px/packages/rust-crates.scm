@@ -8839,6 +8839,10 @@
   (crate-source "libredox" "0.1.12"
                 "05h6fb2y05h74zwaafmnf7gv3bxilzp7syqlfzw524w55kh9a2rx"))
 
+(define rust-libredox-0.1.14
+  (crate-source "libredox" "0.1.14"
+                "02p3pxlqf54znf1jhiyyjs0i4caf8ckrd5l8ygs4i6ba3nfy6i0p"))
+
 (define rust-libredox-0.1.3
   (crate-source "libredox" "0.1.3"
                 "139602gzgs0k91zb7dvgj1qh4ynb8g1lbxsswdim18hcb6ykgzy0"))
@@ -12399,6 +12403,10 @@
 (define rust-redox-syscall-0.7.1
   (crate-source "redox_syscall" "0.7.1"
                 "0axziqgk7mg2cwmr03qq250z24gxhqn02cn29zi05p5d22k5m61m"))
+
+(define rust-redox-syscall-0.7.3
+  (crate-source "redox_syscall" "0.7.3"
+                "05mys0g4faa5l7dqvl4y8395b42yshs2qlvysdvijlwhx1s0mrvc"))
 
 (define rust-redox-users-0.4.3
   (crate-source "redox_users" "0.4.3"
@@ -32074,7 +32082,7 @@
                                 rust-anstyle-parse-0.2.7
                                 rust-anstyle-query-1.1.5
                                 rust-anstyle-wincon-3.0.11
-                                rust-anyhow-1.0.101
+                                rust-anyhow-1.0.102
                                 rust-arrayvec-0.7.6
                                 rust-autocfg-1.5.0
                                 rust-base64-0.22.1
@@ -32082,16 +32090,16 @@
                                 rust-bitcode-derive-0.6.9
                                 rust-bitflags-1.3.2
                                 rust-bitflags-2.11.0
-                                rust-bumpalo-3.20.1
+                                rust-bumpalo-3.20.2
                                 rust-bytemuck-1.25.0
                                 rust-bytes-1.11.1
                                 rust-cassowary-0.3.0
                                 rust-castaway-0.2.4
                                 rust-cc-1.2.56
                                 rust-cfg-if-1.0.4
-                                rust-chrono-0.4.43
-                                rust-clap-4.5.59
-                                rust-clap-builder-4.5.59
+                                rust-chrono-0.4.44
+                                rust-clap-4.5.60
+                                rust-clap-builder-4.5.60
                                 rust-clap-derive-4.5.55
                                 rust-clap-lex-1.0.0
                                 rust-colorchoice-1.0.4
@@ -32142,14 +32150,14 @@
                                 rust-is-terminal-polyfill-1.70.2
                                 rust-itertools-0.13.0
                                 rust-itoa-1.0.17
-                                rust-js-sys-0.3.85
+                                rust-js-sys-0.3.91
                                 rust-kqueue-1.1.1
                                 rust-kqueue-sys-1.0.4
                                 rust-libc-0.2.182
-                                rust-libredox-0.1.12
+                                rust-libredox-0.1.14
                                 rust-libsqlite3-sys-0.36.0
                                 rust-linux-raw-sys-0.4.15
-                                rust-linux-raw-sys-0.11.0
+                                rust-linux-raw-sys-0.12.1
                                 rust-litrs-1.0.0
                                 rust-lock-api-0.4.14
                                 rust-log-0.4.29
@@ -32168,20 +32176,21 @@
                                 rust-paste-1.0.15
                                 rust-percent-encoding-2.3.2
                                 rust-pkg-config-0.3.32
+                                rust-plain-0.2.3
                                 rust-proc-macro2-1.0.106
                                 rust-quote-1.0.44
                                 rust-ratatui-0.29.0
                                 rust-rayon-1.11.0
                                 rust-rayon-core-1.13.0
                                 rust-redox-syscall-0.5.18
-                                rust-redox-syscall-0.7.1
+                                rust-redox-syscall-0.7.3
                                 rust-redox-users-0.5.2
                                 rust-ring-0.17.14
                                 rust-rsqlite-vfs-0.1.0
                                 rust-rusqlite-0.38.0
                                 rust-rustix-0.38.44
-                                rust-rustix-1.1.3
-                                rust-rustls-0.23.36
+                                rust-rustix-1.1.4
+                                rust-rustls-0.23.37
                                 rust-rustls-pki-types-1.14.0
                                 rust-rustls-webpki-0.103.9
                                 rust-rustversion-1.0.22
@@ -32205,7 +32214,7 @@
                                 rust-strum-0.26.3
                                 rust-strum-macros-0.26.4
                                 rust-subtle-2.6.1
-                                rust-syn-2.0.116
+                                rust-syn-2.0.117
                                 rust-thiserror-2.0.18
                                 rust-thiserror-impl-2.0.18
                                 rust-toml-0.8.23
@@ -32225,10 +32234,10 @@
                                 rust-vcpkg-0.2.15
                                 rust-walkdir-2.5.0
                                 rust-wasi-0.11.1+wasi-snapshot-preview1
-                                rust-wasm-bindgen-0.2.108
-                                rust-wasm-bindgen-macro-0.2.108
-                                rust-wasm-bindgen-macro-support-0.2.108
-                                rust-wasm-bindgen-shared-0.2.108
+                                rust-wasm-bindgen-0.2.114
+                                rust-wasm-bindgen-macro-0.2.114
+                                rust-wasm-bindgen-macro-support-0.2.114
+                                rust-wasm-bindgen-shared-0.2.114
                                 rust-webpki-roots-1.0.6
                                 rust-winapi-0.3.9
                                 rust-winapi-i686-pc-windows-gnu-0.4.0
@@ -32241,6 +32250,7 @@
                                 rust-windows-result-0.4.1
                                 rust-windows-strings-0.5.1
                                 rust-windows-sys-0.52.0
+                                rust-windows-sys-0.59.0
                                 rust-windows-sys-0.61.2
                                 rust-windows-targets-0.52.6
                                 rust-windows-aarch64-gnullvm-0.52.6
