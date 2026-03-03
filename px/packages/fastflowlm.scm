@@ -21,8 +21,13 @@
   #:use-module (gnu packages ninja)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages linux)         ;; util-linux (uuid)
+  #:use-module (gnu packages instrumentation) ;; systemtap
+  #:use-module (gnu packages opencl)       ;; opencl-headers
+  #:use-module (gnu packages tls)          ;; openssl
+  #:use-module (gnu packages web)          ;; rapidjson
   #:use-module (gnu packages xdisorg)       ;; libdrm
   #:use-module (gnu packages rust)
+  #:use-module (gnu packages version-control) ;; git-minimal
   #:use-module (gnu packages elf)           ;; patchelf
   #:use-module (gnu packages textutils)    ;; oniguruma
   #:use-module (px packages rust)
@@ -96,6 +101,77 @@ transform (DFT).  This package provides the long-double precision variant.")))
 software that targets AMD FPGAs and NPUs.")
     (license license:asl2.0)))
 
+;; XRT userspace libraries (Apache-2.0).  Builds the open-source runtime
+;; components: libxrt_coreutil.so, libxrt_core.so, libxrt++.so, xclbinutil,
+;; etc.  The proprietary NPU driver (libxrt_driver_xdna.so) is NOT included.
+(define-public xrt
+  (package
+    (name "xrt")
+    (version "2.20.197")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/Xilinx/XRT")
+             (commit (string-append "202520." version))
+             (recursive? #t)))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0kjc4b1svmykfmbbj666l3098v5l0byqxan0d8jqm550vvhr2ivh"))))
+    (build-system cmake-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:configure-flags
+      #~(list "-DXRT_BASE=ON"
+              "-DXRT_ALVEO=OFF"
+              "-DXRT_EDGE=OFF"
+              "-DXRT_NPU=OFF"
+              "-DXRT_STATIC_BUILD=OFF"
+              "-DXRT_UPSTREAM=ON"
+              "-DXRT_ENABLE_HIP=OFF")
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'chdir-to-src
+            (lambda _
+              ;; CMake root is src/CMakeLists.txt.  Remove the
+              ;; top-level build/ directory so cmake-build-system
+              ;; can create its own ../build without conflict.
+              (when (file-exists? "build")
+                (delete-file-recursively "build"))
+              (chdir "src")))
+          (add-after 'chdir-to-src 'skip-python-bindings
+            (lambda _
+              (substitute* "CMake/nativeLnx.cmake"
+                (("xrt_add_subdirectory\\(python\\)") ""))))
+          (add-after 'chdir-to-src 'fix-boost-system
+            (lambda _
+              ;; boost_system is header-only since Boost 1.86; its cmake
+              ;; component file no longer exists.  Remove it from the
+              ;; REQUIRED COMPONENTS list.
+              (substitute* "CMake/boostUtil.cmake"
+                (("system filesystem") "filesystem"))))
+          (add-after 'chdir-to-src 'fix-icd-install-path
+            (lambda _
+              ;; XRT_BASE installs an OpenCL ICD file to /etc which
+              ;; fails in the sandbox.  Redirect to the output prefix.
+              (substitute* "CMake/icd.cmake"
+                (("\"/etc/OpenCL/vendors\"")
+                 "\"${CMAKE_INSTALL_PREFIX}/etc/OpenCL/vendors\"")))))))
+    (native-inputs
+     (list cmake git-minimal pkg-config opencl-headers systemtap))
+    (inputs
+     (list boost libdrm ncurses ocl-icd (list util-linux "lib")
+           openssl rapidjson))
+    (home-page "https://github.com/Xilinx/XRT")
+    (synopsis "AMD Xilinx Runtime userspace libraries")
+    (description
+     "Open-source userspace libraries from AMD Xilinx Runtime (XRT), providing
+@code{libxrt_coreutil.so}, @code{libxrt_core.so}, @code{libxrt++.so}, and
+tools like @command{xclbinutil}.  Required at runtime by software targeting
+AMD FPGAs and NPUs.")
+    (license license:asl2.0)))
+
 ;; Pre-built Rust tokenizer C FFI library, used by the cmake build.
 ;; The tokenizers-cpp submodule invokes cargo internally, which fails in the
 ;; Guix sandbox (no network). Building this separately lets cargo-build-system
@@ -163,12 +239,7 @@ submodule in FastFlowLM.")
       #:validate-runpath? #f
       #:build-type "Release"
       #:configure-flags
-      #~(list "-GNinja"
-              ;; Allow undefined XRT symbols; resolved at runtime
-              ;; when libxrt_coreutil.so is available.
-              (string-append "-DCMAKE_EXE_LINKER_FLAGS="
-                             "-Wl,--unresolved-symbols=ignore-in-object-files"
-                             " -Wl,--allow-shlib-undefined"))
+      #~(list "-GNinja")
       #:phases
       #~(modify-phases %standard-phases
           (add-after 'unpack 'chdir-to-src
@@ -176,29 +247,14 @@ submodule in FastFlowLM.")
               (chdir "src")
               (setenv "FASTFLOWLM_SRC" (getcwd))))
 
-          (add-after 'chdir-to-src 'create-xrt-stub
-            (lambda _
-              ;; Create a stub libxrt_coreutil.so for linking.
-              ;; The real library is provided at runtime by the AMD
-              ;; XRT installation.
-              (mkdir-p "lib")
-              (with-output-to-file "xrt_stub.c"
-                (lambda () (display "void xrt_stub(void) {}\n")))
-              (invoke "gcc" "-shared" "-o" "lib/libxrt_coreutil.so"
-                      "xrt_stub.c")
-              (delete-file "xrt_stub.c")))
-
           (add-after 'chdir-to-src 'patch-xrt-paths
             (lambda* (#:key inputs #:allow-other-keys)
-              (let ((xrt-include (string-append
-                                  (assoc-ref inputs "xrt-headers")
-                                  "/include"))
-                    (xrt-lib (string-append (getcwd) "/lib")))
+              (let ((xrt (assoc-ref inputs "xrt")))
                 (substitute* "CMakeLists.txt"
                   (("/opt/xilinx/xrt/include")
-                   xrt-include)
+                   (string-append xrt "/include"))
                   (("/opt/xilinx/xrt/lib")
-                   xrt-lib)))))
+                   (string-append xrt "/lib"))))))
 
           (add-after 'chdir-to-src 'patch-tokenizers-skip-cargo
             (lambda* (#:key inputs #:allow-other-keys)
@@ -245,19 +301,27 @@ submodule in FastFlowLM.")
                     (install-file model-list share))))))
 
           (add-after 'install-bundled-libs 'fix-rpath
-            (lambda* (#:key outputs #:allow-other-keys)
+            (lambda* (#:key inputs outputs #:allow-other-keys)
               (let* ((out (assoc-ref outputs "out"))
                      (bin (string-append out "/bin/flm"))
-                     (lib (string-append out "/lib")))
-                ;; Add our bundled lib/ to the binary's existing RPATH.
+                     (lib (string-append out "/lib"))
+                     (xrt-lib (string-append (assoc-ref inputs "xrt")
+                                             "/lib"))
+                     (rpath (string-append lib ":" xrt-lib)))
+                ;; Patch the main binary.
                 (when (file-exists? bin)
-                  (invoke "patchelf" "--add-rpath" lib bin))))))))
+                  (invoke "patchelf" "--add-rpath" rpath bin))
+                ;; Patch bundled NPU .so files so they find
+                ;; libxrt_coreutil.so.2 at runtime.
+                (for-each (lambda (so)
+                            (invoke "patchelf" "--add-rpath" xrt-lib so))
+                          (find-files lib "\\.so$"))))))))
     (native-inputs
-     (list cmake ninja pkg-config patchelf xrt-headers))
+     (list cmake ninja pkg-config patchelf))
     (inputs
      (list boost curl fftw fftwf fftwl ffmpeg readline ncurses
            (list util-linux "lib") libdrm oniguruma
-           rust-tokenizers-c))
+           rust-tokenizers-c xrt))
     (supported-systems '("x86_64-linux"))
     (home-page "https://github.com/FastFlowLM/FastFlowLM")
     (synopsis "LLM runtime for AMD Ryzen AI NPUs")
