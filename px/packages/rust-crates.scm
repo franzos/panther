@@ -15433,6 +15433,10 @@
   (crate-source "tokenizers" "0.20.4"
                 "01dr6dqglx1bvynk2sibwcf2wfji589m1j0awb4nyiwa88vwq21v"))
 
+(define rust-tokenizers-0.21.4
+  (crate-source "tokenizers" "0.21.4"
+                "0xilw396nf36z735hisi19ns6d7aa61gsbgsqa2f2nba26bbj856"))
+
 (define rust-tokenizers-0.22.2
   (crate-source "tokenizers" "0.22.2"
                 "08v23bzl25mxnmn4vr5il54q3xawcjyhgywhjr94jlx18hny4f5j"))
@@ -27632,7 +27636,6 @@
                             rust-zvariant-5.10.0
                             rust-zvariant-derive-5.10.0
                             rust-zvariant-utils-3.3.0))
-
                      (keifu =>
                             (list rust-allocator-api2-0.2.21
                                   rust-android-system-properties-0.1.5
@@ -31580,6 +31583,85 @@
                                 rust-winnow-0.7.14
                                 rust-zeroize-1.8.2
                                 rust-zmij-1.0.21))
+                     (tokenizers-c =>
+                                   (list rust-ahash-0.8.12
+                                    rust-aho-corasick-1.1.4
+                                    rust-base64-0.13.1
+                                    rust-bitflags-2.11.0
+                                    rust-castaway-0.2.4
+                                    rust-cc-1.2.56
+                                    rust-cfg-if-1.0.4
+                                    rust-compact-str-0.9.0
+                                    rust-crossbeam-deque-0.8.6
+                                    rust-crossbeam-epoch-0.9.18
+                                    rust-crossbeam-utils-0.8.21
+                                    rust-darling-0.20.11
+                                    rust-darling-core-0.20.11
+                                    rust-darling-macro-0.20.11
+                                    rust-dary-heap-0.3.8
+                                    rust-derive-builder-0.20.2
+                                    rust-derive-builder-core-0.20.2
+                                    rust-derive-builder-macro-0.20.2
+                                    rust-either-1.15.0
+                                    rust-esaxx-rs-0.1.10
+                                    rust-find-msvc-tools-0.1.9
+                                    rust-fnv-1.0.7
+                                    rust-getrandom-0.3.4
+                                    rust-ident-case-1.0.1
+                                    rust-itertools-0.14.0
+                                    rust-itoa-1.0.17
+                                    rust-libc-0.2.182
+                                    rust-log-0.4.29
+                                    rust-macro-rules-attribute-0.2.2
+                                    rust-macro-rules-attribute-proc-macro-0.2.2
+                                    rust-memchr-2.8.0
+                                    rust-minimal-lexical-0.2.1
+                                    rust-monostate-0.1.18
+                                    rust-monostate-impl-0.1.18
+                                    rust-nom-7.1.3
+                                    rust-once-cell-1.21.3
+                                    rust-onig-6.5.1
+                                    rust-onig-sys-69.9.1
+                                    rust-paste-1.0.15
+                                    rust-pkg-config-0.3.32
+                                    rust-ppv-lite86-0.2.21
+                                    rust-proc-macro2-1.0.106
+                                    rust-quote-1.0.44
+                                    rust-r-efi-5.3.0
+                                    rust-rand-0.9.2
+                                    rust-rand-chacha-0.9.0
+                                    rust-rand-core-0.9.5
+                                    rust-rayon-1.11.0
+                                    rust-rayon-cond-0.4.0
+                                    rust-rayon-core-1.13.0
+                                    rust-regex-1.12.3
+                                    rust-regex-automata-0.4.14
+                                    rust-regex-syntax-0.8.10
+                                    rust-rustversion-1.0.22
+                                    rust-ryu-1.0.23
+                                    rust-serde-1.0.228
+                                    rust-serde-core-1.0.228
+                                    rust-serde-derive-1.0.228
+                                    rust-serde-json-1.0.149
+                                    rust-shlex-1.3.0
+                                    rust-smallvec-1.15.1
+                                    rust-spm-precompiled-0.1.4
+                                    rust-static-assertions-1.1.0
+                                    rust-strsim-0.11.1
+                                    rust-syn-2.0.117
+                                    rust-thiserror-2.0.18
+                                    rust-thiserror-impl-2.0.18
+                                    rust-tokenizers-0.21.4
+                                    rust-unicode-ident-1.0.24
+                                    rust-unicode-normalization-alignments-0.1.12
+                                    rust-unicode-segmentation-1.12.0
+                                    rust-unicode-categories-0.1.1
+                                    rust-version-check-0.9.5
+                                    rust-wasip2-1.0.2+wasi-0.2.9
+                                    rust-wit-bindgen-0.51.0
+                                    rust-zerocopy-0.8.40
+                                    rust-zerocopy-derive-0.8.40
+                                    rust-zmij-1.0.21))
                      (vatic =>
                             (list rust-accessory-2.1.0
                              rust-adler2-2.0.1
