@@ -294,11 +294,12 @@ submodule in FastFlowLM.")
                 ;; Install xclbin NPU bitstreams
                 (copy-recursively (string-append src "/xclbins")
                                   (string-append share "/xclbins"))
-                ;; Install model list
-                (let ((model-list (string-append src "/../model_list.json")))
+                ;; Install model list next to the binary — flm resolves
+                ;; it relative to its own executable path.
+                (let ((model-list (string-append src "/model_list.json"))
+                      (bin (string-append out "/bin")))
                   (when (file-exists? model-list)
-                    (mkdir-p share)
-                    (install-file model-list share))))))
+                    (install-file model-list bin))))))
 
           (add-after 'install-bundled-libs 'fix-rpath
             (lambda* (#:key inputs outputs #:allow-other-keys)
