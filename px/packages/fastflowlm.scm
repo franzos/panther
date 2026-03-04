@@ -172,6 +172,91 @@ tools like @command{xclbinutil}.  Required at runtime by software targeting
 AMD FPGAs and NPUs.")
     (license license:asl2.0)))
 
+;; NPU userspace driver plugin (libxrt_driver_xdna.so).  Builds from the
+;; amd/xdna-driver repository which includes XRT as a git submodule.
+;; The shim links against xrt_core and xrt_coreutil built from the submodule;
+;; at runtime it finds the libraries from our xrt package via RPATH.
+(define-public xrt-plugin-amdxdna
+  (package
+    (name "xrt-plugin-amdxdna")
+    (version "2.21.75")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/amd/xdna-driver")
+             (commit version)
+             (recursive? #t)))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1nqmq2blqmi39x8vw5ylybwv7fszln67846kwy79wsphcviqh63c"))))
+    (build-system cmake-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:configure-flags
+      #~(list "-DSKIP_KMOD=1")
+      #:phases
+      #~(modify-phases %standard-phases
+          ;; Apply same fixes to the XRT submodule as our xrt package.
+          (add-after 'unpack 'patch-xrt-submodule
+            (lambda _
+              ;; boost_system is header-only since Boost 1.86
+              (substitute* "xrt/src/CMake/boostUtil.cmake"
+                (("system filesystem") "filesystem"))
+              ;; Skip python bindings
+              (substitute* "xrt/src/CMake/nativeLnx.cmake"
+                (("xrt_add_subdirectory\\(python\\)") ""))
+              ;; Redirect ICD install away from /etc
+              (substitute* "xrt/src/CMake/icd.cmake"
+                (("\"/etc/OpenCL/vendors\"")
+                 "\"${CMAKE_INSTALL_PREFIX}/etc/OpenCL/vendors\""))))
+          ;; Only install the plugin shared library.  The build
+          ;; produces a versioned .so with symlinks; preserve them.
+          (replace 'install
+            (lambda* (#:key outputs #:allow-other-keys)
+              (let* ((lib (string-append (assoc-ref outputs "out") "/lib"))
+                     ;; Find the real versioned .so (not symlinks).
+                     (real (car (find-files "src/shim"
+                                           "libxrt_driver_xdna\\.so\\.[0-9]+\\.[0-9]+\\.[0-9]+"))))
+                (mkdir-p lib)
+                (install-file real lib)
+                (let ((base (basename real)))
+                  (with-directory-excursion lib
+                    (symlink base "libxrt_driver_xdna.so.2")
+                    (symlink "libxrt_driver_xdna.so.2"
+                             "libxrt_driver_xdna.so"))))))
+          ;; Point RPATH at our xrt package so the plugin finds
+          ;; libxrt_coreutil.so and libxrt_core.so at runtime.
+          ;; Only patch the real versioned .so, not the symlinks.
+          (add-after 'install 'fix-rpath
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (let* ((out (assoc-ref outputs "out"))
+                     (xrt-lib (string-append (assoc-ref inputs "xrt")
+                                             "/lib"))
+                     (files (find-files
+                             (string-append out "/lib")
+                             "libxrt_driver_xdna\\.so\\.[0-9]+\\.[0-9]+\\.[0-9]+")))
+                (for-each (lambda (so)
+                            (invoke "patchelf" "--add-rpath" xrt-lib so)
+                            (invoke "patchelf" "--shrink-rpath"
+                                    "--allowed-rpath-prefixes"
+                                    "/gnu/store" so))
+                          files)))))))
+    (native-inputs
+     (list cmake pkg-config opencl-headers systemtap patchelf git-minimal))
+    (inputs
+     (list boost libdrm ncurses ocl-icd (list util-linux "lib")
+           openssl rapidjson xrt))
+    (supported-systems '("x86_64-linux"))
+    (home-page "https://github.com/amd/xdna-driver")
+    (synopsis "AMD XDNA NPU userspace driver plugin for XRT")
+    (description
+     "Userspace driver plugin (@code{libxrt_driver_xdna.so}) for AMD XDNA NPU
+accelerators.  This shared library is loaded by XRT at runtime to communicate
+with AMD Ryzen AI NPU hardware via the @code{amdxdna} kernel driver.")
+    (license license:asl2.0)))
+
 ;; Pre-built Rust tokenizer C FFI library, used by the cmake build.
 ;; The tokenizers-cpp submodule invokes cargo internally, which fails in the
 ;; Guix sandbox (no network). Building this separately lets cargo-build-system
@@ -316,13 +401,52 @@ submodule in FastFlowLM.")
                 ;; libxrt_coreutil.so.2 at runtime.
                 (for-each (lambda (so)
                             (invoke "patchelf" "--add-rpath" xrt-lib so))
-                          (find-files lib "\\.so$"))))))))
+                          (find-files lib "\\.so$")))))
+
+          ;; XRT discovers driver plugins by scanning the same directory
+          ;; as libxrt_core.so.2 for libxrt_driver_*.so.2 files.
+          ;; Since xrt and xrt-plugin-amdxdna live in separate store
+          ;; paths, create a merged directory with symlinks so XRT
+          ;; finds the plugin alongside its own libraries.
+          (add-after 'fix-rpath 'setup-xrt-plugins
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (let* ((out (assoc-ref outputs "out"))
+                     (xrt-prefix (string-append out "/share/xrt"))
+                     (xrt-lib-dir (string-append xrt-prefix "/lib"))
+                     (xrt (assoc-ref inputs "xrt"))
+                     (xdna (assoc-ref inputs "xrt-plugin-amdxdna")))
+                (mkdir-p xrt-lib-dir)
+                ;; Symlink all XRT libraries
+                (for-each (lambda (f)
+                            (let ((target (string-append xrt-lib-dir "/"
+                                                         (basename f))))
+                              (unless (file-exists? target)
+                                (symlink f target))))
+                          (find-files (string-append xrt "/lib")
+                                     "\\.(so|so\\.[0-9].*)" #:stat stat))
+                ;; Symlink the XDNA plugin
+                (for-each (lambda (f)
+                            (let ((target (string-append xrt-lib-dir "/"
+                                                         (basename f))))
+                              (unless (file-exists? target)
+                                (symlink f target))))
+                          (find-files (string-append xdna "/lib")
+                                     "\\.(so|so\\.[0-9].*)" #:stat stat)))))
+
+          (add-after 'setup-xrt-plugins 'wrap-flm
+            (lambda* (#:key outputs #:allow-other-keys)
+              (let* ((out (assoc-ref outputs "out"))
+                     (bin (string-append out "/bin/flm"))
+                     (xrt-prefix (string-append out "/share/xrt")))
+                (when (file-exists? bin)
+                  (wrap-program bin
+                    `("XILINX_XRT" = (,xrt-prefix))))))))))
     (native-inputs
      (list cmake ninja pkg-config patchelf))
     (inputs
      (list boost curl fftw fftwf fftwl ffmpeg readline ncurses
            (list util-linux "lib") libdrm oniguruma
-           rust-tokenizers-c xrt))
+           rust-tokenizers-c xrt xrt-plugin-amdxdna))
     (supported-systems '("x86_64-linux"))
     (home-page "https://github.com/FastFlowLM/FastFlowLM")
     (synopsis "LLM runtime for AMD Ryzen AI NPUs")
@@ -330,6 +454,6 @@ submodule in FastFlowLM.")
      "FastFlowLM is an NPU-first LLM runtime for AMD Ryzen AI NPUs (XDNA2
 architecture).  It supports Llama, Qwen, Gemma, Phi-4, DeepSeek, Whisper and
 other models running on Strix, Strix Halo and Kraken processors.  This
-package bundles proprietary NPU kernel libraries and requires the AMD XRT
-runtime (@code{libxrt-npu2}) to be installed separately.")
+package bundles proprietary NPU kernel libraries and includes the AMD XDNA
+driver plugin for NPU communication.")
     (license license:expat)))
