@@ -14,7 +14,9 @@
   #:use-module (ice-9 match)
   #:use-module (nonguix build-system binary)
   #:use-module (gnu packages base)
+  #:use-module (gnu packages bash)
   #:use-module (gnu packages compression)
+  #:use-module (gnu packages elf)
   #:use-module (gnu packages gcc)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages golang)
@@ -75,6 +77,58 @@ on your computer.  It assists with software development tasks directly within
 a terminal environment, providing code suggestions, explanations, and
 automated coding assistance.")
     (license license:asl2.0)))
+
+(define-public bun
+  (package
+    (name "bun")
+    (version "1.3.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/oven-sh/bun/releases/download/bun-v"
+             version "/bun-linux-x64.zip"))
+       (sha256
+        (base32 "0g9sm53gx7fy5jgn1qwbir0h2yyzdxxiccg2km2l2lcmdxrldigm"))))
+    (build-system binary-build-system)
+    (arguments
+     (list
+      #:validate-runpath? #f
+      #:install-plan
+      #~`(("bun" "bin/bun.real"))
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'unpack
+            (lambda* (#:key inputs #:allow-other-keys)
+              (invoke "unzip" "-q" (assoc-ref inputs "source"))
+              (invoke "mv" "bun-linux-x64/bun" "bun")))
+          (add-after 'install 'create-wrapper
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (let* ((out (assoc-ref outputs "out"))
+                     (bin (string-append out "/bin"))
+                     (glibc (assoc-ref inputs "glibc"))
+                     (openssl (assoc-ref inputs "openssl")))
+                (mkdir-p bin)
+                (with-output-to-file (string-append bin "/bun")
+                  (lambda _
+                    (format #t "#!~a/bin/bash~%" (assoc-ref inputs "bash"))
+                    (format #t "export LD_LIBRARY_PATH=~a/lib:~a/lib:$LD_LIBRARY_PATH~%"
+                            glibc openssl)
+                    (format #t "exec ~a/lib/ld-linux-x86-64.so.2 ~a/bin/bun.real \"$@\"~%"
+                            glibc out)))
+                (chmod (string-append bin "/bun") #o755)))))))
+    (native-inputs (list unzip bash))
+    (inputs `(("glibc" ,glibc)
+              ("openssl" ,openssl)))
+    (supported-systems '("x86_64-linux"))
+    (home-page "https://bun.sh")
+    (synopsis "Fast JavaScript runtime, package manager, and bundler")
+    (description
+     "Bun is a modern JavaScript runtime built for speed and compatibility.
+It serves as a drop-in replacement for Node.js while providing a unified
+toolkit that includes a package manager and bundler, making it ideal for
+building fast and scalable JavaScript applications.")
+    (license license:expat)))
 
 (define-public binsider
   (package
