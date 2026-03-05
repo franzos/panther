@@ -20,7 +20,7 @@
 (define-public claude-code
   (package
     (name "claude-code")
-    (version "2.1.63")
+    (version "2.1.69")
     (source
      (origin
        (method url-fetch)
@@ -29,7 +29,7 @@
              "86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/"
              version "/linux-x64/claude"))
        (sha256
-        (base32 "1ldh75fn0hqb2n6vx16xx0b3qnn32ribp0znspzz14mvc7j4fi3k"))))
+        (base32 "16k2kv2shzbysba78c00005sivvzyw6if8ih6pzam35z7idbvgdk"))))
     (build-system binary-build-system)
     (arguments
      (list
@@ -75,7 +75,7 @@ handle entire workflows.  This package disables auto-updates.")
 (define-public ollama
   (package
     (name "ollama")
-    (version "0.17.4")
+    (version "0.17.6")
     (source
      (origin
        (method url-fetch)
@@ -83,7 +83,7 @@ handle entire workflows.  This package disables auto-updates.")
              "https://github.com/ollama/ollama/releases/download/v"
              version "/ollama-linux-amd64.tar.zst"))
        (sha256
-        (base32 "0y48aznxn021nsaq7hrfia31wf4giaja26qhnj8lbvxfgnl261w1"))))
+        (base32 "005xk376kxxy688q0scc9czgqd3n8l9yg2wwmijqgqvfhiw399cm"))))
     (build-system binary-build-system)
     (arguments
      (list
