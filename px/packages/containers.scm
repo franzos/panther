@@ -11,7 +11,7 @@
 (define-public podman-healthcheckd
   (package
     (name "podman-healthcheckd")
-    (version "0.1.2")
+    (version "0.1.3")
     (source
      (origin
        (method git-fetch)
@@ -20,7 +20,7 @@
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0snl2bifb691mhd1i478xxdcf1md2r7kd2x74mpyx4rll5jiiz3m"))))
+        (base32 "0q6nrp1r0b7y3amv631l473814rcfn8f8lswf5sncshqh9ss248h"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f))
