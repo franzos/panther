@@ -64,14 +64,14 @@ with git and your code.")
 (define-public jj-vcs
   (package
     (name "jj-vcs")
-    (version "0.38.0")
+    (version "0.39.0")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "jj-cli" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "0im2a2hcw61kz3745318vcwfsqk5nayj7295zdzk6ygczc4nr7np"))))
+        (base32 "06p4pm9lkxq2fsz3sdl0nf23vf952di2w19mc8f21nxcpdcml209"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
