@@ -47,7 +47,7 @@
 (define-public vscode
   (package
     (name "vscode")
-    (version "1.109.5")
+    (version "1.110.1")
     (source
      #f)
     (build-system binary-build-system)
@@ -202,7 +202,7 @@
                                                  out) ":"))))) #t)))))
     (native-inputs `(("tar" ,tar)))
     (inputs `(("vscode" ,(make-vscode-release-asset version "vscode"
-                          "19xipl93dn29rl5imkrlhy9scr4sbak2gvip39jhz9fxq01h25kh"))
+                          "132iqlhkl5i8l4j2jls35jq00h4pb3jzna5pb87chpsriax4yz4x"))
               ("gcc:lib" ,gcc "lib")
               ("gcc" ,gcc "lib")
               ("glib" ,glib)
@@ -446,7 +446,7 @@ predictive code completion, and integrations with development workflows.")
 (define-public zed
   (package
     (name "zed")
-    (version "0.226.4")
+    (version "0.226.5")
     (source #f)
     (build-system binary-build-system)
     (arguments
@@ -508,7 +508,7 @@ predictive code completion, and integrations with development workflows.")
                         "https://github.com/zed-industries/zed/releases/download/v"
                         version "/zed-linux-x86_64.tar.gz"))
                   (sha256
-                   (base32 "0g72mmrd4z0va50s0winji2172gr8glvvm1knj4qx75a0z9bkff3"))))
+                   (base32 "1sqkd924449ipq2yj58p1d130fcmdbk0dwp2jcwbhhp8xy8iif2g"))))
               ("bash-minimal" ,bash-minimal)
               ("glib" ,glib)
               ("gtk+" ,gtk+)
