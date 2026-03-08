@@ -20,7 +20,7 @@
 (define-public claude-code
   (package
     (name "claude-code")
-    (version "2.1.69")
+    (version "2.1.71")
     (source
      (origin
        (method url-fetch)
@@ -29,7 +29,7 @@
              "86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/"
              version "/linux-x64/claude"))
        (sha256
-        (base32 "16k2kv2shzbysba78c00005sivvzyw6if8ih6pzam35z7idbvgdk"))))
+        (base32 "1gds8yil42dcag3fvj5jkwvz1wzzaw7gk75xfnkyk421bigjw031"))))
     (build-system binary-build-system)
     (arguments
      (list
@@ -75,7 +75,7 @@ handle entire workflows.  This package disables auto-updates.")
 (define-public ollama
   (package
     (name "ollama")
-    (version "0.17.6")
+    (version "0.17.7")
     (source
      (origin
        (method url-fetch)
@@ -83,7 +83,7 @@ handle entire workflows.  This package disables auto-updates.")
              "https://github.com/ollama/ollama/releases/download/v"
              version "/ollama-linux-amd64.tar.zst"))
        (sha256
-        (base32 "005xk376kxxy688q0scc9czgqd3n8l9yg2wwmijqgqvfhiw399cm"))))
+        (base32 "078ar2v457wbvv6ns7i70vy6ycxrv7lfnzfprs9j9yk6kw71xjji"))))
     (build-system binary-build-system)
     (arguments
      (list
@@ -116,7 +116,7 @@ as well as a library of pre-built models that can be easily used.")
 (define-public tku
   (package
     (name "tku")
-    (version "0.1.6")
+    (version "0.1.7")
     (source
      (origin
        (method git-fetch)
@@ -125,13 +125,16 @@ as well as a library of pre-built models that can be easily used.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0ny9zglhg6kh84ashhw1c1yg5wdj59w2v35vjcs2154gda579n4j"))))
+        (base32 "0inb78mjp13zaizm6p5arq0kknb9i85fqniq6iaz6jqrah6xg98w"))))
     (build-system cargo-build-system)
     (arguments
      (list
       #:rust rust-1.89
       #:install-source? #f
-      #:tests? #t))
+      #:tests? #t
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'check-for-pregenerated-files))))
     (inputs
      (px-cargo-inputs 'tku))
     (home-page "https://github.com/franzos/tku")
