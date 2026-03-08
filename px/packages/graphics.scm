@@ -38,7 +38,7 @@
 (define-public rapidraw
   (package
     (name "rapidraw")
-    (version "1.5.0")
+    (version "1.5.1")
     (source
      (origin
        (method url-fetch)
@@ -46,7 +46,7 @@
              "https://github.com/CyberTimon/RapidRAW/releases/download/v"
              version "/03_RapidRAW_v" version "_ubuntu-24.04_amd64.deb"))
        (sha256
-        (base32 "0ckc9q4g8mvrdjyzx79f0c36y2f9rv7v274sfkdc27jaab8kr0wp"))))
+        (base32 "16my1immbryjcilsv7h38flby4vvgpzcnbw3s8a0jqc6vnd05slh"))))
     (build-system binary-build-system)
     (arguments
      `(#:patchelf-plan `(("usr/bin/RapidRAW"
