@@ -546,21 +546,35 @@ upload, and reCAPTCHA.")
 (define-public fw-fanctrl
   (package
     (name "fw-fanctrl")
-    (version "1.0.0")
+    (version "1.0.4")
     (source
      (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/franzos/fw-fanctrl")
-             (commit "07f815846c75c2d5a490166f8e1f29947333cc1c")))
-       (file-name (git-file-name name version))
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/TamtamHero/fw-fanctrl/archive/refs/tags/v"
+             version ".tar.gz"))
+       (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "1a05rws1w4ml6ii4vb5nzlh6gz02n88mk5i5rn0qn5pbknixf2w5"))))
+        (base32 "1a26xrj0cfc007jbrzhs8a6dj2gv9qaw3zbds177b1ng41an76qy"))
+       ;; Replace Python 3.12+ f-string syntax (PEP 701) with 3.11-compatible
+       ;; form: config["key"] -> config['key'] inside f-strings.
+       (modules '((guix build utils)))
+       (snippet
+        #~(begin
+            (substitute* "src/fw_fanctrl/Configuration.py"
+              (("config\\[\"defaultStrategy\"\\]\\}' is not")
+               "config['defaultStrategy']}' is not"))
+            (substitute* "src/fw_fanctrl/dto/runtime_result/StatusRuntimeResult.py"
+              (("self\\.configuration\\[\"data\"\\]\\[\"defaultStrategy\"\\]")
+               "self.configuration['data']['defaultStrategy']")
+              (("self\\.configuration\\[\"data\"\\]\\[\"strategyOnDischarging\"\\]")
+               "self.configuration['data']['strategyOnDischarging']"))))))
     (build-system pyproject-build-system)
     (arguments
      (list
       #:tests? #f))
-    (propagated-inputs (list python-setuptools python-wheel python-jsonschema ectool))
+    (native-inputs (list python-setuptools python-wheel))
+    (propagated-inputs (list python-jsonschema ectool))
     (home-page "https://github.com/TamtamHero/fw-fanctrl")
     (synopsis "A service to better control Framework Laptop's fan(s)")
     (description
