@@ -28,6 +28,7 @@
   #:use-module (gnu packages sqlite)
   #:use-module (gnu packages tls)
   #:use-module (px packages golang-xyz)
+  #:use-module (px packages go)
   #:use-module (px self))
 
 (define-public codex
@@ -320,3 +321,34 @@ the causal chain of why a process exists.  It traces process ancestry, maps
 ports to processes, and identifies contexts like Git repositories, Docker
 containers, and PM2 instances.")
     (license license:asl2.0)))
+
+(define-public d2
+  (package
+    (name "d2")
+    (version "0.7.1")
+    (source (origin
+              (method go-fetch-vendored)
+              (uri (go-git-reference
+                    (url "https://github.com/terrastruct/d2")
+                    (commit (string-append "v" version))
+                    (sha (base32 "1i1fvy35rqjxvmpa2rlfx96j0bb1hf17xxml0pf6nhjaq8qjy435"))))
+              (sha256
+               (base32
+                "1dcka1h312wqivamiyrvbkk3pkggqhqbnqdyp1scblcml9rd6jk7"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "oss.terrastruct.com/d2"
+      #:install-source? #f
+      #:go go-1.25
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'check))))
+    (home-page "https://d2lang.com")
+    (synopsis "Modern diagram scripting language")
+    (description
+     "D2 is a modern diagram scripting language that turns text into diagrams.
+It supports flowcharts, sequence diagrams, class diagrams, and more with a
+readable syntax.  D2 includes multiple layout engines and can output to SVG,
+PNG, and PDF formats.")
+    (license license:mpl2.0)))
