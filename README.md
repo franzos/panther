@@ -120,6 +120,53 @@ herd stop foot-server     # Stop server
 herd status foot-server   # Check status
 ```
 
+### Unattended Upgrade
+
+Periodically runs `guix pull` followed by `guix home reconfigure`. Drop-in home equivalent of the system `unattended-upgrade-service-type` with battery awareness — upgrades are skipped when the laptop is on battery power.
+
+**Usage:**
+
+```scheme
+(use-modules (px home services unattended-upgrade))
+
+;; Minimal configuration (config-file is required)
+(service home-unattended-upgrade-service-type
+         (home-unattended-upgrade-configuration
+          (config-file "/home/user/dotfiles/home/home.scm")
+          (channels #~
+                    (cons* (channel
+                            (name 'my-channel)
+                            (url "https://example.com/channel.git"))
+                           %default-channels))))
+
+;; Full configuration
+(service home-unattended-upgrade-service-type
+         (home-unattended-upgrade-configuration
+          (config-file "/home/user/dotfiles/home/home.scm")
+          (skip-on-battery? #t)
+          (schedule "0 19 * * *")
+          (channels #~ %default-channels)))
+```
+
+**Configuration options:**
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `config-file` | (required) | Path to `home.scm` configuration file |
+| `channels` | `%default-channels` | Gexp producing a list of channels for `guix pull -C` |
+| `schedule` | `"0 19 * * *"` | Cron schedule string |
+| `system-expiration` | 90 days | Max age of home generations before deletion |
+| `maximum-duration` | 3600 | Max seconds the upgrade may run |
+| `skip-on-battery?` | `#f` | Skip upgrade when on battery power |
+| `log-file` | `~/.local/state/unattended-home-upgrade.log` | Log file path |
+
+**Service management:**
+
+```bash
+herd status unattended-home-upgrade   # Check status
+herd trigger unattended-home-upgrade  # Trigger upgrade now
+```
+
 ### Podman Healthcheckd
 
 Runs podman container healthchecks on systems without systemd.
@@ -147,6 +194,36 @@ herd status podman-healthcheckd   # Check status
 ```
 
 ## System Services
+
+### Unattended Upgrade
+
+Drop-in replacement for `(gnu services admin)` `unattended-upgrade-service-type` with battery awareness. All upstream fields are preserved; the only addition is `skip-on-battery?`.
+
+**Usage:**
+
+```scheme
+(use-modules (px services unattended-upgrade))
+
+(service unattended-upgrade-service-type
+         (unattended-upgrade-configuration
+          (schedule "0 17 * * *")
+          (skip-on-battery? #t)
+          (channels #~
+                    (cons* (channel
+                            (name 'my-channel)
+                            (url "https://example.com/channel.git"))
+                           %default-channels))))
+```
+
+**Additional configuration option:**
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `skip-on-battery?` | `#f` | Skip upgrade when on battery power |
+
+All other fields (`operating-system-file`, `schedule`, `channels`, `reboot?`, `services-to-restart`, `system-expiration`, `maximum-duration`, `log-file`) match the upstream `(gnu services admin)` defaults.
+
+**Battery detection:** Reads `/sys/class/power_supply/*/type` to locate AC adapters and checks their `online` status via sysfs. Desktops without battery info proceed normally.
 
 ### IOTA Node
 
