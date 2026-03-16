@@ -7,6 +7,8 @@
   #:use-module (gnu packages cups)
   #:use-module (gnu packages datastructures)
   #:use-module (gnu packages elf)
+  #:use-module (gnu packages fcitx5)
+  #:use-module (gnu packages fontutils)
   #:use-module (gnu packages gcc)
   #:use-module (gnu packages gl)
   #:use-module (gnu packages glib)
@@ -17,6 +19,7 @@
   #:use-module (gnu packages nss)
   #:use-module (gnu packages pulseaudio)
   #:use-module (gnu packages qt)
+  #:use-module (gnu packages vulkan)
   #:use-module (gnu packages web)
   #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages xml)
@@ -27,7 +30,8 @@
   #:use-module (guix git-download)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix packages)
-  #:use-module (guix utils))
+  #:use-module (guix utils)
+  #:use-module (nonguix licenses))
 
 (define-public strawberry
   (package
@@ -213,3 +217,156 @@ a high-fidelity music streaming experience for TIDAL.  It supports Widevine
 DRM for high-quality audio playback and includes features like custom themes,
 Discord integration, and media key support.")
     (license license:expat)))
+
+(define-public bitwig-studio
+  (package
+    (name "bitwig-studio")
+    (version "6.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://www.bitwig.com/dl/Bitwig%20Studio/" version
+             "/installer_linux/"))
+       (file-name (string-append name "-" version ".deb"))
+       (sha256
+        (base32 "1jcvcqm0l9s24zm72mjv2pnr41admawjiph25dgnhyazmj0r7c4f"))))
+    (supported-systems '("x86_64-linux"))
+    (build-system gnu-build-system)
+    (arguments
+     (list
+      #:validate-runpath? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'unpack
+            (lambda* (#:key inputs #:allow-other-keys)
+              (invoke "ar" "x" #$source)
+              (invoke "tar" "xf" "data.tar.zst")))
+          (delete 'configure)
+          (delete 'build)
+          (delete 'check)
+          (replace 'install
+            (lambda* (#:key outputs #:allow-other-keys)
+              (let* ((out (assoc-ref outputs "out"))
+                     (lib (string-append out "/lib/bitwig-studio"))
+                     (bin (string-append out "/bin"))
+                     (share (string-append out "/share")))
+                ;; Install main application
+                (copy-recursively "opt/bitwig-studio" lib)
+                ;; Create bin symlink
+                (mkdir-p bin)
+                (symlink (string-append lib "/bitwig-studio")
+                         (string-append bin "/bitwig-studio"))
+                ;; Install desktop file, icons, mime, metainfo
+                (copy-recursively "usr/share" share)
+                ;; Fix desktop file
+                (substitute* (string-append share
+                              "/applications/com.bitwig.BitwigStudio.desktop")
+                  (("Exec=bitwig-studio")
+                   (string-append "Exec=" out "/bin/bitwig-studio"))))))
+          (add-after 'install 'patchelf
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (let* ((out (assoc-ref outputs "out"))
+                     (lib (string-append out "/lib/bitwig-studio"))
+                     (ld-so (search-input-file inputs "/lib/ld-linux-x86-64.so.2")))
+                ;; Patch main launcher and BitwigStudio
+                (for-each
+                 (lambda (binary)
+                   (invoke "patchelf" "--set-interpreter" ld-so
+                           (string-append lib "/" binary)))
+                 '("bitwig-studio"
+                   "BitwigStudio"
+                   "bin/BitwigAudioEngine-X64-AVX2"
+                   "bin/BitwigPluginHost-X64-AVX2"
+                   "bin/BitwigPluginHost-X86-AVX2"
+                   "bin/BitwigVampHost"
+                   "bin/show-splash-gtk"
+                   "bin/show-file-dialog-gtk3"
+                   "bin/ffmpeg"
+                   "bin/ffprobe"
+                   "lib/jre/bin/java"))
+                ;; Patch .so files
+                (for-each
+                 (lambda (so-file)
+                   (system* "patchelf" "--set-rpath"
+                            (string-append lib ":" (dirname so-file))
+                            so-file))
+                 (find-files lib "\\.so")))))
+          (add-after 'patchelf 'wrap
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (let* ((out (assoc-ref outputs "out"))
+                     (lib (string-append out "/lib/bitwig-studio"))
+                     (libs (list
+                            #$(this-package-input "alsa-lib")
+                            #$(this-package-input "cairo")
+                            #$(this-package-input "eudev")
+                            #$(this-package-input "fontconfig-minimal")
+                            #$(this-package-input "freetype")
+                            #$(this-package-input "glib")
+                            #$(this-package-input "gtk+")
+                            #$(this-package-input "libglvnd")
+                            #$(this-package-input "libx11")
+                            #$(this-package-input "libxcb")
+                            #$(this-package-input "libxcursor")
+                            #$(this-package-input "libxrender")
+                            #$(this-package-input "libxkbcommon")
+                            #$(this-package-input "mesa")
+                            #$(this-package-input "pango")
+                            #$(this-package-input "pipewire")
+                            #$(this-package-input "vulkan-loader")
+                            #$(this-package-input "xcb-util")
+                            #$(this-package-input "xcb-util-wm")))
+                     (ld-lib-path (string-join
+                                   (append
+                                    (list lib
+                                          (string-append lib "/bin")
+                                          (string-append lib "/lib/jre/lib")
+                                          (string-append lib "/lib/jre/lib/server")
+                                          (string-append lib "/lib/bitwig-studio"))
+                                    (list (string-append
+                                           #$(this-package-input "gcc") "/lib"))
+                                    (map (lambda (pkg)
+                                           (string-append pkg "/lib"))
+                                         libs))
+                                   ":")))
+                (wrap-program (string-append lib "/bitwig-studio")
+                  `("LD_LIBRARY_PATH" ":" prefix (,ld-lib-path))
+                  `("FONTCONFIG_PATH" ":" prefix
+                    (,(string-append #$(this-package-input "fontconfig-minimal")
+                                     "/etc/fonts"))))))))))
+    (native-inputs
+     (list binutils
+           patchelf
+           tar
+           zstd))
+    (inputs
+     (list `(,gcc "lib")
+           alsa-lib
+           cairo
+           eudev
+           fontconfig
+           freetype
+           glib
+           gtk+
+           libglvnd
+           libx11
+           libxcb
+           libxcursor
+           libxkbcommon
+           libxrender
+           mesa
+           pango
+           pipewire
+           vulkan-loader
+           xcb-imdkit
+           xcb-util
+           xcb-util-wm))
+    (home-page "https://www.bitwig.com/")
+    (synopsis "Music production and performance system")
+    (description
+     "Bitwig Studio is a digital audio workstation for music production,
+remixing, and performance. It features flexible editing tools, a modular
+sound design environment, and support for VST/CLAP plugins with a focus
+on a fast, non-linear workflow.")
+    (license (nonfree
+              "https://www.bitwig.com/eula/"))))
