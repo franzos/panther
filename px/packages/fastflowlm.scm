@@ -306,7 +306,7 @@ submodule in FastFlowLM.")
 (define-public fastflowlm
   (package
     (name "fastflowlm")
-    (version "0.9.34")
+    (version "0.9.35")
     (source
      (origin
        (method git-fetch)
@@ -316,7 +316,7 @@ submodule in FastFlowLM.")
              (recursive? #t)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0vfidxp0f03bj203v9qjrwmyrh60cxd9ysy7syasjxnalixpawy1"))))
+        (base32 "0rzl89dqh4wh0m8ib0zay8zyy8bpw598ba2fjly15vlcxkpwb8hc"))))
     (build-system cmake-build-system)
     (arguments
      (list
@@ -324,7 +324,10 @@ submodule in FastFlowLM.")
       #:validate-runpath? #f
       #:build-type "Release"
       #:configure-flags
-      #~(list "-GNinja")
+      #~(list "-GNinja"
+              (string-append "-DFLM_VERSION=" #$version)
+              (string-append "-DNPU_VERSION="
+                             #$(package-version xrt-plugin-amdxdna)))
       #:phases
       #~(modify-phases %standard-phases
           (add-after 'unpack 'chdir-to-src
@@ -339,7 +342,20 @@ submodule in FastFlowLM.")
                   (("/opt/xilinx/xrt/include")
                    (string-append xrt "/include"))
                   (("/opt/xilinx/xrt/lib")
-                   (string-append xrt "/lib"))))))
+                   (string-append xrt "/lib"))
+))))
+
+          (add-after 'patch-xrt-paths 'remove-usr-local-symlink
+            (lambda _
+              ;; Remove the cmake setting that errors on absolute
+              ;; install paths, and the block that creates a symlink
+              ;; in /usr/local/bin (not writable in the build sandbox).
+              (substitute* "CMakeLists.txt"
+                (("set\\(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION ON\\)")
+                 ""))
+              (invoke "sed" "-i"
+                      "/if(NOT WIN32 AND NOT CMAKE_INSTALL_PREFIX/,/endif()/d"
+                      "CMakeLists.txt")))
 
           (add-after 'chdir-to-src 'patch-tokenizers-skip-cargo
             (lambda* (#:key inputs #:allow-other-keys)
