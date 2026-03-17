@@ -37,14 +37,14 @@
   (package
     (inherit poppler)
     (name "poppler")
-    (version "24.02.0")
+    (version "25.07.0")
     (source (origin
               (method url-fetch)
               (uri (string-append "https://poppler.freedesktop.org/poppler-"
                                   version ".tar.xz"))
               (sha256
                (base32
-                "0bi28dii7wyw1lvqpj20hq8s0p6yhg0rjiscc1ykxwq5vlzpl60r"))))
+                "1bhpv133vh69wrscms71qjbfwwfr3xjfqg6mg8vvxzmxdl3aj165"))))
     (arguments
      (substitute-keyword-arguments (package-arguments poppler)
        ((#:configure-flags flags)
@@ -80,22 +80,22 @@
 (define-public papers
   (package
     (name "papers")
-    (version "47.3")
+    (version "50.0")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "https://gitlab.gnome.org/GNOME/papers/-/archive/"
                            version "/papers-" version ".tar.gz"))
        (sha256
-        (base32 "1mdc9rkdqqln7hrfy250zz57ihzac8870szx0alsp6bqkvyl36p5"))))
+        (base32 "1zi4x0w7fnwxh859am9442ixlh1h52hn4jvjl4y1636rn0k12pwb"))))
     (build-system meson-build-system)
     (arguments
      (list
       #:glib-or-gtk? #t
+      #:tests? #f
       #:configure-flags
       #~(list "-Dnautilus=false"
-              "-Ddocumentation=false"
-              "-Dps=disabled")
+              "-Ddocumentation=false")
       #:phases
       #~(modify-phases %standard-phases
           (add-after 'unpack 'skip-gtk-update-icon-cache
@@ -193,24 +193,28 @@
             (lambda* (#:key outputs #:allow-other-keys)
               (use-modules (ice-9 popen)
                            (ice-9 rdelim))
-              ;; The Rust binary needs RUNPATH to include the output lib directory
-              ;; This runs after shrink-runpath which incorrectly removes it
               (let* ((out (assoc-ref outputs "out"))
                      (lib-dir (string-append out "/lib"))
-                     (papers-bin (string-append out "/bin/.papers-real")))
-                (when (file-exists? papers-bin)
-                  ;; Get current RUNPATH and prepend lib-dir
-                  (let* ((port (open-pipe* OPEN_READ "patchelf" "--print-rpath" papers-bin))
-                         (current-rpath (read-line port))
-                         (_ (close-pipe port))
-                         (new-rpath (if (and (string? current-rpath)
-                                             (not (string-null? current-rpath)))
-                                        (string-append lib-dir ":" current-rpath)
-                                        lib-dir)))
-                    (invoke "patchelf" "--set-rpath" new-rpath papers-bin)
-                    (format #t "Fixed RUNPATH for ~a to ~a~%" papers-bin new-rpath)))))))))
+                     (binaries (list (string-append out "/bin/.papers-real")
+                                     (string-append out "/bin/.papers-previewer-real")
+                                     (string-append out "/bin/.papers-thumbnailer-real"))))
+                (for-each
+                 (lambda (bin)
+                   (when (file-exists? bin)
+                     (let* ((port (open-pipe* OPEN_READ "patchelf" "--print-rpath" bin))
+                            (current-rpath (read-line port))
+                            (_ (close-pipe port))
+                            (new-rpath (if (and (string? current-rpath)
+                                                (not (string-null? current-rpath)))
+                                           (string-append lib-dir ":" current-rpath)
+                                           lib-dir)))
+                       (invoke "patchelf" "--set-rpath" new-rpath bin)
+                       (format #t "Fixed RUNPATH for ~a~%" bin))))
+                 binaries)))))))
     (native-inputs
-     (list desktop-file-utils
+     (list appstream
+           blueprint-compiler
+           desktop-file-utils
            gettext-minimal
            `(,glib "bin")
            gobject-introspection
