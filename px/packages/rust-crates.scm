@@ -8640,6 +8640,10 @@
   (crate-source "libdav" "0.10.2"
                 "1ghjckhk8xsmmr67v2migfz3v9s6gag59rq9w4h3mzsaz7gnvvxr"))
 
+(define rust-libdav-0.10.3
+  (crate-source "libdav" "0.10.3"
+                "1a3b0z2l8pxyniaki9lc7aak5f73gp34mfg9k8hl35fsh1sz14lr"))
+
 (define rust-libdav-0.9.1
   (crate-source "libdav" "0.9.1"
                 "1646mcnalav3jiprn3xyslyncmcvn34jzw5qn0h4k1x0bppczqhm"))
@@ -16862,6 +16866,10 @@
 (define rust-vstorage-0.6.0
   (crate-source "vstorage" "0.6.0"
                 "1r76s7dd8jgs1j3yqr0iffshnksiiw104sa44cqkv7zamb1q6fiz"))
+
+(define rust-vstorage-0.7.0
+  (crate-source "vstorage" "0.7.0"
+                "1h4w85bz7nxcgpfxxk551fgfpc7zhsqg429df3zbqw83r0ffrkaz"))
 
 (define rust-vswhom-0.1.0
   (crate-source "vswhom" "0.1.0"
@@ -30013,9 +30021,9 @@
                                     rust-http-body-util-0.1.3
                                     rust-httparse-1.10.1
                                     rust-httpdate-1.0.3
-                                    rust-hyper-1.7.0
+                                    rust-hyper-1.8.1
                                     rust-hyper-rustls-0.27.7
-                                    rust-hyper-util-0.1.17
+                                    rust-hyper-util-0.1.20
                                     rust-hyperlocal-0.9.1
                                     rust-iana-time-zone-0.1.64
                                     rust-iana-time-zone-haiku-0.1.2
@@ -30028,7 +30036,7 @@
                                     rust-lazy-static-1.5.0
                                     rust-lexopt-0.3.1
                                     rust-libc-0.2.176
-                                    rust-libdav-0.10.2
+                                    rust-libdav-0.10.3
                                     rust-libjmap-0.1.1
                                     rust-linux-raw-sys-0.11.0
                                     rust-lock-api-0.4.14
@@ -30126,7 +30134,7 @@
                                     rust-uuid-1.18.1
                                     rust-version-check-0.9.5
                                     rust-vparser-1.1.0
-                                    rust-vstorage-0.6.0
+                                    rust-vstorage-0.7.0
                                     rust-want-0.3.1
                                     rust-wasi-0.11.1+wasi-snapshot-preview1
                                     rust-wasi-0.14.7+wasi-0.2.4

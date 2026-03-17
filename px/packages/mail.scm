@@ -25,7 +25,7 @@
 (define-public pimsync
   (package
     (name "pimsync")
-    (version "0.5.6")
+    (version "0.5.7")
     (source
      (origin
        (method git-fetch)
@@ -34,7 +34,30 @@
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "01qxg0mk7if96rmb0q88wgjpnv1fb8iw2dbzwlm0ars1mi3xpmr3"))))
+        (base32 "0x90l9k3sfnszrvmzqclykpv2py33v9jh92ps68wdd7xkrjp42ga"))
+       (snippet
+        #~(begin
+            (use-modules (guix build utils) (ice-9 textual-ports) (ice-9 regex))
+            ;; Use crates.io hashify instead of git dependency and
+            ;; remove [patch.crates-io] section to avoid conflict
+            (chmod "Cargo.toml" #o644)
+            (chmod "Cargo.lock" #o644)
+            (let ((content (call-with-input-file "Cargo.toml" get-string-all)))
+              (call-with-output-file "Cargo.toml"
+                (lambda (port)
+                  (display
+                   (regexp-substitute/global #f
+                    "hashify = \\{ git = [^\n]+\\}"
+                    (regexp-substitute/global #f
+                     "\\[patch\\.crates-io\\]\nhashify[^\n]*\n?"
+                     content 'pre 'post)
+                    'pre "hashify = \"0.2.7\"" 'post)
+                   port))))
+            (substitute* "Cargo.lock"
+              (("source = \"git\\+https://github\\.com/WhyNotHugo/hashify/\\?branch=reproducible-builds#[a-f0-9]+\"")
+               (string-append
+                "source = \"registry+https://github.com/rust-lang/crates.io-index\"\n"
+                "checksum = \"149e3ea90eb5a26ad354cfe3cb7f7401b9329032d0235f2687d03a35f30e5d4c\"")))))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
@@ -43,6 +66,7 @@
        #:phases
        (modify-phases %standard-phases
          (delete 'package)
+         (delete 'check-for-pregenerated-files)
          (add-after 'unpack 'set-version
            (lambda _
              (setenv "PIMSYNC_VERSION" ,version))))))
