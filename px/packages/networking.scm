@@ -82,7 +82,7 @@ but is also able to connect tens of thousands of computers.")
 (define-public v2ray
   (package
     (name "v2ray")
-    (version "5.46.0")
+    (version "5.47.0")
     (source
      (origin
        (method url-fetch)
@@ -90,7 +90,7 @@ but is also able to connect tens of thousands of computers.")
              "https://github.com/v2fly/v2ray-core/releases/download/v" version
              "/v2ray-linux-64.zip"))
        (sha256
-        (base32 "0pa5qs6mcz2bcyhy66jl6kpyn5cp2b6vrn42sfcyrya7hws8qy9a"))))
+        (base32 "0p6ylwda98wr8nk548mvl4s1qly658ij5bvjwy3y6rbsmll568an"))))
     (build-system binary-build-system)
     (arguments
      `(#:install-plan '(("v2ray" "/bin/")
