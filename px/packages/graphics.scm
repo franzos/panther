@@ -5,8 +5,10 @@
   #:use-module ((guix licenses)
                 #:prefix license:)
   #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix gexp)
+  #:use-module (guix utils)
   #:use-module (guix build-system cargo)
   #:use-module (guix build-system meson)
   #:use-module (nonguix build-system binary)
@@ -22,11 +24,14 @@
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gtk)
+  #:use-module (gnu packages gettext)
   #:use-module (gnu packages image-processing)
   #:use-module (gnu packages linux)
+  #:use-module (gnu packages pdf)
   #:use-module (gnu packages perl)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
+  #:use-module (gnu packages rust)
   #:use-module (gnu packages tls)
   #:use-module (gnu packages vulkan)
   #:use-module (gnu packages webkit)
@@ -233,3 +238,185 @@ RAW, PSD, HDR, HEIC, and AVIF.  Features include GPU-accelerated rendering,
 color analysis tools, basic editing operations, and support for animated
 images.")
     (license license:expat)))
+
+(define ink-stroke-modeler-rs-source
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/flxzt/ink-stroke-modeler-rs")
+          (commit "84d311e9b0d034dcd955a1f353d37f54b2bda70f")))
+    (file-name "ink-stroke-modeler-rs-checkout")
+    (sha256
+     (base32 "1qwp2agn593ka18va93vl7sfrrfvrs4i74wj0rm7q84flkm57a87"))))
+
+(define-public rnote
+  (package
+    (name "rnote")
+    (version "0.13.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/flxzt/rnote")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0va1kjchfs6adgkdcs5jfg96hi41lc1agm3rfyzsf8d61bjl1k0h"))
+       (snippet
+        #~(begin
+            (use-modules (guix build utils))
+            ;; Replace git dependency with local path
+            (substitute* "Cargo.toml"
+              (("ink-stroke-modeler-rs = \\{ git.*\\}")
+               "ink-stroke-modeler-rs = { path = \"ink-stroke-modeler-rs\" }"))))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:install-source? #f
+       #:tests? #f
+       #:rust ,rust-1.89
+       #:cargo-build-flags '("--release" "-p" "rnote")
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'unpack-ink-stroke-modeler
+           (lambda* (#:key native-inputs inputs #:allow-other-keys)
+             (copy-recursively
+              (assoc-ref (or native-inputs inputs) "ink-stroke-modeler-rs")
+              "ink-stroke-modeler-rs")
+             ;; Remove dev-dependencies to avoid version conflicts
+             (substitute* "ink-stroke-modeler-rs/Cargo.toml"
+               (("\\[dev-dependencies\\]") "[fake-dev-deps]"))))
+         (add-after 'unpack-ink-stroke-modeler 'generate-config
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let ((out (assoc-ref outputs "out")))
+               ;; Generate config.rs from template
+               (substitute* "crates/rnote-ui/src/config.rs.in"
+                 (("@APP_NAME@") "\"rnote\"")
+                 (("@APP_NAME_CAPITALIZED@") "\"Rnote\"")
+                 (("@APP_ID@") "\"com.github.flxzt.rnote\"")
+                 (("@APP_IDPATH@") "\"/com/github/flxzt/rnote/\"")
+                 (("@APP_VERSION@") "\"0.13.1\"")
+                 (("@APP_VERSION_SUFFIX@") "\"\"")
+                 (("@APP_AUTHOR_NAME@") "\"Felix Zwettler\"")
+                 (("@APP_AUTHORS@") "\"Felix Zwettler\"")
+                 (("@APP_WEBSITE@") "\"https://rnote.flxzt.net\"")
+                 (("@APP_ISSUES_URL@") "\"https://github.com/flxzt/rnote/issues\"")
+                 (("@APP_SUPPORT_URL@")
+                  "\"https://github.com/flxzt/rnote/discussions\"")
+                 (("@APP_DONATE_URL@") "\"https://rnote.flxzt.net/donate/\"")
+                 (("@PROFILE@") "\"default\"")
+                 (("@GETTEXT_PACKAGE@") "\"rnote\"")
+                 (("@LOCALEDIR@") (string-append "\"" out "/share/locale\""))
+                 (("@DATADIR@") (string-append "\"" out "/share\""))
+                 (("@LIBDIR@") (string-append "\"" out "/lib\"")))
+               (copy-file "crates/rnote-ui/src/config.rs.in"
+                          "crates/rnote-ui/src/config.rs")
+               ;; Substitute meson template variables in data files
+               (let ((app-id "com.github.flxzt.rnote"))
+                 (substitute* "crates/rnote-ui/data/app.desktop.in.in"
+                   (("@APP_ID@") app-id)
+                   (("@APP_NAME@") "rnote")
+                   (("@DESKTOP_FILE_NAME_ENTRY@") "Rnote"))
+                 (substitute* "crates/rnote-ui/data/app.gschema.xml.in"
+                   (("@APP_ID@") app-id)
+                   (("@APP_IDPATH@") "/com/github/flxzt/rnote/"))
+                 (substitute* "crates/rnote-ui/data/app.metainfo.xml.in.in"
+                   (("@APP_ID@") app-id)
+                   (("@APP_NAME_CAPITALIZED@") "Rnote"))
+                 (substitute* "crates/rnote-ui/data/app.mimetype.xml.in"
+                   (("@APP_NAME@") "rnote"))))))
+         (replace 'install
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (bin (string-append out "/bin"))
+                    (share (string-append out "/share"))
+                    (apps (string-append share "/applications"))
+                    (icons-scalable (string-append share
+                                     "/icons/hicolor/scalable/apps"))
+                    (icons-symbolic (string-append share
+                                     "/icons/hicolor/symbolic/apps"))
+                    (icons-mime (string-append share
+                                 "/icons/hicolor/scalable/mimetypes"))
+                    (schemas (string-append share "/glib-2.0/schemas"))
+                    (metainfo (string-append share "/metainfo"))
+                    (mime (string-append share "/mime/packages")))
+               ;; Install binary
+               (mkdir-p bin)
+               (install-file "target/release/rnote" bin)
+               ;; Desktop file
+               (mkdir-p apps)
+               (install-file "crates/rnote-ui/data/app.desktop.in.in"
+                             apps)
+               (rename-file (string-append apps "/app.desktop.in.in")
+                            (string-append apps
+                                           "/com.github.flxzt.rnote.desktop"))
+               ;; Icons
+               (mkdir-p icons-scalable)
+               (copy-file "crates/rnote-ui/data/icons/scalable/apps/rnote.svg"
+                          (string-append icons-scalable
+                                         "/com.github.flxzt.rnote.svg"))
+               (mkdir-p icons-symbolic)
+               (copy-file
+                "crates/rnote-ui/data/icons/symbolic/apps/rnote-symbolic.svg"
+                (string-append icons-symbolic
+                               "/com.github.flxzt.rnote-symbolic.svg"))
+               (mkdir-p icons-mime)
+               (copy-file
+                "crates/rnote-ui/data/icons/scalable/mimetypes/application-rnote.svg"
+                (string-append icons-mime "/application-rnote.svg"))
+               ;; GSchema
+               (mkdir-p schemas)
+               (install-file "crates/rnote-ui/data/app.gschema.xml.in"
+                             schemas)
+               (rename-file
+                (string-append schemas "/app.gschema.xml.in")
+                (string-append schemas
+                               "/com.github.flxzt.rnote.gschema.xml"))
+               ;; Metainfo
+               (mkdir-p metainfo)
+               (install-file "crates/rnote-ui/data/app.metainfo.xml.in.in"
+                             metainfo)
+               (rename-file
+                (string-append metainfo "/app.metainfo.xml.in.in")
+                (string-append metainfo
+                               "/com.github.flxzt.rnote.metainfo.xml"))
+               ;; MIME type
+               (mkdir-p mime)
+               (install-file "crates/rnote-ui/data/app.mimetype.xml.in"
+                             mime)
+               (rename-file
+                (string-append mime "/app.mimetype.xml.in")
+                (string-append mime "/com.github.flxzt.rnote.xml")))))
+         (add-after 'install 'compile-gschemas
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let ((schemas (string-append (assoc-ref outputs "out")
+                                           "/share/glib-2.0/schemas")))
+               (invoke "glib-compile-schemas" schemas))))
+         (add-after 'install 'wrap-program
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (let ((out (assoc-ref outputs "out")))
+               ;; Wrap for GSettings schemas
+               (wrap-program (string-append out "/bin/rnote")
+                 `("XDG_DATA_DIRS" ":" prefix
+                   (,(string-append out "/share"))))))))))
+    (native-inputs
+     `(("cmake" ,cmake)
+       ("glib:bin" ,glib "bin")
+       ("ink-stroke-modeler-rs" ,ink-stroke-modeler-rs-source)
+       ("pkg-config" ,pkg-config)))
+    (inputs
+     (cons* alsa-lib
+            cairo
+            gettext-minimal
+            gtk
+            libadwaita
+            poppler
+            (px-cargo-inputs 'rnote)))
+    (home-page "https://github.com/flxzt/rnote")
+    (synopsis "Vector-based drawing app for handwritten notes and sketches")
+    (description
+     "Rnote is an open-source vector-based drawing application for sketching,
+handwritten notes, and annotating documents and pictures.  It features an
+adaptive UI powered by libadwaita, an infinite canvas, pressure-sensitive
+input with pen/stylus support, various document export options (SVG, PDF, PNG,
+JPEG), and import of PDF, bitmap images, and Xournal++ files.")
+    (license license:gpl3+)))
