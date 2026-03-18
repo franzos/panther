@@ -18,6 +18,7 @@
   #:use-module (guix gexp)
   #:use-module (guix modules)
   #:use-module (guix records)
+  #:use-module (srfi srfi-1)
   #:export (unattended-upgrade-configuration
             unattended-upgrade-configuration?
             unattended-upgrade-operating-system-file
