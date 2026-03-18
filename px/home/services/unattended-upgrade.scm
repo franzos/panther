@@ -75,6 +75,7 @@
     (with-imported-modules (source-module-closure '((guix build utils)))
       #~(begin
           (use-modules (guix build utils)
+                       (ice-9 rdelim)
                        (srfi srfi-34))
 
           (setvbuf (current-output-port) 'line)
