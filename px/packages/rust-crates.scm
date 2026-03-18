@@ -1917,6 +1917,10 @@
   (crate-source "cc" "1.2.56"
                 "1chvh9g2izhqad7vzy4cc7xpdljdvqpsr6x6hv1hmyqv3mlkbgxf"))
 
+(define rust-cc-1.2.25
+  (crate-source "cc" "1.2.25"
+                "0la999i153miffa4maj2wk5z679zkmnq6np0q1kwqrg8q5yqkz6h"))
+
 (define rust-cc-1.2.6
   (crate-source "cc" "1.2.6"
                 "0cx32v9pcslavf8y10sb3y883v7377mw48q3dpw5b1cgidibnvcd"))
@@ -2099,6 +2103,10 @@
   (crate-source "clap" "4.5.35"
                 "0i1rnz7mwbhs5qf10r6vmrkplkzm3477khkwz189rha49f9qdanq"))
 
+(define rust-clap-4.5.39
+  (crate-source "clap" "4.5.39"
+                "17raqwxkhhhm80iyblp1v83fvpddkg7rgqr2cjsmz3p6kczfcq7x"))
+
 (define rust-clap-4.5.45
   (crate-source "clap" "4.5.45"
                 "0663m85dd0aq1g3mkwz5b8pkjv4f5k2smlz7bagib4iqf15fgh0z"))
@@ -2162,6 +2170,10 @@
 (define rust-clap-builder-4.5.35
   (crate-source "clap_builder" "4.5.35"
                 "1nczcw6cc49ap99nn3v3n0vrv7j74zin34palq6ji586vnrdn514"))
+
+(define rust-clap-builder-4.5.39
+  (crate-source "clap_builder" "4.5.39"
+                "0lggb5vscs21jliisvjjphcazzb1iw8347yp42wbwazpl6967k49"))
 
 (define rust-clap-builder-4.5.44
   (crate-source "clap_builder" "4.5.44"
@@ -3021,6 +3033,10 @@
 (define rust-crunchy-0.2.2
   (crate-source "crunchy" "0.2.2"
                 "1dx9mypwd5mpfbbajm78xcrg5lirqk7934ik980mmaffg3hdm0bs"))
+
+(define rust-crunchy-0.2.3
+  (crate-source "crunchy" "0.2.3"
+                "0aa9k4izp962qlsn5ndgw2zq62mizcpnkns8bxscgz3gqr35knj3"))
 
 (define rust-crunchy-0.2.4
   (crate-source "crunchy" "0.2.4"
@@ -6578,6 +6594,10 @@
   (crate-source "hashbrown" "0.15.2"
                 "12dj0yfn59p3kh3679ac0w1fagvzf4z2zp87a13gbbqbzw0185dz"))
 
+(define rust-hashbrown-0.15.3
+  (crate-source "hashbrown" "0.15.3"
+                "1cwfw1yzkvsqkhmkg5igdvgsl8a0wyi716cn83k2j8h09ma6rcl4"))
+
 (define rust-hashbrown-0.15.5
   (crate-source "hashbrown" "0.15.5"
                 "189qaczmjxnikm9db748xyhiw04kpmhm9xj9k9hg0sgx7pjwyacj"))
@@ -8753,6 +8773,10 @@
 (define rust-libc-0.2.171
   (crate-source "libc" "0.2.171"
                 "1mipla3dy3l59pfa9xy4iw2vdgn8n30dzf4vdnasjflxdqhkg6f1"))
+
+(define rust-libc-0.2.172
+  (crate-source "libc" "0.2.172"
+                "1ykz4skj7gac14znljm5clbnrhini38jkq3d60jggx3y5w2ayl6p"))
 
 (define rust-libc-0.2.174
   (crate-source "libc" "0.2.174"
@@ -14936,6 +14960,10 @@
   (crate-source "syn" "2.0.100"
                 "18623wdkns03blpv65xsjn8fipl9p9hj98vlrnhin7nqran496mh"))
 
+(define rust-syn-2.0.101
+  (crate-source "syn" "2.0.101"
+                "1brwsh7fn3bnbj50d2lpwy9akimzb3lghz0ai89j8fhvjkybgqlc"))
+
 (define rust-syn-2.0.106
   (crate-source "syn" "2.0.106"
                 "19mddxp1ia00hfdzimygqmr1jqdvyl86k48427bkci4d08wc9rzd"))
@@ -15812,6 +15840,10 @@
   (crate-source "toml" "0.8.20"
                 "0j012b37iz1mihksr6a928s6dzszxvblzg3l5wxp7azzsv6sb1yd"))
 
+(define rust-toml-0.8.22
+  (crate-source "toml" "0.8.22"
+                "1bjsrmi9w88v4sik8bd6chp0d7bnb9dzzmxyb5xd3i083yfk5bh5"))
+
 (define rust-toml-0.8.23
   (crate-source "toml" "0.8.23"
                 "0qnkrq4lm2sdhp3l6cb6f26i8zbnhqb7mhbmksd550wxdfcyn6yw"))
@@ -15839,6 +15871,10 @@
 (define rust-toml-1.0.3+spec-1.1.0
   (crate-source "toml" "1.0.3+spec-1.1.0"
                 "033cc36cl3w7mfq9xzgxnslz573j06idzb94vd3q70dd36plwqf7"))
+
+(define rust-toml-datetime-0.6.9
+  (crate-source "toml_datetime" "0.6.9"
+                "18q9ix4isxw2n4mij3v6x0pb4jw1hbxbc5wbprlbq91yjrddp99x"))
 
 (define rust-toml-datetime-0.6.11
   (crate-source "toml_datetime" "0.6.11"
@@ -15900,6 +15936,10 @@
   (crate-source "toml_edit" "0.22.24"
                 "0x0lgp70x5cl9nla03xqs5vwwwlrwmd0djkdrp3h3lpdymgpkd0p"))
 
+(define rust-toml-edit-0.22.26
+  (crate-source "toml_edit" "0.22.26"
+                "0zhk135y6rn6jxik7knia3xblpc545fw6b4xcpkv7idj7n3nh01i"))
+
 (define rust-toml-edit-0.22.27
   (crate-source "toml_edit" "0.22.27"
                 "16l15xm40404asih8vyjvnka9g0xs9i4hfb6ry3ph9g419k8rzj1"))
@@ -15955,6 +15995,10 @@
 (define rust-toml-parser-1.0.9+spec-1.1.0
   (crate-source "toml_parser" "1.0.9+spec-1.1.0"
                 "1i54qpvvcppy8ybdn9gssas81vfzq0kmgkcnxzhyf8w9w0al8bbh"))
+
+(define rust-toml-write-0.1.1
+  (crate-source "toml_write" "0.1.1"
+                "0xhhyipq7vivp8pfmjkhma4zn9cs5fyybggwwxz9mqnqw7gl5fdz"))
 
 (define rust-toml-write-0.1.2
   (crate-source "toml_write" "0.1.2"
@@ -18781,6 +18825,10 @@
   (crate-source "winnow" "0.6.5"
                 "1f0m48kfdvds456b1i1qd6ia9w3mckk2jf4q6z94snpdcw741ynz"))
 
+(define rust-winnow-0.7.10
+  (crate-source "winnow" "0.7.10"
+                "1v69byry8fyarzl83wij6f1h3zxnw69assp9kdfb10cdfk42hsf0"))
+
 (define rust-winnow-0.7.12
   (crate-source "winnow" "0.7.12"
                 "159y8inpy86xswmr4yig9hxss0v2fssyqy1kk12504n8jbsfpvgk"))
@@ -18824,6 +18872,10 @@
 (define rust-winres-0.1.12
   (crate-source "winres" "0.1.12"
                 "0v2gvqnd8iwwvb6fs69nv0mmk1z96430527n0qlfbsarxxhv53dn"))
+
+(define rust-winresource-0.1.22
+  (crate-source "winresource" "0.1.22"
+                "03z3h27j9dq926xv5a55bzc9yryk9l5pdvpvbv8z27v54f4sqyd1"))
 
 (define rust-winsafe-0.0.19
   (crate-source "winsafe" "0.0.19"
@@ -23109,6 +23161,98 @@
                                           rust-zvariant-3.15.0
                                           rust-zvariant-derive-3.15.0
                                           rust-zvariant-utils-1.0.1))
+                     (edit =>
+                           (list rust-aho-corasick-1.1.3
+                                 rust-anes-0.1.6
+                                 rust-anstyle-1.0.10
+                                 rust-autocfg-1.4.0
+                                 rust-bitflags-2.9.1
+                                 rust-bumpalo-3.17.0
+                                 rust-cast-0.3.0
+                                 rust-cc-1.2.25
+                                 rust-cfg-if-1.0.0
+                                 rust-ciborium-0.2.2
+                                 rust-ciborium-io-0.2.2
+                                 rust-ciborium-ll-0.2.2
+                                 rust-clap-4.5.39
+                                 rust-clap-builder-4.5.39
+                                 rust-clap-lex-0.7.4
+                                 rust-criterion-0.6.0
+                                 rust-criterion-plot-0.5.0
+                                 rust-crossbeam-deque-0.8.6
+                                 rust-crossbeam-epoch-0.9.18
+                                 rust-crossbeam-utils-0.8.21
+                                 rust-crunchy-0.2.3
+                                 rust-either-1.15.0
+                                 rust-equivalent-1.0.2
+                                 rust-getrandom-0.3.3
+                                 rust-half-2.6.0
+                                 rust-hashbrown-0.15.3
+                                 rust-indexmap-2.9.0
+                                 rust-itertools-0.10.5
+                                 rust-itertools-0.13.0
+                                 rust-itoa-1.0.15
+                                 rust-jobserver-0.1.33
+                                 rust-js-sys-0.3.77
+                                 rust-libc-0.2.172
+                                 rust-log-0.4.27
+                                 rust-memchr-2.7.4
+                                 rust-num-traits-0.2.19
+                                 rust-once-cell-1.21.3
+                                 rust-oorandom-11.1.5
+                                 rust-pkg-config-0.3.32
+                                 rust-plotters-0.3.7
+                                 rust-plotters-backend-0.3.7
+                                 rust-plotters-svg-0.3.7
+                                 rust-proc-macro2-1.0.95
+                                 rust-quote-1.0.40
+                                 rust-r-efi-5.2.0
+                                 rust-rayon-1.10.0
+                                 rust-rayon-core-1.12.1
+                                 rust-regex-1.11.1
+                                 rust-regex-automata-0.4.9
+                                 rust-regex-syntax-0.8.5
+                                 rust-rustversion-1.0.21
+                                 rust-ryu-1.0.20
+                                 rust-same-file-1.0.6
+                                 rust-serde-1.0.219
+                                 rust-serde-derive-1.0.219
+                                 rust-serde-json-1.0.140
+                                 rust-serde-spanned-0.6.8
+                                 rust-shlex-1.3.0
+                                 rust-syn-2.0.101
+                                 rust-tinytemplate-1.2.1
+                                 rust-toml-0.8.22
+                                 rust-toml-datetime-0.6.9
+                                 rust-toml-edit-0.22.26
+                                 rust-toml-write-0.1.1
+                                 rust-unicode-ident-1.0.18
+                                 rust-version-check-0.9.5
+                                 rust-walkdir-2.5.0
+                                 rust-wasi-0.14.2+wasi-0.2.4
+                                 rust-wasm-bindgen-0.2.100
+                                 rust-wasm-bindgen-backend-0.2.100
+                                 rust-wasm-bindgen-macro-0.2.100
+                                 rust-wasm-bindgen-macro-support-0.2.100
+                                 rust-wasm-bindgen-shared-0.2.100
+                                 rust-web-sys-0.3.77
+                                 rust-winapi-util-0.1.9
+                                 rust-windows-sys-0.59.0
+                                 rust-windows-targets-0.52.6
+                                 rust-windows-aarch64-gnullvm-0.52.6
+                                 rust-windows-aarch64-msvc-0.52.6
+                                 rust-windows-i686-gnu-0.52.6
+                                 rust-windows-i686-gnullvm-0.52.6
+                                 rust-windows-i686-msvc-0.52.6
+                                 rust-windows-x86-64-gnu-0.52.6
+                                 rust-windows-x86-64-gnullvm-0.52.6
+                                 rust-windows-x86-64-msvc-0.52.6
+                                 rust-winnow-0.7.10
+                                 rust-winresource-0.1.22
+                                 rust-wit-bindgen-rt-0.39.0
+                                 rust-zstd-0.13.3
+                                 rust-zstd-safe-7.2.4
+                                 rust-zstd-sys-2.0.15+zstd.1.5.7))
                      (envstash =>
                                (list rust-adler2-2.0.1
                                 rust-aead-0.5.2

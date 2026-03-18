@@ -8,6 +8,7 @@
   #:use-module (guix build-system cargo)
   #:use-module (guix download)
   #:use-module (guix gexp)
+  #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (px self)
@@ -793,4 +794,37 @@ editors that support the Language Server Protocol.")
      "Google Antigravity is a next-generation AI-powered IDE built on Electron,
 featuring deep integration with Gemini 3 for agentic development workflows,
 intelligent code generation, and collaborative AI assistance.")
+    (license license:expat)))
+
+(define-public edit
+  (package
+    (name "edit")
+    (version "1.2.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/microsoft/edit")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0hwxll5qvzx0dgs5gzqjhac3va0piacj443d55530shx11mzggj9"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:install-source? #f
+       #:tests? #f
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'enable-nightly-features
+           (lambda _
+             (delete-file "rust-toolchain.toml")
+             (setenv "RUSTC_BOOTSTRAP" "1"))))))
+    (inputs (px-cargo-inputs 'edit))
+    (home-page "https://github.com/microsoft/edit")
+    (synopsis "Terminal-based text editor inspired by MS-DOS Editor")
+    (description
+     "Edit is a terminal-based text editor that pays homage to the classic
+MS-DOS Editor while incorporating modern features.  It combines nostalgic
+MS-DOS Editor design with contemporary UI controls, search and replace,
+and multi-language support.")
     (license license:expat)))
