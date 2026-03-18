@@ -197,7 +197,7 @@ herd status podman-healthcheckd   # Check status
 
 ### Unattended Upgrade
 
-Drop-in replacement for `(gnu services admin)` `unattended-upgrade-service-type` with battery awareness. All upstream fields are preserved; the only addition is `skip-on-battery?`.
+Drop-in replacement for `(gnu services admin)` `unattended-upgrade-service-type` with battery awareness. All upstream fields are preserved; additions are `skip-on-battery?` and `system-load-paths`.
 
 **Usage:**
 
@@ -208,6 +208,7 @@ Drop-in replacement for `(gnu services admin)` `unattended-upgrade-service-type`
          (unattended-upgrade-configuration
           (schedule "0 17 * * *")
           (skip-on-battery? #t)
+          (system-load-paths '("/home/user/dotfiles/system"))
           (channels #~
                     (cons* (channel
                             (name 'my-channel)
@@ -215,13 +216,16 @@ Drop-in replacement for `(gnu services admin)` `unattended-upgrade-service-type`
                            %default-channels))))
 ```
 
-**Additional configuration option:**
+**Additional configuration options:**
 
 | Field | Default | Description |
 |-------|---------|-------------|
 | `skip-on-battery?` | `#f` | Skip upgrade when on battery power |
+| `system-load-paths` | `'()` | Extra `-L` load paths for `guix system reconfigure` |
 
 All other fields (`operating-system-file`, `schedule`, `channels`, `reboot?`, `services-to-restart`, `system-expiration`, `maximum-duration`, `log-file`) match the upstream `(gnu services admin)` defaults.
+
+**Caveat on `system-load-paths`:** Guix only stores the top-level configuration file in the store (`/run/current-system/configuration.scm`), not its imported modules. If your config imports local modules (e.g. `(common)`) that live outside a channel, you need `system-load-paths` so the unattended upgrade can find them. These modules are resolved from disk at upgrade time — not from a stored snapshot — so they should be kept in sync with your configuration.
 
 **Battery detection:** Reads `/sys/class/power_supply/*/type` to locate AC adapters and checks their `online` status via sysfs. Desktops without battery info proceed normally.
 

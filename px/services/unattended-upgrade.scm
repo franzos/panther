@@ -60,6 +60,11 @@
                         (default (* 3 30 24 3600)))
   (maximum-duration     unattended-upgrade-maximum-duration
                         (default 3600))
+  ;; Additional -L flags passed to 'guix system reconfigure'.  Needed when
+  ;; the operating-system-file imports modules that live outside channels
+  ;; (e.g. a local (common) module).  Note: Guix only stores the top-level
+  ;; configuration file in the store — imported modules are resolved from
+  ;; these paths at upgrade time, not from a stored snapshot.
   (system-load-paths    unattended-upgrade-configuration-system-load-paths
                         (default '()))
   (skip-on-battery?     unattended-upgrade-configuration-skip-on-battery?
