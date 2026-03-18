@@ -28,6 +28,7 @@
             unattended-upgrade-configuration-services-to-restart
             unattended-upgrade-system-expiration
             unattended-upgrade-maximum-duration
+            unattended-upgrade-configuration-system-load-paths
             unattended-upgrade-configuration-skip-on-battery?
             unattended-upgrade-configuration-log-file
             unattended-upgrade-service-type))
@@ -58,6 +59,8 @@
                         (default (* 3 30 24 3600)))
   (maximum-duration     unattended-upgrade-maximum-duration
                         (default 3600))
+  (system-load-paths    unattended-upgrade-configuration-system-load-paths
+                        (default '()))
   (skip-on-battery?     unattended-upgrade-configuration-skip-on-battery?
                         (default #f))
   (log-file             unattended-upgrade-configuration-log-file
@@ -95,10 +98,14 @@
   (define expression
     (unattended-upgrade-operating-system-expression config))
 
+  (define load-paths
+    (unattended-upgrade-configuration-system-load-paths config))
+
   (define arguments
     (if expression
         #~(list "-e" (object->string '#$expression))
-        #~(list #$config-file)))
+        #~(append #$(append-map (lambda (p) (list "-L" p)) load-paths)
+                  (list #$config-file))))
 
   (define code
     (with-imported-modules (source-module-closure '((guix build utils)
@@ -106,6 +113,7 @@
       #~(begin
           (use-modules (guix build utils)
                        (gnu services herd)
+                       (ice-9 rdelim)
                        (srfi srfi-34))
 
           (setvbuf (current-output-port) 'line)
