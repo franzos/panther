@@ -9,10 +9,19 @@
   #:use-module (guix build-system cargo)
   #:use-module (guix build-system copy)
   #:use-module (guix gexp)
+  #:use-module (nonguix build-system binary)
+  #:use-module (nonguix licenses)
   #:use-module (gnu packages base)
+  #:use-module (gnu packages bash)
+  #:use-module (gnu packages compression)
+  #:use-module (gnu packages gcc)
+  #:use-module (gnu packages glib)
+  #:use-module (gnu packages gnome)
+  #:use-module (gnu packages gtk)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages tls)
   #:use-module (gnu packages perl)
+  #:use-module (gnu packages webkit)
   #:use-module (px packages rust)
   #:use-module (px self))
 
@@ -60,6 +69,104 @@
 other GitHub concepts to the terminal next to where you are already working
 with git and your code.")
     (license license:expat)))
+
+(define-public gitbutler
+  (package
+    (name "gitbutler")
+    (version "0.19.6")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://releases.gitbutler.com/releases/release/"
+             version "-2922/linux/x86_64/GitButler_" version "_amd64.deb"))
+       (sha256
+        (base32 "0j71fpy48r6sbgk0ba8nf6631lq849xfl2cz91rl8ignfjgp6f2f"))))
+    (build-system binary-build-system)
+    (arguments
+     `(#:patchelf-plan `(("usr/bin/gitbutler-tauri"
+                          ("glib" "gtk+" "gdk-pixbuf" "cairo"
+                           "webkitgtk-for-gtk3" "libsoup" "dbus" "zlib"
+                           "gcc:lib"))
+                         ("usr/bin/gitbutler-git-askpass"
+                          ("gcc:lib" "glibc")))
+       #:phases
+       (modify-phases %standard-phases
+         (replace 'unpack
+           (lambda* (#:key inputs #:allow-other-keys)
+             (invoke "ar" "x" (assoc-ref inputs "source"))
+             (invoke "tar" "-xzf" "data.tar.gz")
+             (delete-file "control.tar.gz")
+             (delete-file "data.tar.gz")
+             (delete-file "debian-binary")))
+         (add-after 'install 'install-extras
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (bin (string-append out "/bin"))
+                    (share (string-append out "/share"))
+                    (apps (string-append share "/applications"))
+                    (icons (string-append share "/icons"))
+                    (metainfo (string-append share "/metainfo")))
+               (mkdir-p bin)
+               (mkdir-p apps)
+               (mkdir-p metainfo)
+               ;; Install desktop file
+               (copy-file "usr/share/applications/GitButler.desktop"
+                          (string-append apps "/GitButler.desktop"))
+               (substitute* (string-append apps "/GitButler.desktop")
+                 (("Exec=gitbutler-tauri")
+                  (string-append "Exec=" out "/bin/gitbutler-tauri"))
+                 (("Icon=gitbutler-tauri")
+                  (string-append "Icon=" out "/share/icons/hicolor/128x128/apps/gitbutler-tauri.png")))
+               ;; Install icons
+               (copy-recursively "usr/share/icons" icons)
+               ;; Install metainfo
+               (copy-file "usr/share/metainfo/com.gitbutler.gitbutler.metainfo.xml"
+                          (string-append metainfo "/com.gitbutler.gitbutler.metainfo.xml")))))
+         (add-after 'install-extras 'create-wrapper
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (bin (string-append out "/bin")))
+               (wrap-program (string-append out "/usr/bin/gitbutler-tauri")
+                 `("LD_LIBRARY_PATH" ":" prefix
+                   (,(string-append (assoc-ref inputs "webkitgtk-for-gtk3") "/lib")
+                    ,(string-append (assoc-ref inputs "libsoup") "/lib")
+                    ,(string-append (assoc-ref inputs "gtk+") "/lib")
+                    ,(string-append (assoc-ref inputs "glib") "/lib")
+                    ,(string-append (assoc-ref inputs "gdk-pixbuf") "/lib")
+                    ,(string-append (assoc-ref inputs "cairo") "/lib")
+                    ,(string-append (assoc-ref inputs "dbus") "/lib")
+                    ,(string-append (assoc-ref inputs "zlib") "/lib")
+                    ,(string-append (assoc-ref inputs "gcc:lib") "/lib"))))
+               ;; Create symlinks in bin
+               (symlink (string-append out "/usr/bin/gitbutler-tauri")
+                        (string-append bin "/gitbutler-tauri"))
+               (symlink (string-append out "/usr/bin/gitbutler-git-askpass")
+                        (string-append bin "/gitbutler-git-askpass"))
+               (symlink (string-append bin "/gitbutler-tauri")
+                        (string-append bin "/but"))))))))
+    (native-inputs `(("binutils" ,binutils)))
+    (inputs `(("bash-minimal" ,bash-minimal)
+              ("cairo" ,cairo)
+              ("dbus" ,dbus)
+              ("gdk-pixbuf" ,gdk-pixbuf)
+              ("glib" ,glib)
+              ("glibc" ,glibc)
+              ("gcc:lib" ,gcc "lib")
+              ("gtk+" ,gtk+)
+              ("libsoup" ,libsoup)
+              ("webkitgtk-for-gtk3" ,webkitgtk-for-gtk3)
+              ("zlib" ,zlib)))
+    (supported-systems '("x86_64-linux"))
+    (home-page "https://gitbutler.com")
+    (synopsis "Git branch management tool")
+    (description
+     "GitButler is a Git client that lets you work on multiple branches at the
+same time.  It allows you to quickly organize file changes into separate
+branches while still having them applied to your working directory.  Features
+include virtual branches, easy commit management, and GitHub integration.")
+    (license (nonfree "https://github.com/gitbutlerapp/gitbutler/blob/master/LICENSE.md"
+                      "FSL-1.1-Apache-2.0; converts to Apache 2.0 after 2 years."))))
 
 (define-public jj-vcs
   (package
