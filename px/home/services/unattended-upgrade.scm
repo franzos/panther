@@ -23,6 +23,7 @@
             home-unattended-upgrade-configuration-maximum-duration
             home-unattended-upgrade-configuration-skip-on-battery?
             home-unattended-upgrade-configuration-log-file
+            home-unattended-upgrade-configuration-warm-packages
             home-unattended-upgrade-service-type))
 
 ;;;
@@ -47,7 +48,9 @@
   (skip-on-battery? home-unattended-upgrade-configuration-skip-on-battery?
                     (default #f))
   (log-file         home-unattended-upgrade-configuration-log-file
-                    (default #f)))
+                    (default #f))
+  (warm-packages    home-unattended-upgrade-configuration-warm-packages
+                    (default '())))
 
 (define (home-unattended-upgrade-shepherd-services config)
   (define channels
@@ -70,6 +73,9 @@
 
   (define skip-on-battery?
     (home-unattended-upgrade-configuration-skip-on-battery? config))
+
+  (define warm-packages
+    (home-unattended-upgrade-configuration-warm-packages config))
 
   (define code
     (with-imported-modules (source-module-closure '((guix build utils)))
@@ -139,7 +145,16 @@
             (invoke %updated-guix
                     "home" "reconfigure" #$config-file)
 
-            ;; Step 3: Clean up old generations
+            ;; Step 3: Warm up store with frequently used packages
+            (let ((pkgs '#$warm-packages))
+              (unless (null? pkgs)
+                (format #t "warming up store: ~a~%" pkgs)
+                (guard (c ((invoke-error? c)
+                           (report-invoke-error c)
+                           (format #t "warning: store warm-up failed, continuing~%")))
+                  (apply invoke %updated-guix "build" pkgs))))
+
+            ;; Step 4: Clean up old generations
             (guard (c ((invoke-error? c)
                        (report-invoke-error c)))
               (invoke %updated-guix
@@ -176,4 +191,5 @@
    (description
     "Periodically upgrade the home environment by running
 @command{guix pull} followed by @command{guix home reconfigure}.
-Supports @code{skip-on-battery?} to avoid upgrades on battery power.")))
+Supports @code{skip-on-battery?} to avoid upgrades on battery power
+and @code{warm-packages} to pre-build packages into the store.")))
