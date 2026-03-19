@@ -82,7 +82,7 @@ automated coding assistance.")
 (define-public bun
   (package
     (name "bun")
-    (version "1.3.10")
+    (version "1.3.11")
     (source
      (origin
        (method url-fetch)
@@ -90,7 +90,7 @@ automated coding assistance.")
              "https://github.com/oven-sh/bun/releases/download/bun-v"
              version "/bun-linux-x64.zip"))
        (sha256
-        (base32 "021f7mrppp2lpa0ajcbipvbv51jlvagkhfms2vkksqirgqcc0yzm"))))
+        (base32 "1v876r4v8c31jvpss1sxbmgc29h32qahlx1qdxdg11pqba9vl4c6"))))
     (build-system binary-build-system)
     (arguments
      (list
