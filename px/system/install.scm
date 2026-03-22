@@ -8,8 +8,6 @@
 ;; $ dd if=/path/to/disk-image of=/dev/sdb bs=4M status=progress oflag=sync
 
 (define-module (px system install)
-  #:use-module (guix channels)
-  #:use-module (guix gexp)
   #:use-module (gnu packages admin)
   #:use-module (gnu packages package-management)
   #:use-module (gnu packages vim)
@@ -18,10 +16,12 @@
   #:use-module (gnu services base)
   #:use-module (gnu system)
   #:use-module (gnu system install)
+  #:use-module (guix channels)
+  #:use-module (guix gexp)
   #:use-module (nongnu packages linux)
   #:use-module (px packages setup)
-  #:use-module (px system os)
-  #:export (installation-os-nonfree))
+  #:use-module (px system common)
+  #:export (px-installation-os))
 
 (define %issue
   ;; Greeting.
@@ -43,12 +43,9 @@
     (issue %issue)
 
     (packages (cons* px-install
-                     ;; Wi-Fi connection via CLI
-                     wpa-supplicant
-                     ;; iPhone USB tethering
-                     libimobiledevice
-                     ;; Editing
-                     neovim
+                     wpa-supplicant                  ;; Wi-Fi connection via CLI
+                     libimobiledevice                ;; iPhone USB tethering
+                     neovim                          ;; Editing
                      (operating-system-packages installation-os)))
     (services
      (modify-services (operating-system-user-services installation-os)

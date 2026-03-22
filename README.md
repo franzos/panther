@@ -34,7 +34,7 @@ This repository contains GUIX package defintions maintained primarily by [Franz 
 sudo guix archive --authorize < /path/to/key.pub
 ```
 
-Already configured if using `%panther-base-services` or `%panther-desktop-services`.
+Already configured if using `%os-base-services` or `%os-desktop-services`.
 
 ## Home Services
 
@@ -159,6 +159,7 @@ Periodically runs `guix pull` followed by `guix home reconfigure`. Drop-in home 
 | `maximum-duration` | 3600 | Max seconds the upgrade may run |
 | `skip-on-battery?` | `#f` | Skip upgrade when on battery power |
 | `log-file` | `~/.local/state/unattended-home-upgrade.log` | Log file path |
+| `warm-packages` | `'()` | List of package names to `guix build` after reconfigure |
 
 **Service management:**
 
@@ -318,36 +319,34 @@ tailscale status     # Check connection status
 This channel provides pre-configured building blocks for Guix system definitions. Import with:
 
 ```scheme
-(use-modules (px system panther))
+(use-modules (px system os))
 ```
 
 ### Packages
 
 | Variable | Description |
 |----------|-------------|
-| `%panther-base-packages` | Extends `%base-packages` with wpa-supplicant, libimobiledevice, neovim |
-| `%panther-desktop-packages` | Adds U2F/FIDO2 support (pam-u2f, libu2f-*) and blueman |
+| `%os-base-packages` | Extends `%base-packages` with wpa-supplicant, libimobiledevice, neovim |
 
 ### Services
 
 | Variable | Description |
 |----------|-------------|
-| `%panther-base-services` | Extends `%base-services` with panther channel and substitute servers |
-| `%panther-desktop-services` | Full desktop services including display managers, audio, and udev rules for security tokens |
-| `%panther-desktop-services-minimal` | Desktop services without login/display managers and audio (for custom greeter setups) |
+| `%os-base-services` | Extends `%base-services` with panther channel and substitute servers |
+| `%os-desktop-services` | Extends `%desktop-services` with panther channel and substitute servers |
+| `%os-desktop-services-minimal` | Desktop services without login/display managers and audio (for custom greeter setups) |
 
 ### Operating Systems
 
 | Variable | Description |
 |----------|-------------|
-| `%panther-os` | Base OS with `%panther-base-services` and `%panther-base-packages` |
-| `%panther-desktop-os` | Desktop OS with `%panther-desktop-services` and `%panther-desktop-packages` |
+| `%os-base` | Minimal OS with `%os-base-services` and `%os-base-packages` |
 
 ### When to Use What
 
-- **Headless server**: Use `%panther-os` directly or inherit from it
-- **Desktop with GDM/SDDM**: Use `%panther-desktop-os` or `%panther-desktop-services`
-- **Desktop with custom greeter** (greetd, etc.): Use `%panther-desktop-services-minimal` to avoid conflicts
+- **Headless server**: Use `%os-base` directly or inherit from it
+- **Desktop with GDM/SDDM**: Inherit `%os-base` and use `%os-desktop-services`
+- **Desktop with custom greeter** (greetd, etc.): Use `%os-desktop-services-minimal` to avoid conflicts
 
 ### Usage
 
@@ -355,13 +354,13 @@ Inherit from an OS definition and customize:
 
 ```scheme
 (operating-system
-  (inherit %panther-os)
+  (inherit %os-base)
   (host-name "my-workstation")
   (timezone "Europe/Berlin")
   ;; Add your file-systems, users, etc.
   (services
    (cons* (service openssh-service-type)
-          %panther-base-services)))
+          %os-base-services)))
 ```
 
 Or use just the services/packages in your own OS:
@@ -371,9 +370,9 @@ Or use just the services/packages in your own OS:
   ;; ...your configuration...
   (packages
    (cons* my-extra-package
-          %panther-desktop-packages))
+          %os-base-packages))
   (services
-   (modify-services %panther-desktop-services-minimal
+   (modify-services %os-desktop-services-minimal
      (elogind-service-type config =>
        (elogind-configuration
          (inherit config)
