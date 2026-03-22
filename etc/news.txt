@@ -9,6 +9,29 @@
 (channel-news
  (version 0)
 
+ (entry (commit "aa2e3a89aea0e818d51183267a28010cf53ce694")
+        (title
+         (en "System modules reorganized"))
+        (body
+         (en "The @code{(px system panther)} module has been reorganized into
+@code{(px system common)} and @code{(px system os)}.
+
+All @code{%panther-*} variables in @code{(px system panther)} are now
+deprecated aliases.  Update your imports:
+
+@itemize
+@item
+@code{%panther-base-services} @result{} @code{%os-base-services}
+@item
+@code{%panther-base-packages} @result{} @code{%os-base-packages}
+@item
+@code{%panther-desktop-services-minimal} @result{} @code{%os-desktop-services-minimal}
+@item
+@code{%panther-os} @result{} @code{%os-base}
+@end itemize
+
+Import @code{(px system os)} instead of @code{(px system panther)}.")))
+
  (entry (commit "4f51b01")
         (title
          (en "Darkman home service removed - use Guix upstream"))
