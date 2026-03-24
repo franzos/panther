@@ -29114,7 +29114,9 @@
                             rust-zvariant-derive-5.10.0
                             rust-zvariant-utils-3.3.0))
                      (keifu =>
-                            (list rust-allocator-api2-0.2.21
+                            (list rust-adler2-2.0.1
+                                  rust-aho-corasick-1.1.4
+                                  rust-allocator-api2-0.2.21
                                   rust-android-system-properties-0.1.5
                                   rust-anstream-0.6.21
                                   rust-anstyle-1.0.13
@@ -29123,6 +29125,10 @@
                                   rust-anstyle-wincon-3.0.11
                                   rust-anyhow-1.0.100
                                   rust-autocfg-1.5.0
+                                  rust-base64-0.22.1
+                                  rust-bincode-1.3.3
+                                  rust-bit-set-0.8.0
+                                  rust-bit-vec-0.8.0
                                   rust-bitflags-2.10.0
                                   rust-bumpalo-3.19.1
                                   rust-cassowary-0.3.0
@@ -29137,18 +29143,23 @@
                                   rust-colorchoice-1.0.4
                                   rust-compact-str-0.8.1
                                   rust-core-foundation-sys-0.8.7
+                                  rust-crc32fast-1.5.0
                                   rust-crossterm-0.28.1
                                   rust-crossterm-winapi-0.9.1
                                   rust-darling-0.20.11
                                   rust-darling-core-0.20.11
                                   rust-darling-macro-0.20.11
+                                  rust-deranged-0.5.8
                                   rust-dirs-5.0.1
                                   rust-dirs-sys-0.4.1
                                   rust-displaydoc-0.2.5
                                   rust-either-1.15.0
                                   rust-equivalent-1.0.2
                                   rust-errno-0.3.14
+                                  rust-fancy-regex-0.16.2
+                                  rust-fastrand-2.3.0
                                   rust-find-msvc-tools-0.1.5
+                                  rust-flate2-1.1.9
                                   rust-fnv-1.0.7
                                   rust-foldhash-0.1.5
                                   rust-form-urlencoded-1.2.2
@@ -29184,13 +29195,17 @@
                                   rust-libredox-0.1.12
                                   rust-libssh2-sys-0.3.1
                                   rust-libz-sys-1.1.23
+                                  rust-linked-hash-map-0.5.6
                                   rust-linux-raw-sys-0.4.15
+                                  rust-linux-raw-sys-0.11.0
                                   rust-litemap-0.8.1
                                   rust-lock-api-0.4.14
                                   rust-log-0.4.29
                                   rust-lru-0.12.5
                                   rust-memchr-2.7.6
+                                  rust-miniz-oxide-0.8.9
                                   rust-mio-1.1.1
+                                  rust-num-conv-0.2.0
                                   rust-num-traits-0.2.19
                                   rust-once-cell-1.21.3
                                   rust-once-cell-polyfill-1.70.2
@@ -29203,25 +29218,35 @@
                                   rust-paste-1.0.15
                                   rust-percent-encoding-2.3.2
                                   rust-pkg-config-0.3.32
+                                  rust-plist-1.8.0
                                   rust-potential-utf-0.1.4
+                                  rust-powerfmt-0.2.0
                                   rust-proc-macro2-1.0.103
+                                  rust-quick-xml-0.38.4
                                   rust-quote-1.0.42
                                   rust-r-efi-5.3.0
                                   rust-ratatui-0.29.0
                                   rust-redox-syscall-0.5.18
                                   rust-redox-users-0.4.6
+                                  rust-regex-automata-0.4.14
+                                  rust-regex-syntax-0.8.10
                                   rust-rustix-0.38.44
+                                  rust-rustix-1.1.3
                                   rust-rustversion-1.0.22
                                   rust-ryu-1.0.20
+                                  rust-same-file-1.0.6
                                   rust-scopeguard-1.2.0
                                   rust-serde-1.0.228
                                   rust-serde-core-1.0.228
                                   rust-serde-derive-1.0.228
+                                  rust-serde-json-1.0.149
                                   rust-serde-spanned-0.6.9
                                   rust-shlex-1.3.0
                                   rust-signal-hook-0.3.18
                                   rust-signal-hook-mio-0.2.5
                                   rust-signal-hook-registry-1.4.7
+                                  rust-simd-adler32-0.3.8
+                                  rust-similar-2.7.0
                                   rust-smallvec-1.15.1
                                   rust-stable-deref-trait-1.2.1
                                   rust-static-assertions-1.1.0
@@ -29230,11 +29255,16 @@
                                   rust-strum-macros-0.26.4
                                   rust-syn-2.0.111
                                   rust-synstructure-0.13.2
+                                  rust-syntect-5.3.0
+                                  rust-tempfile-3.25.0
                                   rust-thiserror-1.0.69
                                   rust-thiserror-2.0.17
                                   rust-thiserror-impl-1.0.69
                                   rust-thiserror-impl-2.0.17
                                   rust-thread-local-1.1.9
+                                  rust-time-0.3.47
+                                  rust-time-core-0.1.8
+                                  rust-time-macros-0.2.27
                                   rust-tinystr-0.8.2
                                   rust-toml-0.8.23
                                   rust-toml-datetime-0.6.11
@@ -29249,6 +29279,7 @@
                                   rust-utf8-iter-1.0.4
                                   rust-utf8parse-0.2.2
                                   rust-vcpkg-0.2.15
+                                  rust-walkdir-2.5.0
                                   rust-wasi-0.11.1+wasi-snapshot-preview1
                                   rust-wasip2-1.0.1+wasi-0.2.4
                                   rust-wasm-bindgen-0.2.106
@@ -29257,6 +29288,7 @@
                                   rust-wasm-bindgen-shared-0.2.106
                                   rust-winapi-0.3.9
                                   rust-winapi-i686-pc-windows-gnu-0.4.0
+                                  rust-winapi-util-0.1.11
                                   rust-winapi-x86-64-pc-windows-gnu-0.4.0
                                   rust-windows-core-0.62.2
                                   rust-windows-implement-0.60.2
@@ -29287,13 +29319,15 @@
                                   rust-winnow-0.7.14
                                   rust-wit-bindgen-0.46.0
                                   rust-writeable-0.6.2
+                                  rust-yaml-rust-0.4.5
                                   rust-yoke-0.8.1
                                   rust-yoke-derive-0.8.1
                                   rust-zerofrom-0.1.6
                                   rust-zerofrom-derive-0.1.6
                                   rust-zerotrie-0.2.3
                                   rust-zerovec-0.11.5
-                                  rust-zerovec-derive-0.11.2))
+                                  rust-zerovec-derive-0.11.2
+                                  rust-zmij-1.0.21))
                      (kooha =>
                             (list rust-aho-corasick-1.1.3
                                   rust-android-system-properties-0.1.5
