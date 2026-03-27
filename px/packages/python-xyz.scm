@@ -502,7 +502,6 @@ upload, and reCAPTCHA.")
       (list #:tests? #f))
     (propagated-inputs (list python-anyio
                              python-click
-                             python-exceptiongroup
                              python-httpx
                              python-importlib-metadata
                              python-importlib-resources
