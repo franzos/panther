@@ -28,7 +28,7 @@
 (define-public iota
   (package
     (name "iota")
-    (version "1.18.1")
+    (version "1.19.1")
     (source
      (origin
        (method url-fetch)
@@ -36,7 +36,7 @@
              "https://github.com/iotaledger/iota/releases/download/v"
              version "/iota-v" version "-linux-x86_64.tgz"))
        (sha256
-        (base32 "1grnrvl2pfhk9dc0dlk69avd8qm51lfcsa0h7l5ac053mzn8k4b9"))))
+        (base32 "1mam9k1zx8dbv3h882y74gipmm4gvalca7f8sqm0wjij07l1cpz0"))))
     (build-system binary-build-system)
     (arguments
      (list
