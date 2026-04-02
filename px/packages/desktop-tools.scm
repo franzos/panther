@@ -167,7 +167,6 @@ and based on the Qt6 framework.")
        (sha256
         (base32 "0rqcl2dmrgagq5547qsmichgybxzdbmc8b5m0cvsclb7lkcxsmmf"))))
     (build-system cmake-build-system)
-    (inputs `(("gcc" ,gcc-11)))
     (arguments
      `(#:tests? #f
        #:configure-flags '("-DCMAKE_VERBOSE_MAKEFILE=ON"
@@ -215,8 +214,7 @@ brand icons for easy, scalable vector graphics on websites and beyond.")
        (sha256
         (base32 "0lmv50ds7mvzidavwklry9nqxkjlqqhjlpyy8x0bcgnpklp1c5cj"))))
     (build-system cmake-build-system)
-    (native-inputs (list gcc-11
-                         qtutilities
+    (native-inputs (list qtutilities
                          cpputilities
                          qtbase-5
                          qtquickcontrols-5
@@ -267,7 +265,7 @@ brand icons for easy, scalable vector graphics on websites and beyond.")
 (define-public syncthingtray
   (package
     (name "syncthingtray")
-    (version "1.4.1")
+    (version "2.0.9")
     (source
      (origin
        (method url-fetch)
@@ -275,7 +273,7 @@ brand icons for easy, scalable vector graphics on websites and beyond.")
              "https://github.com/Martchus/syncthingtray/archive/refs/tags/v"
              version ".tar.gz"))
        (sha256
-        (base32 "0cyimd018bknvip6jxz83w0va05kgfcix53jryqdka665p4048ba"))))
+        (base32 "07m8lblg1w3aqyzhfgr19g1lh91b4dir28cqrbcicc1gmbsh95dz"))))
     (build-system cmake-build-system)
     (arguments
      `(#:tests? #f
@@ -298,12 +296,11 @@ brand icons for easy, scalable vector graphics on websites and beyond.")
                                       `("QTWEBENGINEPROCESS_PATH" =
                                         (,qtwebengineprocess))))
                                   (find-files bin ".*"))) #t)))))
-    (native-inputs (list extra-cmake-modules qttools-5 gcc-11))
+    (native-inputs (list extra-cmake-modules qttools-5))
     (inputs `(("qtbase" ,qtbase-5)
               ("qtquickcontrols2" ,qtquickcontrols2-5)
               ("qtutilities" ,qtutilities)
               ("boost" ,boost)
-              ("gcc" ,gcc-11)
               ("qtdeclarative" ,qtdeclarative-5)
               ("qtsvg" ,qtsvg-5)
               ("qtwebchannel-5" ,qtwebchannel-5)
