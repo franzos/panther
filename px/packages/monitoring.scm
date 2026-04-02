@@ -126,7 +126,7 @@ for native applications, optimized for C and C++.")
 
 (define-public sentry-native-0.9
   (package
-    (name "sentry-native")
+    (inherit sentry-native-0.6)
     (version "0.9.1")
     (source
      (origin
@@ -135,10 +135,9 @@ for native applications, optimized for C and C++.")
              (url "https://github.com/getsentry/sentry-native")
              (commit version)
              (recursive? #t)))
-       (file-name (git-file-name name version))
+       (file-name (git-file-name "sentry-native" version))
        (sha256
         (base32 "0r2wriinwpaw4nya20ckjizmakdqr06pmh1w8kn48prb48d8jg6n"))))
-    (build-system cmake-build-system)
     (arguments
      `(#:tests? #f
        #:configure-flags '("-DSENTRY_BACKEND=crashpad"
@@ -147,20 +146,15 @@ for native applications, optimized for C and C++.")
        (modify-phases %standard-phases
          (replace 'build
            (lambda* (#:key parallel-build? #:allow-other-keys)
-             (invoke "cmake" "--build" "." 
+             (invoke "cmake" "--build" "."
                      "--config" "RelWithDebInfo"
                      "--parallel" (if parallel-build?
                                     (number->string (parallel-job-count))
                                     "1")))))))
-    (inputs `(("curl" ,curl)))
-    (native-inputs `(("pkg-config" ,pkg-config)
-                     ("zlib", zlib)))
-    (home-page "https://github.com/getsentry/sentry-native")
     (synopsis "Official Sentry SDK for C/C++ with Crashpad backend")
     (description "The Sentry Native SDK is an error and crash reporting client
 for native applications, optimized for C and C++. This version is built with
-the Crashpad backend for enhanced crash reporting capabilities.")
-    (license license:expat)))
+the Crashpad backend for enhanced crash reporting capabilities.")))
 
 (define-public sentry-native
   (package
