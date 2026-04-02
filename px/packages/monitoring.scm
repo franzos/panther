@@ -161,3 +161,18 @@ for native applications, optimized for C and C++.")
 for native applications, optimized for C and C++. This version is built with
 the Crashpad backend for enhanced crash reporting capabilities.")
     (license license:expat)))
+
+(define-public sentry-native
+  (package
+    (inherit sentry-native-0.9)
+    (version "0.13.4")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/getsentry/sentry-native")
+             (commit version)
+             (recursive? #t)))
+       (file-name (git-file-name "sentry-native" version))
+       (sha256
+        (base32 "003y25icijgbxvikc4wlzniy5lgf5xa7rj7vixjd6kwzvsij4zhm"))))))
