@@ -500,3 +500,34 @@ captured data.")
 framework.  It supports IRCv3 features including SASL authentication, DCC
 transfers, auto-completion, desktop notifications, and custom themes.")
     (license license:gpl3+)))
+
+(define-public hatsu
+  (package
+    (name "hatsu")
+    (version "0.3.4")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/importantimport/hatsu")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0nrxpczz1wi3fcpz9lrgxgz80kxdrgv0kkjg01ww4g4qq20lv87b"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:install-source? #f
+       #:tests? #f))
+    (native-inputs (list pkg-config))
+    (inputs
+     (cons* openssl
+            sqlite
+            (px-cargo-inputs 'hatsu)))
+    (home-page "https://github.com/importantimport/hatsu")
+    (synopsis "Self-hosted bridge for static sites to the Fediverse")
+    (description
+     "Hatsu is a self-hosted bridge that brings static websites into the
+Fediverse via ActivityPub.  It handles user discovery, content federation,
+follow management, and backfeeding of replies from Fediverse users to your
+static site.")
+    (license license:agpl3+)))
