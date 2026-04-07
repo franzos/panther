@@ -31,6 +31,10 @@
             unattended-upgrade-maximum-duration
             unattended-upgrade-configuration-system-load-paths
             unattended-upgrade-configuration-skip-on-battery?
+            unattended-upgrade-configuration-pre-upgrade-hook
+            unattended-upgrade-configuration-post-upgrade-hook
+            unattended-upgrade-configuration-pause-file
+            unattended-upgrade-configuration-status-file
             unattended-upgrade-configuration-log-file
             unattended-upgrade-service-type))
 
@@ -69,6 +73,14 @@
                         (default '()))
   (skip-on-battery?     unattended-upgrade-configuration-skip-on-battery?
                         (default #f))
+  (pre-upgrade-hook     unattended-upgrade-configuration-pre-upgrade-hook
+                        (default '()))
+  (post-upgrade-hook    unattended-upgrade-configuration-post-upgrade-hook
+                        (default '()))
+  (pause-file           unattended-upgrade-configuration-pause-file
+                        (default "/var/run/unattended-upgrade-paused"))
+  (status-file          unattended-upgrade-configuration-status-file
+                        (default "/var/run/unattended-upgrade-status"))
   (log-file             unattended-upgrade-configuration-log-file
                         (default %unattended-upgrade-log-file)))
 
@@ -98,6 +110,18 @@
   (define skip-on-battery?
     (unattended-upgrade-configuration-skip-on-battery? config))
 
+  (define pre-upgrade-hook
+    (unattended-upgrade-configuration-pre-upgrade-hook config))
+
+  (define post-upgrade-hook
+    (unattended-upgrade-configuration-post-upgrade-hook config))
+
+  (define pause-file
+    (unattended-upgrade-configuration-pause-file config))
+
+  (define status-file
+    (unattended-upgrade-configuration-status-file config))
+
   (define config-file
     (unattended-upgrade-operating-system-file config))
 
@@ -125,6 +149,28 @@
           (setvbuf (current-output-port) 'line)
           (setvbuf (current-error-port) 'line)
 
+          (define start-time (current-time))
+
+          (define (write-status result)
+            (guard (c (#t
+                       (format #t "warning: failed to write status file: ~a~%" c)))
+              (let ((duration (- (current-time) start-time)))
+                (call-with-output-file #$status-file
+                  (lambda (port)
+                    (write `((timestamp . ,(current-time))
+                             (result    . ,result)
+                             (duration  . ,duration))
+                           port)
+                    (newline port))))))
+
+          (define (run-post-hooks result)
+            (for-each
+              (lambda (hook)
+                (guard (c (#t
+                           (format #t "warning: post-upgrade hook failed: ~a~%" hook)))
+                  (invoke hook result)))
+              '#$post-upgrade-hook))
+
           ;; Battery check: skip upgrade when on battery power.
           ;; Reads /sys/class/power_supply/*/type to find AC adapters ("Mains")
           ;; and checks their /online status.  Proceeds if no battery info is
@@ -141,6 +187,8 @@
                           (closedir dir)
                           (when (and has-mains? (not mains-online?))
                             (format #t "skipping upgrade: running on battery~%")
+                            (run-post-hooks "skipped")
+                            (write-status "skipped")
                             (exit 0)))
                         (if (member entry '("." ".."))
                             (loop (readdir dir) has-mains? mains-online?)
@@ -167,6 +215,24 @@
                                     (or has-mains? is-mains?)
                                     (or mains-online? is-online?))))))))))
 
+          (when (file-exists? #$pause-file)
+            (format #t "skipping upgrade: paused (~a exists)~%" #$pause-file)
+            (run-post-hooks "skipped")
+            (write-status "skipped")
+            (exit 0))
+
+          (let loop ((hooks '#$pre-upgrade-hook))
+            (unless (null? hooks)
+              (let ((hook (car hooks)))
+                (guard (c ((invoke-error? c)
+                           (format #t "skipping upgrade: pre-upgrade hook failed: ~a~%" hook)
+                           (report-invoke-error c)
+                           (run-post-hooks "skipped")
+                           (write-status "skipped")
+                           (exit 0)))
+                  (invoke hook))
+                (loop (cdr hooks)))))
+
           ;; 'guix time-machine' needs X.509 certificates to authenticate the
           ;; Git host.
           (setenv "SSL_CERT_DIR"
@@ -175,6 +241,8 @@
           (format #t "starting upgrade...~%")
           (guard (c ((invoke-error? c)
                      (report-invoke-error c)
+                     (run-post-hooks "failure")
+                     (write-status "failure")
                      (exit 1)))
             (apply invoke #$(file-append guix "/bin/guix")
                    "time-machine" "-C" #$channels
@@ -188,6 +256,9 @@
                       "system" "delete-generations"
                       #$(string-append (number->string expiration)
                                        "s")))
+
+            (run-post-hooks "success")
+            (write-status "success")
 
             (unless #$reboot?
               ;; Rebooting effectively restarts services anyway and execution
