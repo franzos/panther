@@ -22,6 +22,10 @@
             home-unattended-upgrade-configuration-system-expiration
             home-unattended-upgrade-configuration-maximum-duration
             home-unattended-upgrade-configuration-skip-on-battery?
+            home-unattended-upgrade-configuration-pre-upgrade-hook
+            home-unattended-upgrade-configuration-post-upgrade-hook
+            home-unattended-upgrade-configuration-pause-file
+            home-unattended-upgrade-configuration-status-file
             home-unattended-upgrade-configuration-log-file
             home-unattended-upgrade-configuration-warm-packages
             home-unattended-upgrade-service-type))
@@ -47,6 +51,14 @@
                     (default 3600))
   (skip-on-battery? home-unattended-upgrade-configuration-skip-on-battery?
                     (default #f))
+  (pre-upgrade-hook home-unattended-upgrade-configuration-pre-upgrade-hook
+                    (default '()))
+  (post-upgrade-hook home-unattended-upgrade-configuration-post-upgrade-hook
+                    (default '()))
+  (pause-file       home-unattended-upgrade-configuration-pause-file
+                    (default #f))
+  (status-file      home-unattended-upgrade-configuration-status-file
+                    (default #f))
   (log-file         home-unattended-upgrade-configuration-log-file
                     (default #f))
   (warm-packages    home-unattended-upgrade-configuration-warm-packages
@@ -57,10 +69,13 @@
     (scheme-file "home-channels.scm"
                  (home-unattended-upgrade-configuration-channels config)))
 
+  (define home
+    (or (getenv "HOME")
+        (error "HOME environment variable is not set")))
+
   (define log
     (or (home-unattended-upgrade-configuration-log-file config)
-        (string-append (getenv "HOME")
-                       "/.local/state/unattended-home-upgrade.log")))
+        (string-append home "/.local/state/unattended-home-upgrade.log")))
 
   (define schedule
     (home-unattended-upgrade-configuration-schedule config))
@@ -73,6 +88,20 @@
 
   (define skip-on-battery?
     (home-unattended-upgrade-configuration-skip-on-battery? config))
+
+  (define pre-upgrade-hook
+    (home-unattended-upgrade-configuration-pre-upgrade-hook config))
+
+  (define post-upgrade-hook
+    (home-unattended-upgrade-configuration-post-upgrade-hook config))
+
+  (define pause-file
+    (or (home-unattended-upgrade-configuration-pause-file config)
+        (string-append home "/.config/unattended-upgrade-paused")))
+
+  (define status-file
+    (or (home-unattended-upgrade-configuration-status-file config)
+        (string-append home "/.local/state/unattended-home-upgrade-status")))
 
   (define warm-packages
     (home-unattended-upgrade-configuration-warm-packages config))
@@ -87,6 +116,29 @@
           (setvbuf (current-output-port) 'line)
           (setvbuf (current-error-port) 'line)
 
+          (define start-time (current-time))
+
+          (define (write-status result)
+            (guard (c (#t
+                       (format #t "warning: failed to write status file: ~a~%" c)))
+              (let ((duration (- (current-time) start-time)))
+                (mkdir-p (dirname #$status-file))
+                (call-with-output-file #$status-file
+                  (lambda (port)
+                    (write `((timestamp . ,(current-time))
+                             (result    . ,result)
+                             (duration  . ,duration))
+                           port)
+                    (newline port))))))
+
+          (define (run-post-hooks result)
+            (for-each
+              (lambda (hook)
+                (guard (c (#t
+                           (format #t "warning: post-upgrade hook failed: ~a~%" hook)))
+                  (invoke hook result)))
+              '#$post-upgrade-hook))
+
           ;; Battery check: skip upgrade when on battery power.
           (when #$skip-on-battery?
             (let ((base "/sys/class/power_supply"))
@@ -100,6 +152,8 @@
                           (closedir dir)
                           (when (and has-mains? (not mains-online?))
                             (format #t "skipping upgrade: running on battery~%")
+                            (run-post-hooks "skipped")
+                            (write-status "skipped")
                             (exit 0)))
                         (if (member entry '("." ".."))
                             (loop (readdir dir) has-mains? mains-online?)
@@ -126,6 +180,24 @@
                                     (or has-mains? is-mains?)
                                     (or mains-online? is-online?))))))))))
 
+          (when (file-exists? #$pause-file)
+            (format #t "skipping upgrade: paused (~a exists)~%" #$pause-file)
+            (run-post-hooks "skipped")
+            (write-status "skipped")
+            (exit 0))
+
+          (let loop ((hooks '#$pre-upgrade-hook))
+            (unless (null? hooks)
+              (let ((hook (car hooks)))
+                (guard (c ((invoke-error? c)
+                           (format #t "skipping upgrade: pre-upgrade hook failed: ~a~%" hook)
+                           (report-invoke-error c)
+                           (run-post-hooks "skipped")
+                           (write-status "skipped")
+                           (exit 0)))
+                  (invoke hook))
+                (loop (cdr hooks)))))
+
           (setenv "SSL_CERT_DIR"
                   #$(file-append nss-certs "/etc/ssl/certs"))
 
@@ -136,6 +208,8 @@
           (format #t "starting home upgrade...~%")
           (guard (c ((invoke-error? c)
                      (report-invoke-error c)
+                     (run-post-hooks "failure")
+                     (write-status "failure")
                      (exit 1)))
             ;; Step 1: Update guix with specified channels
             (invoke #$(file-append guix "/bin/guix")
@@ -161,6 +235,9 @@
                       "home" "delete-generations"
                       #$(string-append (number->string expiration)
                                        "s")))
+
+            (run-post-hooks "success")
+            (write-status "success")
 
             (format #t "home upgrade complete~%")))))
 
