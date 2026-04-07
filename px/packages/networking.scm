@@ -536,7 +536,7 @@ follow management, and backfeeding of replies from Fediverse users to your
 static site.")
     (license license:agpl3+)))
 
-(define %mullvad-vpn-desktop-version "2025.8")
+(define %mullvad-vpn-desktop-version "2026.1")
 
 (define (mullvad-vpn-desktop-origin-url system)
   (string-append "https://github.com/mullvad/mullvadvpn-app/releases/"
@@ -553,8 +553,8 @@ static site.")
 (define-public mullvad-vpn-desktop
   (define-values (url hash)
     (mullvad-vpn-desktop-origin-values
-     #:amd64-hash "1566h29c0lpbw61cbi2mnv0zy33jv42x0z2j1qgkrkac228s9jv4"
-     #:aarch64-hash "02s8a4lf1nmsywnn99xfphs5pvgavxnx9ssdb4i8rycyywcqkafh"))
+     #:amd64-hash "0gpg5yb1b4fw6zw06ymgicw46v7qj4sf7i5zd5srdhqvn66rlmqy"
+     #:aarch64-hash "052rd1vivfclg701galsw5r00qlf9z6xac4v8vh93rkmy3l8av9j"))
   (package
     (name "mullvad-vpn-desktop")
     (version %mullvad-vpn-desktop-version)
@@ -585,10 +585,8 @@ static site.")
                   "libvk_swiftshader.so"
                   "libvulkan.so.1"
                   "mullvad-gui"
-                  "resources/libtalpid_openvpn_plugin.so"
                   "resources/mullvad-problem-report"
-                  "resources/mullvad-setup"
-                  "resources/openvpn")))
+                  "resources/mullvad-setup")))
        #:install-plan
         #~'(("opt/" "/share")
             ("usr/bin/" "/bin")
@@ -600,8 +598,9 @@ static site.")
             (replace 'binary-unpack
               (lambda* (#:key inputs #:allow-other-keys)
                  (invoke "ar" "x" #$source)
-                 (invoke "rm" "-v" "control.tar.gz"
+                 (invoke "rm" "-v" "control.tar.xz"
                                    "debian-binary"
+                                   "_gpgbuilder"
                                    (string-append #$name "-" #$version "-" #$(%current-system) ".deb"))
                  (invoke "tar" "xvf" "data.tar.xz")
                  (invoke "rm" "-vrf" "data.tar.xz" "./usr/bin/mullvad-problem-report")))
