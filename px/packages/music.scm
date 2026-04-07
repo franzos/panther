@@ -77,7 +77,7 @@
 (define-public tidal-hifi
   (package
     (name "tidal-hifi")
-    (version "6.3.0")
+    (version "6.3.1")
     (source
      (origin
        (method url-fetch)
@@ -85,7 +85,7 @@
              "https://github.com/Mastermindzh/tidal-hifi/releases/download/"
              version "-Mavy/tidal-hifi_" version "_amd64.deb"))
        (sha256
-        (base32 "0b43f6fg39w2pwm3glbk35qmlq7p528ayv3jkkx1wi0cnf85kb5w"))))
+        (base32 "0hb4m41m7jl344jp787m5np3jcylc2mz3kpz4v03gq3vyp7bav3f"))))
     (supported-systems '("x86_64-linux"))
     (build-system gnu-build-system)
     (arguments
