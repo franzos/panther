@@ -6,6 +6,7 @@
 (define-module (px packages networking)
   #:use-module (nonguix build-system binary)
   #:use-module (nonguix build-system chromium-binary)
+  #:use-module (nonguix licenses)
   #:use-module ((guix licenses)
                 :prefix license:)
   #:use-module (guix build-system cargo)
@@ -82,6 +83,50 @@ and security.It lets you seamlessly connect computers anywhere in the world. Neb
 and runs on Linux, OSX, Windows, iOS, and Android. It can be used to connect a small number of computers,
 but is also able to connect tens of thousands of computers.")
     (license license:expat)))
+
+(define-public ngrok
+  (package
+    (name "ngrok")
+    (version "3.37.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-" version
+             "-linux-"
+             (match (or (%current-system) (%current-target-system))
+               ("x86_64-linux" "amd64")
+               ("aarch64-linux" "arm64"))
+             ".tgz"))
+       (file-name (string-append name "-" version "-"
+                                 (match (or (%current-system)
+                                            (%current-target-system))
+                                   ("x86_64-linux" "amd64")
+                                   ("aarch64-linux" "arm64"))
+                                 ".tgz"))
+       (sha256
+        (base32
+         (match (or (%current-system) (%current-target-system))
+           ("x86_64-linux"
+            "1l1jx407cknglpl0q9lhp289czybj8d6ypydffc7y9gd9h3by7gp")
+           ("aarch64-linux"
+            "1jn1cannq1724vyzj8fwgmy7l7aslwnn0vpm5v0rbcw0297nx80p"))))))
+    (build-system binary-build-system)
+    (arguments
+     (list
+      #:strip-binaries? #f
+      #:patchelf-plan #~'()
+      #:install-plan #~'(("ngrok" "bin/"))))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
+    (home-page "https://ngrok.com")
+    (synopsis "Secure tunnels to localhost")
+    (description
+     "ngrok exposes local networked services behind NATs and firewalls to
+the public internet over a secure tunnel.  It is useful for sharing local
+websites, building and testing webhook consumers, and self-hosting personal
+services.  This package ships the official statically-linked binary from
+ngrok.")
+    (license (nonfree "https://ngrok.com/tos"))))
 
 (define-public v2ray
   (package
