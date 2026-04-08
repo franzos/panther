@@ -9,6 +9,21 @@
 (channel-news
  (version 0)
 
+ (entry (commit "00a45578dc4ea5989503954ca8ccc8efb0fe9717")
+        (title
+         (en "Substitute servers: nonguix routed through guix.moe mirror"))
+        (body
+         (en "@code{substitutes.nonguix.org} has been unreliable, so it has
+been replaced with @code{cache-test.guix.moe}, a transparent mirror that
+retains the original nonguix signing key.  No action is required: the
+nonguix key remains authorized.
+
+Additionally, @code{cache-fi.guix.moe} (the guix.moe build farm head node)
+has been added as a secondary mirror with its own signing key.
+
+After @code{guix pull}, run @code{sudo guix system reconfigure} to apply
+the new substitute URLs and authorized keys.")))
+
  (entry (commit "aa2e3a89aea0e818d51183267a28010cf53ce694")
         (title
          (en "System modules reorganized"))
