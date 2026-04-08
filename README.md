@@ -314,6 +314,71 @@ tailscale up         # Authenticate and connect
 tailscale status     # Check connection status
 ```
 
+### USBGuard
+
+Runs `usbguard-daemon` to enforce a USB device authorization policy — a whitelist for USB devices that blocks BadUSB-style attacks. The generated `usbguard-daemon.conf` lives in the store; rules are kept at `/etc/usbguard/rules.conf` so they can be updated without a reconfigure.
+
+**Usage:**
+
+```scheme
+(use-modules (px services usbguard))
+
+;; Default: block everything not explicitly allowed, only root can use IPC
+(service usbguard-service-type)
+
+;; Allow members of the 'usbguard' group to manage rules via the CLI
+(service usbguard-service-type
+         (usbguard-configuration
+          (ipc-allowed-groups '("usbguard"))))
+```
+
+Add yourself to the `usbguard` group (created by the service) to use the CLI without sudo.
+
+**Managing rules without reconfiguring:**
+
+```bash
+# Via the CLI — daemon persists changes to /etc/usbguard/rules.conf
+sudo usbguard list-devices
+sudo usbguard allow-device <id> -p       # -p = permanent
+sudo usbguard append-rule 'allow id 1d6b:0002'
+
+# Or edit the file directly
+sudo $EDITOR /etc/usbguard/rules.conf
+sudo herd restart usbguard
+```
+
+Changing fields in `usbguard-configuration` (policy targets, IPC allow-lists, audit settings) *does* require `guix system reconfigure` — those are baked into the store config.
+
+**Configuration options:**
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `package` | `usbguard` | The usbguard package to use |
+| `rule-file` | `"/etc/usbguard/rules.conf"` | Persistent rules file |
+| `rule-folder` | `"/etc/usbguard/rules.d/"` | Directory of additional rule files |
+| `implicit-policy-target` | `'block` | Action for devices not matching any rule (`'allow`, `'block`, `'reject`) |
+| `present-device-policy` | `'apply-policy` | How to treat devices already connected at daemon start |
+| `present-controller-policy` | `'keep` | Same, for USB controllers |
+| `inserted-device-policy` | `'apply-policy` | How to treat newly-inserted devices |
+| `authorized-default` | `'none` | Default authorization for new devices (`'none`, `'all`, `'keep`, `'internal`) |
+| `device-manager-backend` | `'uevent` | Backend (`'uevent` or `'umockdev`) |
+| `ipc-allowed-users` | `'("root")` | Users permitted to use the IPC interface |
+| `ipc-allowed-groups` | `'()` | Groups permitted to use the IPC interface |
+| `audit-backend` | `'FileAudit` | `'FileAudit` or `'LinuxAudit` |
+| `audit-file-path` | `"/var/log/usbguard/usbguard-audit.log"` | Audit log location |
+| `hide-pii?` | `#f` | Strip serial numbers and descriptor hashes from audit entries |
+| `log-file` | `"/var/log/usbguard.log"` | Shepherd log file |
+| `auto-start?` | `#t` | Start the daemon automatically at boot |
+
+**Service management:**
+
+```bash
+herd status usbguard    # Check status
+herd restart usbguard   # Reload after editing rules.conf by hand
+```
+
+**Hardening:** The daemon is launched with `-C` (drop capabilities after startup) and `-W` (seccomp syscall allowlist). The D-Bus configuration and Polkit action from the `usbguard` package are registered automatically, so `usbguard-dbus` and desktop front-ends work without extra wiring.
+
 ## System Configuration
 
 This channel provides pre-configured building blocks for Guix system definitions. Import with:
