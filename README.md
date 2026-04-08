@@ -230,6 +230,67 @@ All other fields (`operating-system-file`, `schedule`, `channels`, `reboot?`, `s
 
 **Battery detection:** Reads `/sys/class/power_supply/*/type` to locate AC adapters and checks their `online` status via sysfs. Desktops without battery info proceed normally.
 
+### Chrony
+
+Runs `chronyd`, the NTP daemon from the [Chrony project](https://chrony-project.org). Keeps the system clock in sync with the configured time servers. The service creates a dedicated `chrony:chrony` system user and the drift directory at `/var/lib/chrony` — no manual setup required.
+
+**Default configuration uses NTS** ([RFC 8915](https://www.rfc-editor.org/rfc/rfc8915)) to authenticate time packets via TLS, preventing on-path attackers from forging NTP responses. The default sources are a geographically diverse mix of Stratum 1 servers:
+
+```
+server time.cloudflare.com iburst nts
+server nts.netnod.se iburst nts
+server ptbtime1.ptb.de iburst nts
+server ptbtime2.ptb.de iburst nts
+server ntppool1.time.nl iburst nts
+driftfile /var/lib/chrony/drift
+ntsdumpdir /var/lib/chrony
+makestep 1.0 3
+rtcsync
+```
+
+`ntsdumpdir` caches NTS cookies across restarts so the TLS handshake isn't repeated on every boot. There is currently no NTS pool — TLS certificates break the traditional `pool.ntp.org` pooling model, so sources are listed individually.
+
+**Firewall requirement:** NTS needs outbound **TCP/4460** (NTS-KE handshake) in addition to the usual **UDP/123** (NTP). If TCP/4460 is blocked, `chronyc -N authdata` will show zeros in the KeyID/Type/KLen columns and the sources will never come up.
+
+**First-boot caveat:** NTS certificate validation requires a roughly-correct clock. If the RTC is badly wrong, the TLS handshake will fail and chronyd won't be able to bootstrap. On fresh systems with unreliable RTCs, temporarily add an unauthenticated `pool 2.pool.ntp.org iburst` line until the clock is close enough for TLS to work.
+
+**Usage:**
+
+```scheme
+(use-modules (px services ntp))
+
+;; Default — five NTS-enabled sources (see above)
+(service chrony-service-type)
+
+;; With a custom chrony.conf
+(service chrony-service-type
+         (chrony-service-configuration
+          (config "server time.cloudflare.com iburst nts
+server ptbtime1.ptb.de iburst nts
+driftfile /var/lib/chrony/drift
+ntsdumpdir /var/lib/chrony
+makestep 1.0 3
+rtcsync
+")))
+```
+
+**Configuration options:**
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `package` | `chrony` | The chrony package to use |
+| `config` | Five NTS sources + `driftfile` / `ntsdumpdir` / `makestep` / `rtcsync` | Raw `chrony.conf` contents |
+
+**Service management:**
+
+```bash
+sudo herd status chrony          # Check status
+sudo herd configuration chrony   # Print path to generated chrony.conf
+sudo chronyc sources             # Show NTP sources and reachability
+sudo chronyc tracking            # Show clock sync status
+sudo chronyc -N authdata         # Verify NTS: KeyID/Type/KLen should be non-zero
+```
+
 ### IOTA Node
 
 Run an IOTA full node or validator node.
