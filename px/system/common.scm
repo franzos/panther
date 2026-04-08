@@ -6,16 +6,34 @@
   #:use-module (guix channels)
 
   #:export (%gofranz-substitute-server-url
-            %nonguix-substitute-server-url
+            ;; %nonguix-substitute-server-url
+            %nonguix-mirror-substitute-server-url
+            %guix-moe-substitute-server-url
             %gofranz-substitute-server-key
             %nonguix-substitute-server-key
+            %guix-moe-substitute-server-key
             %pantherx-default-channels))
 
 (define %gofranz-substitute-server-url
   "https://substitutes.guix.gofranz.com")
 
-(define %nonguix-substitute-server-url
-  "https://substitutes.nonguix.org")
+;; Official nonguix substitutes - temporarily disabled due to availability
+;; issues; using guix.moe mirrors instead.
+;; See https://ultrarare.space/en/posts/guix-build-farm/
+;; (define %nonguix-substitute-server-url
+;;   "https://substitutes.nonguix.org")
+
+;; Transparent mirror of nonguix substitutes operated by guix.moe.  Retains the
+;; original nonguix signing key, so %nonguix-substitute-server-key is reused
+;; below.  Marked as a testing endpoint upstream (added 2026-04-03), revisit
+;; if availability of substitutes.nonguix.org is restored.
+(define %nonguix-mirror-substitute-server-url
+  "https://cache-test.guix.moe")
+
+;; guix.moe build farm head node (nuporta, Finland).  Builds upstream Guix
+;; substitutes signed with its own key (see %guix-moe-substitute-server-key).
+(define %guix-moe-substitute-server-url
+  "https://cache-fi.guix.moe")
 
 (define %gofranz-substitute-server-key
   (plain-file "substitutes.guix.gofranz.com.pub"
@@ -33,6 +51,16 @@
  (ecc
   (curve Ed25519)
   (q #C1FD53E5D4CE971933EC50C9F307AE2171A2D3B52C804642A7A35F84F3A4EA98#)
+  )
+ )
+"))
+
+(define %guix-moe-substitute-server-key
+  (plain-file "cache-fi.guix.moe.pub"
+   "(public-key
+ (ecc
+  (curve Ed25519)
+  (q #552F670D5005D7EB6ACF05284A1066E52156B51D75DE3EBD3030CD046675D543#)
   )
  )
 "))
