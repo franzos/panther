@@ -187,11 +187,22 @@
       (auto-start? auto-start?)
       ;; Do NOT pass -f: that flag enables classical daemon forking.
       ;; Shepherd needs the process to stay in the foreground.
+      ;;
+      ;; -P is required: the daemon refuses to load its config unless it's
+      ;; mode 0600, but files in the store are world-readable (0444) and
+      ;; immutable.  The store already provides tamper-resistance, so the
+      ;; check is redundant here.
+      ;;
+      ;; -W (seccomp syscall allowlist) is intentionally omitted: the
+      ;; allowlist shipped with usbguard 1.1.4 is stale against current
+      ;; glibc and kills the daemon with SIGSYS during IPC socket setup,
+      ;; leaving clients with "Connection refused".  -C (capability drop)
+      ;; still applies, which is the more important hardening.
       (start #~(make-forkexec-constructor
                 (list #$(file-append pkg "/sbin/usbguard-daemon")
                       "-k"          ;log to console (captured by shepherd)
                       "-C"          ;drop capabilities after startup
-                      "-W"          ;apply a seccomp syscall allowlist
+                      "-P"          ;skip perm check (store file is 0444)
                       "-c" #$conf)
                 #:log-file #$log-file))
       (stop #~(make-kill-destructor))
