@@ -47,7 +47,7 @@
        #~(begin
            (use-modules (guix build utils))
            (let ((inputs (list
-                          #+go-1.25
+                          #+go-1.26
                           #+tar
                           #+bzip2
                           #+gzip)))
@@ -61,6 +61,9 @@
                      (find-files "."))
            (setenv "GOCACHE" "/tmp/gc")
            (setenv "GOMODCACHE" "/tmp/gmc")
+           ;; Prevent Go from attempting to download newer toolchains declared
+           ;; in go.mod -- the build sandbox has no writable HOME for sumdb.
+           (setenv "GOTOOLCHAIN" "local")
            (setenv "SSL_CERT_DIR" #+(file-append nss-certs "/etc/ssl/certs/"))
            (invoke "go" "mod" "vendor")
            (invoke "tar" "czvf" #$output

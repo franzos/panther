@@ -9,12 +9,15 @@
   #:use-module (guix gexp)
   #:use-module (guix utils)
   #:use-module (guix build-system gnu)
+  #:use-module (guix build-system go)
   #:use-module (gnu packages base)
   #:use-module (gnu packages bash)
   #:use-module (gnu packages file)
   #:use-module (gnu packages gawk)
+  #:use-module (gnu packages golang)
   #:use-module (gnu packages linux)
-  #:use-module (gnu packages admin))
+  #:use-module (gnu packages admin)
+  #:use-module (px packages go))
 
 (define-public chkrootkit
   (package
@@ -146,3 +149,40 @@ checks including examining network interfaces for promiscuous mode, checking
 for deleted files still being accessed, and scanning for known rootkit
 signatures in log files and system binaries.")
     (license license:bsd-2)))
+
+(define-public osv-scanner
+  (package
+    (name "osv-scanner")
+    (version "2.3.5")
+    (source (origin
+              (method go-fetch-vendored)
+              (uri (go-git-reference
+                    (url "https://github.com/google/osv-scanner")
+                    (commit (string-append "v" version))
+                    (sha (base32
+                          "1ph7cwaca7yblqwxs7dir917mli46w1ghmhlz69gxxvnrdq26hxl"))))
+              (sha256
+               (base32
+                "1ndxdvp6jsihnaf68n63fww4l8zqbi3d0qmj31zbq4h52d636y9c"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/google/osv-scanner/v2/cmd/osv-scanner"
+      #:unpack-path "github.com/google/osv-scanner/v2"
+      #:install-source? #f
+      #:go go-1.26
+      ;; segmentio/asm's amd64 assembly fails to link in our environment;
+      ;; fall back to the pure-Go implementations via the 'purego' tag.
+      #:build-flags #~(list "-tags=purego")
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'check))))
+    (home-page "https://github.com/google/osv-scanner")
+    (synopsis "Vulnerability scanner for project dependencies")
+    (description
+     "OSV-Scanner finds existing vulnerabilities affecting a project's
+dependencies.  It is the official frontend to the OSV database and supports a
+wide range of languages and package managers including npm, pip, cargo, go
+modules, maven, composer, and many more.  It can also scan container images
+and OS packages on Linux systems.")
+    (license license:asl2.0)))
