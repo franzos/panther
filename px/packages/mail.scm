@@ -14,72 +14,9 @@
   #:use-module (gnu packages compression)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages tls)
-  #:use-module (gnu packages man)
-  #:use-module (gnu packages sqlite)
-  #:use-module (gnu packages documentation)
-  #:use-module (gnu packages version-control)
   #:use-module (gnu packages rust)
   #:use-module (px packages rust)
   #:use-module (px self))
-
-(define-public pimsync
-  (package
-    (name "pimsync")
-    (version "0.5.7")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://git.sr.ht/~whynothugo/pimsync")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "0x90l9k3sfnszrvmzqclykpv2py33v9jh92ps68wdd7xkrjp42ga"))
-       (snippet
-        #~(begin
-            (use-modules (guix build utils) (ice-9 textual-ports) (ice-9 regex))
-            ;; Use crates.io hashify instead of git dependency and
-            ;; remove [patch.crates-io] section to avoid conflict
-            (chmod "Cargo.toml" #o644)
-            (chmod "Cargo.lock" #o644)
-            (let ((content (call-with-input-file "Cargo.toml" get-string-all)))
-              (call-with-output-file "Cargo.toml"
-                (lambda (port)
-                  (display
-                   (regexp-substitute/global #f
-                    "hashify = \\{ git = [^\n]+\\}"
-                    (regexp-substitute/global #f
-                     "\\[patch\\.crates-io\\]\nhashify[^\n]*\n?"
-                     content 'pre 'post)
-                    'pre "hashify = \"0.2.7\"" 'post)
-                   port))))
-            (substitute* "Cargo.lock"
-              (("source = \"git\\+https://github\\.com/WhyNotHugo/hashify/\\?branch=reproducible-builds#[a-f0-9]+\"")
-               (string-append
-                "source = \"registry+https://github.com/rust-lang/crates.io-index\"\n"
-                "checksum = \"149e3ea90eb5a26ad354cfe3cb7f7401b9329032d0235f2687d03a35f30e5d4c\"")))))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:install-source? #f
-       #:tests? #f
-       #:rust ,rust-1.88
-       #:phases
-       (modify-phases %standard-phases
-         (delete 'package)
-         (delete 'check-for-pregenerated-files)
-         (add-after 'unpack 'set-version
-           (lambda _
-             (setenv "PIMSYNC_VERSION" ,version))))))
-    (native-inputs
-     (list git-minimal scdoc))
-    (inputs
-     (cons* sqlite (px-cargo-inputs 'pimsync)))
-    (home-page "https://pimsync.whynothugo.nl/")
-    (synopsis "Synchronize calendars and contacts")
-    (description
-     "pimsync is a tool for synchronizing calendars and contacts between
-local storage and remote servers using the CalDAV and CardDAV protocols.")
-    (license license:eupl1.1)))
 
 (define-public himalaya
   (package

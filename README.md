@@ -395,6 +395,17 @@ Runs `usbguard-daemon` to enforce a USB device authorization policy — a whitel
 
 Add yourself to the `usbguard` group (created by the service) to use the CLI without sudo.
 
+**Before first start:**
+
+With `implicit-policy-target` set to `'block` (the default), the daemon will block everything that isn't explicitly allowed — including devices already plugged in when it starts. Generate an initial policy from your currently-connected devices so you don't lock yourself out of your own keyboard:
+
+```bash
+sudo sh -c 'usbguard generate-policy > /etc/usbguard/rules.conf'
+sudo herd restart usbguard
+```
+
+Run this once, with only the devices you trust plugged in. Review `/etc/usbguard/rules.conf` afterwards and trim anything you don't want whitelisted.
+
 **Managing rules without reconfiguring:**
 
 ```bash
@@ -529,12 +540,6 @@ Spawn a shell for a clean environment:
 
 ```bash
 guix shell --container --nesting --network openssl nss-certs coreutils guix
-```
-
-And build the target package:
-
-```bash
-guix time-machine --channels=default-channel.scm -- build -L panther pimsync
 ```
 
 ## Known Issues
