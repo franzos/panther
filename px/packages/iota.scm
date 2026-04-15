@@ -28,7 +28,7 @@
 (define-public iota
   (package
     (name "iota")
-    (version "1.19.1")
+    (version "1.20.1")
     (source
      (origin
        (method url-fetch)
@@ -36,7 +36,7 @@
              "https://github.com/iotaledger/iota/releases/download/v"
              version "/iota-v" version "-linux-x86_64.tgz"))
        (sha256
-        (base32 "1mam9k1zx8dbv3h882y74gipmm4gvalca7f8sqm0wjij07l1cpz0"))))
+        (base32 "0gz5607g52kyn6a1m41m7mfx2yqs3llayd3l1zmmxcwcwqcn1bjp"))))
     (build-system binary-build-system)
     (arguments
      (list
@@ -48,6 +48,7 @@
           ("iota-faucet" ("libc" "gcc" "postgresql"))
           ("iota-graphql-rpc" ("libc" "gcc" "postgresql"))
           ("iota-data-ingestion" ("libc" "gcc"))
+          ("iota-localnet" ("libc" "gcc" "postgresql"))
           ("move-analyzer" ("libc" "gcc")))
       #:install-plan
       #~'(("iota" "/bin/")
@@ -57,6 +58,7 @@
           ("iota-faucet" "/bin/")
           ("iota-graphql-rpc" "/bin/")
           ("iota-data-ingestion" "/bin/")
+          ("iota-localnet" "/bin/")
           ("move-analyzer" "/bin/"))))
     (inputs
      (list eudev
