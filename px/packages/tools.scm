@@ -189,7 +189,7 @@ navigate large directory structures.")
 (define-public wakatime-cli
   (package
     (name "wakatime-cli")
-    (version "2.2.0")
+    (version "2.3.0")
     (source
      (origin
        (method url-fetch)
@@ -202,7 +202,7 @@ navigate large directory structures.")
                ("i686-linux" "386")
                ("armhf-linux" "arm")) ".zip"))
        (sha256
-        (base32 "11ycv5808wvlnrc8kbwcghy084iklbjc7pns7nd9rj9inj15scxc"))))
+        (base32 "0fm5ifksqsq7dh3ggaw1ffgns84fl8iyrl34fb099395rs16d345"))))
     (build-system binary-build-system)
     (arguments
      (list
