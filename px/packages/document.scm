@@ -80,14 +80,14 @@
 (define-public papers
   (package
     (name "papers")
-    (version "50.0")
+    (version "50.1")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "https://gitlab.gnome.org/GNOME/papers/-/archive/"
                            version "/papers-" version ".tar.gz"))
        (sha256
-        (base32 "1zi4x0w7fnwxh859am9442ixlh1h52hn4jvjl4y1636rn0k12pwb"))))
+        (base32 "1agl8fr259gckjzyw3y3sah5z8fv77kx0ik5aigakx1wkmmp7qvb"))))
     (build-system meson-build-system)
     (arguments
      (list
