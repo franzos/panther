@@ -293,7 +293,7 @@ including Telegram, Matrix, and email.")
 (define-public witr
   (package
     (name "witr")
-    (version "0.3.0")
+    (version "0.3.1")
     (source
      (origin
        (method git-fetch)
@@ -302,7 +302,7 @@ including Telegram, Matrix, and email.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0q0gz67bxkbwg0x6kz2625wvwrbxlhi8w95pnsbxs94fbda4b8aw"))))
+        (base32 "03v9n4mdvqm0knqjl4s64321i5clqpmlrlkkdb87glzb9p28sg00"))))
     (build-system go-build-system)
     (arguments
      (list
