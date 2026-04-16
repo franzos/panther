@@ -265,7 +265,7 @@ brand icons for easy, scalable vector graphics on websites and beyond.")
 (define-public syncthingtray
   (package
     (name "syncthingtray")
-    (version "2.0.9")
+    (version "2.0.10")
     (source
      (origin
        (method url-fetch)
@@ -273,7 +273,7 @@ brand icons for easy, scalable vector graphics on websites and beyond.")
              "https://github.com/Martchus/syncthingtray/archive/refs/tags/v"
              version ".tar.gz"))
        (sha256
-        (base32 "07m8lblg1w3aqyzhfgr19g1lh91b4dir28cqrbcicc1gmbsh95dz"))))
+        (base32 "1r89x0mmhapwz1s0mp42x8m4ld2nh9iqf09wk9g9d9nl2w0wvchd"))))
     (build-system cmake-build-system)
     (arguments
      `(#:tests? #f
