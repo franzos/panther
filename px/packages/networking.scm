@@ -253,7 +253,7 @@ publish/subscribe, RPC-style request/reply, or service discovery.")
 ;; Licensed under the Apache License, Version 2.0
 
 (define-public tailscale
-  (let ((version "1.94.2"))
+  (let ((version "1.96.4"))
     (package
       (name "tailscale")
       (version version)
@@ -261,11 +261,11 @@ publish/subscribe, RPC-style request/reply, or service discovery.")
                 (method go-fetch-vendored)
                 (uri (go-git-reference
                       (url "https://github.com/tailscale/tailscale")
-                      (commit "v1.94.2")
-                      (sha (base32 "07pz43lfmxkvg3b1a4dq9wh8a247gaqxppqaa8ah4mjnrh3radda"))))
+                      (commit "v1.96.4")
+                      (sha (base32 "0qqlj6cq43h0pr8jg9g956yz5xgg81959vq2kl7n9yqnixyh8w2n"))))
                 (sha256
                  (base32
-                  "0dqwgihl9wjv4kwsv0dj7c7l8n99bkfsd7v1ipy3cw3akgclilf7"))))
+                  "1lz2pmyfka0inhiasgfd1spxa5ikn56c76r3zg136n9dz6163wz2"))))
       (build-system go-build-system)
       (arguments
        `(#:import-path "tailscale.com/cmd/tailscale"
@@ -274,7 +274,7 @@ publish/subscribe, RPC-style request/reply, or service discovery.")
          #:phases
          (modify-phases %standard-phases
            (delete 'check))
-         #:go ,go-1.25))
+         #:go ,go-1.26))
       (home-page "https://tailscale.com")
       (synopsis "Tailscale VPN client")
       (description "Tailscale is a zero-config VPN based on WireGuard.
