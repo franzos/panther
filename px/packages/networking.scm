@@ -324,7 +324,7 @@ the VPN connection."))))
     (build-system go-build-system)
     (arguments
      (list
-      #:go go-1.23
+      #:go go-1.24
       #:import-path "github.com/ivpn/desktop-app/daemon"
       #:unpack-path "github.com/ivpn/desktop-app"
       #:install-source? #f
