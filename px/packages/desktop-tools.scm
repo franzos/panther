@@ -64,6 +64,7 @@
   #:use-module (gnu packages xorg)
   #:use-module (gnu packages kde-frameworks)
   #:use-module (gnu packages serialization)
+  #:use-module (gnu packages textutils)
   #:use-module (gnu packages tls)
   #:use-module (gnu packages xml)
   #:use-module (px packages qt)
@@ -668,7 +669,7 @@ displays through both laptop backlights and external monitors via DDC.")
 (define-public rio
   (package
     (name "rio")
-    (version "0.3.1")
+    (version "0.3.11")
     (source
      (origin
        (method git-fetch)
@@ -677,7 +678,7 @@ displays through both laptop backlights and external monitors via DDC.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0098d1l5ggj0qa6lqa0jj7vzjj4ir318fh69yyvm56mb19rmd524"))))
+        (base32 "0cd0w01i9h87bfr1f16cd4fgmkakd202zchmspgmlb84iyva0cwv"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
@@ -725,6 +726,7 @@ displays through both laptop backlights and external monitors via DDC.")
             libxrandr
             libxcb
             mesa
+            oniguruma
             vulkan-loader
             wayland
             (px-cargo-inputs 'rioterm)))
