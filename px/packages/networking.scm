@@ -474,7 +474,7 @@ captured data.")
 (define-public halloy
   (package
     (name "halloy")
-    (version "2026.5")
+    (version "2026.6")
     (source
      (origin
        (method url-fetch)
@@ -483,7 +483,7 @@ captured data.")
              version ".tar.gz"))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "0wvvj7mzd6dfxjhvzrv3slc3y0sdjgcpck0iyhzj9lbda7ik9627"))))
+        (base32 "0bf5clrxxnwrscpi7hwv4p0h87y9c4qczna9m58i54q228gya7r9"))))
     (build-system cargo-build-system)
     (arguments
      (list
