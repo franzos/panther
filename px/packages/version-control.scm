@@ -171,14 +171,14 @@ include virtual branches, easy commit management, and GitHub integration.")
 (define-public jj-vcs
   (package
     (name "jj-vcs")
-    (version "0.39.0")
+    (version "0.40.0")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "jj-cli" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "06p4pm9lkxq2fsz3sdl0nf23vf952di2w19mc8f21nxcpdcml209"))))
+        (base32 "165zxib6bdyfhvh9mf879bs3i0cx0rf4ndy9ybrxwcp6ra6b31x9"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
