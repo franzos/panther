@@ -40,14 +40,14 @@
 (define-public python-pycapnp
   (package
     (name "python-pycapnp")
-    (version "2.2.1")
+    (version "2.2.2")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "https://github.com/capnproto/pycapnp/archive/v"
                            version ".tar.gz"))
        (sha256
-        (base32 "0ysf179ki84maywgf8c4kaj7i8cjb9i92cyj2ygz4ggp2hfs53v9"))))
+        (base32 "1swlfi08i7fj48id32an86wh6g62fya50n4ph2lh0yj7y567lkxn"))))
     (build-system pyproject-build-system)
     (arguments
      `(#:tests? #f
