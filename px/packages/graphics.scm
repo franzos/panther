@@ -147,7 +147,7 @@ optional AI-powered features using ONNX Runtime.")
 (define-public vipsdisp
   (package
     (name "vipsdisp")
-    (version "4.1.3")
+    (version "4.1.4")
     (source
      (origin
        (method url-fetch)
@@ -155,7 +155,7 @@ optional AI-powered features using ONNX Runtime.")
              "https://github.com/libvips/vipsdisp/archive/refs/tags/v"
              version ".tar.gz"))
        (sha256
-        (base32 "1hvnb7hjjh35gqsd5hha9v4fqmfp9fs7dsadkylsdbwk08jpqsv9"))))
+        (base32 "1ky88pvk68sj7pcfh8qda0h3s04pqwdpgsp559s7mpsankja2dw9"))))
     (build-system meson-build-system)
     (arguments
      (list #:glib-or-gtk? #t))
