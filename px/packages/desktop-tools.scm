@@ -783,7 +783,7 @@ WiFi and wired connections, VPN support, and Bluetooth tethering.")
 (define-public arbtt-capture-wl
   (package
     (name "arbtt-capture-wl")
-    (version "0.1.2")
+    (version "0.1.3")
     (source
      (origin
        (method git-fetch)
@@ -792,7 +792,7 @@ WiFi and wired connections, VPN support, and Bluetooth tethering.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0dnc8g202xbramkwkwr67nkwd6c6y0hh46pgsp104yzkp0cxmk91"))))
+        (base32 "18k5chax91zjyamip2brk7lm6hg1b8ry2f5qijr6928ns6drqaiz"))))
       (build-system cargo-build-system)
       (arguments
        `(#:install-source? #f))
