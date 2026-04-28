@@ -46,27 +46,7 @@
              (commit version)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1bxrqqi2xi057v9qaz73dl44jyyhpqvi51pjs6pzprfiqgy1gi11"))
-       (modules '((guix build utils)
-                  (ice-9 regex)))
-       (snippet
-        '(begin
-           (use-modules ((ice-9 regex)))
-           (for-each
-            (lambda (dir)
-              ;; TODO: The following dependencies are still bundled:
-              ;; - "singleapplication"
-              ;; - "discord-rpc"
-              (let ((bundled '("singleapplication" "discord-rpc")))
-                (if (not
-                     (string-match
-                      (string-append ".?*(" (string-join bundled "|") ")")
-                      dir))
-                    (delete-file-recursively dir))))
-            (find-files "3rdparty"
-                        (lambda (file stat)
-                          (string-match "^3rdparty/[^/]*$" file))
-                        #:directories? #t))))))
+        (base32 "1bxrqqi2xi057v9qaz73dl44jyyhpqvi51pjs6pzprfiqgy1gi11"))))
     (inputs
      (modify-inputs (package-inputs (@ (gnu packages music) strawberry))
        (append kdsingleapplication
