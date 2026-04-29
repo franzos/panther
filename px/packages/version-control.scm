@@ -8,6 +8,7 @@
   #:use-module (guix git-download)
   #:use-module (guix build-system cargo)
   #:use-module (guix build-system copy)
+  #:use-module (guix build-system go)
   #:use-module (guix gexp)
   #:use-module (nonguix build-system binary)
   #:use-module (nonguix licenses)
@@ -17,11 +18,13 @@
   #:use-module (gnu packages gcc)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
+  #:use-module (gnu packages golang)
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages tls)
   #:use-module (gnu packages perl)
   #:use-module (gnu packages webkit)
+  #:use-module (px packages go)
   #:use-module (px packages rust)
   #:use-module (px self))
 
@@ -167,6 +170,38 @@ branches while still having them applied to your working directory.  Features
 include virtual branches, easy commit management, and GitHub integration.")
     (license (nonfree "https://github.com/gitbutlerapp/gitbutler/blob/master/LICENSE.md"
                       "FSL-1.1-Apache-2.0; converts to Apache 2.0 after 2 years."))))
+
+(define-public jira-cli
+  (package
+    (name "jira-cli")
+    (version "1.7.0")
+    (source (origin
+              (method go-fetch-vendored)
+              (uri (go-git-reference
+                    (url "https://github.com/ankitpokhrel/jira-cli")
+                    (commit (string-append "v" version))
+                    (sha (base32 "1h515ssidk9d690bijmqndks4vs89x5xh6x9qc7cyabwcc3wp59l"))))
+              (sha256
+               (base32
+                "03npl57r9nrnli2vmg436rn5bnvff6y2kglgxk4m3wjygknmpwx5"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/ankitpokhrel/jira-cli/cmd/jira"
+      #:unpack-path "github.com/ankitpokhrel/jira-cli"
+      #:install-source? #f
+      #:go go-1.24
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'check))))
+    (home-page "https://github.com/ankitpokhrel/jira-cli")
+    (synopsis "Feature-rich interactive Jira command-line client")
+    (description
+     "Jira CLI is an interactive command-line tool for Atlassian Jira.  It
+provides a TUI for working with issues, sprints, and epics, supports both Jira
+Cloud and on-premise installations, and offers issue creation, editing,
+assignment, transitions, comments, and search via JQL.")
+    (license license:expat)))
 
 (define-public jj-vcs
   (package
