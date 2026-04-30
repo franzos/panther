@@ -322,6 +322,43 @@ ports to processes, and identifies contexts like Git repositories, Docker
 containers, and PM2 instances.")
     (license license:asl2.0)))
 
+(define-public google-workspace-cli
+  (package
+    (name "google-workspace-cli")
+    (version "0.22.5")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/googleworkspace/cli/releases/download/v"
+             version "/google-workspace-cli-"
+             (match (or (%current-system) (%current-target-system))
+               ("x86_64-linux" "x86_64-unknown-linux-musl")
+               ("aarch64-linux" "aarch64-unknown-linux-musl")) ".tar.gz"))
+       (sha256
+        (base32
+         (match (or (%current-system) (%current-target-system))
+           ("x86_64-linux" "0879hyfdm2ngsmwmwq0s8jkg3waa1ndpcpgk9wp8gaxiwkfp7d2d")
+           ("aarch64-linux" "16liz5xpdy2czk655zh5c3k51a0ax7n4f2qkq87b2cj9a9izw077"))))))
+    (build-system binary-build-system)
+    (arguments
+     (list
+      #:install-plan
+      #~'(("gws" "bin/gws"))
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'patchelf)
+          (delete 'validate-runpath))))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
+    (home-page "https://github.com/googleworkspace/cli")
+    (synopsis "Command-line interface for Google Workspace")
+    (description
+     "Google Workspace CLI (@command{gws}) is a single command-line tool for
+Drive, Gmail, Calendar, Sheets, Docs, Chat, Admin, and other Google Workspace
+services.  Its command surface is dynamically built from the Google Discovery
+Service, and it includes AI agent skills.")
+    (license license:asl2.0)))
+
 (define-public d2
   (package
     (name "d2")
