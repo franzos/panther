@@ -138,18 +138,20 @@ and based on the Qt6 framework.")
 (define-public qlipper
   (package
     (name "qlipper")
-    (version "5.1.2")
+    (version "6.1.0")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "https://github.com/pvanek/qlipper/archive/"
                            version ".tar.gz"))
        (sha256
-        (base32 "0vbhiyn56qwlssavim02kp0y5rxj6gdffchyigkhpg8qza64afch"))))
-    (build-system cmake-build-system)
+        (base32 "13yfh9sbqnf10vfjp86b9kdb6vf8jp5pfvcv82p9gkfdc1hah6kd"))))
+    (build-system qt-build-system)
     (arguments
-     `(#:tests? #f))
-    (native-inputs (list qtbase-5 qttools-5))
+     (list #:qtbase qtbase
+           #:tests? #f))
+    (native-inputs (list qttools))
+    (inputs (list kguiaddons libx11 qtbase))
     (home-page "https://github.com/pvanek/qlipper")
     (synopsis "Lightweight and cross-platform clipboard history applet.")
     (description "Lightweight and cross-platform clipboard history applet.")
