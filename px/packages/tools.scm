@@ -34,7 +34,7 @@
 (define-public codex
   (package
     (name "codex")
-    (version "0.125.0")
+    (version "0.128.0")
     (source
      (origin
        (method url-fetch)
@@ -42,33 +42,23 @@
              "https://github.com/openai/codex/releases/download/rust-v"
              version "/codex-"
              (match (or (%current-system) (%current-target-system))
-               ("x86_64-linux" "x86_64-unknown-linux-gnu")
-               ("aarch64-linux" "aarch64-unknown-linux-gnu")) ".tar.gz"))
+               ("x86_64-linux" "x86_64-unknown-linux-musl")
+               ("aarch64-linux" "aarch64-unknown-linux-musl")) ".tar.gz"))
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "1gnl9kskdq1ggmqwgkqvdim12fz8sjmphj7wy6lg6cdbp2ww0asj")
-           ("aarch64-linux" "1rjnc6hbcshm864rkcw0k51afi4kvh56b4473dpnay3mzlkna1rd"))))))
+           ("x86_64-linux" "0fp243xswx5fsgh00g8h7fji2dljprzh1jip8hil62wc27k8asw8")
+           ("aarch64-linux" "1l6blqxsl00ashvfzqx73gil1vm7z4dv9z5hzfzggsjg63av8q9i"))))))
     (build-system binary-build-system)
     (arguments
      (list
+      #:validate-runpath? #f
       #:install-plan
       #~`((,(string-append "codex-"
                            #$(match (or (%current-system) (%current-target-system))
-                               ("x86_64-linux" "x86_64-unknown-linux-gnu")
-                               ("aarch64-linux" "aarch64-unknown-linux-gnu")))
-           "bin/codex"))
-      #:patchelf-plan
-      #~`((,(string-append "codex-"
-                           #$(match (or (%current-system) (%current-target-system))
-                               ("x86_64-linux" "x86_64-unknown-linux-gnu")
-                               ("aarch64-linux" "aarch64-unknown-linux-gnu")))
-           ("glibc" "gcc:lib" "libcap" "openssl" "zlib")))))
-    (inputs `(("glibc" ,glibc)
-               ("gcc:lib" ,gcc "lib")
-               ("libcap" ,libcap)
-               ("openssl" ,openssl)
-               ("zlib" ,zlib)))
+                               ("x86_64-linux" "x86_64-unknown-linux-musl")
+                               ("aarch64-linux" "aarch64-unknown-linux-musl")))
+           "bin/codex"))))
     (supported-systems '("x86_64-linux" "aarch64-linux"))
     (home-page "https://github.com/openai/codex")
     (synopsis "AI coding agent from OpenAI")
