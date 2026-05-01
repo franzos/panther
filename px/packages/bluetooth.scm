@@ -132,7 +132,7 @@ selection.")
 (define-public goveebttemplogger
   (package
     (name "goveebttemplogger")
-    (version "3.20251208.0")
+    (version "4.20260424.0")
     (source
      (origin
        (method url-fetch)
@@ -140,7 +140,7 @@ selection.")
              "https://github.com/wcbonner/GoveeBTTempLogger/archive/refs/tags/v"
              version ".tar.gz"))
        (sha256
-        (base32 "1c4wr1vkrwzdl5fadf22lal2ca97ia41knqmpvk6gg8j95vlrzxr"))))
+        (base32 "1shkj000s5v8bbsshziq50blg0gisw7fc3gzb5lq8qcrbv67swh0"))))
     (build-system cmake-build-system)
     (native-inputs (list pkg-config))
     (inputs (list bluez dbus))
