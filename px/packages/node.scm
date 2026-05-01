@@ -8,34 +8,65 @@
   #:use-module (guix download)
   #:use-module (guix build-system trivial)
   #:use-module (guix build-system copy)
-  #:use-module (guix packages))
+  #:use-module (guix packages)
+  #:use-module (gnu packages base)
+  #:use-module (gnu packages gcc)
+  #:use-module (nonguix build-system binary))
 
 (define-public pnpm
   (package
     (name "pnpm")
-    (version "10.33.2")
+    (version "11.0.0")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "https://github.com/pnpm/pnpm/releases/download/v"
-                           version "/pnpm-linuxstatic-"
+                           version "/pnpm-linux-"
                            (match (or (%current-system)
                                       (%current-target-system))
                              ("x86_64-linux" "x64")
-                             ("aarch64-linux" "arm64"))))
+                             ("aarch64-linux" "arm64"))
+                           ".tar.gz"))
        (sha256
-        (base32 "1mi6wm2fj4dnrj4jq5h24h1jqafqz7vk8pnwzcha9bwvjcayfyx4"))))
-    (build-system trivial-build-system)
+        (base32
+         (match (or (%current-system)
+                    (%current-target-system))
+           ("x86_64-linux"
+            "05ryvaax3bldb401njxx67nfp9b7fgay3zb5nr0zqh6sgb3sqi4v")
+           ("aarch64-linux"
+            "0xfzaf4gsv89y5yrhn9yip387f40nxqsvczmdyb6kwbzzpmqfv8y"))))))
+    (build-system binary-build-system)
     (arguments
-     `(#:modules ((guix build utils))
-       #:builder (begin
-                   (use-modules ((guix build utils)))
-                   (let* ((source (assoc-ref %build-inputs "source"))
-                          (bin (string-append %output "/bin"))
-                          (exe (string-append bin "/pnpm")))
-                     (mkdir-p bin)
-                     (copy-file source exe)
-                     (chmod exe #o755)))))
+     `(#:patchelf-plan `(("pnpm" ("glibc" "gcc:lib")))
+       ;; The `pnpm' binary loads `./dist/pnpm.mjs' relative to its own
+       ;; location, so install it next to `dist/' and symlink into `bin/'.
+       #:install-plan `(("pnpm" "lib/pnpm/pnpm")
+                        ("dist" "lib/pnpm/dist"))
+       ;; `dist/node_modules/.bin/' contains absolute symlinks pointing to the
+       ;; upstream CI build path; `validate-runpath' chokes trying to read
+       ;; them.  Skip it -- only the `pnpm' binary needs patching.
+       #:validate-runpath? #f
+       ;; `pnpm' is a Node.js Single Executable Application; `strip' moves
+       ;; sections and corrupts the embedded SEA blob, so leave it alone.
+       #:strip-binaries? #f
+       #:phases
+       (modify-phases %standard-phases
+         ;; The tarball has multiple top-level entries (`pnpm' and `dist').
+         ;; The standard `unpack' phase chdirs into the only subdirectory it
+         ;; finds (`dist'), so step back up before patching and installing.
+         (add-after 'unpack 'chdir-up
+           (lambda _
+             (chdir "..")))
+         (add-after 'install 'symlink-bin
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (bin (string-append out "/bin")))
+               (mkdir-p bin)
+               (symlink (string-append out "/lib/pnpm/pnpm")
+                        (string-append bin "/pnpm"))))))))
+    (inputs `(("glibc" ,glibc)
+              ("gcc:lib" ,gcc "lib")))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
     (home-page "https://pnpm.io")
     (synopsis "Fast, disk space efficient package manager for nodejs")
     (description "PNPM uses a content-addressable filesystem to
