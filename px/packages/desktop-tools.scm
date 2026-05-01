@@ -669,7 +669,7 @@ displays through both laptop backlights and external monitors via DDC.")
 (define-public rio
   (package
     (name "rio")
-    (version "0.3.11")
+    (version "0.4.0")
     (source
      (origin
        (method git-fetch)
@@ -678,7 +678,7 @@ displays through both laptop backlights and external monitors via DDC.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0cd0w01i9h87bfr1f16cd4fgmkakd202zchmspgmlb84iyva0cwv"))))
+        (base32 "1zal53gklyzagmz186lvxbvb86c9y4fpqyw387cpfv0fb5iz8vi9"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
@@ -716,7 +716,7 @@ displays through both laptop backlights and external monitors via DDC.")
                     ,(string-append wayland "/lib")
                     ,(string-append libxkbcommon "/lib"))))))))))
     (native-inputs
-     (list cmake ncurses pkg-config))
+     (list cmake ncurses pkg-config shaderc))
     (inputs
      (cons* fontconfig
             libxkbcommon
