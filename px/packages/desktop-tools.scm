@@ -621,7 +621,7 @@ TeamViewer and AnyDesk.")
 (define-public wluma
   (package
     (name "wluma")
-    (version "4.10.0")
+    (version "4.11.0")
     (source
      (origin
        (method git-fetch)
@@ -630,7 +630,7 @@ TeamViewer and AnyDesk.")
              (commit version)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0jf0gqh9xx0qilgqdv0hyjshw60carjniv9lin7wriszpbji42lb"))
+        (base32 "169gdby3qw1g3wk8k0arf64i4p80lgqkk0nl8ld0m6xfr5yiw6m6"))
        (snippet
         #~(begin
             (use-modules (guix build utils))
