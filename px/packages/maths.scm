@@ -7,6 +7,7 @@
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (guix gexp)
+  #:use-module (guix utils)
   #:use-module (gnu packages maths))
 
 (define-public libqalculate
@@ -22,3 +23,20 @@
        (file-name (git-file-name "libqalculate" version))
        (sha256
         (base32 "1wra4r099s60lv6m9ab94ybdxlsxqn82h138jkvlziszz9ab94mk"))))))
+
+(define-public qalculate-gtk
+  (package
+    (inherit (@ (gnu packages maths) qalculate-gtk))
+    (version "5.10.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/Qalculate/qalculate-gtk/")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name "qalculate-gtk" version))
+       (sha256
+        (base32 "0yrbbpfya60d51md84dyxk7sb0rx8jcxnpvgwxpvni2b4jayi5r5"))))
+    (inputs
+     (modify-inputs (package-inputs (@ (gnu packages maths) qalculate-gtk))
+       (replace "libqalculate" libqalculate)))))
