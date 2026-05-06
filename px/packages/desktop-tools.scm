@@ -63,6 +63,7 @@
   #:use-module (gnu packages golang-xyz)
   #:use-module (gnu packages xorg)
   #:use-module (gnu packages kde-frameworks)
+  #:use-module (gnu packages kde-plasma)
   #:use-module (gnu packages serialization)
   #:use-module (gnu packages textutils)
   #:use-module (gnu packages tls)
@@ -73,6 +74,7 @@
   #:use-module (px packages haskell)
   #:use-module (px packages rust)
   #:use-module (px packages themes)
+  #:use-module ((px packages maths) #:select (libqalculate) #:prefix px:)
   #:use-module (px self)
   #:use-module (srfi srfi-1))
 
@@ -930,3 +932,76 @@ the iced GUI framework for a responsive interface, llama.cpp for model inference
 and Hugging Face for model sourcing, all running locally without external
 dependencies.")
     (license license:expat)))
+
+(define-public vicinae
+  (package
+    (name "vicinae")
+    (version "0.15.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/vicinaehq/vicinae/releases/download/v"
+             version "/vicinae-linux-x86_64-v" version ".tar.gz"))
+       (sha256
+        (base32 "098dzjk4lpjh6il7331dywdw33f2zycs9igdx9fy9idm34dh1dyc"))))
+    (supported-systems '("x86_64-linux"))
+    (build-system binary-build-system)
+    (arguments
+     (list
+      #:validate-runpath? #f
+      #:patchelf-plan
+      #~'(("bin/vicinae"
+           ("glibc" "gcc"
+            "qtbase" "qtdeclarative" "qtsvg"
+            "qtkeychain-qt6" "layer-shell-qt"
+            "libqalculate" "openssl" "zlib"
+            "wayland" "libglvnd")))
+      #:install-plan
+      #~'(("bin" "bin")
+          ("share/applications" "share/applications")
+          ("share/icons" "share/icons")
+          ("share/vicinae" "share/vicinae"))
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'unpack
+            (lambda* (#:key inputs #:allow-other-keys)
+              (invoke "tar" "-xzf" (assoc-ref inputs "source"))))
+          (add-after 'install 'wrap-binary
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (let* ((out (assoc-ref outputs "out"))
+                     (qtbase (assoc-ref inputs "qtbase"))
+                     (qtdeclarative (assoc-ref inputs "qtdeclarative"))
+                     (layer-shell (assoc-ref inputs "layer-shell-qt"))
+                     (qml-path (string-join
+                                (list (string-append qtdeclarative "/lib/qt6/qml")
+                                      (string-append layer-shell "/lib/qt6/qml"))
+                                ":")))
+                (wrap-program (string-append out "/bin/vicinae")
+                  `("QT_PLUGIN_PATH" ":" prefix
+                    (,(string-append qtbase "/lib/qt6/plugins")))
+                  `("QML2_IMPORT_PATH" ":" prefix (,qml-path))
+                  `("QML_IMPORT_PATH" ":" prefix (,qml-path)))))))))
+    (inputs
+     (list bash-minimal
+           glibc
+           `(,gcc "lib")
+           qtbase
+           qtdeclarative
+           qtsvg
+           qtkeychain-qt6
+           layer-shell-qt
+           px:libqalculate
+           openssl
+           zlib
+           wayland
+           libglvnd))
+    (home-page "https://vicinae.com")
+    (synopsis "Focused launcher for your desktop — native, fast, extensible")
+    (description
+     "Vicinae is a high-performance, native launcher for the Linux desktop,
+inspired by Raycast.  It comes with a rich set of built-in modules and can be
+extended via a TypeScript SDK.  Features include app launching, file search,
+emoji picker, calculator, clipboard history, window focusing, script commands,
+@code{dmenu} compatibility mode, theming, and Raycast extension compatibility.")
+    (license license:gpl3+)))
