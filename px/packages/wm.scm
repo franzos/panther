@@ -7,10 +7,18 @@
   #:use-module (guix git-download)
   #:use-module (guix gexp)
   #:use-module (guix utils)
+  #:use-module (guix build-system copy)
+  #:use-module (gnu packages bash)
   #:use-module (gnu packages glib)
+  #:use-module (gnu packages hardware)
+  #:use-module (gnu packages imagemagick)
+  #:use-module (gnu packages linux)
   #:use-module (gnu packages polkit)
+  #:use-module (gnu packages python)
   #:use-module (gnu packages vulkan)
-  #:use-module (gnu packages wm))
+  #:use-module (gnu packages wget)
+  #:use-module (gnu packages wm)
+  #:use-module (gnu packages xdisorg))
 
 ;; Niri with SHM screencast support (PR #1791)
 ;; Fixes black screen in Chrome/WebRTC screen sharing
@@ -57,3 +65,84 @@ shell toolkit, with patches and defaults specific to the Noctalia Shell
 ecosystem.  It adds support for the @code{ext-background-effect-v1} Wayland
 protocol.  The binary is named @code{quickshell} (with a @code{qs} alias) and
 is a drop-in replacement for upstream Quickshell when running Noctalia."))))
+
+(define-public noctalia-shell
+  (package
+    (name "noctalia-shell")
+    (version "4.7.6")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/noctalia-dev/noctalia-shell")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "00g0ylp01y8yjbq8kb6rcisfkyxg7ybss8ib89qxiaplqdd1hqx0"))))
+    (build-system copy-build-system)
+    (arguments
+     (list
+      #:install-plan
+      #~'(("Assets"  "share/noctalia-shell/")
+          ("Commons" "share/noctalia-shell/")
+          ("Helpers" "share/noctalia-shell/")
+          ("Modules" "share/noctalia-shell/")
+          ("Scripts" "share/noctalia-shell/")
+          ("Services" "share/noctalia-shell/")
+          ("Shaders" "share/noctalia-shell/")
+          ("Widgets" "share/noctalia-shell/")
+          ("shell.qml" "share/noctalia-shell/"))
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'install 'install-launcher
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (let* ((out (assoc-ref outputs "out"))
+                     (bin (string-append out "/bin"))
+                     (share (string-append out "/share/noctalia-shell"))
+                     (launcher (string-append bin "/noctalia-shell"))
+                     (path (string-join
+                            (map (lambda (pkg)
+                                   (string-append (assoc-ref inputs pkg) "/bin"))
+                                 '("brightnessctl"
+                                   "cliphist"
+                                   "ddcutil"
+                                   "wlsunset"
+                                   "wl-clipboard"
+                                   "wlr-randr"
+                                   "imagemagick"
+                                   "wget"
+                                   "python"
+                                   "noctalia-qs"))
+                            ":")))
+                (mkdir-p bin)
+                (call-with-output-file launcher
+                  (lambda (port)
+                    (format port "#!~a
+export PATH=~a:$PATH
+exec ~a/bin/quickshell -p ~a \"$@\"~%"
+                            (string-append (assoc-ref inputs "bash")
+                                           "/bin/bash")
+                            path
+                            (assoc-ref inputs "noctalia-qs")
+                            share)))
+                (chmod launcher #o755)))))))
+    (inputs (list bash-minimal
+                  brightnessctl
+                  cliphist
+                  ddcutil
+                  imagemagick
+                  noctalia-qs
+                  python
+                  wget
+                  wl-clipboard
+                  wlr-randr
+                  wlsunset))
+    (home-page "https://github.com/noctalia-dev/noctalia-shell")
+    (synopsis "Minimal desktop shell for Wayland built on Quickshell")
+    (description
+     "Noctalia is a minimal desktop shell for Wayland compositors, built on
+Quickshell (Qt/QML).  It provides a status bar, panels, application launcher,
+notifications, lock screen, idle management, OSD, theming, wallpaper
+management, desktop widgets, dock, and multi-monitor support.  Noctalia
+natively supports Niri, Hyprland, Sway, Scroll, Labwc and MangoWC.")
+    (license license:expat)))
