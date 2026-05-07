@@ -25,12 +25,15 @@
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages gettext)
+  #:use-module (gnu packages image)
   #:use-module (gnu packages image-processing)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages pdf)
   #:use-module (gnu packages perl)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
+  #:use-module (gnu packages python-build)
+  #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages rust)
   #:use-module (gnu packages tls)
   #:use-module (gnu packages vulkan)
@@ -419,4 +422,74 @@ handwritten notes, and annotating documents and pictures.  It features an
 adaptive UI powered by libadwaita, an infinite canvas, pressure-sensitive
 input with pen/stylus support, various document export options (SVG, PDF, PNG,
 JPEG), and import of PDF, bitmap images, and Xournal++ files.")
+    (license license:gpl3+)))
+
+(define-public curtail
+  (package
+    (name "curtail")
+    (version "1.16.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/Huluti/Curtail")
+             (commit version)))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0qr5zxn8idkb1vgdq80wlg6mxkakyl2j7p1r75h4sl3i22fsifry"))))
+    (build-system meson-build-system)
+    (arguments
+     (list
+      #:glib-or-gtk? #t
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'skip-update-checks
+            (lambda _
+              ;; Don't run gtk-update-icon-cache or update-desktop-database
+              ;; at install time -- the build user can't write to the cache.
+              (substitute* "meson.build"
+                (("gtk_update_icon_cache: true")
+                 "gtk_update_icon_cache: false")
+                (("update_desktop_database: true")
+                 "update_desktop_database: false"))))
+          (add-after 'glib-or-gtk-wrap 'python-and-gi-wrap
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (let ((bin (string-append #$output "/bin/curtail"))
+                    (compressors
+                     (map (lambda (file)
+                            (dirname (search-input-file inputs file)))
+                          '("/bin/jpegoptim"
+                            "/bin/pngquant"
+                            "/bin/cwebp"
+                            "/bin/scour"))))
+                (wrap-program bin
+                  `("GUIX_PYTHONPATH" ":" prefix
+                    (,(getenv "GUIX_PYTHONPATH")))
+                  `("GI_TYPELIB_PATH" ":" prefix
+                    (,(getenv "GI_TYPELIB_PATH")))
+                  `("PATH" ":" prefix ,compressors))))))))
+    (native-inputs
+     (list `(,glib "bin")
+           blueprint-compiler
+           desktop-file-utils
+           gettext-minimal
+           gobject-introspection
+           `(,gtk "bin")
+           pkg-config))
+    (inputs
+     (list bash-minimal
+           gtk
+           jpegoptim
+           libadwaita
+           libwebp
+           pngquant
+           python
+           python-pygobject
+           python-scour))
+    (home-page "https://github.com/Huluti/Curtail")
+    (synopsis "Image compression tool for GNOME")
+    (description
+     "Curtail is a useful image compressor for GNOME, supporting PNG, JPEG,
+WebP and SVG file types.  Both lossy and lossless compression are available,
+and metadata can be preserved.")
     (license license:gpl3+)))
