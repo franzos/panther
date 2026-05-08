@@ -34,6 +34,7 @@
   #:use-module (gnu packages gl)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gtk)
+  #:use-module (gnu packages image-processing)
   #:use-module (gnu packages networking)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gnuzilla)
@@ -1004,4 +1005,49 @@ inspired by Raycast.  It comes with a rich set of built-in modules and can be
 extended via a TypeScript SDK.  Features include app launching, file search,
 emoji picker, calculator, clipboard history, window focusing, script commands,
 @code{dmenu} compatibility mode, theming, and Raycast extension compatibility.")
+    (license license:gpl3+)))
+
+(define-public actiona
+  (package
+    (name "actiona")
+    (version "3.11.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "https://github.com/Jmgr/actiona/releases/download/v"
+                           version "/actiona-" version "-source-linux.tar.gz"))
+       (sha256
+        (base32 "0bzzwwckjxzzp4p4cqagc9rwm5wwwz18pyc44fhxhbd663llajdh"))))
+    (build-system cmake-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:configure-flags
+      #~(list "-DCMAKE_BUILD_TYPE=Release"
+              "-DACT_UPDATER=OFF"
+              "-DCMAKE_INSTALL_RPATH=$ORIGIN;$ORIGIN/..")))
+    (native-inputs
+     (list pkg-config
+           qttools))
+    (inputs
+     (list bluez
+           eudev
+           libnotify
+           libx11
+           libxext
+           libxtst
+           opencv
+           qtbase
+           qtdeclarative
+           qtmultimedia
+           qtsvg
+           qtspeech
+           qt5compat))
+    (home-page "https://actiona.tools")
+    (synopsis "Cross-platform task automation tool")
+    (description
+     "Actiona is an automation tool that allows executing many actions on
+your computer such as emulating mouse clicks, key presses, showing message
+boxes, and editing text files.  Tasks can be created using a simple editor
+or written in EcmaScript (JavaScript) for more customization.")
     (license license:gpl3+)))
