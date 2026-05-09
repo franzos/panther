@@ -9720,6 +9720,11 @@
   (crate-source "js-sys" "0.3.97"
                 "1kyaxgn1sm5am98jb48aj5j7r7s98kdrab41la5wzys5q2a0r151"))
 
+(define rust-js-sys-0.3.98
+  ;; TODO REVIEW: Check bundled sources.
+  (crate-source "js-sys" "0.3.98"
+                "024zjwpxp6fri4j79bh1686q1x4nw4a06fh1a28zv2rzc4973pv7"))
+
 (define rust-jsonschema-0.33.0
   (crate-source "jsonschema" "0.33.0"
                 "1dcnrddf1j6gfkgcbxjxwhlyi16wp8pn7x3mbca0mxn5kf2n4rnl"))
@@ -9913,6 +9918,11 @@
   ;; TODO: Check bundled sources.
   (crate-source "kqueue-sys" "1.0.4"
                 "12w3wi90y4kwis4k9g6fp0kqjdmc6l00j16g8mgbhac7vbzjb5pd"))
+
+(define rust-kqueue-sys-1.1.0
+  ;; TODO REVIEW: Check bundled sources.
+  (crate-source "kqueue-sys" "1.1.0"
+                "0byssypr815kj1kxbk8sxc70yjmx5ngncbl8z8irz52z85h5idm7"))
 
 (define rust-kstring-2.0.0
   (crate-source "kstring" "2.0.0"
@@ -13273,6 +13283,10 @@
   (crate-source "pin-project" "1.1.10"
                 "12kadbnfm1f43cyadw9gsbyln1cy7vj764wz5c8wxaiza3filzv7"))
 
+(define rust-pin-project-1.1.12
+  (crate-source "pin-project" "1.1.12"
+                "1sbcs3s240z2w4jaga53c3jl5maw4qprf0a9kfcagcq0h7kdkw6b"))
+
 (define rust-pin-project-1.1.3
   (crate-source "pin-project" "1.1.3"
                 "08k4cpy8q3j93qqgnrbzkcgpn7g0a88l4a9nm33kyghpdhffv97x"))
@@ -13296,6 +13310,10 @@
 (define rust-pin-project-internal-1.1.10
   (crate-source "pin-project-internal" "1.1.10"
                 "0qgqzfl0f4lzaz7yl5llhbg97g68r15kljzihaw9wm64z17qx4bf"))
+
+(define rust-pin-project-internal-1.1.12
+  (crate-source "pin-project-internal" "1.1.12"
+                "12a3c85sa005ahk1qm673h1akx2fa8qfvpb0ybd5aj788cpy5459"))
 
 (define rust-pin-project-internal-1.1.3
   (crate-source "pin-project-internal" "1.1.3"
@@ -13817,6 +13835,10 @@
   (crate-source "profiling" "1.0.17"
                 "0wqp6i1bl7azy9270dp92srbbr55mgdh9qnk5b1y44lyarmlif1y"))
 
+(define rust-profiling-1.0.18
+  (crate-source "profiling" "1.0.18"
+                "1xdwlvxlgy99nn1dra7arzinkc8lbqljvcwpq70m7g16lda5wn9x"))
+
 (define rust-profiling-1.0.9
   (crate-source "profiling" "1.0.9"
                 "1jghc1sg9ckncx61f19syvd127imj911dgipwg2yxpxipm71dcj6"))
@@ -14032,6 +14054,10 @@
 (define rust-quick-xml-0.39.2
   (crate-source "quick-xml" "0.39.2"
                 "0z86jkw618p0d7q3zqp7pzh7cnf7wwlanzx8gyma3dffwzl233wm"))
+
+(define rust-quick-xml-0.39.3
+  (crate-source "quick-xml" "0.39.3"
+                "02w71hyn6z4by58zzxaada39910ay93hbzjgkgg5qr8jqdqaj7bj"))
 
 (define rust-quickexif-0.1.5
   (crate-source "quickexif" "0.1.5"
@@ -14528,6 +14554,10 @@
 (define rust-redox-syscall-0.7.4
   (crate-source "redox_syscall" "0.7.4"
                 "0fk4infcfn2hvshrwgf7r48rf9mr1zxy1a28d7xn798x7ffasl7l"))
+
+(define rust-redox-syscall-0.7.5
+  (crate-source "redox_syscall" "0.7.5"
+                "06qvcqy42dv563dsbxpxyig0mslwrhyx3xllknqyl4l41nka2rj6"))
 
 (define rust-redox-users-0.4.3
   (crate-source "redox_users" "0.4.3"
@@ -16396,6 +16426,10 @@
   (crate-source "simd_helpers" "0.1.0"
                 "19idqicn9k4vhd04ifh2ff41wvna79zphdf2c81rlmpc7f3hz2cm"))
 
+(define rust-simdutf-0.7.0
+  (crate-source "simdutf" "0.7.0"
+                "0hci1yilg8xc83lc7hkfddx5lhd17hn130dvwxs92nikqx92fm2z"))
+
 (define rust-simdutf8-0.1.5
   (crate-source "simdutf8" "0.1.5"
                 "0vmpf7xaa0dnaikib5jlx6y4dxd3hxqz6l830qb079g7wcsgxag3"))
@@ -16439,6 +16473,10 @@
 (define rust-siphasher-1.0.2
   (crate-source "siphasher" "1.0.2"
                 "13k7cfbpcm8qgj9p2n8dwg9skv9s0hxk5my30j5chy1p4l78bamj"))
+
+(define rust-siphasher-1.0.3
+  (crate-source "siphasher" "1.0.3"
+                "0jg6l9xyzca5vy4h6gf8r6p4kk84g98fk95pzig1kq6cr4z8grcf"))
 
 (define rust-skeptic-0.13.7
   (crate-source "skeptic" "0.13.7"
@@ -20118,6 +20156,10 @@
   (crate-source "wasm-bindgen" "0.2.120"
                 "1cax9wy1n67sa2m16ia72lsxdrc5pzcv47psxp4p833yp3cvclnz"))
 
+(define rust-wasm-bindgen-0.2.121
+  (crate-source "wasm-bindgen" "0.2.121"
+                "14375vc40l67lk9rxp59my4r6s64h2an3vjfh9j0hnqngk8f3b29"))
+
 (define rust-wasm-bindgen-0.2.84
   (crate-source "wasm-bindgen" "0.2.84"
                 "0fx5gh0b4n6znfa3blz92wn1k4bbiysyq9m95s7rn3gk46ydry1i"))
@@ -20234,6 +20276,10 @@
   (crate-source "wasm-bindgen-futures" "0.4.70"
                 "1130a64yig0p10mk7rnq5l2jpwglbyxpnqg6h0nlqwzcmir4i4xg"))
 
+(define rust-wasm-bindgen-futures-0.4.71
+  (crate-source "wasm-bindgen-futures" "0.4.71"
+                "1f3k8r13nqshrlxwq0naxpbh250b4l6p526wlw2m78pv7w6jsjcn"))
+
 (define rust-wasm-bindgen-macro-0.2.100
   (crate-source "wasm-bindgen-macro" "0.2.100"
                 "01xls2dvzh38yj17jgrbiib1d3nyad7k2yw9s0mpklwys333zrkz"))
@@ -20277,6 +20323,10 @@
 (define rust-wasm-bindgen-macro-0.2.120
   (crate-source "wasm-bindgen-macro" "0.2.120"
                 "00xixpydzjd6y9knwdsrsiff6wi1ddszb1fa9bk25csz94gh9cbq"))
+
+(define rust-wasm-bindgen-macro-0.2.121
+  (crate-source "wasm-bindgen-macro" "0.2.121"
+                "0y45ghbkvs5rmxvdyhqrx8nzyy45rdx6619c01iaarykmzsfcs4f"))
 
 (define rust-wasm-bindgen-macro-0.2.84
   (crate-source "wasm-bindgen-macro" "0.2.84"
@@ -20346,6 +20396,10 @@
   (crate-source "wasm-bindgen-macro-support" "0.2.120"
                 "0h8v5aphaaq155fzz2d312zrxbka1x6lsvb8mhc8m60n0kr0zkcx"))
 
+(define rust-wasm-bindgen-macro-support-0.2.121
+  (crate-source "wasm-bindgen-macro-support" "0.2.121"
+                "1wjr69qa8rwmk4v7243dr100k393qi0avznk6p5sgck4bk1rwnnr"))
+
 (define rust-wasm-bindgen-macro-support-0.2.84
   (crate-source "wasm-bindgen-macro-support" "0.2.84"
                 "1xm56lpi0rihh8ny7x085dgs3jdm47spgqflb98wghyadwq83zra"))
@@ -20414,6 +20468,10 @@
   (crate-source "wasm-bindgen-shared" "0.2.120"
                 "1sjrac4f4j5pgw42mxadq9v42f0bji1a2rcksrbnrwgbh8y7nxa9"))
 
+(define rust-wasm-bindgen-shared-0.2.121
+  (crate-source "wasm-bindgen-shared" "0.2.121"
+                "0h9la4176j5bvgbr64cqkmirif8z59vrcax9i4qx1w79045i1q64"))
+
 (define rust-wasm-bindgen-shared-0.2.84
   (crate-source "wasm-bindgen-shared" "0.2.84"
                 "0pcvk1c97r1pprzfaxxn359r0wqg5bm33ylbwgjh8f4cwbvzwih0"))
@@ -20458,6 +20516,10 @@
   (crate-source "wasm-bindgen-test" "0.3.70"
                 "0zcppyx9r9idafwgm0a6db5yd467s5vb4xnkh32198yaksfnz0i9"))
 
+(define rust-wasm-bindgen-test-0.3.71
+  (crate-source "wasm-bindgen-test" "0.3.71"
+                "1l227nrxaqxllqdakxkqy89nc9ywfvn6slasah5cv75d54rcjpmg"))
+
 (define rust-wasm-bindgen-test-macro-0.3.50
   (crate-source "wasm-bindgen-test-macro" "0.3.50"
                 "16znd6wz79v2i3b2sf5n4ld2kcci8br3wcx7z5c9c07sqln09m8p"))
@@ -20478,6 +20540,10 @@
   (crate-source "wasm-bindgen-test-macro" "0.3.70"
                 "1mk1377xc6miwhlj36v3j8z3mzcxsq98s9vdajd5krprhwc32466"))
 
+(define rust-wasm-bindgen-test-macro-0.3.71
+  (crate-source "wasm-bindgen-test-macro" "0.3.71"
+                "1sybs2ma67zny7z2rinq2l1p03da3dnp6ca4wph7br97z3zbk09w"))
+
 (define rust-wasm-bindgen-test-shared-0.2.117
   (crate-source "wasm-bindgen-test-shared" "0.2.117"
                 "01v2ywmx1fl0vmj1kinj4b1szwpsaydjn8zs085h7gym2hmmha8w"))
@@ -20489,6 +20555,10 @@
 (define rust-wasm-bindgen-test-shared-0.2.120
   (crate-source "wasm-bindgen-test-shared" "0.2.120"
                 "154x25qa68xnwgdbjpwg6j89kqbg28m6v9prsq0mfa8v9ddqw8v0"))
+
+(define rust-wasm-bindgen-test-shared-0.2.121
+  (crate-source "wasm-bindgen-test-shared" "0.2.121"
+                "09zm8zx87vw8s9rdy7a4i154a9niawld9pwrjw73ch2lmpkqlkag"))
 
 (define rust-wasm-encoder-0.227.1
   (crate-source "wasm-encoder" "0.227.1"
@@ -20895,6 +20965,11 @@
   (crate-source "web-sys" "0.3.97"
                 "00knh8cizgb01bmh362f3f19b11f8zl1y3gj6h47pk95233vmb9f"))
 
+(define rust-web-sys-0.3.98
+  ;; TODO REVIEW: Check bundled sources.
+  (crate-source "web-sys" "0.3.98"
+                "1aijiwx7wsfzj37p1gnqn6wv4j2ppf4rqwhrzb8blf6gigzjsmsb"))
+
 (define rust-web-time-1.1.0
   (crate-source "web-time" "1.1.0"
                 "1fx05yqx83dhx628wb70fyy10yjfq1jpl20qfqhdkymi13rq0ras"))
@@ -21195,6 +21270,10 @@
 (define rust-wide-1.3.0
   (crate-source "wide" "1.3.0"
                 "0h9i13g5z5vliz9av0yyjl9ihyb4j1amja9pmg7iky2ply29yiy9"))
+
+(define rust-wide-1.4.0
+  (crate-source "wide" "1.4.0"
+                "0fk9ldd84wkz7y5y3glmfqwc49cks2jlviv78qan79ih0k6i8xws"))
 
 (define rust-widestring-0.5.1
   (crate-source "widestring" "0.5.1"
@@ -34800,11 +34879,11 @@
                            rust-jni-sys-0.4.1
                            rust-jni-sys-macros-0.4.1
                            rust-jobserver-0.1.34
-                           rust-js-sys-0.3.97
+                           rust-js-sys-0.3.98
                            rust-khronos-egl-6.0.0
                            rust-khronos-api-3.1.0
                            rust-kqueue-1.1.1
-                           rust-kqueue-sys-1.0.4
+                           rust-kqueue-sys-1.1.0
                            rust-lazy-static-1.5.0
                            rust-leb128fmt-0.1.0
                            rust-libc-0.2.186
@@ -34916,8 +34995,8 @@
                            rust-petgraph-0.8.3
                            rust-phf-0.13.1
                            rust-phf-shared-0.13.1
-                           rust-pin-project-1.1.11
-                           rust-pin-project-internal-1.1.11
+                           rust-pin-project-1.1.12
+                           rust-pin-project-internal-1.1.12
                            rust-pin-project-lite-0.2.17
                            rust-piper-0.2.5
                            rust-pkg-config-0.3.33
@@ -34938,10 +35017,10 @@
                            rust-prettyplease-0.2.37
                            rust-proc-macro-crate-3.5.0
                            rust-proc-macro2-1.0.106
-                           rust-profiling-1.0.17
+                           rust-profiling-1.0.18
                            rust-pxfm-0.1.29
                            rust-quick-error-2.0.1
-                           rust-quick-xml-0.39.2
+                           rust-quick-xml-0.39.3
                            rust-quote-1.0.45
                            rust-r-efi-5.3.0
                            rust-r-efi-6.0.0
@@ -34965,7 +35044,7 @@
                            rust-read-fonts-0.37.0
                            rust-redox-syscall-0.4.1
                            rust-redox-syscall-0.5.18
-                           rust-redox-syscall-0.7.4
+                           rust-redox-syscall-0.7.5
                            rust-redox-users-0.4.6
                            rust-redox-users-0.5.2
                            rust-regex-1.12.3
@@ -34999,8 +35078,8 @@
                            rust-signal-hook-0.4.4
                            rust-signal-hook-registry-1.4.8
                            rust-simd-adler32-0.3.9
-                           rust-simdutf8-0.1.5
-                           rust-siphasher-1.0.2
+                           rust-simdutf-0.7.0
+                           rust-siphasher-1.0.3
                            rust-skrifa-0.37.0
                            rust-skrifa-0.40.0
                            rust-slab-0.4.12
@@ -35082,14 +35161,14 @@
                            rust-wasi-0.11.1+wasi-snapshot-preview1
                            rust-wasip2-1.0.3+wasi-0.2.9
                            rust-wasip3-0.4.0+wasi-0.3.0-rc-2026-01-06
-                           rust-wasm-bindgen-0.2.120
-                           rust-wasm-bindgen-futures-0.4.70
-                           rust-wasm-bindgen-macro-0.2.120
-                           rust-wasm-bindgen-macro-support-0.2.120
-                           rust-wasm-bindgen-shared-0.2.120
-                           rust-wasm-bindgen-test-0.3.70
-                           rust-wasm-bindgen-test-macro-0.3.70
-                           rust-wasm-bindgen-test-shared-0.2.120
+                           rust-wasm-bindgen-0.2.121
+                           rust-wasm-bindgen-futures-0.4.71
+                           rust-wasm-bindgen-macro-0.2.121
+                           rust-wasm-bindgen-macro-support-0.2.121
+                           rust-wasm-bindgen-shared-0.2.121
+                           rust-wasm-bindgen-test-0.3.71
+                           rust-wasm-bindgen-test-macro-0.3.71
+                           rust-wasm-bindgen-test-shared-0.2.121
                            rust-wasm-encoder-0.244.0
                            rust-wasm-metadata-0.244.0
                            rust-wasmparser-0.244.0
@@ -35104,7 +35183,7 @@
                            rust-wayland-protocols-wlr-0.3.12
                            rust-wayland-scanner-0.31.10
                            rust-wayland-sys-0.31.11
-                           rust-web-sys-0.3.97
+                           rust-web-sys-0.3.98
                            rust-web-time-1.1.0
                            rust-weezl-0.1.12
                            rust-wgpu-28.0.0
@@ -35114,7 +35193,7 @@
                            rust-wgpu-core-deps-windows-linux-android-28.0.0
                            rust-wgpu-hal-28.0.1
                            rust-wgpu-types-28.0.0
-                           rust-wide-1.3.0
+                           rust-wide-1.4.0
                            rust-widestring-1.2.1
                            rust-winapi-0.3.9
                            rust-winapi-i686-pc-windows-gnu-0.4.0
@@ -35461,11 +35540,11 @@
                                rust-jni-sys-0.4.1
                                rust-jni-sys-macros-0.4.1
                                rust-jobserver-0.1.34
-                               rust-js-sys-0.3.97
+                               rust-js-sys-0.3.98
                                rust-khronos-egl-6.0.0
                                rust-khronos-api-3.1.0
                                rust-kqueue-1.1.1
-                               rust-kqueue-sys-1.0.4
+                               rust-kqueue-sys-1.1.0
                                rust-lazy-static-1.5.0
                                rust-leb128fmt-0.1.0
                                rust-libc-0.2.186
@@ -35562,7 +35641,7 @@
                                rust-onig-sys-69.9.3
                                rust-oorandom-11.1.5
                                rust-option-ext-0.2.0
-                               rust-orbclient-0.3.53
+                               rust-orbclient-0.3.54
                                rust-ordered-float-5.3.0
                                rust-ordered-stream-0.2.0
                                rust-owned-ttf-parser-0.25.1
@@ -35577,8 +35656,8 @@
                                rust-petgraph-0.8.3
                                rust-phf-0.13.1
                                rust-phf-shared-0.13.1
-                               rust-pin-project-1.1.11
-                               rust-pin-project-internal-1.1.11
+                               rust-pin-project-1.1.12
+                               rust-pin-project-internal-1.1.12
                                rust-pin-project-lite-0.2.17
                                rust-piper-0.2.5
                                rust-pkg-config-0.3.33
@@ -35599,10 +35678,10 @@
                                rust-prettyplease-0.2.37
                                rust-proc-macro-crate-3.5.0
                                rust-proc-macro2-1.0.106
-                               rust-profiling-1.0.17
+                               rust-profiling-1.0.18
                                rust-pxfm-0.1.29
                                rust-quick-error-2.0.1
-                               rust-quick-xml-0.39.2
+                               rust-quick-xml-0.39.3
                                rust-quote-1.0.45
                                rust-r-efi-5.3.0
                                rust-r-efi-6.0.0
@@ -35626,7 +35705,7 @@
                                rust-read-fonts-0.37.0
                                rust-redox-syscall-0.4.1
                                rust-redox-syscall-0.5.18
-                               rust-redox-syscall-0.7.4
+                               rust-redox-syscall-0.7.5
                                rust-redox-users-0.4.6
                                rust-redox-users-0.5.2
                                rust-regex-1.12.3
@@ -35660,8 +35739,8 @@
                                rust-signal-hook-0.4.4
                                rust-signal-hook-registry-1.4.8
                                rust-simd-adler32-0.3.9
-                               rust-simdutf8-0.1.5
-                               rust-siphasher-1.0.2
+                               rust-simdutf-0.7.0
+                               rust-siphasher-1.0.3
                                rust-skrifa-0.37.0
                                rust-skrifa-0.40.0
                                rust-slab-0.4.12
@@ -35743,14 +35822,14 @@
                                rust-wasi-0.11.1+wasi-snapshot-preview1
                                rust-wasip2-1.0.3+wasi-0.2.9
                                rust-wasip3-0.4.0+wasi-0.3.0-rc-2026-01-06
-                               rust-wasm-bindgen-0.2.120
-                               rust-wasm-bindgen-futures-0.4.70
-                               rust-wasm-bindgen-macro-0.2.120
-                               rust-wasm-bindgen-macro-support-0.2.120
-                               rust-wasm-bindgen-shared-0.2.120
-                               rust-wasm-bindgen-test-0.3.70
-                               rust-wasm-bindgen-test-macro-0.3.70
-                               rust-wasm-bindgen-test-shared-0.2.120
+                               rust-wasm-bindgen-0.2.121
+                               rust-wasm-bindgen-futures-0.4.71
+                               rust-wasm-bindgen-macro-0.2.121
+                               rust-wasm-bindgen-macro-support-0.2.121
+                               rust-wasm-bindgen-shared-0.2.121
+                               rust-wasm-bindgen-test-0.3.71
+                               rust-wasm-bindgen-test-macro-0.3.71
+                               rust-wasm-bindgen-test-shared-0.2.121
                                rust-wasm-encoder-0.244.0
                                rust-wasm-metadata-0.244.0
                                rust-wasmparser-0.244.0
@@ -35765,7 +35844,7 @@
                                rust-wayland-protocols-wlr-0.3.12
                                rust-wayland-scanner-0.31.10
                                rust-wayland-sys-0.31.11
-                               rust-web-sys-0.3.97
+                               rust-web-sys-0.3.98
                                rust-web-time-1.1.0
                                rust-weezl-0.1.12
                                rust-wgpu-28.0.0
@@ -35775,7 +35854,7 @@
                                rust-wgpu-core-deps-windows-linux-android-28.0.0
                                rust-wgpu-hal-28.0.1
                                rust-wgpu-types-28.0.0
-                               rust-wide-1.3.0
+                               rust-wide-1.4.0
                                rust-widestring-1.2.1
                                rust-winapi-0.3.9
                                rust-winapi-i686-pc-windows-gnu-0.4.0
@@ -35859,7 +35938,7 @@
                                rust-xml-rs-0.8.28
                                rust-yansi-1.0.1
                                rust-yazi-0.2.1
-                               rust-yeslogic-fontconfig-sys-6.0.0
+                               rust-yeslogic-fontconfig-sys-6.0.1
                                rust-yoke-0.8.2
                                rust-yoke-derive-0.8.2
                                rust-zbus-4.4.0
