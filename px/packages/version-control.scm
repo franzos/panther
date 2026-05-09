@@ -102,15 +102,15 @@ with git and your code.")
 (define-public gitbutler
   (package
     (name "gitbutler")
-    (version "0.19.9")
+    (version "0.19.10")
     (source
      (origin
        (method url-fetch)
        (uri (string-append
              "https://releases.gitbutler.com/releases/release/"
-             version "-2990/linux/x86_64/GitButler_" version "_amd64.deb"))
+             version "-3025/linux/x86_64/GitButler_" version "_amd64.deb"))
        (sha256
-        (base32 "0k8dz6051swbzbby0jm9jrmva8zxcklpzzz3mb7099686vaih9f0"))))
+        (base32 "1k1vq9xz5hfsmkpzgsr3ribf05ghd3xn7822pln5px5h3c92pv3i"))))
     (build-system binary-build-system)
     (arguments
      `(#:patchelf-plan `(("usr/bin/gitbutler-tauri"
