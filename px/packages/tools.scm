@@ -280,38 +280,6 @@ with templated prompts, conversation memory, and multiple output targets
 including Telegram, Matrix, and email.")
     (license license:gpl3)))
 
-(define-public witr
-  (package
-    (name "witr")
-    (version "0.3.1")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/pranshuparmar/witr")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "03v9n4mdvqm0knqjl4s64321i5clqpmlrlkkdb87glzb9p28sg00"))))
-    (build-system go-build-system)
-    (arguments
-     (list
-      #:install-source? #f
-      #:import-path "github.com/pranshuparmar/witr/cmd/witr"
-      #:unpack-path "github.com/pranshuparmar/witr"
-      #:go go-1.24
-      #:build-flags
-      #~(list (string-append
-               "-ldflags=-X main.version=" #$version))))
-    (home-page "https://github.com/pranshuparmar/witr")
-    (synopsis "Explain why a process is running on Linux")
-    (description
-     "Witr (Why Is This Running) is a Linux CLI debugging tool that explains
-the causal chain of why a process exists.  It traces process ancestry, maps
-ports to processes, and identifies contexts like Git repositories, Docker
-containers, and PM2 instances.")
-    (license license:asl2.0)))
-
 (define-public google-workspace-cli
   (package
     (name "google-workspace-cli")
