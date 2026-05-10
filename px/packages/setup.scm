@@ -5,15 +5,18 @@
   #:use-module ((guix licenses)
                 #:prefix license:)
   #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix build-system python)
+  #:use-module (guix build-system cargo)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-build)
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages python-web)
   #:use-module (gnu packages time)
-  #:use-module (px packages common))
+  #:use-module (px packages common)
+  #:use-module (px self))
 
 (define-public px-install
   (package
@@ -40,3 +43,28 @@
     (synopsis "PantherX OS Installer")
     (description "A command line driven installer with sane defaults.")
     (license license:gpl3)))
+
+(define-public guix-install
+  (package
+    (name "guix-install")
+    (version "0.1.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/franzos/guix-install")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0m16bb3wwn8s2ffifjqxpb5h0ykxy2k4zyzs75z7pc684vq3apd6"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:install-source? #f))
+    (inputs (px-cargo-inputs 'guix-install))
+    (home-page "https://github.com/franzos/guix-install")
+    (synopsis "Guix System installer")
+    (description
+     "Guix System installer.  Boot a Guix ISO, run one binary, get a working
+system---libre Guix, Nonguix, PantherX, or an enterprise config from a
+server.")
+    (license license:gpl3+)))
