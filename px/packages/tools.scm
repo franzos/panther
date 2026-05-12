@@ -251,6 +251,37 @@ provides versioning, diffing, restore, and sharing of environment variables with
 optional encryption using GPG or password-based AES-256-GCM.")
     (license license:gpl3)))
 
+(define-public shelf
+  (package
+    (name "shelf")
+    (version "0.1.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/franzos/shelf")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "13kjmwprvba0p5a5w7p65b4hbrvfmvy418g7qfxmvhghg7ws08ym"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:install-source? #f
+       #:tests? #f
+       #:rust ,rust-1.88))
+    (inputs
+     (cons* sqlite (px-cargo-inputs 'shelf)))
+    (home-page "https://github.com/franzos/shelf")
+    (synopsis "CLI for cataloguing files by metadata-driven rules")
+    (description
+     "Shelf is a command-line tool that walks input folders, extracts file
+metadata (EXIF, QuickTime/MP4, PDF info), and sorts files into a structured
+destination via configurable templates.  It deduplicates by sha256 content hash
+and tracks run state in SQLite so re-runs are cheap and deterministic.
+Profile-driven TOML configuration targets photos, videos, documents, invoices,
+or any files with extractable metadata.")
+    (license license:gpl3)))
+
 (define-public vatic
   (package
     (name "vatic")
