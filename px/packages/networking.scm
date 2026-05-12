@@ -581,7 +581,7 @@ follow management, and backfeeding of replies from Fediverse users to your
 static site.")
     (license license:agpl3+)))
 
-(define %mullvad-vpn-desktop-version "2026.1")
+(define %mullvad-vpn-desktop-version "2026.2")
 
 (define (mullvad-vpn-desktop-origin-url system)
   (string-append "https://github.com/mullvad/mullvadvpn-app/releases/"
@@ -598,8 +598,8 @@ static site.")
 (define-public mullvad-vpn-desktop
   (define-values (url hash)
     (mullvad-vpn-desktop-origin-values
-     #:amd64-hash "0gpg5yb1b4fw6zw06ymgicw46v7qj4sf7i5zd5srdhqvn66rlmqy"
-     #:aarch64-hash "052rd1vivfclg701galsw5r00qlf9z6xac4v8vh93rkmy3l8av9j"))
+     #:amd64-hash "1yilhzp5s7dplpnn69pyr9s2hd7s37h3f8nbzivv2m5h39gpy0kv"
+     #:aarch64-hash "02n1143c7c309l8ik05ncxq3x5ixyikyyxa17bjwlg1p62j8p6w6"))
   (package
     (name "mullvad-vpn-desktop")
     (version %mullvad-vpn-desktop-version)
