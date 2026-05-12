@@ -14,6 +14,7 @@
   #:use-module (guix packages)
   #:use-module (nonguix build-system binary)
   #:use-module (nonguix licenses)
+  #:use-module (nongnu packages electron)
   #:use-module (px packages rust)
   #:use-module (px self))
 
@@ -71,6 +72,110 @@ exec ~a \"$@\"
 It can understand your codebase, edit files, run terminal commands, and
 handle entire workflows.  This package disables auto-updates.")
     (license (nonfree "https://code.claude.com/docs/en/legal-and-compliance"))))
+
+(define-public claude-desktop
+  (package
+    (name "claude-desktop")
+    (version "1.6608.2-2.0.10")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/aaddrick/claude-desktop-debian/releases/"
+             "download/v2.0.10+claude1.6608.2/"
+             "claude-desktop_1.6608.2-2.0.10_amd64.deb"))
+       (file-name (string-append name "-" version ".deb"))
+       (sha256
+        (base32 "02v6930yfwckw6pvs0rm160chg1n9ckkxh88k3s0jiwn4dsfzh7r"))))
+    (build-system binary-build-system)
+    (arguments
+     (list
+      #:strip-binaries? #f
+      #:validate-runpath? #f
+      #:patchelf-plan #~'()
+      #:install-plan #~'()
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'unpack
+            (lambda* (#:key inputs #:allow-other-keys)
+              (invoke "ar" "x" (assoc-ref inputs "source"))
+              (invoke "tar" "--use-compress-program=zstd" "-xf" "data.tar.zst")))
+          (replace 'install
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (let* ((out (assoc-ref outputs "out"))
+                     (bin (string-append out "/bin"))
+                     (lib (string-append out "/lib/claude-desktop"))
+                     (resources (string-append lib "/resources"))
+                     (src-resources
+                      "usr/lib/claude-desktop/node_modules/electron/dist/resources")
+                     (electron (search-input-file inputs "/bin/electron")))
+                (mkdir-p resources)
+                (mkdir-p bin)
+                ;; App + unpacked + co-located resources used by the asar
+                (install-file (string-append src-resources "/app.asar") resources)
+                (copy-recursively
+                 (string-append src-resources "/app.asar.unpacked")
+                 (string-append resources "/app.asar.unpacked"))
+                (for-each
+                 (lambda (f)
+                   (let ((full (string-append src-resources "/" f)))
+                     (cond ((not (file-exists? full)) #t)
+                           ((file-is-directory? full)
+                            (copy-recursively
+                             full (string-append resources "/" f)))
+                           (else
+                            (install-file full resources)))))
+                 '("en-US.json" "de-DE.json" "es-419.json" "es-ES.json"
+                   "fr-FR.json" "hi-IN.json" "id-ID.json" "it-IT.json"
+                   "ja-JP.json" "ko-KR.json" "pt-BR.json"
+                   "TrayIconTemplate.png" "TrayIconTemplate@2x.png"
+                   "TrayIconTemplate@3x.png" "TrayIconTemplate-Dark.png"
+                   "TrayIconTemplate-Dark@2x.png" "TrayIconTemplate-Dark@3x.png"
+                   "Tray-Win32.ico" "Tray-Win32-Dark.ico"
+                   "ion-dist"))
+                ;; Shared launcher functions + doctor diagnostics
+                (install-file "usr/lib/claude-desktop/launcher-common.sh" lib)
+                (install-file "usr/lib/claude-desktop/doctor.sh" lib)
+                ;; Icons, desktop entry
+                (copy-recursively "usr/share/icons"
+                                  (string-append out "/share/icons"))
+                (install-file "usr/share/applications/claude-desktop.desktop"
+                              (string-append out "/share/applications"))
+                ;; Launcher: keep upstream logic, retarget paths to our store
+                (install-file "usr/bin/claude-desktop" bin)
+                (let ((launcher (string-append bin "/claude-desktop")))
+                  (substitute* launcher
+                    (("/usr/lib/claude-desktop/launcher-common.sh")
+                     (string-append lib "/launcher-common.sh"))
+                    (("/usr/lib/claude-desktop/node_modules/electron/dist/electron")
+                     electron)
+                    (("/usr/lib/claude-desktop/node_modules/electron/dist/resources/app\\.asar")
+                     (string-append resources "/app.asar"))
+                    (("app_dir='/usr/lib/claude-desktop'")
+                     (string-append "app_dir='" lib "'"))
+                    (("app_dir=\"/usr/lib/claude-desktop\"")
+                     (string-append "app_dir=\"" lib "\"")))
+                  (chmod launcher #o755))
+                (substitute* (string-append
+                              out "/share/applications/claude-desktop.desktop")
+                  (("/usr/bin/claude-desktop")
+                   (string-append bin "/claude-desktop")))))))))
+    (native-inputs
+     (list binutils zstd))
+    (inputs
+     (list bash-minimal electron-41))
+    (supported-systems '("x86_64-linux"))
+    (home-page "https://github.com/aaddrick/claude-desktop-debian")
+    (synopsis "Claude Desktop for Linux")
+    (description
+     "Claude Desktop is Anthropic's official desktop client for Claude,
+repackaged for Linux by the @code{claude-desktop-debian} project.  It
+runs as an Electron app with Model Context Protocol (MCP) support, a
+global hotkey (Ctrl+Alt+Space), and system tray integration.
+
+This package extracts the prebuilt @code{.deb} from the upstream
+release and wraps it with the Guix-provided Electron runtime.")
+    (license (nonfree "https://www.anthropic.com/legal/consumer-terms"))))
 
 (define-public ollama
   (package
