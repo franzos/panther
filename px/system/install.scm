@@ -29,7 +29,7 @@
 \x1b[1;37mThis is a PantherX OS installation image.\x1b[0m
 \x1b[1;37mVisit wiki.pantherx.org for more information.\x1b[0m
 
-\x1b[1;33mStart with: px-install run\x1b[0m
+\x1b[1;33mStart with: guix-install\x1b[0m
 
 ")
 
@@ -42,7 +42,7 @@
 
     (issue %issue)
 
-    (packages (cons* px-install
+    (packages (cons* guix-install
                      wpa-supplicant                  ;; Wi-Fi connection via CLI
                      libimobiledevice                ;; iPhone USB tethering
                      neovim                          ;; Editing
