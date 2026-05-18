@@ -69,7 +69,7 @@ is a drop-in replacement for upstream Quickshell when running Noctalia."))))
 (define-public noctalia-shell
   (package
     (name "noctalia-shell")
-    (version "4.7.6")
+    (version "4.7.7")
     (source
      (origin
        (method git-fetch)
@@ -78,7 +78,7 @@ is a drop-in replacement for upstream Quickshell when running Noctalia."))))
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "00g0ylp01y8yjbq8kb6rcisfkyxg7ybss8ib89qxiaplqdd1hqx0"))))
+        (base32 "0pchvsd89js4q7k10q621w3jqndv6raw6zy0px2b43ygh2kcpk22"))))
     (build-system copy-build-system)
     (arguments
      (list
