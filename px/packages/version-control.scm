@@ -23,6 +23,7 @@
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages tls)
   #:use-module (gnu packages perl)
+  #:use-module (gnu packages rust-apps)
   #:use-module (gnu packages webkit)
   #:use-module (px packages go)
   #:use-module (px packages rust)
@@ -279,3 +280,82 @@ rebasing of descendant commits, and comprehensive history rewriting tools.")
 with branch genealogy.  It provides color-coded commit graphs, branch
 information, file change statistics, and basic Git operations.")
     (license license:expat)))
+
+(define-public radicle-desktop
+  (package
+    (name "radicle-desktop")
+    (version "0.10.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://files.radicle.dev/apt/pool/main/r/radicle-desktop/"
+             "radicle-desktop_" version "_amd64.deb"))
+       (sha256
+        (base32 "1p1flha80jzy0sb1pbgv5ivzqibk0fwcyvw1drnaxpz1mpq9572y"))))
+    (build-system binary-build-system)
+    (arguments
+     `(#:patchelf-plan `(("usr/bin/radicle-desktop"
+                          ("glib" "gtk+" "gdk-pixbuf" "cairo" "pango"
+                           "webkitgtk-for-gtk3" "libsoup" "gcc:lib")))
+       #:phases
+       (modify-phases %standard-phases
+         (replace 'unpack
+           (lambda* (#:key inputs #:allow-other-keys)
+             (invoke "ar" "x" (assoc-ref inputs "source"))
+             (invoke "tar" "-xzf" "data.tar.gz")
+             (delete-file "control.tar.gz")
+             (delete-file "data.tar.gz")
+             (delete-file "debian-binary")))
+         (add-after 'install 'install-extras
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (share (string-append out "/share"))
+                    (apps (string-append share "/applications"))
+                    (icons (string-append share "/icons")))
+               (mkdir-p apps)
+               (copy-file "usr/share/applications/radicle-desktop.desktop"
+                          (string-append apps "/radicle-desktop.desktop"))
+               (substitute* (string-append apps "/radicle-desktop.desktop")
+                 (("Exec=radicle-desktop")
+                  (string-append "Exec=" out "/bin/radicle-desktop"))
+                 (("Categories=")
+                  "Categories=Development;RevisionControl;"))
+               (copy-recursively "usr/share/icons" icons))))
+         (add-after 'install-extras 'create-wrapper
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (bin (string-append out "/bin")))
+               (wrap-program (string-append out "/usr/bin/radicle-desktop")
+                 `("LD_LIBRARY_PATH" ":" prefix
+                   (,(string-append (assoc-ref inputs "webkitgtk-for-gtk3") "/lib")
+                    ,(string-append (assoc-ref inputs "libsoup") "/lib")
+                    ,(string-append (assoc-ref inputs "gtk+") "/lib")
+                    ,(string-append (assoc-ref inputs "glib") "/lib")
+                    ,(string-append (assoc-ref inputs "gdk-pixbuf") "/lib")
+                    ,(string-append (assoc-ref inputs "cairo") "/lib")
+                    ,(string-append (assoc-ref inputs "pango") "/lib")
+                    ,(string-append (assoc-ref inputs "gcc:lib") "/lib"))))
+               (mkdir-p bin)
+               (symlink (string-append out "/usr/bin/radicle-desktop")
+                        (string-append bin "/radicle-desktop"))))))))
+    (native-inputs `(("binutils" ,binutils)))
+    (inputs `(("bash-minimal" ,bash-minimal)
+              ("cairo" ,cairo)
+              ("gdk-pixbuf" ,gdk-pixbuf)
+              ("glib" ,glib)
+              ("gcc:lib" ,gcc "lib")
+              ("gtk+" ,gtk+)
+              ("libsoup" ,libsoup)
+              ("pango" ,pango)
+              ("webkitgtk-for-gtk3" ,webkitgtk-for-gtk3)))
+    (propagated-inputs (list radicle))
+    (supported-systems '("x86_64-linux"))
+    (home-page "https://radicle.dev/desktop")
+    (synopsis "Desktop app for the Radicle peer-to-peer code collaboration network")
+    (description
+     "Radicle Desktop is a graphical client for @code{radicle}, a peer-to-peer
+code collaboration stack built on Git.  It provides a local-first interface
+for browsing repositories, reviewing patches with inline comments, managing
+issues, and following an inbox of notifications across the Radicle network.")
+    (license license:gpl3)))
