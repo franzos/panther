@@ -1010,14 +1010,14 @@ emoji picker, calculator, clipboard history, window focusing, script commands,
 (define-public actiona
   (package
     (name "actiona")
-    (version "3.11.3")
+    (version "3.11.4")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "https://github.com/Jmgr/actiona/releases/download/v"
                            version "/actiona-" version "-source-linux.tar.gz"))
        (sha256
-        (base32 "0bzzwwckjxzzp4p4cqagc9rwm5wwwz18pyc44fhxhbd663llajdh"))))
+        (base32 "08f7jz1pm507ymh3rrpkvm9vpfn3s7aqzlfb0xbngqya73vmpgr0"))))
     (build-system cmake-build-system)
     (arguments
      (list
