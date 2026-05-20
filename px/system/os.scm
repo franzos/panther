@@ -7,6 +7,7 @@
   #:use-module (gnu services)
   #:use-module (gnu services base)
   #:use-module (gnu services desktop)
+  #:use-module (gnu services dbus)                   ;; polkit-service-type
   #:use-module (gnu services sound)                  ;; pulseaudio-service-type alsa-service-type
   #:use-module (gnu services xorg)                   ;; gdm-service-type
   #:use-module (gnu services sddm)                   ;; sddm-service-type
@@ -19,6 +20,7 @@
   #:use-module (srfi srfi-1)                         ;; remove
   #:use-module (nongnu packages linux)
   #:use-module (px system common)
+  #:use-module (px packages libguix-rs)             ;; libguix-rs-polkit
 
   #:export (%os-base-services
             %os-desktop-services
@@ -45,22 +47,25 @@
         (channels %pantherx-default-channels)))))
 
 (define %os-desktop-services
-  (modify-services %desktop-services
-    (guix-service-type config =>
-      (guix-configuration
-        (inherit config)
-        (guix (guix-for-channels %pantherx-default-channels))
-        (authorized-keys
-        (cons* %gofranz-substitute-server-key
-                %nonguix-substitute-server-key
-                %guix-moe-substitute-server-key
-                %default-authorized-guix-keys))
-        (substitute-urls
-        (cons* %gofranz-substitute-server-url
-                %nonguix-mirror-substitute-server-url
-                %guix-moe-substitute-server-url
-                %default-substitute-urls))
-        (channels %pantherx-default-channels)))))
+  (cons (simple-service 'libguix-rs-polkit
+                        polkit-service-type
+                        (list libguix-rs-polkit))
+        (modify-services %desktop-services
+          (guix-service-type config =>
+            (guix-configuration
+              (inherit config)
+              (guix (guix-for-channels %pantherx-default-channels))
+              (authorized-keys
+              (cons* %gofranz-substitute-server-key
+                      %nonguix-substitute-server-key
+                      %guix-moe-substitute-server-key
+                      %default-authorized-guix-keys))
+              (substitute-urls
+              (cons* %gofranz-substitute-server-url
+                      %nonguix-mirror-substitute-server-url
+                      %guix-moe-substitute-server-url
+                      %default-substitute-urls))
+              (channels %pantherx-default-channels))))))
 
 ;; Desktop services without login/display managers and audio.
 ;; Use this when bringing your own (greetd, pipewire, etc.).
