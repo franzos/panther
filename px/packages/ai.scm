@@ -180,7 +180,7 @@ release and wraps it with the Guix-provided Electron runtime.")
 (define-public ollama
   (package
     (name "ollama")
-    (version "0.23.0")
+    (version "0.24.0")
     (source
      (origin
        (method url-fetch)
@@ -188,7 +188,7 @@ release and wraps it with the Guix-provided Electron runtime.")
              "https://github.com/ollama/ollama/releases/download/v"
              version "/ollama-linux-amd64.tar.zst"))
        (sha256
-        (base32 "1m4syjdvmjk5n691d8l9a04hgfk00952fk259w7yi8vd1k6ac6sq"))))
+        (base32 "1nywgijy2limpclhjxl29vhndg9dc5l8ipqr8wxhsvm0dgbgii8m"))))
     (build-system binary-build-system)
     (arguments
      (list
