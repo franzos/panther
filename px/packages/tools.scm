@@ -152,7 +152,7 @@ and hexdump generation through an interactive command-line environment.")
 (define-public broot
   (package
     (name "broot")
-    (version "1.56.2")
+    (version "1.56.4")
     (source
      (origin
        (method url-fetch)
@@ -160,7 +160,7 @@ and hexdump generation through an interactive command-line environment.")
                            version ".tar.gz"))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "0ramwxpqcvjgf8f2gj71qad4ni714ryx0jxkf5nmymkn5hjy8yry"))))
+        (base32 "16x9mvlxfbw07i4bsj1nsisdkihzxdlhhqyd701ywrar6cpl4jgc"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
