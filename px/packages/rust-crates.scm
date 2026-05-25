@@ -9408,6 +9408,10 @@
   (crate-source "indicatif" "0.18.0"
                 "1kg1wi3x9x15f22q99spfzcg5fzlmhcc5i6aqjxyssyh8vcld9kh"))
 
+(define rust-indicatif-0.18.4
+  (crate-source "indicatif" "0.18.4"
+                "1sz9p1a7i0z666psqzjdpi8xa11icmnpfd4q4dyxm4ihh0ihyir5"))
+
 (define rust-indoc-1.0.9
   (crate-source "indoc" "1.0.9"
                 "01l3b4ami6sck57yrn8n2z44jifph2m3jiivkws7w2njbvfrk9xz"))
@@ -20174,6 +20178,10 @@
 (define rust-unit-prefix-0.5.1
   (crate-source "unit-prefix" "0.5.1"
                 "05rq0asf2f1q5vrcv4bwf0c3y6q20asqkiqpr8wqyrfxyb7h4d1j"))
+
+(define rust-unit-prefix-0.5.2
+  (crate-source "unit-prefix" "0.5.2"
+                "18xr6yhdvlxrv51y6js9npa3qhkzc5b1z4skr5kfzn7kkd449rc1"))
 
 (define rust-universal-config-0.5.0
   (crate-source "universal-config" "0.5.0"
@@ -37969,6 +37977,7 @@
                                   rust-id-arena-2.3.0
                                   rust-ignore-0.4.25
                                   rust-indexmap-2.14.0
+                                  rust-indicatif-0.18.4
                                   rust-insta-1.47.2
                                   rust-is-terminal-polyfill-1.70.2
                                   rust-itertools-0.13.0
@@ -37996,6 +38005,7 @@
                                   rust-plotters-0.3.7
                                   rust-plotters-backend-0.3.7
                                   rust-plotters-svg-0.3.7
+                                  rust-portable-atomic-1.13.1
                                   rust-ppv-lite86-0.2.21
                                   rust-predicates-3.1.4
                                   rust-predicates-core-1.0.10
@@ -38056,7 +38066,9 @@
                                   rust-typenum-1.20.0
                                   rust-unarray-0.1.4
                                   rust-unicode-ident-1.0.24
+                                  rust-unicode-width-0.2.2
                                   rust-unicode-xid-0.2.6
+                                  rust-unit-prefix-0.5.2
                                   rust-utf8parse-0.2.2
                                   rust-valuable-0.1.1
                                   rust-vcpkg-0.2.15
@@ -38072,6 +38084,7 @@
                                   rust-wasm-metadata-0.244.0
                                   rust-wasmparser-0.244.0
                                   rust-web-sys-0.3.98
+                                  rust-web-time-1.1.0
                                   rust-winapi-0.3.9
                                   rust-winapi-i686-pc-windows-gnu-0.4.0
                                   rust-winapi-util-0.1.11

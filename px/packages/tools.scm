@@ -254,7 +254,7 @@ optional encryption using GPG or password-based AES-256-GCM.")
 (define-public shelf
   (package
     (name "shelf")
-    (version "0.1.1")
+    (version "0.1.2")
     (source
      (origin
        (method git-fetch)
@@ -263,7 +263,7 @@ optional encryption using GPG or password-based AES-256-GCM.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "017v6rsxf23h9534nhfbbxazqkhvbvlirzngx2fcnyw0gky9n64r"))))
+        (base32 "12x4k5qndzbhpz73cwy2c4flfji0cf94zkp86qdlgbirsmfg526i"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
