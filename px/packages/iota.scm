@@ -22,7 +22,7 @@
   #:use-module (gnu packages vulkan)
   #:use-module (gnu packages xdisorg)
   #:use-module (nonguix build-system binary)
-  #:use-module (px packages rust)
+  #:use-module (gnu packages rust)
   #:use-module (px self))
 
 (define-public iota

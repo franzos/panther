@@ -15,7 +15,6 @@
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages tls)
   #:use-module (gnu packages rust)
-  #:use-module (px packages rust)
   #:use-module (px self))
 
 (define-public himalaya

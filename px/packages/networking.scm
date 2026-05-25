@@ -47,7 +47,6 @@
   #:use-module (gnu packages xml)
   #:use-module (px packages go)
   #:use-module (px packages golang-xyz)
-  #:use-module (px packages rust)
   #:use-module (px self)
   #:use-module (ice-9 match))
 

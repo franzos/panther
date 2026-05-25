@@ -15,7 +15,7 @@
   #:use-module (nonguix build-system binary)
   #:use-module (nonguix licenses)
   #:use-module (nongnu packages electron)
-  #:use-module (px packages rust)
+  #:use-module (gnu packages rust)
   #:use-module (px self))
 
 (define-public claude-code

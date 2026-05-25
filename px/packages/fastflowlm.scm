@@ -30,7 +30,6 @@
   #:use-module (gnu packages version-control) ;; git-minimal
   #:use-module (gnu packages elf)           ;; patchelf
   #:use-module (gnu packages textutils)    ;; oniguruma
-  #:use-module (px packages rust)
   #:use-module (px self))
 
 ;; Long-double precision FFTW (not available in Guix upstream).

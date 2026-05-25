@@ -73,7 +73,6 @@
   #:use-module (px packages common)
   #:use-module (px packages library)
   #:use-module (px packages haskell)
-  #:use-module (px packages rust)
   #:use-module (px packages themes)
   #:use-module ((px packages maths) #:select (libqalculate) #:prefix px:)
   #:use-module (px self)

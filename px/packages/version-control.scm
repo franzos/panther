@@ -23,10 +23,10 @@
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages tls)
   #:use-module (gnu packages perl)
+  #:use-module (gnu packages rust)
   #:use-module (gnu packages rust-apps)
   #:use-module (gnu packages webkit)
   #:use-module (px packages go)
-  #:use-module (px packages rust)
   #:use-module (px self))
 
 (define-public forgejo-cli

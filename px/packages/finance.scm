@@ -27,7 +27,7 @@
   #:use-module (gnu packages aidc)
   #:use-module (gnu packages serialization)
   #:use-module (px packages python-xyz)
-  #:use-module (px packages rust)
+  #:use-module (gnu packages rust)
   #:use-module (px self))
 
 (define-public electrum-cc
