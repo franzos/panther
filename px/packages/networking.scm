@@ -264,7 +264,7 @@ publish/subscribe, RPC-style request/reply, or service discovery.")
                       (sha (base32 "0yc1v300ax0n63g5j5ksyzjc0x022y8mshkngw6hawyba8jl9qx7"))))
                 (sha256
                  (base32
-                  "1vbi4xmnf4dnw6dahl2fkgqnx8x8z7jrc6nfg3grj63qgkwg9wkx"))))
+                  "1jldr53r088mcrw5fm3n2nnlvkxhxwrnjdl1d6n4ysxa59gki6r7"))))
       (build-system go-build-system)
       (arguments
        `(#:import-path "tailscale.com/cmd/tailscale"
