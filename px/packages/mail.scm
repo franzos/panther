@@ -46,7 +46,7 @@ authorization for various email providers including Gmail, Outlook, and iCloud."
 (define-public bichon
   (package
     (name "bichon")
-    (version "0.3.7")
+    (version "1.3.0")
     (source
      (origin
        (method git-fetch)
@@ -55,44 +55,129 @@ authorization for various email providers including Gmail, Outlook, and iCloud."
              (commit version)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "04nqqkw2fhdd4c97iw2jimkzy0wfkp81ca9gryz3zc8n2b5kk8pd"))
+        (base32 "1cmnl27krxbry3f2s5lvs72jjq41ivwfi9fi2bm0q7471inhvsd2"))
        (snippet
         #~(begin
-            (use-modules (guix build utils))
-            ;; Replace git dependency with path to workspace crate
-            (substitute* "Cargo.toml"
-              (("outlook-pst = \\{ git.*\\}")
-               "outlook-pst = { path = \"outlook-pst-src/crates/pst\" }"))
+            (use-modules (guix build utils)
+                         (ice-9 regex)
+                         (ice-9 rdelim))
             ;; Set a fixed GIT_HASH since git isn't available during build
-            (substitute* "build.rs"
+            (substitute* "crates/server/build.rs"
               (("Command::new\\(\"git\"\\)")
                "Command::new(\"echo\")")
-              (("\\.args\\(&\\[\"rev-parse\".*\\]\\)")
-               ".arg(\"0.3.7\")"))))))
+              (("\\.args\\(&\\[\"rev-parse.*\\]\\)")
+               ".arg(\"1.3.0\")"))
+            ;; Replace git deps with path deps (multi-line: read/regex/write)
+            (define (rewrite-file path pattern replacement)
+              (let* ((content (call-with-input-file path
+                                (lambda (p)
+                                  (let loop ((acc ""))
+                                    (let ((line (read-line p 'concat)))
+                                      (if (eof-object? line)
+                                          acc
+                                          (loop (string-append acc line)))))))))
+                (chmod path #o644)
+                (call-with-output-file path
+                  (lambda (port)
+                    (display (regexp-substitute/global
+                              #f pattern content
+                              'pre replacement 'post)
+                             port)))))
+            (rewrite-file "crates/core/Cargo.toml"
+                          "async-imap = \\{ git[^}]+\\}"
+                          (string-append
+                           "async-imap = { path = \"../../vendored-git/async-imap\""
+                           ", default-features = false"
+                           ", features = [\"runtime-tokio\", \"compress\"] }"))
+            (rewrite-file "crates/cli/Cargo.toml"
+                          "outlook-pst = \\{ git[^}]+\\}"
+                          "outlook-pst = { path = \"../../vendored-git/outlook-pst\" }")))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
        #:tests? #f
-       #:rust ,rust-1.91
+       #:rust ,rust-1.95
+       #:cargo-install-paths
+       '("crates/server" "crates/cli" "crates/admin")
        #:phases
        (modify-phases %standard-phases
-         (add-after 'unpack 'setup-outlook-pst
-           (lambda* (#:key inputs #:allow-other-keys)
-             ;; Find outlook-pst input and symlink to its directory
-             (for-each (lambda (pair)
-                         (let ((name (car pair))
-                               (path (cdr pair)))
-                           (when (and (string? path)
-                                      (string-contains name "outlook-pst"))
-                             (symlink path "outlook-pst-src"))))
-                       inputs)))
-         (add-after 'setup-outlook-pst 'create-web-placeholder
+         (add-after 'unpack 'create-web-placeholder
            (lambda _
-             ;; Create a minimal web/dist folder with placeholder for RustEmbed
+             ;; Minimal web/dist folder for RustEmbed in the server crate
              (mkdir-p "web/dist")
              (call-with-output-file "web/dist/index.html"
                (lambda (port)
-                 (display "<!DOCTYPE html><html><body>Web UI</body></html>" port))))))))
+                 (display "<!DOCTYPE html><html><body>Web UI</body></html>" port)))))
+         ;; Place the two git-fetched deps under ./vendored-git/ so member
+         ;; crates can reference them via path.  outlook-pst's crates/pst is
+         ;; extracted as a standalone package — cargo walks up to bichon's
+         ;; workspace, not outlook-pst's, so `.workspace = true` inheritances
+         ;; can't resolve.  For async-imap, also strip [dev-dependencies] and
+         ;; the optional async-std dep: cargo pulls dev-deps for path deps
+         ;; even when not building tests.
+         (add-after 'unpack-rust-crates 'vendor-git-deps
+           (lambda* (#:key inputs #:allow-other-keys)
+             (use-modules (ice-9 rdelim))
+             (mkdir-p "vendored-git")
+             (define (handle-input pair)
+               (let ((name (car pair))
+                     (path (cdr pair)))
+                 (cond
+                  ((and (string? path)
+                        (string-prefix? "rust-async-imap-" name))
+                   (let ((dest "vendored-git/async-imap"))
+                     (unless (file-exists? dest)
+                       (copy-recursively path dest))
+                     ;; Drop [dev-dependencies] (cargo pulls those for path deps)
+                     ;; and the optional async-std dep (not activated, but cargo
+                     ;; still requires it to be resolvable in the vendor dir).
+                     (let* ((toml-path (string-append dest "/Cargo.toml"))
+                            (content (call-with-input-file toml-path
+                                       (lambda (p)
+                                         (let loop ((acc ""))
+                                           (let ((line (read-line p 'concat)))
+                                             (if (eof-object? line)
+                                                 acc
+                                                 (loop (string-append acc line))))))))
+                            (idx (string-contains content "[dev-dependencies]"))
+                            (trimmed (if idx (substring content 0 idx) content)))
+                       (chmod toml-path #o644)
+                       (call-with-output-file toml-path
+                         (lambda (port) (display trimmed port))))
+                     (substitute* (string-append dest "/Cargo.toml")
+                       (("^async-std = .*$") "")
+                       (("\"async-std\",") "")
+                       (("^default = \\[\"runtime-async-std\"\\]")
+                        "default = []")
+                       (("^runtime-async-std = .*$") ""))))
+                  ((and (string? path)
+                        (string-prefix? "rust-outlook-pst-" name))
+                   (let ((dest "vendored-git/outlook-pst"))
+                     (unless (file-exists? dest)
+                       (copy-recursively (string-append path "/crates/pst")
+                                         dest))
+                     (chmod (string-append dest "/Cargo.toml") #o644)
+                     (call-with-output-file (string-append dest "/Cargo.toml")
+                       (lambda (port)
+                         (display "\
+[package]
+name = \"outlook-pst\"
+description = \"Outlook PST Store Provider in Rust\"
+version = \"1.1.0\"
+authors = [\"Microsoft\"]
+edition = \"2021\"
+rust-version = \"1.82\"
+repository = \"https://github.com/microsoft/outlook-pst-rs\"
+license = \"MIT\"
+keywords = [\"win32\", \"outlook\", \"mapi\"]
+categories = [\"os::windows-apis\"]
+
+[dependencies]
+byteorder = \"1\"
+thiserror = \"2\"
+tracing = \"0.1\"
+" port))))))))
+             (for-each handle-input inputs))))))
     (native-inputs
      (list pkg-config))
     (inputs
