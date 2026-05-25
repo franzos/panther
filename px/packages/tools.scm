@@ -192,7 +192,7 @@ navigate large directory structures.")
                ("i686-linux" "386")
                ("armhf-linux" "arm")) ".zip"))
        (sha256
-        (base32 "0r1y330wgdpvifgkknnsbd0g1brx339150bsjvbw40yvx4km3zp9"))))
+        (base32 "110vhn3fd0vkd7lm85rqpy701bqw8y9djpp57mjp4rzq41l2ry0x"))))
     (build-system binary-build-system)
     (arguments
      (list
