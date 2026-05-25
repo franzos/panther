@@ -20,7 +20,7 @@
   #:use-module (srfi srfi-1)                         ;; remove
   #:use-module (nongnu packages linux)
   #:use-module (px system common)
-  #:use-module (px packages libguix-rs)             ;; libguix-rs-polkit
+  #:use-module (px packages libguix)                ;; libguix-polkit
 
   #:export (%os-base-services
             %os-desktop-services
@@ -47,9 +47,9 @@
         (channels %pantherx-default-channels)))))
 
 (define %os-desktop-services
-  (cons (simple-service 'libguix-rs-polkit
+  (cons (simple-service 'libguix-polkit
                         polkit-service-type
-                        (list libguix-rs-polkit))
+                        (list libguix-polkit))
         (modify-services %desktop-services
           (guix-service-type config =>
             (guix-configuration
