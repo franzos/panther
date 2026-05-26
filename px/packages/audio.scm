@@ -161,7 +161,7 @@ minimize its security impact.")
 (define-public voxtype
   (package
     (name "voxtype")
-    (version "0.6.3")
+    (version "0.7.4")
     (source
      (origin
        (method git-fetch)
@@ -170,14 +170,7 @@ minimize its security impact.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1j7hvry4yaih90m1vn421xdrzhn2njbvs3671lj3ym694k10g1nr"))
-       (snippet
-        #~(begin
-            (use-modules (guix build utils))
-            ;; Replace unstable is_multiple_of with stable modulo operator
-            (substitute* "src/daemon.rs"
-              (("count\\.is_multiple_of\\(120\\)")
-               "count % 120 == 0"))))))
+        (base32 "1mb6b9nq6gf1d3hhk825zhf234v89n13ifpbszf2wjxq0fvcjnhr"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
