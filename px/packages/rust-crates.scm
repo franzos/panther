@@ -10372,6 +10372,11 @@
   (crate-source "kqueue-sys" "1.1.0"
                 "0byssypr815kj1kxbk8sxc70yjmx5ngncbl8z8irz52z85h5idm7"))
 
+(define rust-kqueue-sys-1.1.2
+  ;; TODO REVIEW: Check bundled sources.
+  (crate-source "kqueue-sys" "1.1.2"
+                "11xhzsgwc82g85072c6m8nimxxqkax4n40sikcsk9hks5573la87"))
+
 (define rust-kstring-2.0.0
   (crate-source "kstring" "2.0.0"
                 "0isp7kmk4q0qxpcd877q77ykgb3ryfbmj18djmnwv8c210sncc7c"))
@@ -37036,7 +37041,7 @@
                                rust-calloop-wayland-source-0.3.0
                                rust-calloop-wayland-source-0.4.1
                                rust-cast-0.3.0
-                               rust-cc-1.2.61
+                               rust-cc-1.2.62
                                rust-cesu8-1.1.0
                                rust-cexpr-0.6.0
                                rust-cfg-if-0.1.10
@@ -37087,7 +37092,7 @@
                                rust-ctor-0.10.1
                                rust-cursor-icon-1.2.0
                                rust-d3d12-descriptor-heap-0.2.1
-                               rust-dashmap-6.1.0
+                               rust-dashmap-6.2.1
                                rust-dasp-sample-0.11.0
                                rust-data-encoding-2.11.0
                                rust-deflate-1.0.0
@@ -37179,7 +37184,7 @@
                                rust-hashbrown-0.14.5
                                rust-hashbrown-0.15.5
                                rust-hashbrown-0.16.1
-                               rust-hashbrown-0.17.0
+                               rust-hashbrown-0.17.1
                                rust-heck-0.5.0
                                rust-hermit-abi-0.5.2
                                rust-hex-0.4.3
@@ -37213,7 +37218,7 @@
                                rust-khronos-egl-6.0.0
                                rust-khronos-api-3.1.0
                                rust-kqueue-1.1.1
-                               rust-kqueue-sys-1.1.0
+                               rust-kqueue-sys-1.1.2
                                rust-lazy-static-1.5.0
                                rust-leb128fmt-0.1.0
                                rust-libc-0.2.186
@@ -37325,8 +37330,8 @@
                                rust-petgraph-0.8.3
                                rust-phf-0.13.1
                                rust-phf-shared-0.13.1
-                               rust-pin-project-1.1.12
-                               rust-pin-project-internal-1.1.12
+                               rust-pin-project-1.1.13
+                               rust-pin-project-internal-1.1.13
                                rust-pin-project-lite-0.2.17
                                rust-piper-0.2.5
                                rust-pkg-config-0.3.33
@@ -37350,7 +37355,7 @@
                                rust-profiling-1.0.18
                                rust-pxfm-0.1.29
                                rust-quick-error-2.0.1
-                               rust-quick-xml-0.39.3
+                               rust-quick-xml-0.39.4
                                rust-quote-1.0.45
                                rust-r-efi-5.3.0
                                rust-r-efi-6.0.0
@@ -37583,7 +37588,7 @@
                                rust-windows-x86-64-msvc-0.52.6
                                rust-windows-x86-64-msvc-0.53.1
                                rust-winnow-0.7.15
-                               rust-winnow-1.0.2
+                               rust-winnow-1.0.3
                                rust-winres-0.1.12
                                rust-wio-0.2.2
                                rust-wit-bindgen-0.51.0
@@ -37616,7 +37621,7 @@
                                rust-zeno-0.3.3
                                rust-zerocopy-0.8.48
                                rust-zerocopy-derive-0.8.48
-                               rust-zerofrom-0.1.7
+                               rust-zerofrom-0.1.8
                                rust-zerofrom-derive-0.1.7
                                rust-zerotrie-0.2.4
                                rust-zerovec-0.11.6
