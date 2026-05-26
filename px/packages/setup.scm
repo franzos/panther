@@ -38,7 +38,7 @@
               ("python-qrcode" ,python-qrcode)
               ("python-py-cpuinfo" ,python-py-cpuinfo)
               ("python-urllib3" ,python-urllib3)))
-    (native-inputs `(("pkg-config" ,pkg-config)))
+    (native-inputs (list pkg-config python-setuptools))
     (home-page "https://www.pantherx.org/")
     (synopsis "PantherX OS Installer")
     (description "A command line driven installer with sane defaults.")

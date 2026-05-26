@@ -58,6 +58,8 @@
        (sha256
         (base32 "1qpjyh7l5l9p6mhsb77m84ch6hkvr74hay4ldyi0rnj1qdbnjvk1"))))
     (build-system python-build-system)
+    (arguments (list #:tests? #f))
+    (native-inputs (list python-setuptools))
     (propagated-inputs `(("python-serpent" ,python-serpent)))
     (home-page "https://github.com/irmen/Pyro5")
     (synopsis "Remote object communication library, fifth major version")
@@ -75,6 +77,8 @@
        (sha256
         (base32 "1wdrdg2j16pmqhk0ify20s5pngijh7zc6hyxhh8w8v5k8v3pz5vk"))))
     (build-system python-build-system)
+    (arguments (list #:tests? #f))
+    (native-inputs (list python-setuptools))
     (home-page "https://github.com/bb4242/sdnotify")
     (synopsis
      "A pure Python implementation of systemd's service notification protocol (sd_notify)")
@@ -93,6 +97,8 @@
        (sha256
         (base32 "1qpg5alg6m9kfj5y90chgr66g0f33r3xqrrx2d496vipwsm3vbsc"))))
     (build-system python-build-system)
+    (arguments (list #:tests? #f))
+    (native-inputs (list python-setuptools))
     (propagated-inputs `(("python-wrapio" ,python-wrapio)))
     (home-page "https://github.com/Exahilosys/survey")
     (synopsis "A simple library for creating beautiful interactive prompts.")
@@ -111,6 +117,8 @@
        (sha256
         (base32 "1s696hblap6qz8pc6zspg75bnvh7d48ww1qh1d8d5zjrnwhiqjh9"))))
     (build-system python-build-system)
+    (arguments (list #:tests? #f))
+    (native-inputs (list python-setuptools))
     (home-page "https://github.com/Exahilosys/wrapio")
     (synopsis "Handling event-based streams.")
     (description "Handling event-based streams.")
@@ -127,6 +135,8 @@
        (sha256
         (base32 "1vh203dppi6457lwv7z46dc8rpanjlahk4v3394nq1jwyp0425g2"))))
     (build-system python-build-system)
+    (arguments (list #:tests? #f))
+    (native-inputs (list python-setuptools))
     (home-page "https://github.com/python/typeshed")
     (synopsis "Typing stubs for requests")
     (description "Typing stubs for requests")
@@ -143,6 +153,8 @@
        (sha256
         (base32 "11q384z2pa3i4w0d07mnqd25r16sdgvgd8m75ysff6w0kr3vhxvm"))))
     (build-system python-build-system)
+    (arguments (list #:tests? #f))
+    (native-inputs (list python-setuptools))
     (inputs `(("python-simplejson" ,python-simplejson)
               ("python-six" ,python-six)))
     (home-page "https://github.com/SpamScope/mail-parser")
@@ -167,6 +179,7 @@ use in your code.")
     (build-system python-build-system)
     (arguments
      `(#:tests? #f))
+    (native-inputs (list python-setuptools))
     (home-page "")
     (synopsis "")
     (description "todo.")
@@ -187,6 +200,7 @@ use in your code.")
     (build-system python-build-system)
     (arguments
      `(#:tests? #f))
+    (native-inputs (list python-setuptools))
     (propagated-inputs `(("python-requests" ,python-requests)))
     (home-page "https://github.com/reclosedev/requests-cache")
     (synopsis
@@ -210,6 +224,7 @@ use in your code.")
     (build-system python-build-system)
     (arguments
      `(#:tests? #f))
+    (native-inputs (list python-setuptools))
     (propagated-inputs `(("python-requests-cache" ,python-requests-cache)))
     (home-page "https://github.com/neoctobers/etherscan")
     (synopsis "Python-etherscan provides a wrapper for Etherscan.io API.")
@@ -234,6 +249,7 @@ use in your code.")
      `(#:tests? #f
        #:phases (modify-phases %standard-phases
                   (delete 'sanity-check))))
+    (native-inputs (list python-setuptools))
     (propagated-inputs `(("python-requests" ,python-requests)
                          ("python-pycryptodome" ,python-pycryptodome)
                          ("python-ecdsa" ,python-ecdsa)
@@ -270,6 +286,7 @@ use in your code.")
     (build-system python-build-system)
     (arguments
      `(#:tests? #f))
+    (native-inputs (list python-setuptools))
     (home-page "https://github.com/peter-wangxu/persist-queue")
     (synopsis "A thread-safe disk based persistent queue in Python.")
     (description
@@ -310,6 +327,7 @@ use in your code.")
     (build-system python-build-system)
     (arguments
      `(#:tests? #f))
+    (native-inputs (list python-setuptools))
     (home-page "https://github.com/ErikBjare/TakeTheTime")
     (synopsis "Take The Time, a time-taking library for Python")
     (description "Take The Time, a time-taking library for Python.")
@@ -332,6 +350,7 @@ use in your code.")
 				  python-click))
     (arguments
      `(#:tests? #f))
+    (native-inputs (list python-setuptools))
     (home-page "https://github.com/Coldcard/ckcc-protocol")
     (synopsis "Python library for Coldcard")
     (description "Python library and command line tool for
@@ -355,7 +374,7 @@ communicating with your Coldcard over USB")
             #:phases
             #~(modify-phases %standard-phases
                 (delete 'sanity-check))))
-    (native-inputs `(("pkg-config" ,pkg-config)))
+    (native-inputs (list pkg-config python-setuptools))
     (propagated-inputs `(("python-requests" ,python-requests)))
     (home-page "https://www.pantherx.org/")
     (synopsis "Stuff that's shared across px-projects.")
@@ -381,7 +400,7 @@ communicating with your Coldcard over USB")
                       (invoke "pytest" "-vv"))))))
     (propagated-inputs (list python-flask python-itsdangerous python-wtforms
                              python-flask-babelex))
-    (native-inputs (list python-pytest))
+    (native-inputs (list python-pytest python-setuptools))
     (home-page "https://github.com/lepture/flask-wtf")
     (synopsis "Simple integration of Flask and WTForms")
     (description "Flask-WTF integrates Flask and WTForms, including CSRF, file
@@ -399,6 +418,8 @@ upload, and reCAPTCHA.")
        (sha256
         (base32 "1ab5dbfzzgz6cnz4xlwx79gz83id4bhiw67k1cgqrlzfs0va7zjr"))))
     (build-system python-build-system)
+    (arguments (list #:tests? #f))
+    (native-inputs (list python-setuptools))
     (home-page "http://github.com/mitsuhiko/speaklater")
     (synopsis
      "implements a lazy string for python useful for use with gettext")
@@ -418,6 +439,8 @@ upload, and reCAPTCHA.")
        (sha256
         (base32 "09yfr8hlwvpgvq8kp1y7qbnnl0q28hi0348bv199ssiqx779r99r"))))
     (build-system python-build-system)
+    (arguments (list #:tests? #f))
+    (native-inputs (list python-setuptools))
     (propagated-inputs (list python-babel python-flask python-jinja2
                              python-speaklater))
     (home-page "http://github.com/mrjoes/flask-babelex")
@@ -442,7 +465,7 @@ upload, and reCAPTCHA.")
             #:phases
             #~(modify-phases %standard-phases
                 (delete 'sanity-check))))
-    (native-inputs `(("pkg-config" ,pkg-config)))
+    (native-inputs (list pkg-config python-setuptools))
     (home-page "https://www.pantherx.org/")
     (synopsis "Massages the state of your system.")
     (description "Basically ansible, minus a lot of the features, plus speed.")
