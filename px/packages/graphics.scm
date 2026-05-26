@@ -427,7 +427,7 @@ JPEG), and import of PDF, bitmap images, and Xournal++ files.")
 (define-public curtail
   (package
     (name "curtail")
-    (version "1.16.1")
+    (version "1.16.2")
     (source
      (origin
        (method git-fetch)
@@ -436,7 +436,7 @@ JPEG), and import of PDF, bitmap images, and Xournal++ files.")
              (commit version)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "16i6cz4wynrgzhfmlya7rk5c3ky2wjs1h6lqpksgm3djw6x2vs5x"))))
+        (base32 "1z1gxi4swynh77sm47j7zsnyj99xrwz7kk0x7ipif55qzpdxi1b7"))))
     (build-system meson-build-system)
     (arguments
      (list
