@@ -409,7 +409,7 @@ and rich media support for gaming communities.")
 (define-public appflowy
   (package
     (name "appflowy")
-    (version "0.11.9")
+    (version "0.12.0")
     (source
      (origin
        (method url-fetch)
@@ -417,7 +417,7 @@ and rich media support for gaming communities.")
              "https://github.com/AppFlowy-IO/AppFlowy/releases/download/"
              version "/AppFlowy-" version "-linux-x86_64.deb"))
        (sha256
-        (base32 "0ks15xyc5crppc3023v5lc1rg6jlv7xw6zgvgv28z1nl9s7chvsx"))))
+        (base32 "1dlc1absh4cdf23mcxjsm1spbs1q65k2arr0amvbx84kaycf3zll"))))
     (supported-systems '("x86_64-linux"))
     (build-system binary-build-system)
     (arguments
@@ -436,7 +436,7 @@ and rich media support for gaming communities.")
          (replace 'unpack
            (lambda* (#:key inputs #:allow-other-keys)
              (invoke "ar" "x" (assoc-ref inputs "source"))
-             (invoke "tar" "-xf" "data.tar.xz")
+             (invoke "tar" "-xf" "data.tar.zst")
              (copy-recursively "usr/" ".")
              (delete-file-recursively "usr")))
          (add-after 'install 'fix-desktop-file
