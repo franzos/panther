@@ -375,6 +375,44 @@ tailscale up         # Authenticate and connect
 tailscale status     # Check connection status
 ```
 
+### vpnmux
+
+Runs the [vpnmux](https://github.com/franzos/vpnmux) daemon, a control loop that keeps Mullvad and Tailscale from conflicting at the netfilter and DNS layer. It continuously reconciles the system to a desired provider state by driving `nft`, `mullvad`, and `tailscale`. The service wires those binaries via `VPNMUX_NFT`/`VPNMUX_MULLVAD`/`VPNMUX_TAILSCALE`, creates `/run/vpnmux` and `/var/lib/vpnmux` (root-owned, `0700`), and installs the `vpnmux` CLI into the system profile.
+
+**Usage:**
+
+```scheme
+(use-modules (px services networking))
+
+(service vpnmux-service-type)
+
+;; Verbose logging in the shepherd log
+(service vpnmux-service-type
+         (vpnmux-configuration
+          (log-level "debug")))
+```
+
+**Configuration options:**
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `vpnmux` | `vpnmux` | The vpnmux package to run |
+| `nftables` | `nftables` | Package providing `nft` (`VPNMUX_NFT`) |
+| `mullvad` | `mullvad-vpn-desktop` | Package providing the `mullvad` CLI (`VPNMUX_MULLVAD`) |
+| `tailscale` | `tailscale` | Package providing the `tailscale` CLI (`VPNMUX_TAILSCALE`) |
+| `log-level` | unset | When set, exported as `VPNMUX_LOG` (e.g. `"debug"`) |
+
+**After reconfiguration:**
+
+```bash
+vpnmux status                 # Show current state
+sudo vpnmux set mullvad       # Desired: Mullvad only
+sudo vpnmux set tailscale     # Desired: Tailscale only
+sudo vpnmux set mullvad tailscale  # Both, coexisting
+sudo vpnmux set              # Neither (empty set)
+herd status vpnmux            # Daemon status
+```
+
 ### USBGuard
 
 Runs `usbguard-daemon` to enforce a USB device authorization policy — a whitelist for USB devices that blocks BadUSB-style attacks. The generated `usbguard-daemon.conf` lives in the store; rules are kept at `/etc/usbguard/rules.conf` so they can be updated without a reconfigure.

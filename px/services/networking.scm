@@ -44,7 +44,17 @@
             mullvad-daemon-configuration-cachedir
             mullvad-daemon-configuration-configdir
             mullvad-daemon-configuration-datadir
-            mullvad-daemon-configuration-logdir))
+            mullvad-daemon-configuration-logdir
+
+            vpnmux-configuration
+            vpnmux-configuration?
+            vpnmux-configuration-vpnmux
+            vpnmux-configuration-nftables
+            vpnmux-configuration-mullvad
+            vpnmux-configuration-tailscale
+            vpnmux-configuration-log-level
+            vpnmux-shepherd-service
+            vpnmux-service-type))
 
 ;;
 ;; Nebula SERVICE
@@ -280,3 +290,87 @@ user is root.")
                 (default-value (mullvad-daemon-configuration))
                 (description
                  "This service provides a way to run Mullvad's daemon as Shepherd services.")))
+
+;;
+;; vpnmux SERVICE
+;;
+
+(define-configuration/no-serialization vpnmux-configuration
+  (vpnmux
+   (package vpnmux)
+   "The @code{vpnmux} package to run.")
+  (nftables
+   (package nftables)
+   "The package providing the @command{nft} binary used to manage firewall
+rules (exported as @env{VPNMUX_NFT}).")
+  (mullvad
+   (package mullvad-vpn-desktop)
+   "The package providing the @command{mullvad} CLI the daemon drives
+(exported as @env{VPNMUX_MULLVAD}).")
+  (tailscale
+   (package tailscale)
+   "The package providing the @command{tailscale} CLI the daemon drives
+(exported as @env{VPNMUX_TAILSCALE}).")
+  (log-level
+   (maybe-string)
+   "When set, exported as @env{VPNMUX_LOG} to raise the daemon's log
+verbosity, e.g. @code{\"debug\"}."))
+
+(define (vpnmux-activation config)
+  ;; /var/lib/vpnmux holds the desired state, /run/vpnmux the status file;
+  ;; both root-owned and 0700, matching what the daemon also enforces.
+  #~(begin
+      (use-modules (guix build utils))
+      (for-each (lambda (dir)
+                  (mkdir-p dir)
+                  (chmod dir #o700))
+                '("/run/vpnmux" "/var/lib/vpnmux"))))
+
+(define (vpnmux-shepherd-service config)
+  (let ((vpnmux (vpnmux-configuration-vpnmux config))
+        (nft (vpnmux-configuration-nftables config))
+        (mullvad (vpnmux-configuration-mullvad config))
+        (tailscale (vpnmux-configuration-tailscale config))
+        (log-level (vpnmux-configuration-log-level config)))
+    (let ((log-env (if (maybe-value-set? log-level)
+                       (list #~(string-append "VPNMUX_LOG=" #$log-level))
+                       '())))
+      (list
+       (shepherd-service
+        (provision '(vpnmux))
+        (requirement '(networking user-processes))
+        (documentation
+         "Arbitrate Mullvad and Tailscale at the netfilter and DNS layer.")
+        (respawn? #t)
+        (start
+         #~(make-forkexec-constructor
+            (list #$(file-append vpnmux "/bin/vpnmux") "daemon")
+            #:log-file "/var/log/vpnmux.log"
+            #:environment-variables
+            (append
+             (list (string-append "VPNMUX_NFT=" #$(file-append nft "/sbin/nft"))
+                   (string-append "VPNMUX_MULLVAD="
+                                  #$(file-append mullvad "/bin/mullvad"))
+                   (string-append "VPNMUX_TAILSCALE="
+                                  #$(file-append tailscale "/bin/tailscale"))
+                   #$@log-env)
+             (default-environment-variables))))
+        (stop #~(make-kill-destructor)))))))
+
+(define vpnmux-service-type
+  (service-type
+   (name 'vpnmux)
+   (extensions
+    (list (service-extension shepherd-root-service-type
+                             vpnmux-shepherd-service)
+          (service-extension profile-service-type
+                             (lambda (config)
+                               (list (vpnmux-configuration-vpnmux config))))
+          (service-extension activation-service-type
+                             vpnmux-activation)
+          (service-extension log-rotation-service-type
+                             (const (list "/var/log/vpnmux.log")))))
+   (default-value (vpnmux-configuration))
+   (description
+    "Run vpnmux, a control-loop daemon that keeps Mullvad and Tailscale from
+conflicting at the netfilter and DNS layer.")))
