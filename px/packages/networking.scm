@@ -385,6 +385,32 @@ OpenVPN or WireGuard protocols.  Features include kill-switch, multi-hop
 connections, and custom DNS settings.")
     (license license:gpl3+)))
 
+(define-public vpnmux
+  (package
+    (name "vpnmux")
+    (version "0.1.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/franzos/vpnmux")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0c1q0q6jvmf0lpfsqqbv80s0frzjhz1adjaxqlg4axsbh835iihd"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:install-source? #f))
+    (home-page "https://github.com/franzos/vpnmux")
+    (synopsis "Arbitrate Mullvad and Tailscale at the netfilter/DNS layer")
+    (description
+     "vpnmux is a control-loop daemon and CLI that keeps Mullvad VPN and
+Tailscale from conflicting at the netfilter and DNS layers.  It continuously
+reconciles the system to a desired provider state (@code{none}, @code{mullvad},
+@code{tailscale}, or both) by driving the @command{nft}, @command{mullvad}, and
+@command{tailscale} binaries, handling DNS automatically.")
+    (license license:gpl3)))
+
 (define-public oha
   (package
     (name "oha")
