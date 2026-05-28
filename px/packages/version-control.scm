@@ -58,14 +58,14 @@ requests, repositories, and other Forgejo features from the terminal.")
 (define-public gh
   (package
     (name "gh")
-    (version "2.92.0")
+    (version "2.93.0")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "https://github.com/cli/cli/releases/download/v"
                            version "/gh_" version "_linux_amd64.tar.gz"))
        (sha256
-        (base32 "1i1yjhla92bync888wifif2rk0bim98jl7sysff2436z3c9lhy5m"))))
+        (base32 "1w3sh2swdaw5d93p1nsx8x8mmiz14bzzy29pdy4hn3hkp872kl82"))))
     (build-system copy-build-system)
     (arguments
      '(#:install-plan
