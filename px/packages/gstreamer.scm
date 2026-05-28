@@ -10,7 +10,9 @@
   #:use-module (guix git-download)
   #:use-module (gnu packages gstreamer)
   #:use-module (gnu packages mp3)
+  #:use-module (gnu packages networking)
   #:use-module (gnu packages qt)
+  #:use-module (px packages networking)
   #:use-module (guix utils))
 
 ;; gst-plugins-ugly with x264 and lame (mp3) encoders enabled
@@ -27,6 +29,18 @@
     (inputs
      (modify-inputs (package-inputs gst-plugins-ugly)
        (append lame)))))
+
+;; gst-plugins-bad 1.28 needs libnice >= 0.1.23 to build libgstwebrtcnice and
+;; therefore the `webrtc' plugin. Guix still ships libnice 0.1.22, so the
+;; upstream package silently disables webrtc at meson configure time.
+;; TODO: drop this override once guix bumps libnice to >= 0.1.23.
+(define-public gst-plugins-bad-with-webrtc
+  (package
+    (inherit gst-plugins-bad)
+    (name "gst-plugins-bad-with-webrtc")
+    (inputs
+     (modify-inputs (package-inputs gst-plugins-bad)
+       (replace "libnice" libnice-0.1.23)))))
 
 ;; Yields libgstqmlgl.so for qmlgl support
 (define-public gst-plugins-good-qmlgl

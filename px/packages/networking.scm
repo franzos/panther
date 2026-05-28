@@ -712,3 +712,30 @@ For more information about the service, please visit Mullvad's website,
 mullvad.net (Also accessible via Tor on this onion service).")
     (home-page "https://mullvad.net")
     (license license:gpl3)))
+
+;; gst-plugins-bad >= 1.28 needs libnice >= 0.1.23 to build libgstwebrtcnice;
+;; without it the webrtc plugin is silently disabled. Guix still ships 0.1.22.
+(define-public libnice-0.1.23
+  (package
+    (inherit libnice)
+    (name "libnice")
+    (version "0.1.23")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://gitlab.freedesktop.org/libnice/libnice")
+             (commit version)))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0zqnqhcm1rx5axbzd448yi6j4bq4kykiqb4wihs2p8h1k49nkyjh"))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments libnice)
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (add-after 'disable-failing-tests 'disable-slow-resolving-test
+              (lambda _
+                (substitute* "tests/meson.build"
+                  ;; Drop the entry from the test list; leaves the
+                  ;; `if tname == 'test-slow-resolving'` branch untouched.
+                  (("'test-slow-resolving',") ""))))))))))

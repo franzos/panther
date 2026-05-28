@@ -15,16 +15,16 @@
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages qt)
   #:use-module (gnu packages gstreamer)
-  #:use-module (gnu packages networking) ;; libnice
+  #:use-module (gnu packages networking) ;; libnice, asio
   #:use-module (gnu packages cpp) ;; cli11
   #:use-module (gnu packages compression) ;; xz
   #:use-module (gnu packages web) ;; rapidjson, websocketpp, gumbo-parser
   #:use-module (gnu packages tls) ;; openssl
-  #:use-module (gnu packages networking) ;; asio
+  #:use-module (px packages networking) ;; libnice-0.1.23
   #:use-module (gnu packages curl)
   #:use-module (gnu packages gtk) ;; gtkmm, cairo, pango
   #:use-module (gnu packages gnome) ;; libadwaita
-  #:use-module (px packages gstreamer) ;; gst-plugins-good-qmlgl
+  #:use-module (px packages gstreamer) ;; gst-plugins-good-qmlgl, gst-plugins-bad-with-webrtc
   #:use-module (gnu packages check) ;; googletest
   #:use-module (guix git-download)
   #:use-module (px packages monitoring) ;; sentry
@@ -97,9 +97,9 @@ in multiple languages.")
                   gstreamer
                   gst-plugins-base
                   gst-plugins-good
-                  gst-plugins-bad
+                  gst-plugins-bad-with-webrtc
                   gst-plugins-good-qmlgl
-                  libnice
+                  libnice-0.1.23
                   cli11
                   xz))
     (native-inputs (list pkg-config))
@@ -179,14 +179,14 @@ install(TARGETS webrtc-cpp-demo
                   qtquickcontrols2-5
                   qtwebsockets-5
                   qtsvg-5
-                  libnice
+                  libnice-0.1.23
                   cli11
                   xz))
-    (propagated-inputs (list libnice
+    (propagated-inputs (list libnice-0.1.23
                              gstreamer
                              gst-plugins-base
                              gst-plugins-good
-                             gst-plugins-bad
+                             gst-plugins-bad-with-webrtc
                              gst-plugins-good-qmlgl))
     (native-inputs (list pkg-config
                          sentry-native-0.9))
