@@ -388,7 +388,7 @@ connections, and custom DNS settings.")
 (define-public vpnmux
   (package
     (name "vpnmux")
-    (version "0.1.0")
+    (version "0.1.1")
     (source
      (origin
        (method git-fetch)
@@ -397,7 +397,7 @@ connections, and custom DNS settings.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0c1q0q6jvmf0lpfsqqbv80s0frzjhz1adjaxqlg4axsbh835iihd"))))
+        (base32 "1xsv4q729g3xcj2gy773aayabinbcshglg80bc03gqbrv8lw75d4"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f))
