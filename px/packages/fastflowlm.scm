@@ -305,7 +305,7 @@ submodule in FastFlowLM.")
 (define-public fastflowlm
   (package
     (name "fastflowlm")
-    (version "0.9.41")
+    (version "0.9.43")
     (source
      (origin
        (method git-fetch)
@@ -315,7 +315,7 @@ submodule in FastFlowLM.")
              (recursive? #t)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1n7xdlvqmfsnj9c4h5ikl9gdag30q5231ldprbagnx6kxa5wsiix"))))
+        (base32 "0g2g8gpy7mgz04fh6l5wvif3bqi5syyxdfwmq1vxrqbk0a9zp6hk"))))
     (build-system cmake-build-system)
     (arguments
      (list
