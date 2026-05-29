@@ -3107,6 +3107,10 @@
   (crate-source "const_format" "0.2.35"
                 "1b9h03z3k76ail1ldqxcqmsc4raa7dwgwwqwrjf6wmism5lp9akz"))
 
+(define rust-const-format-0.2.36
+  (crate-source "const_format" "0.2.36"
+                "07ncczs8yndga2f8p4386c827l4fxwzl0pbwp7ijnhcsmlbsd0a4"))
+
 (define rust-const-format-proc-macros-0.2.34
   (crate-source "const_format_proc_macros" "0.2.34"
                 "0i3pxxcl4xvwq4mlfg3csb4j0n6v0mhj07p6yk0vlvdirznc4mqx"))
@@ -3306,6 +3310,10 @@
 (define rust-cosmic-text-0.18.2
   (crate-source "cosmic-text" "0.18.2"
                 "1vb67cdbqmx50xynfljmhmga7lwrgyj5gj9j4bgcf32jwylq5rxv"))
+
+(define rust-cosmic-text-0.19.0
+  (crate-source "cosmic-text" "0.19.0"
+                "0wys9shmdcibqacxl3qy50z5h48ff2xbx8j87zhlr4qda64bc5xy"))
 
 (define rust-cpal-0.15.2
   (crate-source "cpal" "0.15.2"
@@ -3580,6 +3588,16 @@
                         (commit "1d68895e9c4c9b73739f826e81c2e3012c155cce")))
     (file-name (git-file-name "rust-cryoglyph" "0.1.0.1d68895"))
     (sha256 (base32 "1s7sbki08rp9rrfa3w1i0j45k61dbj5kyl3yl9l343kzghv0jdnk"))))
+
+(define rust-cryoglyph-0.1.0.53ba3e8
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/iced-rs/cryoglyph.git")
+          (commit "53ba3e879539d19ed8162942126a977ec896cc3b")))
+    (file-name (git-file-name "rust-cryoglyph" "0.1.0.53ba3e8"))
+    (sha256 (base32 "1srilw3ffsfpdmybsxdv00vzrm8sr4nsxlpmxxsrp1i36ws8j4z4"))))
 
 (define rust-crypto-bigint-0.5.5
   (crate-source "crypto-bigint" "0.5.5"
@@ -4619,9 +4637,17 @@
   (crate-source "embed-resource" "3.0.8"
                 "0i9dxmwfhh8a2xnaynd586r6ni2gh6070kc8yl7slj929zgd18b3"))
 
+(define rust-embed-resource-3.0.9
+  (crate-source "embed-resource" "3.0.9"
+                "1jsbckrpj5drij7rbz9svghrv8sshi3waj77iz8hxr3dsb48h6n3"))
+
 (define rust-emojis-0.8.0
   (crate-source "emojis" "0.8.0"
                 "0pdhn57q1g4bl9lxfpxy2pgbd54ws2c68lphwncc6vvn1f3w3hah"))
+
+(define rust-emojis-0.8.1
+  (crate-source "emojis" "0.8.1"
+                "11i8gz8g93j8fiq86c0rcp2z1m747d1ajqrgr2si5v49k4bn5mdg"))
 
 (define rust-ena-0.14.3
   (crate-source "ena" "0.14.3"
@@ -8665,6 +8691,16 @@
     (file-name (git-file-name "rust-iced" "0.15.0-dev.b201e4f"))
     (sha256 (base32 "1gw8fyhy7q6a7q86jsmiqq87dn3j4pkv6ggy2gxlpnj0xdkv07y9"))))
 
+(define rust-iced-0.15.0-dev.fcfa87c
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/squidowl/iced")
+          (commit "fcfa87cb35b615715919c8b4da408b6488f195de")))
+    (file-name (git-file-name "rust-iced" "0.15.0-dev.fcfa87c"))
+    (sha256 (base32 "0ca7xkmcyjsxhl8cyri2xy5hpwgfbvq066rr17fxxra231c01am3"))))
+
 (define rust-iced-0.9.0
   (crate-source "iced" "0.9.0"
                 "120wb72biawwhfjzs4hgld89dn5zc96x1aclscfd9s81dlsxzggg"))
@@ -8706,6 +8742,16 @@
           (commit "b201e4fc8f39de1989305694a3ba2e9c2fa6fb07")))
     (file-name (git-file-name "rust-iced-beacon" "0.15.0-dev.b201e4f"))
     (sha256 (base32 "1gw8fyhy7q6a7q86jsmiqq87dn3j4pkv6ggy2gxlpnj0xdkv07y9"))))
+
+(define rust-iced-beacon-0.15.0-dev.fcfa87c
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/squidowl/iced")
+          (commit "fcfa87cb35b615715919c8b4da408b6488f195de")))
+    (file-name (git-file-name "rust-iced-beacon" "0.15.0-dev.fcfa87c"))
+    (sha256 (base32 "0ca7xkmcyjsxhl8cyri2xy5hpwgfbvq066rr17fxxra231c01am3"))))
 
 (define rust-iced-core-0.13.2
   (crate-source "iced_core" "0.13.2"
@@ -8753,6 +8799,16 @@
     (file-name (git-file-name "rust-iced-core" "0.15.0-dev.b201e4f"))
     (sha256 (base32 "1gw8fyhy7q6a7q86jsmiqq87dn3j4pkv6ggy2gxlpnj0xdkv07y9"))))
 
+(define rust-iced-core-0.15.0-dev.fcfa87c
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/squidowl/iced")
+          (commit "fcfa87cb35b615715919c8b4da408b6488f195de")))
+    (file-name (git-file-name "rust-iced-core" "0.15.0-dev.fcfa87c"))
+    (sha256 (base32 "0ca7xkmcyjsxhl8cyri2xy5hpwgfbvq066rr17fxxra231c01am3"))))
+
 (define rust-iced-core-0.9.0
   (crate-source "iced_core" "0.9.0"
                 "10jp2cxsn2gpr5z65ybbzdcixp4chdx7xri7ribfgpny50p99q8i"))
@@ -8799,6 +8855,16 @@
     (file-name (git-file-name "rust-iced-debug" "0.15.0-dev.b201e4f"))
     (sha256 (base32 "1gw8fyhy7q6a7q86jsmiqq87dn3j4pkv6ggy2gxlpnj0xdkv07y9"))))
 
+(define rust-iced-debug-0.15.0-dev.fcfa87c
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/squidowl/iced")
+          (commit "fcfa87cb35b615715919c8b4da408b6488f195de")))
+    (file-name (git-file-name "rust-iced-debug" "0.15.0-dev.fcfa87c"))
+    (sha256 (base32 "0ca7xkmcyjsxhl8cyri2xy5hpwgfbvq066rr17fxxra231c01am3"))))
+
 (define rust-iced-devtools-0.15.0-dev.19f12c5
   ;; TODO REVIEW: Define standalone package if this is a workspace.
   (origin
@@ -8836,6 +8902,16 @@
           (commit "b201e4fc8f39de1989305694a3ba2e9c2fa6fb07")))
     (file-name (git-file-name "rust-iced-devtools" "0.15.0-dev.b201e4f"))
     (sha256 (base32 "1gw8fyhy7q6a7q86jsmiqq87dn3j4pkv6ggy2gxlpnj0xdkv07y9"))))
+
+(define rust-iced-devtools-0.15.0-dev.fcfa87c
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/squidowl/iced")
+          (commit "fcfa87cb35b615715919c8b4da408b6488f195de")))
+    (file-name (git-file-name "rust-iced-devtools" "0.15.0-dev.fcfa87c"))
+    (sha256 (base32 "0ca7xkmcyjsxhl8cyri2xy5hpwgfbvq066rr17fxxra231c01am3"))))
 
 (define rust-iced-futures-0.13.2
   (crate-source "iced_futures" "0.13.2"
@@ -8882,6 +8958,16 @@
           (commit "b201e4fc8f39de1989305694a3ba2e9c2fa6fb07")))
     (file-name (git-file-name "rust-iced-futures" "0.15.0-dev.b201e4f"))
     (sha256 (base32 "1gw8fyhy7q6a7q86jsmiqq87dn3j4pkv6ggy2gxlpnj0xdkv07y9"))))
+
+(define rust-iced-futures-0.15.0-dev.fcfa87c
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/squidowl/iced")
+          (commit "fcfa87cb35b615715919c8b4da408b6488f195de")))
+    (file-name (git-file-name "rust-iced-futures" "0.15.0-dev.fcfa87c"))
+    (sha256 (base32 "0ca7xkmcyjsxhl8cyri2xy5hpwgfbvq066rr17fxxra231c01am3"))))
 
 (define rust-iced-futures-0.6.0
   (crate-source "iced_futures" "0.6.0"
@@ -8941,6 +9027,16 @@
     (file-name (git-file-name "rust-iced-graphics" "0.15.0-dev.b201e4f"))
     (sha256 (base32 "1gw8fyhy7q6a7q86jsmiqq87dn3j4pkv6ggy2gxlpnj0xdkv07y9"))))
 
+(define rust-iced-graphics-0.15.0-dev.fcfa87c
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/squidowl/iced")
+          (commit "fcfa87cb35b615715919c8b4da408b6488f195de")))
+    (file-name (git-file-name "rust-iced-graphics" "0.15.0-dev.fcfa87c"))
+    (sha256 (base32 "0ca7xkmcyjsxhl8cyri2xy5hpwgfbvq066rr17fxxra231c01am3"))))
+
 (define rust-iced-graphics-0.8.0
   (crate-source "iced_graphics" "0.8.0"
                 "1h6w1zsirgbniii3r97yrl99bnyg42vyh3xdfiq561mrgpznm2ik"))
@@ -8991,6 +9087,16 @@
     (file-name (git-file-name "rust-iced-program" "0.15.0-dev.b201e4f"))
     (sha256 (base32 "1gw8fyhy7q6a7q86jsmiqq87dn3j4pkv6ggy2gxlpnj0xdkv07y9"))))
 
+(define rust-iced-program-0.15.0-dev.fcfa87c
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/squidowl/iced")
+          (commit "fcfa87cb35b615715919c8b4da408b6488f195de")))
+    (file-name (git-file-name "rust-iced-program" "0.15.0-dev.fcfa87c"))
+    (sha256 (base32 "0ca7xkmcyjsxhl8cyri2xy5hpwgfbvq066rr17fxxra231c01am3"))))
+
 (define rust-iced-renderer-0.13.0
   (crate-source "iced_renderer" "0.13.0"
                 "0akcyi214gnay0y046i0fp73iy729q24whxzy8nn57lz0l484mbk"))
@@ -9037,6 +9143,16 @@
     (file-name (git-file-name "rust-iced-renderer" "0.15.0-dev.b201e4f"))
     (sha256 (base32 "1gw8fyhy7q6a7q86jsmiqq87dn3j4pkv6ggy2gxlpnj0xdkv07y9"))))
 
+(define rust-iced-renderer-0.15.0-dev.fcfa87c
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/squidowl/iced")
+          (commit "fcfa87cb35b615715919c8b4da408b6488f195de")))
+    (file-name (git-file-name "rust-iced-renderer" "0.15.0-dev.fcfa87c"))
+    (sha256 (base32 "0ca7xkmcyjsxhl8cyri2xy5hpwgfbvq066rr17fxxra231c01am3"))))
+
 (define rust-iced-runtime-0.13.2
   (crate-source "iced_runtime" "0.13.2"
                 "1db2xylrsrp9ihlglrka10yr47i92gcixvdhlf6dhd69c4n5p2rl"))
@@ -9082,6 +9198,16 @@
           (commit "b201e4fc8f39de1989305694a3ba2e9c2fa6fb07")))
     (file-name (git-file-name "rust-iced-runtime" "0.15.0-dev.b201e4f"))
     (sha256 (base32 "1gw8fyhy7q6a7q86jsmiqq87dn3j4pkv6ggy2gxlpnj0xdkv07y9"))))
+
+(define rust-iced-runtime-0.15.0-dev.fcfa87c
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/squidowl/iced")
+          (commit "fcfa87cb35b615715919c8b4da408b6488f195de")))
+    (file-name (git-file-name "rust-iced-runtime" "0.15.0-dev.fcfa87c"))
+    (sha256 (base32 "0ca7xkmcyjsxhl8cyri2xy5hpwgfbvq066rr17fxxra231c01am3"))))
 
 (define rust-iced-style-0.8.0
   (crate-source "iced_style" "0.8.0"
@@ -9133,6 +9259,16 @@
     (file-name (git-file-name "rust-iced-tiny-skia" "0.15.0-dev.b201e4f"))
     (sha256 (base32 "1gw8fyhy7q6a7q86jsmiqq87dn3j4pkv6ggy2gxlpnj0xdkv07y9"))))
 
+(define rust-iced-tiny-skia-0.15.0-dev.fcfa87c
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/squidowl/iced")
+          (commit "fcfa87cb35b615715919c8b4da408b6488f195de")))
+    (file-name (git-file-name "rust-iced-tiny-skia" "0.15.0-dev.fcfa87c"))
+    (sha256 (base32 "0ca7xkmcyjsxhl8cyri2xy5hpwgfbvq066rr17fxxra231c01am3"))))
+
 (define rust-iced-wgpu-0.10.0
   (crate-source "iced_wgpu" "0.10.0"
                 "176bqk6nbp3h4dax1c3bqj612g0xs4h3n8nzbp76gxb1c32h7227"))
@@ -9183,6 +9319,16 @@
     (file-name (git-file-name "rust-iced-wgpu" "0.15.0-dev.b201e4f"))
     (sha256 (base32 "1gw8fyhy7q6a7q86jsmiqq87dn3j4pkv6ggy2gxlpnj0xdkv07y9"))))
 
+(define rust-iced-wgpu-0.15.0-dev.fcfa87c
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/squidowl/iced")
+          (commit "fcfa87cb35b615715919c8b4da408b6488f195de")))
+    (file-name (git-file-name "rust-iced-wgpu" "0.15.0-dev.fcfa87c"))
+    (sha256 (base32 "0ca7xkmcyjsxhl8cyri2xy5hpwgfbvq066rr17fxxra231c01am3"))))
+
 (define rust-iced-widget-0.13.4
   (crate-source "iced_widget" "0.13.4"
                 "079yk3wajvzjg0bl22h3hakqwrx6zrw44k5ycp54n3hbjldrwhl1"))
@@ -9229,6 +9375,16 @@
     (file-name (git-file-name "rust-iced-widget" "0.15.0-dev.b201e4f"))
     (sha256 (base32 "1gw8fyhy7q6a7q86jsmiqq87dn3j4pkv6ggy2gxlpnj0xdkv07y9"))))
 
+(define rust-iced-widget-0.15.0-dev.fcfa87c
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/squidowl/iced")
+          (commit "fcfa87cb35b615715919c8b4da408b6488f195de")))
+    (file-name (git-file-name "rust-iced-widget" "0.15.0-dev.fcfa87c"))
+    (sha256 (base32 "0ca7xkmcyjsxhl8cyri2xy5hpwgfbvq066rr17fxxra231c01am3"))))
+
 (define rust-iced-winit-0.13.0
   (crate-source "iced_winit" "0.13.0"
                 "0a6s5wm9hparm8ikrw7d3z9i9fkjz5xr70lj817k7dllqphx8k7l"))
@@ -9274,6 +9430,16 @@
           (commit "b201e4fc8f39de1989305694a3ba2e9c2fa6fb07")))
     (file-name (git-file-name "rust-iced-winit" "0.15.0-dev.b201e4f"))
     (sha256 (base32 "1gw8fyhy7q6a7q86jsmiqq87dn3j4pkv6ggy2gxlpnj0xdkv07y9"))))
+
+(define rust-iced-winit-0.15.0-dev.fcfa87c
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/squidowl/iced")
+          (commit "fcfa87cb35b615715919c8b4da408b6488f195de")))
+    (file-name (git-file-name "rust-iced-winit" "0.15.0-dev.fcfa87c"))
+    (sha256 (base32 "0ca7xkmcyjsxhl8cyri2xy5hpwgfbvq066rr17fxxra231c01am3"))))
 
 (define rust-iced-winit-0.9.1
   (crate-source "iced_winit" "0.9.1"
@@ -9734,6 +9900,10 @@
 (define rust-infer-0.16.0
   (crate-source "infer" "0.16.0"
                 "0iqq2llvl88nmpnxpaar2zrkmrah6bsy7q3cc6w9a0ikw9f0w5dw"))
+
+(define rust-infer-0.19.0
+  (crate-source "infer" "0.19.0"
+                "1xzwzzg7s3i9jhcd304rb7b7838zkcysd67gmhffg4pxzmmr3255"))
 
 (define rust-infer-0.2.3
   (crate-source "infer" "0.2.3"
@@ -10556,6 +10726,14 @@
 (define rust-kiddo-4.2.1
   (crate-source "kiddo" "4.2.1"
                 "1sbzsbig406vnppbrclrbslvmlbmgcwb40m5h0n4wxsb0k9zrib0"))
+
+(define rust-konst-0.2.20
+  (crate-source "konst" "0.2.20"
+                "1yyf1fhk28wbf1lqrga9as4cpfmpbry9a5vvdqyxgz14g3nk708j"))
+
+(define rust-konst-macro-rules-0.2.19
+  (crate-source "konst_macro_rules" "0.2.19"
+                "0dswja0dqcww4x3fwjnirc0azv2n6cazn8yv0kddksd8awzkz4x4"))
 
 (define rust-kqueue-1.0.7
   (crate-source "kqueue" "1.0.7"
@@ -12427,6 +12605,10 @@
   (crate-source "naga" "29.0.1"
                 "0ir684ggc12z9w60zkgfa4ckrjk2jm5qddnhrlfv1f852y9309ma"))
 
+(define rust-naga-29.0.3
+  (crate-source "naga" "29.0.3"
+                "0yc0i4f1i34adcb7y9r1cp6bipgh82b4nfwvcn7mam14riji5n8d"))
+
 (define rust-nalgebra-0.32.6
   (crate-source "nalgebra" "0.32.6"
                 "1r033ciacblmkif5njlhprfp0k59spjv54cqsyggb1is0bg1fp3v"))
@@ -12610,6 +12792,10 @@
   (crate-source "nix" "0.31.3"
                 "0gbwnjfny9rq9hl5bz4ry520n9rnfknna4bg88n66f7zx3yx486g"))
 
+(define rust-no-std-io2-0.9.3
+  (crate-source "no_std_io2" "0.9.3"
+                "0l0mcg7gb1705rj9dnlr29q500rhklyvnjjzc1ad61vf9f1df7mm"))
+
 (define rust-no-std-io2-0.9.4
   (crate-source "no_std_io2" "0.9.4"
                 "00w0ggkaaacbwiv4qw188ih5llmhf53qgp20wk5gdyrldldvv2j1"))
@@ -12741,6 +12927,10 @@
 (define rust-notify-rust-4.12.0
   (crate-source "notify-rust" "4.12.0"
                 "1hn6zpvl471gv0c9hkb870fa2lyscflg2jppc5carr8bnnhj1br1"))
+
+(define rust-notify-rust-4.16.1
+  (crate-source "notify-rust" "4.16.1"
+                "1f8zj97k54j1rslypysk0i2maqmy559vgxjqgv9hbw4x1c9gdniv"))
 
 (define rust-notify-types-1.0.1
   (crate-source "notify-types" "1.0.1"
@@ -13356,6 +13546,10 @@
 (define rust-open-5.3.3
   (crate-source "open" "5.3.3"
                 "1g1403a17xfa136h6jshxkaa0yq2fh8sb404jycb369pzakp7fs3"))
+
+(define rust-open-5.3.4
+  (crate-source "open" "5.3.4"
+                "1z9pbnc0lx1lqx1p74szfar7rv21shcggkjzyymmga19giqsnfwz"))
 
 (define rust-opener-0.8.3
   (crate-source "opener" "0.8.3"
@@ -19310,6 +19504,10 @@
   (crate-source "tokio-tungstenite" "0.24.0"
                 "1nfw1i6yy120a14h1xagd4f31k3g1mz4rdxpvgh77jcd4i7ggigd"))
 
+(define rust-tokio-tungstenite-0.28.0
+  (crate-source "tokio-tungstenite" "0.28.0"
+                "0mzqgc94csy5ai6kx5yxj548shppq2kwdbyrsdsilhycvmn40nnj"))
+
 (define rust-tokio-util-0.6.10
   (crate-source "tokio-util" "0.6.10"
                 "01v5zkcxjdd5zaniqxxfl6isvd7y5qfmljpqsdyrfrvd3bh3x51n"))
@@ -20413,6 +20611,10 @@
 (define rust-tungstenite-0.24.0
   (crate-source "tungstenite" "0.24.0"
                 "12nsxnxazk4nisgsqpywi6za0hsbc2rd15r1scb5pag7dqvbir8q"))
+
+(define rust-tungstenite-0.28.0
+  (crate-source "tungstenite" "0.28.0"
+                "0hll4l62lk77zqzgps04689skpk555lcpmi3hhyyn2as9v4dqa46"))
 
 (define rust-turbojpeg-1.1.1
   (crate-source "turbojpeg" "1.1.1"
@@ -22295,6 +22497,10 @@
   (crate-source "wgpu" "29.0.1"
                 "0dv8w2ladikh6cmhgxvkk2qkrrf2ab4vm189b5wx7fs7lylkkhkj"))
 
+(define rust-wgpu-29.0.3
+  (crate-source "wgpu" "29.0.3"
+                "0l5j8qb6idkvlrj456h3c6j1lwvc5fs4jwbkq65ywywg8p6flgxv"))
+
 (define rust-wgpu-core-0.15.1
   (crate-source "wgpu-core" "0.15.1"
                 "1zrzkxnpqkxppbdwvrz2x6008fsp74vg162scj95fcqfjj6l0cbi"))
@@ -22327,6 +22533,10 @@
   (crate-source "wgpu-core" "29.0.1"
                 "17j656n08wxb0k24pmx0fa3xky8844b7bnc75wsgcpc9y5nar00y"))
 
+(define rust-wgpu-core-29.0.3
+  (crate-source "wgpu-core" "29.0.3"
+                "1dvpiixbcr5q8hp50i89x9rp1y0fjrq7hc9va4jpycv8np8kmnh2"))
+
 (define rust-wgpu-core-deps-apple-25.0.0
   (crate-source "wgpu-core-deps-apple" "25.0.0"
                 "0g89bl9n99diw3j5sk3s8qsazy3br8wmq11vbhc7nswv4frqim6g"))
@@ -22338,6 +22548,10 @@
 (define rust-wgpu-core-deps-apple-28.0.0
   (crate-source "wgpu-core-deps-apple" "28.0.0"
                 "1nj7024j30plwhqqmfijg2ik42h8ahj194xzhv23gwqqp6bbddw7"))
+
+(define rust-wgpu-core-deps-apple-29.0.3
+  (crate-source "wgpu-core-deps-apple" "29.0.3"
+                "0a6vdzyszw9x5kxrmn8czab1d8jg1zw03ssgpbdv6i718xa1prb2"))
 
 (define rust-wgpu-core-deps-emscripten-25.0.0
   (crate-source "wgpu-core-deps-emscripten" "25.0.0"
@@ -22355,6 +22569,10 @@
   (crate-source "wgpu-core-deps-emscripten" "29.0.0"
                 "0jmjliy2ic11g6j3dbavswj5jayf8piz8py5czvbcs6c6pqkn17g"))
 
+(define rust-wgpu-core-deps-emscripten-29.0.3
+  (crate-source "wgpu-core-deps-emscripten" "29.0.3"
+                "06fqr47dklxsrkylwzy00c0cahr036igd5h31ifbqqx9jdicv1rl"))
+
 (define rust-wgpu-core-deps-windows-linux-android-25.0.0
   (crate-source "wgpu-core-deps-windows-linux-android" "25.0.0"
                 "0ilfyld68pwq2ywgamnz6d45f9ff7bv49m49r2kvm64wgxgzp9fb"))
@@ -22370,6 +22588,10 @@
 (define rust-wgpu-core-deps-windows-linux-android-29.0.0
   (crate-source "wgpu-core-deps-windows-linux-android" "29.0.0"
                 "0a0gp5p98gwxdplcyc732crmki3yagv09vwkdmxrc0lcd805qpbj"))
+
+(define rust-wgpu-core-deps-windows-linux-android-29.0.3
+  (crate-source "wgpu-core-deps-windows-linux-android" "29.0.3"
+                "05hr39fqnk1s6a0rb7g9mgsl1i2wicbiwx5xm45qp80adl3h3yqv"))
 
 (define rust-wgpu-glyph-0.19.0
   (crate-source "wgpu_glyph" "0.19.0"
@@ -22407,9 +22629,17 @@
   (crate-source "wgpu-hal" "29.0.1"
                 "0zns46li6lyc24a4fxv5nh2b9ddl8i6az1bjjgrn4rb38zppm949"))
 
+(define rust-wgpu-hal-29.0.3
+  (crate-source "wgpu-hal" "29.0.3"
+                "0gqr94h36501fpjx5zh38fan13gsqwcf0qkwdwkjyld8wyly3y1i"))
+
 (define rust-wgpu-naga-bridge-29.0.1
   (crate-source "wgpu-naga-bridge" "29.0.1"
                 "0l8di7vbbnfhch5xysnvvrhj80mcv9gbnqybljawz80d87s88ikv"))
+
+(define rust-wgpu-naga-bridge-29.0.3
+  (crate-source "wgpu-naga-bridge" "29.0.3"
+                "00myl246a0qfq8xr7qczpwqwlzla72amwr63f84q0n7hhg259ijr"))
 
 (define rust-wgpu-types-0.15.2
   (crate-source "wgpu-types" "0.15.2"
@@ -22438,6 +22668,10 @@
 (define rust-wgpu-types-29.0.1
   (crate-source "wgpu-types" "29.0.1"
                 "1xnifw7kmb6ny886950b39qpab0f75gksb8jxyjwz9di1xa7a9pc"))
+
+(define rust-wgpu-types-29.0.3
+  (crate-source "wgpu-types" "29.0.3"
+                "0ff6mb76147shb4g9ja94p2d2gpgm7vvbvgbxxd77sd030aw7g59"))
 
 (define rust-which-4.4.0
   (crate-source "which" "4.4.0"
@@ -29769,14 +30003,15 @@
                               rust-bincode-1.3.3
                               rust-bincode-2.0.1
                               rust-bit-set-0.8.0
+                              rust-bit-set-0.9.1
                               rust-bit-vec-0.8.0
+                              rust-bit-vec-0.9.1
                               rust-bit-field-0.10.3
                               rust-bitflags-1.3.2
                               rust-bitflags-2.11.0
-                              rust-bitstream-io-4.9.0
+                              rust-bitstream-io-4.10.0
                               rust-bitvec-1.0.1
                               rust-blanket-0.3.0
-                              rust-block-0.1.6
                               rust-block-buffer-0.10.4
                               rust-block-buffer-0.12.0
                               rust-block2-0.5.1
@@ -29811,13 +30046,13 @@
                               rust-clipboard-x11-0.4.3
                               rust-cmake-0.1.58
                               rust-coarsetime-0.1.37
-                              rust-codespan-reporting-0.12.0
+                              rust-codespan-reporting-0.13.1
                               rust-color-quant-1.1.0
                               rust-combine-4.6.7
                               rust-concurrent-queue-2.5.0
                               rust-const-oid-0.9.6
                               rust-const-oid-0.10.2
-                              rust-const-format-0.2.35
+                              rust-const-format-0.2.36
                               rust-const-format-proc-macros-0.2.34
                               rust-convert-case-0.10.0
                               rust-cookie-factory-0.3.3
@@ -29826,11 +30061,9 @@
                               rust-core-foundation-sys-0.8.7
                               rust-core-graphics-0.23.2
                               rust-core-graphics-types-0.1.3
-                              rust-core-graphics-types-0.2.0
-                              rust-core2-0.4.0
                               rust-core-maths-0.1.1
                               rust-coreaudio-rs-0.13.0
-                              rust-cosmic-text-0.18.2
+                              rust-cosmic-text-0.19.0
                               rust-cpal-0.16.0
                               rust-cpufeatures-0.2.17
                               rust-cpufeatures-0.3.0
@@ -29840,7 +30073,7 @@
                               rust-crossbeam-queue-0.3.12
                               rust-crossbeam-utils-0.8.21
                               rust-crunchy-0.2.4
-                              rust-cryoglyph-0.1.0.1d68895
+                              rust-cryoglyph-0.1.0.53ba3e8
                               rust-crypto-bigint-0.5.5
                               rust-crypto-common-0.1.7
                               rust-crypto-common-0.2.1
@@ -29896,8 +30129,8 @@
                               rust-either-1.15.0
                               rust-elliptic-curve-0.13.8
                               rust-embed-resource-2.5.2
-                              rust-embed-resource-3.0.8
-                              rust-emojis-0.8.0
+                              rust-embed-resource-3.0.9
+                              rust-emojis-0.8.1
                               rust-encoding-rs-0.8.35
                               rust-endi-1.1.1
                               rust-enum-ordinalize-3.1.15
@@ -29920,7 +30153,7 @@
                               rust-extended-0.1.0
                               rust-fallible-iterator-0.3.0
                               rust-fallible-streaming-iterator-0.1.9
-                              rust-fancy-regex-0.17.0
+                              rust-fancy-regex-0.18.0
                               rust-fast-socks5-1.0.0
                               rust-fast-srgb8-1.0.0
                               rust-fastrand-2.3.0
@@ -29933,6 +30166,7 @@
                               rust-figment-0.10.19
                               rust-filetime-0.2.27
                               rust-find-msvc-tools-0.1.9
+                              rust-fixedbitset-0.5.7
                               rust-flate2-1.1.9
                               rust-float-cmp-0.9.0
                               rust-fluid-let-1.0.0
@@ -29973,7 +30207,7 @@
                               rust-gl-generator-0.14.0
                               rust-glam-0.25.0
                               rust-glob-match-0.2.1
-                              rust-glow-0.16.0
+                              rust-glow-0.17.0
                               rust-glutin-wgl-sys-0.6.1
                               rust-gpu-allocator-0.28.0
                               rust-gpu-descriptor-0.3.2
@@ -29986,6 +30220,7 @@
                               rust-hashbrown-0.12.3
                               rust-hashbrown-0.15.5
                               rust-hashbrown-0.16.1
+                              rust-hashbrown-0.17.0
                               rust-hashlink-0.11.0
                               rust-heck-0.4.1
                               rust-heck-0.5.0
@@ -30009,20 +30244,20 @@
                               rust-hyper-util-0.1.20
                               rust-iana-time-zone-0.1.65
                               rust-iana-time-zone-haiku-0.1.2
-                              rust-iced-0.15.0-dev.6f4401a
-                              rust-iced-beacon-0.15.0-dev.6f4401a
-                              rust-iced-core-0.15.0-dev.6f4401a
-                              rust-iced-debug-0.15.0-dev.6f4401a
-                              rust-iced-devtools-0.15.0-dev.6f4401a
-                              rust-iced-futures-0.15.0-dev.6f4401a
-                              rust-iced-graphics-0.15.0-dev.6f4401a
-                              rust-iced-program-0.15.0-dev.6f4401a
-                              rust-iced-renderer-0.15.0-dev.6f4401a
-                              rust-iced-runtime-0.15.0-dev.6f4401a
-                              rust-iced-tiny-skia-0.15.0-dev.6f4401a
-                              rust-iced-wgpu-0.15.0-dev.6f4401a
-                              rust-iced-widget-0.15.0-dev.6f4401a
-                              rust-iced-winit-0.15.0-dev.6f4401a
+                              rust-iced-0.15.0-dev.fcfa87c
+                              rust-iced-beacon-0.15.0-dev.fcfa87c
+                              rust-iced-core-0.15.0-dev.fcfa87c
+                              rust-iced-debug-0.15.0-dev.fcfa87c
+                              rust-iced-devtools-0.15.0-dev.fcfa87c
+                              rust-iced-futures-0.15.0-dev.fcfa87c
+                              rust-iced-graphics-0.15.0-dev.fcfa87c
+                              rust-iced-program-0.15.0-dev.fcfa87c
+                              rust-iced-renderer-0.15.0-dev.fcfa87c
+                              rust-iced-runtime-0.15.0-dev.fcfa87c
+                              rust-iced-tiny-skia-0.15.0-dev.fcfa87c
+                              rust-iced-wgpu-0.15.0-dev.fcfa87c
+                              rust-iced-widget-0.15.0-dev.fcfa87c
+                              rust-iced-winit-0.15.0-dev.fcfa87c
                               rust-icu-collections-2.2.0
                               rust-icu-locale-core-2.2.0
                               rust-icu-normalizer-2.2.0
@@ -30040,8 +30275,8 @@
                               rust-imara-diff-0.2.0
                               rust-imgref-1.12.0
                               rust-indexmap-1.9.3
-                              rust-indexmap-2.13.0
-                              rust-infer-0.16.0
+                              rust-indexmap-2.14.0
+                              rust-infer-0.19.0
                               rust-inotify-0.11.1
                               rust-inotify-sys-0.1.5
                               rust-inout-0.1.4
@@ -30068,6 +30303,8 @@
                               rust-keccak-0.1.6
                               rust-khronos-egl-6.0.0
                               rust-khronos-api-3.1.0
+                              rust-konst-0.2.20
+                              rust-konst-macro-rules-0.2.19
                               rust-kqueue-1.1.1
                               rust-kqueue-sys-1.0.4
                               rust-kurbo-0.10.4
@@ -30095,14 +30332,12 @@
                               rust-lzma-sys-0.1.20
                               rust-mac-notification-sys-0.6.12
                               rust-mach2-0.4.3
-                              rust-malloc-buf-0.0.6
                               rust-matchers-0.2.0
                               rust-maybe-rayon-0.1.1
                               rust-memchr-2.8.0
                               rust-memmap2-0.9.10
                               rust-memoffset-0.9.1
                               rust-merlin-3.0.0
-                              rust-metal-0.33.0
                               rust-mime-0.3.17
                               rust-mime-guess-2.0.5
                               rust-minimal-lexical-0.2.1
@@ -30111,17 +30346,18 @@
                               rust-moxcms-0.8.1
                               rust-mundy-0.1.10
                               rust-mutate-once-0.1.2
-                              rust-naga-28.0.0
+                              rust-naga-29.0.3
                               rust-ndk-0.9.0
                               rust-ndk-context-0.1.1
                               rust-ndk-sys-0.6.0+11769913
                               rust-new-debug-unreachable-1.0.6
+                              rust-no-std-io2-0.9.3
                               rust-nom-7.1.3
                               rust-nom-8.0.0
                               rust-nonany-0.3.0
                               rust-noop-proc-macro-0.3.0
                               rust-notify-8.2.0
-                              rust-notify-rust-4.12.0
+                              rust-notify-rust-4.16.1
                               rust-notify-types-2.1.0
                               rust-ntapi-0.4.3
                               rust-nu-ansi-term-0.50.3
@@ -30136,7 +30372,6 @@
                               rust-num-traits-0.2.19
                               rust-num-enum-0.7.6
                               rust-num-enum-derive-0.7.6
-                              rust-objc-0.2.7
                               rust-objc-sys-0.3.5
                               rust-objc2-0.5.2
                               rust-objc2-0.6.4
@@ -30173,13 +30408,14 @@
                               rust-objc2-user-notifications-0.2.2
                               rust-once-cell-1.21.4
                               rust-oneshot-fused-workaround-0.6.0
-                              rust-open-5.3.3
+                              rust-open-5.3.4
                               rust-openssl-probe-0.2.1
                               rust-option-ext-0.2.0
                               rust-orbclient-0.3.51
                               rust-ordered-float-2.10.1
                               rust-ordered-float-5.3.0
                               rust-ordered-stream-0.2.0
+                              rust-os-pipe-1.2.3
                               rust-os-str-bytes-6.6.1
                               rust-ouroboros-0.18.5
                               rust-ouroboros-macro-0.18.5
@@ -30197,6 +30433,7 @@
                               rust-pathdiff-0.2.3
                               rust-pem-rfc7468-0.7.0
                               rust-percent-encoding-2.3.2
+                              rust-petgraph-0.8.3
                               rust-phf-0.11.3
                               rust-phf-0.13.1
                               rust-phf-generator-0.11.3
@@ -30266,6 +30503,7 @@
                               rust-rav1e-0.8.1
                               rust-ravif-0.13.0
                               rust-raw-window-handle-0.6.2
+                              rust-raw-window-metal-1.1.0
                               rust-rayon-1.11.0
                               rust-rayon-core-1.13.0
                               rust-rdrand-0.8.3
@@ -30281,7 +30519,7 @@
                               rust-regex-automata-0.4.14
                               rust-regex-syntax-0.8.10
                               rust-renderdoc-sys-1.1.0
-                              rust-reqwest-0.13.2
+                              rust-reqwest-0.13.3
                               rust-resvg-0.45.1
                               rust-retry-error-0.12.0
                               rust-rfc6979-0.4.0
@@ -30304,7 +30542,7 @@
                               rust-rustls-pki-types-1.14.0
                               rust-rustls-platform-verifier-0.6.2
                               rust-rustls-platform-verifier-android-0.1.1
-                              rust-rustls-webpki-0.103.12
+                              rust-rustls-webpki-0.103.13
                               rust-rustversion-1.0.22
                               rust-rustybuzz-0.20.1
                               rust-safelog-0.8.1
@@ -30367,7 +30605,7 @@
                               rust-softbuffer-0.4.8
                               rust-spin-0.9.8
                               rust-spinning-0.1.0
-                              rust-spirv-0.3.0+sdk-1.3.268.0
+                              rust-spirv-0.4.0+sdk-1.4.341.0
                               rust-spki-0.7.3
                               rust-sqlite-wasm-rs-0.5.2
                               rust-ssh-cipher-fork-arti-0.2.0
@@ -30428,20 +30666,19 @@
                               rust-tinyvec-1.11.0
                               rust-tinyvec-macros-0.1.1
                               rust-to-method-1.1.0
-                              rust-tokio-1.50.0
-                              rust-tokio-macros-2.6.1
+                              rust-tokio-1.52.1
+                              rust-tokio-macros-2.7.0
                               rust-tokio-rustls-0.26.4
                               rust-tokio-stream-0.1.18
+                              rust-tokio-tungstenite-0.28.0
                               rust-tokio-util-0.7.18
                               rust-toml-0.8.23
-                              rust-toml-0.9.12+spec-1.1.0
-                              rust-toml-1.1.1+spec-1.1.0
+                              rust-toml-1.1.2+spec-1.1.0
                               rust-toml-datetime-0.6.11
-                              rust-toml-datetime-0.7.5+spec-1.1.0
                               rust-toml-datetime-1.1.1+spec-1.1.0
                               rust-toml-edit-0.22.27
                               rust-toml-edit-0.25.9+spec-1.1.0
-                              rust-toml-parser-1.1.1+spec-1.1.0
+                              rust-toml-parser-1.1.2+spec-1.1.0
                               rust-toml-write-0.1.2
                               rust-toml-writer-1.1.1+spec-1.1.0
                               rust-tor-async-utils-0.41.0
@@ -30492,8 +30729,10 @@
                               rust-tracing-subscriber-0.3.23
                               rust-tracing-test-0.2.6
                               rust-tracing-test-macro-0.2.6
+                              rust-tree-magic-mini-3.2.2
                               rust-try-lock-0.2.5
                               rust-ttf-parser-0.25.1
+                              rust-tungstenite-0.28.0
                               rust-typed-index-collections-3.5.0
                               rust-typeid-1.0.3
                               rust-typenum-1.19.0
@@ -30519,9 +30758,10 @@
                               rust-url-2.5.8
                               rust-urlencoding-2.1.3
                               rust-usvg-0.45.1
+                              rust-utf-8-0.7.6
                               rust-utf8-width-0.1.8
                               rust-utf8-iter-1.0.4
-                              rust-uuid-1.23.0
+                              rust-uuid-1.23.1
                               rust-v-frame-0.3.9
                               rust-valuable-0.1.1
                               rust-vcpkg-0.2.15
@@ -30563,13 +30803,14 @@
                               rust-web-time-compat-0.1.0
                               rust-webpki-root-certs-1.0.6
                               rust-weezl-0.1.12
-                              rust-wgpu-28.0.0
-                              rust-wgpu-core-28.0.1
-                              rust-wgpu-core-deps-apple-28.0.0
-                              rust-wgpu-core-deps-emscripten-28.0.0
-                              rust-wgpu-core-deps-windows-linux-android-28.0.0
-                              rust-wgpu-hal-28.0.1
-                              rust-wgpu-types-28.0.0
+                              rust-wgpu-29.0.3
+                              rust-wgpu-core-29.0.3
+                              rust-wgpu-core-deps-apple-29.0.3
+                              rust-wgpu-core-deps-emscripten-29.0.3
+                              rust-wgpu-core-deps-windows-linux-android-29.0.3
+                              rust-wgpu-hal-29.0.3
+                              rust-wgpu-naga-bridge-29.0.3
+                              rust-wgpu-types-29.0.3
                               rust-widestring-1.2.1
                               rust-winapi-0.3.9
                               rust-winapi-i686-pc-windows-gnu-0.4.0
@@ -30657,6 +30898,7 @@
                               rust-wit-bindgen-rust-macro-0.51.0
                               rust-wit-component-0.244.0
                               rust-wit-parser-0.244.0
+                              rust-wl-clipboard-rs-0.9.3
                               rust-writeable-0.6.2
                               rust-wyz-0.5.1
                               rust-x11-dl-2.21.0
