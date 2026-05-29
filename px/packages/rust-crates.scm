@@ -8326,6 +8326,10 @@
   (crate-source "http" "1.4.0"
                 "06iind4cwsj1d6q8c2xgq8i2wka4ps74kmws24gsi1bzdlw2mfp3"))
 
+(define rust-http-1.4.1
+  (crate-source "http" "1.4.1"
+                "1l7k2ia57z3q7q3ka497krzps795kd3fymm2k12lr623y4nldrwb"))
+
 (define rust-http-body-0.4.6
   (crate-source "http-body" "0.4.6"
                 "1lmyjfk6bqk6k9gkn1dxq770sb78pqbqshga241hr5p995bb5skw"))
@@ -26018,7 +26022,7 @@
                               rust-html2text-0.17.1
                               rust-html5ever-0.39.0
                               rust-htmlescape-0.3.1
-                              rust-http-1.4.0
+                              rust-http-1.4.1
                               rust-http-body-1.0.1
                               rust-http-body-util-0.1.3
                               rust-httparse-1.10.1
@@ -26062,7 +26066,6 @@
                               rust-lettre-0.11.21
                               rust-levenshtein-automata-0.2.1
                               rust-libc-0.2.185
-                              rust-libmimalloc-sys-0.1.49
                               rust-linux-raw-sys-0.12.1
                               rust-litemap-0.8.2
                               rust-lock-api-0.4.14
@@ -26082,7 +26085,6 @@
                               rust-measure-time-0.9.0
                               rust-memchr-2.8.0
                               rust-memmap2-0.9.10
-                              rust-mimalloc-0.1.52
                               rust-mime-0.3.17
                               rust-mime-guess-2.0.5
                               rust-minimal-lexical-0.2.1
