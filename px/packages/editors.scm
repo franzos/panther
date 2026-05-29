@@ -799,7 +799,7 @@ intelligent code generation, and collaborative AI assistance.")
 (define-public edit
   (package
     (name "edit")
-    (version "1.2.1")
+    (version "2.0.0")
     (source
      (origin
        (method git-fetch)
@@ -808,17 +808,16 @@ intelligent code generation, and collaborative AI assistance.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0hwxll5qvzx0dgs5gzqjhac3va0piacj443d55530shx11mzggj9"))))
+        (base32 "090ya7g4grxjkj92zzc3m7p4x51l86chwc9lgninp2h85pk0lypl"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
        #:tests? #f
        #:phases
        (modify-phases %standard-phases
-         (add-after 'unpack 'enable-nightly-features
+         (add-before 'build 'chdir
            (lambda _
-             (delete-file "rust-toolchain.toml")
-             (setenv "RUSTC_BOOTSTRAP" "1"))))))
+             (chdir "crates/edit"))))))
     (inputs (px-cargo-inputs 'edit))
     (home-page "https://github.com/microsoft/edit")
     (synopsis "Terminal-based text editor inspired by MS-DOS Editor")
