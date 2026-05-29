@@ -53,6 +53,7 @@
             vpnmux-configuration-mullvad
             vpnmux-configuration-tailscale
             vpnmux-configuration-log-level
+            vpnmux-configuration-group
             vpnmux-shepherd-service
             vpnmux-service-type))
 
@@ -314,27 +315,59 @@ rules (exported as @env{VPNMUX_NFT}).")
   (log-level
    (maybe-string)
    "When set, exported as @env{VPNMUX_LOG} to raise the daemon's log
-verbosity, e.g. @code{\"debug\"}."))
+verbosity, e.g. @code{\"debug\"}.")
+  (group
+   (string "vpnmux")
+   "System group whose members may drive @command{vpnmux set}/@command{status}
+without @command{sudo}.  When non-empty, the activation creates the group and
+chowns @file{/var/lib/vpnmux} and @file{/run/vpnmux} to @code{root:<group>}
+with mode @code{02770} (setgid, group rwx).  Set to the empty string to keep
+the dirs root-only (CLI then requires @command{sudo}).  Mirrors
+@env{MULLVAD_MANAGEMENT_SOCKET_GROUP}."))
+
+(define (vpnmux-accounts config)
+  ;; Create the CLI group as a system group when configured; the daemon itself
+  ;; runs as root, so no user account is needed.
+  (let ((group (vpnmux-configuration-group config)))
+    (if (string-null? group)
+        '()
+        (list (user-group (name group) (system? #t))))))
 
 (define (vpnmux-activation config)
-  ;; /var/lib/vpnmux holds the desired state, /run/vpnmux the status file;
-  ;; both root-owned and 0700, matching what the daemon also enforces.
-  #~(begin
-      (use-modules (guix build utils))
-      (for-each (lambda (dir)
-                  (mkdir-p dir)
-                  (chmod dir #o700))
-                '("/run/vpnmux" "/var/lib/vpnmux"))))
+  ;; /var/lib/vpnmux holds the desired state, /run/vpnmux the status file. When
+  ;; a CLI group is configured, chown both to root:<group> with setgid + 0770
+  ;; so new files inherit the group — matches what the daemon itself enforces
+  ;; on startup. Without a group, fall back to root-only 0700.
+  (let ((group (vpnmux-configuration-group config)))
+    (with-imported-modules '((guix build utils))
+      #~(begin
+          (use-modules (guix build utils))
+          (let* ((group-name #$(if (string-null? group) #f group))
+                 (gid (and group-name
+                           (catch #t
+                             (lambda () (group:gid (getgrnam group-name)))
+                             (lambda _ #f))))
+                 (mode (if gid #o2770 #o0700)))
+            (for-each (lambda (dir)
+                        (mkdir-p dir)
+                        (when gid (chown dir 0 gid))
+                        (chmod dir mode))
+                      '("/run/vpnmux" "/var/lib/vpnmux")))))))
 
 (define (vpnmux-shepherd-service config)
   (let ((vpnmux (vpnmux-configuration-vpnmux config))
         (nft (vpnmux-configuration-nftables config))
         (mullvad (vpnmux-configuration-mullvad config))
         (tailscale (vpnmux-configuration-tailscale config))
-        (log-level (vpnmux-configuration-log-level config)))
+        (log-level (vpnmux-configuration-log-level config))
+        (group (vpnmux-configuration-group config)))
     (let ((log-env (if (maybe-value-set? log-level)
                        (list #~(string-append "VPNMUX_LOG=" #$log-level))
-                       '())))
+                       '()))
+          ;; VPNMUX_GROUP="" tells the daemon to keep dirs root-only; an unset
+          ;; var defaults to "vpnmux" on the Rust side, so we always export it
+          ;; explicitly to make the policy unambiguous.
+          (group-env (list #~(string-append "VPNMUX_GROUP=" #$group))))
       (list
        (shepherd-service
         (provision '(vpnmux))
@@ -353,6 +386,7 @@ verbosity, e.g. @code{\"debug\"}."))
                                   #$(file-append mullvad "/bin/mullvad"))
                    (string-append "VPNMUX_TAILSCALE="
                                   #$(file-append tailscale "/bin/tailscale"))
+                   #$@group-env
                    #$@log-env)
              (default-environment-variables))))
         (stop #~(make-kill-destructor)))))))
@@ -366,6 +400,8 @@ verbosity, e.g. @code{\"debug\"}."))
           (service-extension profile-service-type
                              (lambda (config)
                                (list (vpnmux-configuration-vpnmux config))))
+          (service-extension account-service-type
+                             vpnmux-accounts)
           (service-extension activation-service-type
                              vpnmux-activation)
           (service-extension log-rotation-service-type

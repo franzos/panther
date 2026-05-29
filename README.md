@@ -377,7 +377,9 @@ tailscale status     # Check connection status
 
 ### vpnmux
 
-Runs the [vpnmux](https://github.com/franzos/vpnmux) daemon, a control loop that keeps Mullvad and Tailscale from conflicting at the netfilter and DNS layer. It continuously reconciles the system to a desired provider state by driving `nft`, `mullvad`, and `tailscale`. The service wires those binaries via `VPNMUX_NFT`/`VPNMUX_MULLVAD`/`VPNMUX_TAILSCALE`, creates `/run/vpnmux` and `/var/lib/vpnmux` (root-owned, `0700`), and installs the `vpnmux` CLI into the system profile.
+Runs the [vpnmux](https://github.com/franzos/vpnmux) daemon, a control loop that keeps Mullvad and Tailscale from conflicting at the netfilter and DNS layer. It continuously reconciles the system to a desired provider state by driving `nft`, `mullvad`, and `tailscale`. The service wires those binaries via `VPNMUX_NFT`/`VPNMUX_MULLVAD`/`VPNMUX_TAILSCALE`, creates `/run/vpnmux` and `/var/lib/vpnmux`, and installs the `vpnmux` CLI into the system profile.
+
+By default the activation creates a `vpnmux` system group and chowns the runtime dirs to `root:vpnmux` with mode `02770` (setgid, group rwx), so members of the group can drive `vpnmux set`/`status` without `sudo`. Set `group` to `""` to keep the dirs root-only.
 
 **Usage:**
 
@@ -390,7 +392,14 @@ Runs the [vpnmux](https://github.com/franzos/vpnmux) daemon, a control loop that
 (service vpnmux-service-type
          (vpnmux-configuration
           (log-level "debug")))
+
+;; Root-only CLI (sudo required for set/status)
+(service vpnmux-service-type
+         (vpnmux-configuration
+          (group "")))
 ```
+
+Add yourself to the `vpnmux` group to use the CLI without sudo.
 
 **Configuration options:**
 
@@ -401,15 +410,16 @@ Runs the [vpnmux](https://github.com/franzos/vpnmux) daemon, a control loop that
 | `mullvad` | `mullvad-vpn-desktop` | Package providing the `mullvad` CLI (`VPNMUX_MULLVAD`) |
 | `tailscale` | `tailscale` | Package providing the `tailscale` CLI (`VPNMUX_TAILSCALE`) |
 | `log-level` | unset | When set, exported as `VPNMUX_LOG` (e.g. `"debug"`) |
+| `group` | `"vpnmux"` | System group permitted to drive the CLI without sudo. Empty string keeps dirs root-only. Exported as `VPNMUX_GROUP`. |
 
 **After reconfiguration:**
 
 ```bash
-vpnmux status                 # Show current state
-sudo vpnmux set mullvad       # Desired: Mullvad only
-sudo vpnmux set tailscale     # Desired: Tailscale only
-sudo vpnmux set mullvad tailscale  # Both, coexisting
-sudo vpnmux set              # Neither (empty set)
+vpnmux status                 # Show current state (no sudo if in vpnmux group)
+vpnmux set mullvad            # Desired: Mullvad only
+vpnmux set tailscale          # Desired: Tailscale only
+vpnmux set mullvad tailscale  # Both, coexisting
+vpnmux set                    # Neither (empty set)
 herd status vpnmux            # Daemon status
 ```
 
