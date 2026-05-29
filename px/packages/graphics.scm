@@ -242,20 +242,21 @@ color analysis tools, basic editing operations, and support for animated
 images.")
     (license license:expat)))
 
-(define ink-stroke-modeler-rs-source
+(define hayro-source
+  ;; rnote depends on hayro via a pinned git revision; vendor it locally.
   (origin
     (method git-fetch)
     (uri (git-reference
-          (url "https://github.com/flxzt/ink-stroke-modeler-rs")
-          (commit "84d311e9b0d034dcd955a1f353d37f54b2bda70f")))
-    (file-name "ink-stroke-modeler-rs-checkout")
+          (url "https://github.com/LaurenzV/hayro")
+          (commit "56c62b2a25232d5407af8efe819c49ad46605979")))
+    (file-name "hayro-checkout")
     (sha256
-     (base32 "1qwp2agn593ka18va93vl7sfrrfvrs4i74wj0rm7q84flkm57a87"))))
+     (base32 "0sv8q11538nsmsqy11xwp12vwqand17bibnka1f23msafl95b6sx"))))
 
 (define-public rnote
   (package
     (name "rnote")
-    (version "0.13.1")
+    (version "0.14.2")
     (source
      (origin
        (method git-fetch)
@@ -264,31 +265,37 @@ images.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0va1kjchfs6adgkdcs5jfg96hi41lc1agm3rfyzsf8d61bjl1k0h"))
+        (base32 "0bhsrxar06kg463py0qr8pr4dpcaqbwax4pmkgbvv5fnb5ryiqms"))
        (snippet
         #~(begin
             (use-modules (guix build utils))
-            ;; Replace git dependency with local path
+            ;; Replace git dependencies with a local path and keep the vendored
+            ;; hayro workspace separate from rnote's own workspace.
             (substitute* "Cargo.toml"
-              (("ink-stroke-modeler-rs = \\{ git.*\\}")
-               "ink-stroke-modeler-rs = { path = \"ink-stroke-modeler-rs\" }"))))))
+              (("hayro = \\{ git.*\\}")
+               "hayro = { path = \"hayro/hayro\" }")
+              (("hayro-svg = \\{ git.*\\}")
+               "hayro-svg = { path = \"hayro/hayro-svg\" }")
+              (("^resolver = \"2\"")
+               "exclude = [\"hayro\"]\nresolver = \"2\""))))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
        #:tests? #f
-       #:rust ,rust-1.89
+       #:rust ,rust-1.92
        #:cargo-build-flags '("--release" "-p" "rnote")
        #:phases
        (modify-phases %standard-phases
-         (add-after 'unpack 'unpack-ink-stroke-modeler
+         (add-after 'unpack 'unpack-hayro
            (lambda* (#:key native-inputs inputs #:allow-other-keys)
              (copy-recursively
-              (assoc-ref (or native-inputs inputs) "ink-stroke-modeler-rs")
-              "ink-stroke-modeler-rs")
-             ;; Remove dev-dependencies to avoid version conflicts
-             (substitute* "ink-stroke-modeler-rs/Cargo.toml"
-               (("\\[dev-dependencies\\]") "[fake-dev-deps]"))))
-         (add-after 'unpack-ink-stroke-modeler 'generate-config
+              (assoc-ref (or native-inputs inputs) "hayro")
+              "hayro")
+             ;; Drop the test workspace member, which pulls an external git
+             ;; dependency (sitro) that cannot be fetched offline.
+             (substitute* "hayro/Cargo.toml"
+               (("^[[:space:]]*\"hayro-tests\",?[[:space:]]*$") ""))))
+         (add-after 'unpack-hayro 'generate-config
            (lambda* (#:key outputs #:allow-other-keys)
              (let ((out (assoc-ref outputs "out")))
                ;; Generate config.rs from template
@@ -297,11 +304,12 @@ images.")
                  (("@APP_NAME_CAPITALIZED@") "\"Rnote\"")
                  (("@APP_ID@") "\"com.github.flxzt.rnote\"")
                  (("@APP_IDPATH@") "\"/com/github/flxzt/rnote/\"")
-                 (("@APP_VERSION@") "\"0.13.1\"")
+                 (("@APP_VERSION@") "\"0.14.2\"")
                  (("@APP_VERSION_SUFFIX@") "\"\"")
                  (("@APP_AUTHOR_NAME@") "\"Felix Zwettler\"")
                  (("@APP_AUTHORS@") "\"Felix Zwettler\"")
                  (("@APP_WEBSITE@") "\"https://rnote.flxzt.net\"")
+                 (("@APP_REPO_URL@") "\"https://github.com/flxzt/rnote\"")
                  (("@APP_ISSUES_URL@") "\"https://github.com/flxzt/rnote/issues\"")
                  (("@APP_SUPPORT_URL@")
                   "\"https://github.com/flxzt/rnote/discussions\"")
@@ -402,9 +410,8 @@ images.")
                  `("XDG_DATA_DIRS" ":" prefix
                    (,(string-append out "/share"))))))))))
     (native-inputs
-     `(("cmake" ,cmake)
-       ("glib:bin" ,glib "bin")
-       ("ink-stroke-modeler-rs" ,ink-stroke-modeler-rs-source)
+     `(("glib:bin" ,glib "bin")
+       ("hayro" ,hayro-source)
        ("pkg-config" ,pkg-config)))
     (inputs
      (cons* alsa-lib
