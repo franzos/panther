@@ -27,6 +27,7 @@
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages pulseaudio)
   #:use-module (gnu packages rust)
+  #:use-module (gnu packages tls)
   #:use-module (gnu packages webkit)
   #:use-module (px packages rust-crates)
   #:use-module (ice-9 match))
@@ -132,7 +133,7 @@ selection.")
 (define-public goveebttemplogger
   (package
     (name "goveebttemplogger")
-    (version "4.20260424.0")
+    (version "5.20260525.0")
     (source
      (origin
        (method url-fetch)
@@ -140,10 +141,10 @@ selection.")
              "https://github.com/wcbonner/GoveeBTTempLogger/archive/refs/tags/v"
              version ".tar.gz"))
        (sha256
-        (base32 "1shkj000s5v8bbsshziq50blg0gisw7fc3gzb5lq8qcrbv67swh0"))))
+        (base32 "0spws766ws1pppfa1mb3rffypxbwsqb8kp273yqr1ndh28mz2wam"))))
     (build-system cmake-build-system)
     (native-inputs (list pkg-config))
-    (inputs (list bluez dbus))
+    (inputs (list bluez dbus openssl))
     (home-page "https://github.com/wcbonner/GoveeBTTempLogger")
     (synopsis "Temperature and Humidity Logger for Govee devices")
     (description
