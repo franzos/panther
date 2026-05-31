@@ -328,6 +328,7 @@ gh_release "franzos/guix-install" "guix-install"
 gh_release "rustmailer/bichon" "bichon"
 gh_release "peteonrails/voxtype" "voxtype"
 gh_release "firecat53/networkmanager-dmenu" "networkmanager-dmenu"
+gh_release "djlint/djLint" "djlint"
 echo ""
 
 # --- Crates.io ---

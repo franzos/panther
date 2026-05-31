@@ -536,3 +536,60 @@ communicating with your Coldcard over USB")
      "Fw-fanctrl is a simple Python CLI service that controls Framework Laptop's
 fan(s) speed according to a configurable speed/temperature curve.")
     (license license:bsd-3)))
+
+(define-public python-cssbeautifier
+  (package
+    (name "python-cssbeautifier")
+    (version "1.15.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "cssbeautifier" version))
+       (sha256
+        (base32 "1xdcq1s5pq6d9m1qgbvb837i8nch077ql4kzcw0il42cyv1qvc4v"))))
+    (build-system pyproject-build-system)
+    (arguments
+     (list
+      #:tests? #f))
+    (native-inputs (list python-setuptools python-wheel))
+    (propagated-inputs (list python-editorconfig python-jsbeautifier
+                             python-six))
+    (home-page "https://beautifier.io")
+    (synopsis "CSS unobfuscator and beautifier")
+    (description "This package provides a CSS unobfuscator and beautifier,
+the CSS counterpart to jsbeautifier.")
+    (license license:expat)))
+
+(define-public djlint
+  (package
+    (name "djlint")
+    (version "1.36.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "djlint" version))
+       (sha256
+        (base32 "1888lhaz8b6w5mfg3qdjwdscp6q99h3qak129dqmmzj6ichly98p"))))
+    (build-system pyproject-build-system)
+    (arguments
+     (list
+      #:tests? #f))
+    (native-inputs (list python-hatchling))
+    (propagated-inputs (list python-click
+                             python-colorama
+                             python-cssbeautifier
+                             python-jsbeautifier
+                             python-json5
+                             python-pathspec
+                             python-pyyaml
+                             python-regex
+                             python-tomli
+                             python-tqdm
+                             python-typing-extensions))
+    (home-page "https://djlint.com")
+    (synopsis "HTML template linter and formatter")
+    (description
+     "djLint is a linter and formatter for HTML templates.  It finds
+formatting and code-quality issues in templates for Django, Jinja, Nunjucks,
+Handlebars, GoLang and other template languages, and can reformat them.")
+    (license license:gpl3+)))
