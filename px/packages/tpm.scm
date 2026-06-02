@@ -219,38 +219,26 @@ we use tpm2-abrmd and tabrmd interchangeably.")
 (define-public tpm2-pkcs11
   (package
     (name "tpm2-pkcs11")
-    (version "1.7.0")
+    (version "1.10.0")
     (source
      (origin
        (method url-fetch)
        (uri (string-append
-             "https://github.com/tpm2-software/tpm2-pkcs11/archive/refs/tags/"
-             version ".tar.gz"))
+             "https://github.com/tpm2-software/tpm2-pkcs11/releases/download/"
+             version "/tpm2-pkcs11-" version ".tar.gz"))
        (sha256
-        (base32 "0kkzzdxiz1389jl4rabh739m99x1jh42xagq4sycn5s8kvik1sa5"))
-
-       (modules '((guix build utils)))
-       (snippet '(begin
-                   (substitute* "bootstrap"
-                     (("git describe --tags --always --dirty > VERSION")
-                      "echo" version " > VERSION"))))))
+        (base32 "159f77szmcr29vhwzmvzlsp7788c66b4njy7cyli3987jzmz1lwr"))))
     (build-system gnu-build-system)
     (arguments
-     `(#:tests? #f ;only manual test scripts
-       ;; #:configure-flags (list "--enable-tctienvvar")
-       ))
-    (native-inputs `(("autoconf" ,autoconf)
-                     ("autoconf-archive" ,autoconf-archive)
-                     ("automake" ,automake)
-                     ("libtool" ,libtool)
-                     ("m4" ,m4)
-                     ("pkg-config" ,pkg-config)))
+     `(#:tests? #f                      ;only manual test scripts
+       #:configure-flags '("--disable-ptool-checks")))
+    (native-inputs (list pkg-config))
     (inputs `(("libyaml" ,libyaml)
               ("sqlite" ,sqlite)
-              ("openssl" ,openssl-1.1)
+              ("openssl" ,openssl)
               ("tpm2-abrmd" ,tpm2-abrmd)
               ("tpm2-tools" ,tpm2-tools)
-              ("tpm2-tss" ,tpm2-tss-3-openssl-1.1)))
+              ("tpm2-tss" ,tpm2-tss)))
     (home-page "https://github.com/tpm2-software/tpm2-pkcs11")
     (synopsis "A PKCS#11 interface for TPM2 hardware")
     (description
