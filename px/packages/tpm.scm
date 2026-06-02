@@ -28,7 +28,7 @@
   #:use-module (gnu packages gnupg)
   #:use-module (gnu packages graphviz)
   #:use-module (gnu packages gtk)
-  #:use-module (gnu packages hardware)
+  #:use-module ((gnu packages hardware) #:hide (tpm2-tss))
   #:use-module (gnu packages libusb)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages m4)
@@ -186,48 +186,6 @@ and libtss2-tcti-mssim.")
 for Trusted Platform Module (TPM 2.0) using the tpm2-tss software stack that
 follows the Trusted Computing Groups (TCG) TPM Software Stack (TSS 2.0).")
     (license license:bsd-2)))
-
-(define-public tpm2-tools
-  (package
-    (name "tpm2-tools")
-    (version "5.6")
-    (source
-     (origin
-       (method url-fetch)
-       ;; 1qpqpjcps25as7sif7pa0yqz17562gp6d38v14hcxcxgnp3zlsbi
-       (uri (string-append
-             "https://github.com/tpm2-software/tpm2-tools/archive/refs/tags/"
-             version ".tar.gz"))
-       (sha256
-        (base32 "1qpqpjcps25as7sif7pa0yqz17562gp6d38v14hcxcxgnp3zlsbi"))
-
-       (modules '((guix build utils)))
-       (snippet '(begin
-                   (substitute* "bootstrap"
-                     (("git describe --tags --always --dirty > VERSION")
-                      "echo" version " > VERSION"))))))
-    (build-system gnu-build-system)
-    (arguments
-     `(#:tests? #f ;only manual test scripts
-       #:configure-flags (list "--enable-tctienvvar")))
-    (native-inputs `(("autoconf" ,autoconf)
-                     ("autoconf-archive" ,autoconf-archive)
-                     ("automake" ,automake)
-                     ("bash" ,bash)
-                     ("curl" ,curl)
-                     ("doxygen" ,doxygen)
-                     ("json-c" ,json-c)
-                     ("libgcrypt" ,libgcrypt)
-                     ("libtool" ,libtool)
-                     ("m4" ,m4)
-                     ("pkg-config" ,pkg-config)
-                     ("openssl" ,openssl-1.1)
-                     ("libuuid" ,util-linux "lib")
-                     ("tpm2-tss" ,tpm2-tss-3-openssl-1.1)))
-    (home-page "https://github.com/tpm2-software/tpm2-tools")
-    (synopsis "Trusted Platform Module (TPM2.0) tools")
-    (description "TPM (Trusted Platform Module) 2.0 tools based on tpm2-tss")
-    (license license:lgpl2.1+)))
 
 (define-public tpm2-abrmd
   (package
