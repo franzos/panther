@@ -12,6 +12,7 @@
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system glib-or-gtk)
   #:use-module (guix build-system python)
+  #:use-module (gnu packages admin)
   #:use-module (gnu packages autotools)
   #:use-module (gnu packages base)
   #:use-module (gnu packages bash)
@@ -70,6 +71,37 @@
     (build-system gnu-build-system)
     (native-inputs (list pkg-config))
     (inputs (list curl json-c openssl-1.1))
+    (home-page "https://tpm2-software.github.io/")
+    (synopsis "OSS Implementation of the TCG TPM2 Software Stack (TSS2)")
+    (description
+     "This package provides the @acronym{TCG, Trusted Computing Group}
+@acronym{TSS2, TPM2 Software Stack}.  The stack contains libtss2-fapi,
+libtss2-esys, libtss2-sys, libtss2-mu, libtss2-tcti-device, libtss2-tcti-swtpm
+and libtss2-tcti-mssim.")
+    (license license:bsd-2)))
+
+(define-public tpm2-tss
+  (package
+    (name "tpm2-tss")
+    (version "4.1.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "https://github.com/tpm2-software/tpm2-tss"
+                           "/releases/download/"
+                           version
+                           "/tpm2-tss-"
+                           version
+                           ".tar.gz"))
+       (sha256
+        (base32 "1s1v1nk3f9rkpxcwanz8rf9hrvma869dhwn83xfk0y5b0015iw9p"))))
+    (build-system gnu-build-system)
+    ;; shadow provides groupadd, which configure requires for the tss user.
+    (native-inputs (list pkg-config shadow))
+    (inputs `(("curl" ,curl)
+              ("json-c" ,json-c)
+              ("openssl" ,openssl)
+              ("libuuid" ,util-linux "lib")))
     (home-page "https://tpm2-software.github.io/")
     (synopsis "OSS Implementation of the TCG TPM2 Software Stack (TSS2)")
     (description
