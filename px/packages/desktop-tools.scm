@@ -936,7 +936,7 @@ dependencies.")
 (define-public vicinae
   (package
     (name "vicinae")
-    (version "0.21.2")
+    (version "0.21.5")
     (source
      (origin
        (method url-fetch)
@@ -944,7 +944,7 @@ dependencies.")
              "https://github.com/vicinaehq/vicinae/releases/download/v"
              version "/vicinae-linux-x86_64-v" version ".tar.gz"))
        (sha256
-        (base32 "1ga561mq2n8i5svcjak7kpigpnhr3jrxg5gzdbzm2i8wjrdmnvb8"))))
+        (base32 "18502d3667dr5q5xfhcf92zyyxpc9c1173v54j8l8s5548k0x3cy"))))
     (supported-systems '("x86_64-linux"))
     (build-system binary-build-system)
     (arguments
