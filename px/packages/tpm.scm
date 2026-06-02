@@ -190,26 +190,23 @@ follows the Trusted Computing Groups (TCG) TPM Software Stack (TSS 2.0).")
 (define-public tpm2-abrmd
   (package
     (name "tpm2-abrmd")
-    (version "2.4.0")
+    (version "3.0.0")
     (source
      (origin
        (method url-fetch)
        (uri (string-append
-             "https://github.com/tpm2-software/tpm2-abrmd/archive/refs/tags/"
-             version ".tar.gz"))
+             "https://github.com/tpm2-software/tpm2-abrmd/releases/download/"
+             version "/tpm2-abrmd-" version ".tar.gz"))
        (sha256
-        (base32 "14sj4cbw7myx1fkzz9ya4gc06rzm6x7hy9jd9im8wc2a1r3141k2"))))
+        (base32 "0rglv5nj2xng7x57akqh6fj1hsdnyq3ndf2ma6q0b9sa2qsgz6nm"))))
     (build-system gnu-build-system)
-    (native-inputs `(("autoconf" ,autoconf)
-                     ("autoconf-archive" ,autoconf-archive)
-                     ("automake" ,automake)
-                     ("glib" ,glib "bin")
-                     ("glib" ,glib)
-                     ("git" ,git)
-                     ("libtool" ,libtool)
+    (arguments
+     `(#:tests? #f))                    ;tests need a swtpm and dbus session
+    (native-inputs `(("glib" ,glib "bin")
                      ("pkg-config" ,pkg-config)
-                     ("tpm2-tss" ,tpm2-tss-3-openssl-1.1)
                      ("which" ,which)))
+    (inputs `(("glib" ,glib)
+              ("tpm2-tss" ,tpm2-tss)))
     (home-page "https://github.com/tpm2-software/tpm2-abrmd")
     (synopsis "TPM2 Access Broker & Resource Manager")
     (description
