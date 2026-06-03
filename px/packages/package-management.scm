@@ -15,12 +15,15 @@
   #:use-module (gnu packages bash)
   #:use-module (gnu packages fontutils)
   #:use-module (gnu packages freedesktop)
+  #:use-module (gnu packages gl)
   #:use-module (gnu packages guile)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages serialization)
   #:use-module (gnu packages vulkan)
   #:use-module (gnu packages xdisorg)
+  #:use-module (gnu packages xml)
   #:use-module (gnu packages xorg)
+  #:use-module (px packages setup)
   #:use-module (px self))
 
 (define-public guix-tools
@@ -124,3 +127,58 @@ and (combined with the polkit actions from @code{libguix-polkit}) run
 @command{guix pull} and @command{guix system reconfigure} via
 @command{pkexec}.")
     (license license:gpl3+)))
+
+(define-public guix-install-gui
+  (package
+    (inherit guix-install)
+    (name "guix-install-gui")
+    (arguments
+     (list
+      #:install-source? #f
+      #:tests? #f
+      ;; iced GUI crate of the guix-install workspace; tiny-skia renderer.
+      #:cargo-build-flags ''("--release" "-p" "guix-install-gui")
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'install
+            (lambda _
+              (let ((bin (string-append #$output "/bin")))
+                (mkdir-p bin)
+                (install-file "target/release/guix-install-gui" bin))))
+          (add-after 'install 'wrap-binary
+            (lambda _
+              ;; iced/winit dlopens Wayland, X11, xkbcommon and GL at runtime;
+              ;; rpath alone won't find them.
+              (wrap-program (string-append #$output "/bin/guix-install-gui")
+                `("LD_LIBRARY_PATH" ":" prefix
+                  (#$(file-append wayland "/lib")
+                   #$(file-append libxkbcommon "/lib")
+                   #$(file-append libx11 "/lib")
+                   #$(file-append libxcursor "/lib")
+                   #$(file-append libxi "/lib")
+                   #$(file-append libxrandr "/lib")
+                   #$(file-append mesa "/lib")
+                   #$(file-append libglvnd "/lib")
+                   #$(file-append fontconfig "/lib")
+                   #$(file-append freetype "/lib")))))))))
+    (native-inputs (list pkg-config))
+    (inputs
+     (cons* bash-minimal
+            expat
+            fontconfig
+            freetype
+            libglvnd
+            libx11
+            libxcursor
+            libxi
+            libxkbcommon
+            libxrandr
+            mesa
+            wayland
+            (px-cargo-inputs 'guix-install)))
+    (synopsis "Graphical (iced) frontend for the Guix System installer")
+    (description
+     "@code{guix-install-gui} is the iced graphical frontend for
+@code{guix-install}.  It drives the same installation logic as the CLI
+through a fullscreen interface, with a built-in @file{system.scm} editor
+and live progress for @command{guix pull} and @command{guix system init}.")))
