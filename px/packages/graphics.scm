@@ -242,6 +242,71 @@ color analysis tools, basic editing operations, and support for animated
 images.")
     (license license:expat)))
 
+(define-public oculante-next
+  ;; Development branch tracking the egui 0.34 / Rust 2024 rewrite.
+  (let ((revision "0")
+        (commit "39f4e92dd081980fdb1fd93e3278bf9e270bec75"))
+    (package
+      (inherit oculante)
+      (name "oculante-next")
+      (version (git-version "0.9.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/woelper/oculante")
+               (commit commit)))
+         (file-name (git-file-name name version))
+         (sha256
+          (base32 "09hf8npvwp942anraq9wjs24fqrg4fdvz1wwdwhlc2jiks38b2sw"))
+         (snippet
+          #~(begin
+              (use-modules (guix build utils))
+              (substitute* "Cargo.toml"
+                ;; Resolve the pinned dark-light git revision from the
+                ;; vendored crate source instead of fetching it offline.
+                (("^dark-light = \\{ git =.*")
+                 "dark-light = \"2.0.0\"\n")
+                ;; sysinfo 0.39 requires rustc 1.95 (cfg_select!); 0.38 keeps
+                ;; the same Disks API and builds with the packaged toolchain.
+                (("^sysinfo = \"0.39\"") "sysinfo = \"0.38\""))))))
+      (arguments
+       `(#:install-source? #f
+         #:tests? #f
+         #:rust ,rust-1.94
+         #:phases
+         (modify-phases %standard-phases
+           (add-before 'build 'set-cmake-policy
+             (lambda _
+               ;; Workaround for bundled glslang having old cmake_minimum_required
+               (setenv "CMAKE_POLICY_VERSION_MINIMUM" "3.5")))
+           (add-after 'install 'wrap-program
+             (lambda* (#:key inputs outputs #:allow-other-keys)
+               (let ((out (assoc-ref outputs "out"))
+                     (mesa (assoc-ref inputs "mesa"))
+                     (vulkan (assoc-ref inputs "vulkan-loader"))
+                     (wayland (assoc-ref inputs "wayland"))
+                     (libxkbcommon (assoc-ref inputs "libxkbcommon")))
+                 (wrap-program (string-append out "/bin/oculante")
+                   `("LD_LIBRARY_PATH" ":" prefix
+                     (,(string-append mesa "/lib")
+                      ,(string-append vulkan "/lib")
+                      ,(string-append wayland "/lib")
+                      ,(string-append libxkbcommon "/lib"))))))))))
+      (inputs
+       (cons* alsa-lib
+              expat
+              fontconfig
+              freetype
+              gtk+
+              libxcb
+              libxkbcommon
+              mesa
+              vulkan-loader
+              wayland
+              `(,zstd "lib")
+              (px-cargo-inputs 'oculante-next))))))
+
 (define hayro-source
   ;; rnote depends on hayro via a pinned git revision; vendor it locally.
   (origin
