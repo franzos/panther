@@ -47,7 +47,7 @@
 (define-public guix-install
   (package
     (name "guix-install")
-    (version "0.1.2")
+    (version "0.1.3")
     (source
      (origin
        (method git-fetch)
@@ -56,10 +56,19 @@
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0mvb3j3m05zkv8rqh94qiajnfs7dvwykz7ii6wvp7daavw8xvx4f"))))
+        (base32 "1alwf0jf9gv52nq9s5rywi5i63yg2krdd0bnai18af2hsbvyhxc3"))))
     (build-system cargo-build-system)
     (arguments
-     `(#:install-source? #f))
+     `(#:install-source? #f
+       ;; Workspace also holds the iced GUI crate; build only the CLI here.
+       #:cargo-build-flags '("--release" "-p" "guix-install")
+       #:phases
+       (modify-phases %standard-phases
+         (replace 'install
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let ((bin (string-append (assoc-ref outputs "out") "/bin")))
+               (mkdir-p bin)
+               (install-file "target/release/guix-install" bin)))))))
     (inputs (px-cargo-inputs 'guix-install))
     (home-page "https://github.com/franzos/guix-install")
     (synopsis "Guix System installer")
