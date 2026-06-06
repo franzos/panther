@@ -21,6 +21,7 @@
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages golang)
   #:use-module (gnu packages golang-xyz)
+  #:use-module (gnu packages jemalloc)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages man)
   #:use-module (gnu packages pkg-config)
@@ -29,6 +30,7 @@
   #:use-module (gnu packages tls)
   #:use-module (px packages golang-xyz)
   #:use-module (px packages go)
+  #:use-module (px packages rust)
   #:use-module (px self))
 
 (define-public codex
@@ -68,6 +70,47 @@ on your computer.  It assists with software development tasks directly within
 a terminal environment, providing code suggestions, explanations, and
 automated coding assistance.")
     (license license:asl2.0)))
+
+(define-public biome
+  (package
+    (name "biome")
+    (version "2.4.16")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/biomejs/biome")
+             (commit (string-append "@biomejs/biome@" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "07jlzg8mxrfl3qzx9v6ldxjrvg5rxcnxrhcqii35fj244d4xmwv1"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:install-source? #f
+       #:tests? #f
+       #:rust ,rust-1.95
+       #:cargo-install-paths '("crates/biome_cli")
+       #:phases
+       (modify-phases %standard-phases
+         (add-before 'build 'set-build-env
+           (lambda* (#:key inputs #:allow-other-keys)
+             ;; The crate version is "0.0.0"; the real version is injected
+             ;; via BIOME_VERSION, mirroring upstream's release CI.
+             (setenv "BIOME_VERSION" ,version)
+             ;; Link the system jemalloc; the bundled one needs /bin/sh.
+             (setenv "CARGO_FEATURE_UNPREFIXED_MALLOC_ON_SUPPORTED_PLATFORMS" "1")
+             (setenv "JEMALLOC_OVERRIDE"
+                     (string-append (assoc-ref inputs "jemalloc")
+                                    "/lib/libjemalloc.so")))))))
+    (native-inputs (list pkg-config))
+    (inputs (cons* jemalloc zlib (px-cargo-inputs 'biome_cli)))
+    (home-page "https://biomejs.dev")
+    (synopsis "Fast formatter and linter for web projects")
+    (description
+     "Biome is a toolchain for web projects that formats and lints JavaScript,
+TypeScript, JSX, TSX, JSON, CSS, GraphQL, and HTML.  It aims to be a fast,
+single-binary replacement for tools such as Prettier and ESLint.")
+    (license (list license:expat license:asl2.0))))
 
 (define-public bun
   (package

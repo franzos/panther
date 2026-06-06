@@ -34,6 +34,8 @@ gh_api() {
 # Strip common tag prefixes
 strip_tag() {
     local tag="$1"
+    # Scoped tags like "@biomejs/biome@2.4.16" -> "2.4.16"
+    tag="${tag##*@}"
     tag="${tag#release/}"
     tag="${tag#bun-v}"
     tag="${tag#rust-v}"
@@ -329,6 +331,7 @@ gh_release "rustmailer/bichon" "bichon"
 gh_release "peteonrails/voxtype" "voxtype"
 gh_release "firecat53/networkmanager-dmenu" "networkmanager-dmenu"
 gh_release "djlint/djLint" "djlint"
+gh_release "biomejs/biome" "biome"
 echo ""
 
 # --- Crates.io ---
