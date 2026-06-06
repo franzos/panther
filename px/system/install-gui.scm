@@ -63,26 +63,37 @@
              (chvt #$(file-append kbd "/bin/chvt"))
              (pkill #$(file-append procps "/bin/pkill"))
              (bash #$(file-append bash "/bin/bash")))
+         (define keymap-file "/run/guix-install-keymap")
+         (define relaunch-file "/run/guix-install-relaunch")
+         (define (read-trimmed path)
+           (false-if-exception
+            (call-with-input-file path
+              (lambda (port) (string-trim-both (read-line port))))))
          (define (launch-gui)
-           ;; Clear any stale seat left by a previous (hard-killed) run, then
-           ;; host the iced installer as cage's sole fullscreen client.
-           (system* pkill "-f" "seatd-launch")
-           (system* pkill "seatd")
-           (false-if-exception (delete-file "/run/seatd.sock"))
-           (false-if-exception (mkdir "/run/user" #o755))
-           (false-if-exception (mkdir "/run/user/0" #o700))
-           (setenv "XDG_RUNTIME_DIR" "/run/user/0")
-           ;; kmscon owns DRM master on tty1 (this VT), so cage can't become
-           ;; master here.  Launch it on a fresh VT instead: openvt -s switches
-           ;; to it (seatd then hands cage the master), -w waits for cage to
-           ;; exit; afterwards switch back to the menu on tty1.
-           ;;
-           ;; Run through `bash -lc` so the installer's children (lsblk, parted,
-           ;; cryptsetup, guix ...) inherit the same login PATH/env the CLI path
-           ;; gets -- the chooser itself starts with a near-empty PATH.
-           (system* openvt "-s" "-w" "--" bash "-lc"
-                    (string-append "exec " seatd-launch " -- " cage " -- " gui))
-           (system* chvt "1"))
+           (let loop ()
+             ;; Clear any stale seat left by a previous (hard-killed) run.
+             (system* pkill "-f" "seatd-launch")
+             (system* pkill "seatd")
+             (false-if-exception (delete-file "/run/seatd.sock"))
+             (false-if-exception (mkdir "/run/user" #o755))
+             (false-if-exception (mkdir "/run/user/0" #o700))
+             (setenv "XDG_RUNTIME_DIR" "/run/user/0")
+             ;; Apply the layout the GUI last requested (cage reads
+             ;; XKB_DEFAULT_LAYOUT only at startup, so it must be set before cage).
+             (let ((layout (read-trimmed keymap-file)))
+               (when (and (string? layout) (not (string=? layout "")))
+                 (setenv "XKB_DEFAULT_LAYOUT" layout)))
+             ;; Fresh VT (kmscon owns DRM master on tty1). bash -lc so the
+             ;; installer's children inherit the login PATH/env.
+             (system* openvt "-s" "-w" "--" bash "-lc"
+                      (string-append "exec " seatd-launch " -- " cage " -- " gui))
+             ;; If the GUI asked for a relaunch (keyboard change), consume the
+             ;; marker and loop; otherwise return to the chooser menu.
+             (if (file-exists? relaunch-file)
+                 (begin
+                   (false-if-exception (delete-file relaunch-file))
+                   (loop))
+                 (system* chvt "1"))))
          (let loop ()
            (display "\n  PantherX OS Installer\n\n")
            (display "    1) Graphical installer (recommended)\n")
