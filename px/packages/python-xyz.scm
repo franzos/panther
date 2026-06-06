@@ -501,7 +501,7 @@ communicating with your Coldcard over USB")
 (define-public fw-fanctrl
   (package
     (name "fw-fanctrl")
-    (version "1.0.4")
+    (version "1.0.5")
     (source
      (origin
        (method url-fetch)
@@ -510,7 +510,7 @@ communicating with your Coldcard over USB")
              version ".tar.gz"))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "1a26xrj0cfc007jbrzhs8a6dj2gv9qaw3zbds177b1ng41an76qy"))
+        (base32 "11jw1kasrmgxzq9gpvcc3d6nrxqwvzm183svfksrj5l1zg8vjd5x"))
        ;; Replace Python 3.12+ f-string syntax (PEP 701) with 3.11-compatible
        ;; form: config["key"] -> config['key'] inside f-strings.
        (modules '((guix build utils)))
