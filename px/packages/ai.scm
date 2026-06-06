@@ -76,17 +76,17 @@ handle entire workflows.  This package disables auto-updates.")
 (define-public claude-desktop
   (package
     (name "claude-desktop")
-    (version "1.9255.2-2.0.16")
+    (version "1.11187.4-2.0.18")
     (source
      (origin
        (method url-fetch)
        (uri (string-append
              "https://github.com/aaddrick/claude-desktop-debian/releases/"
-             "download/v2.0.16+claude1.9255.2/"
-             "claude-desktop_1.9255.2-2.0.16_amd64.deb"))
+             "download/v2.0.18+claude1.11187.4/"
+             "claude-desktop_1.11187.4-2.0.18_amd64.deb"))
        (file-name (string-append name "-" version ".deb"))
        (sha256
-        (base32 "126myhmzlxqc9lyl662fa8vn96wpp18pz09m7ni50gnfr13jc66g"))))
+        (base32 "1ajc5pvcdw89kfk6nmscw6aplxi79jgnncyjc460hlx79sb99zzz"))))
     (build-system binary-build-system)
     (arguments
      (list
