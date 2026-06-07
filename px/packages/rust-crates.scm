@@ -43887,6 +43887,14 @@
                                rust-anyhow-1.0.100
                                rust-arrayvec-0.7.6
                                rust-ash-0.38.0+1.3.281
+                               rust-async-broadcast-0.7.2
+                               rust-async-channel-2.5.0
+                               rust-async-io-2.6.0
+                               rust-async-lock-3.4.2
+                               rust-async-process-2.5.0
+                               rust-async-recursion-1.1.1
+                               rust-async-signal-0.2.14
+                               rust-async-task-4.7.1
                                rust-async-trait-0.1.89
                                rust-atk-0.18.2
                                rust-atk-sys-0.18.2
@@ -43904,6 +43912,7 @@
                                rust-block-0.1.6
                                rust-block-buffer-0.10.4
                                rust-block2-0.6.2
+                               rust-blocking-1.6.2
                                rust-bumpalo-3.19.0
                                rust-bytemuck-1.25.0
                                rust-bytemuck-derive-1.10.2
@@ -43998,6 +44007,9 @@
                                rust-egui-wgpu-0.34.1
                                rust-either-1.15.0
                                rust-emath-0.34.1
+                               rust-endi-1.1.1
+                               rust-enumflags2-0.7.12
+                               rust-enumflags2-derive-0.7.12
                                rust-env-home-0.1.0
                                rust-epaint-0.34.1
                                rust-epaint-default-fonts-0.34.1
@@ -44006,6 +44018,8 @@
                                rust-esaxx-rs-0.1.10
                                rust-euclid-0.22.14
                                rust-evdev-0.12.2
+                               rust-event-listener-5.4.1
+                               rust-event-listener-strategy-0.5.4
                                rust-eyre-0.6.12
                                rust-fallible-iterator-0.3.0
                                rust-fallible-streaming-iterator-0.1.9
@@ -44033,6 +44047,7 @@
                                rust-futures-core-0.3.32
                                rust-futures-executor-0.3.32
                                rust-futures-io-0.3.32
+                               rust-futures-lite-2.6.1
                                rust-futures-macro-0.3.32
                                rust-futures-sink-0.3.32
                                rust-futures-task-0.3.32
@@ -44091,6 +44106,7 @@
                                rust-heck-0.4.1
                                rust-heck-0.5.0
                                rust-hermit-abi-0.5.2
+                               rust-hex-0.4.3
                                rust-hexf-parse-0.2.1
                                rust-hmac-sha256-1.1.12
                                rust-hound-3.5.1
@@ -44225,6 +44241,7 @@
                                rust-openssl-sys-0.9.111
                                rust-option-ext-0.2.0
                                rust-ordered-float-5.3.0
+                               rust-ordered-stream-0.2.0
                                rust-ort-2.0.0-rc.12
                                rust-ort-sys-2.0.0-rc.12
                                rust-pango-0.18.3
@@ -44232,6 +44249,7 @@
                                rust-pango-sys-0.18.0
                                rust-pango-sys-0.22.0
                                rust-parakeet-rs-0.3.5
+                               rust-parking-2.2.1
                                rust-parking-lot-0.12.5
                                rust-parking-lot-core-0.9.12
                                rust-paste-1.0.15
@@ -44240,6 +44258,7 @@
                                rust-percent-encoding-2.3.2
                                rust-pidlock-0.1.6
                                rust-pin-project-lite-0.2.16
+                               rust-piper-0.2.5
                                rust-pkg-config-0.3.32
                                rust-png-0.17.16
                                rust-polling-3.11.0
@@ -44318,10 +44337,12 @@
                                rust-serde-core-1.0.228
                                rust-serde-derive-1.0.228
                                rust-serde-json-1.0.149
+                               rust-serde-repr-0.1.20
                                rust-serde-spanned-0.6.9
                                rust-serde-spanned-1.1.1
                                rust-serde-urlencoded-0.7.1
                                rust-sha1-0.10.6
+                               rust-sha2-0.10.9
                                rust-sharded-slab-0.1.7
                                rust-shlex-1.3.0
                                rust-signal-hook-0.3.18
@@ -44399,6 +44420,7 @@
                                rust-tungstenite-0.24.0
                                rust-type-map-0.5.1
                                rust-typenum-1.20.0
+                               rust-uds-windows-1.2.1
                                rust-unicase-2.9.0
                                rust-unicode-ident-1.0.22
                                rust-unicode-normalization-alignments-0.1.12
@@ -44490,6 +44512,7 @@
                                rust-windows-sys-0.45.0
                                rust-windows-sys-0.48.0
                                rust-windows-sys-0.52.0
+                               rust-windows-sys-0.59.0
                                rust-windows-sys-0.60.2
                                rust-windows-sys-0.61.2
                                rust-windows-targets-0.42.2
@@ -44544,11 +44567,15 @@
                                rust-x11-2.21.0
                                rust-x11-dl-2.21.0
                                rust-xcursor-0.3.10
+                               rust-xdg-home-1.3.0
                                rust-xkbcommon-0.8.0
                                rust-xkeysym-0.2.1
                                rust-xml-rs-0.8.28
                                rust-yoke-0.8.1
                                rust-yoke-derive-0.8.1
+                               rust-zbus-4.4.0
+                               rust-zbus-macros-4.4.0
+                               rust-zbus-names-3.0.0
                                rust-zerocopy-0.8.33
                                rust-zerocopy-derive-0.8.33
                                rust-zerofrom-0.1.6
@@ -44557,7 +44584,10 @@
                                rust-zerotrie-0.2.3
                                rust-zerovec-0.11.5
                                rust-zerovec-derive-0.11.2
-                               rust-zmij-1.0.12))
+                               rust-zmij-1.0.12
+                               rust-zvariant-4.2.0
+                               rust-zvariant-derive-4.2.0
+                               rust-zvariant-utils-2.1.0))
                      (wakatime-ls =>
                                   (list rust-adler2-2.0.0
                                    rust-android-system-properties-0.1.5

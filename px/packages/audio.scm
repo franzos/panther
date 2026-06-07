@@ -161,7 +161,7 @@ minimize its security impact.")
 (define-public voxtype
   (package
     (name "voxtype")
-    (version "0.7.5")
+    (version "1.0.0-rc1")
     (source
      (origin
        (method git-fetch)
@@ -170,7 +170,7 @@ minimize its security impact.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0sk8mjvd6945n023hrkr2mz16w191yaxdny4fqhdwp2kc3b8dhyf"))))
+        (base32 "0cvdndx6x8bpg76y7abl9fxdwdfk4wv6cn036plrh6j02yfqpf79"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
@@ -223,7 +223,7 @@ acceleration (Vulkan, CUDA) is available but not yet enabled.")
          (add-after 'patch-cargo-checksums 'fix-shader-compilation
            (lambda _
              (substitute*
-              "guix-vendor/rust-whisper-rs-sys-0.14.1.tar.gz/whisper.cpp/ggml/src/ggml-vulkan/vulkan-shaders/vulkan-shaders-gen.cpp"
+              "guix-vendor/rust-whisper-rs-sys-0.15.0.tar.gz/whisper.cpp/ggml/src/ggml-vulkan/vulkan-shaders/vulkan-shaders-gen.cpp"
               ;; The hardcoded /bin/sh path doesn't exist in the Guix build
               ;; sandbox.  Use execlp to search PATH for sh instead.
               (("execl\\(\"/bin/sh\", \"sh\"")
