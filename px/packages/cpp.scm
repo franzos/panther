@@ -226,7 +226,7 @@ event-based communication.")
 (define-public litehtml
   (package
     (name "litehtml")
-    (version "0.9")
+    (version "0.10")
     (source
      (origin
        (method git-fetch)
@@ -235,7 +235,7 @@ event-based communication.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1kk1ga3wv7k14pg0b101vc576s4zf31dx8gqbflk4yip78mwfkv4"))
+        (base32 "1qan7zplg4yvvnb9dvj0x7lr60x2vvf19vcg9dpjaxdvq2wabz1q"))
        (snippet
         #~(begin (use-modules (guix build utils))
                  ;; Remove bundled gumbo-parser
