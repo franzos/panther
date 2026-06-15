@@ -12,17 +12,17 @@
 (define-public opentofu
   (package
     (name "opentofu")
-    (version "1.12.1")
+    (version "1.12.2")
     (source (origin
               (method go-fetch-vendored)
               (uri (go-git-reference
                     (url "https://github.com/opentofu/opentofu")
                     (commit (string-append "v" version))
                     (sha (base32
-                          "0llszn9d5zn0l5hwd2wbw9z54rgvvqql0z013b3ima7dfxh6hgfc"))))
+                          "0jbnzzmx6xy5bpmjgqcdc8n65f6knw4rf4ijqn9dav0lhzr0vc0w"))))
               (sha256
                (base32
-                "1pyh19aflblzdzxcq322k2jz34x515can170b7yqv2l7229z1yqd"))))
+                "0kh2x3xl9j5f7zpbjnnz7m5s69d9zqj4s8nb04g4p2r0yn7vqnhf"))))
     (build-system go-build-system)
     (arguments
      (list
