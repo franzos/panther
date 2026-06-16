@@ -10,6 +10,7 @@
   #:use-module (guix download)
   #:use-module (guix utils)
   #:use-module (guix build-system cmake)
+  #:use-module (guix build-system gnu)
   #:use-module (gnu packages)
   #:use-module (gnu packages autotools)
   #:use-module (gnu packages pkg-config)
@@ -42,30 +43,29 @@
              version ".tar.gz"))
        (sha256
         (base32 "0q5f6iywzi8hzvpjnzd5rymkkqaz5pa77x7a5sa1qlkg7p9s9h1f"))))
-    (build-system cmake-build-system)
+    ;; The C++ sources live in cpp/ and build with a plain Makefile.
+    (build-system gnu-build-system)
     (arguments
      `(#:tests? #f
        #:phases
-       ;; The build scripts are are in cpp/.
        (modify-phases %standard-phases
-         (add-after 'unpack 'pre-configure
+         (add-after 'unpack 'chdir
            (lambda _
              (chdir "cpp")))
-           ;; The source does not have a ./configure script.
-           (delete 'configure)
-           (replace 'install
+         ;; The source does not have a ./configure script.
+         (delete 'configure)
+         (replace 'install
            ;; The Makefile lacks an ‘install’ target.
            (lambda* (#:key outputs #:allow-other-keys)
-              (let* ((out (assoc-ref outputs "out"))
-                      (lib (string-append out "/lib"))
-                      (include (string-append out "/include")))
-                    (mkdir-p lib)
-                    (mkdir-p include)
-                    (install-file "qrcodegen.hpp" include)
-                    (install-file "qrcodegen.cpp" include)
-                    (install-file "qrcodegen.o" lib)
-                    (install-file "libqrcodegencpp.a" lib)
-             #t))))))
+             (let* ((out (assoc-ref outputs "out"))
+                    (lib (string-append out "/lib"))
+                    (include (string-append out "/include")))
+               (mkdir-p lib)
+               (mkdir-p include)
+               (install-file "qrcodegen.hpp" include)
+               (install-file "qrcodegen.cpp" include)
+               (install-file "qrcodegen.o" lib)
+               (install-file "libqrcodegencpp.a" lib)))))))
     (home-page "https://github.com/nayuki/QR-Code-generator")
     (synopsis "High-quality QR Code generator library - C++ version")
     (description
