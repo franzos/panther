@@ -261,18 +261,6 @@ use in your code.")
     (description "Please use Python2.7+. Also compatible with Python 3.0+.")
     (license license:expat)))
 
-(define-public python-click-8
-  (package
-    (inherit python-click)
-    (name "python-click")
-    (version "8.0.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (pypi-uri "click" version))
-       (sha256
-        (base32 "0ymdyf37acq4qxh038q0xx44qgj6y2kf0jd0ivvix6qij88w214c"))))))
-
 (define-public python-persist-queue
   (package
     (name "python-persist-queue")
