@@ -76,7 +76,7 @@ store all files from all module directories on a disk")
 (define-public pnpm-9
   (package
     (name "pnpm")
-    (version "9.15.5")
+    (version "9.15.9")
     (source
      (origin
        (method url-fetch)
@@ -87,7 +87,7 @@ store all files from all module directories on a disk")
                              ("x86_64-linux" "x64")
                              ("aarch64-linux" "arm64"))))
        (sha256
-        (base32 "02nwfl15rhx0vjfm5za6grg1748kdlqkw6yfz21g4sgcv3sfiadb"))))
+        (base32 "1h3zl7zmjfnkvxc6s7sr6xf4vrzjhpzpysg514yq5g6sri0jm3q3"))))
     (build-system trivial-build-system)
     (arguments
      `(#:modules ((guix build utils))
