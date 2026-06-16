@@ -11,6 +11,7 @@
   #:use-module (guix git-download)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system trivial)
+  #:use-module (gnu packages base)
   #:use-module (gnu packages bash)
   #:use-module (px packages python-xyz))
 
@@ -36,10 +37,11 @@
                                 (srfi srfi-26))
                    (let* ((source (assoc-ref %build-inputs "source"))
                           (bash (assoc-ref %build-inputs "bash"))
+                          (coreutils (assoc-ref %build-inputs "coreutils"))
                           (lib-dir (string-append %output "/lib/firmware")))
                      (mkdir-p lib-dir)
                      (setenv "PATH"
-                             (string-append (string-append bash "/bin:")))
+                             (string-append bash "/bin:" coreutils "/bin"))
                      (copy-recursively source ".")
                      (substitute* "go.sh"
                        (("\\$\\{ROOT\\}")
@@ -47,9 +49,10 @@
                      (substitute* "go.sh"
                        (("\\$\\{VERSION\\}")
                         ,version))
-                     (invoke "./go.sh")
+                     (invoke (string-append bash "/bin/bash") "go.sh")
                      #t))))
-    (inputs `(("bash" ,bash)))
+    (inputs `(("bash" ,bash)
+              ("coreutils" ,coreutils)))
     (home-page "https://thesofproject.github.io")
     (synopsis "SOF Firmware and Topology Binaries.")
     (description
