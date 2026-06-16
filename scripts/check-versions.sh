@@ -79,7 +79,8 @@ gh_latest_semver() {
 # Fetch latest crate version
 crate_latest() {
     local crate="$1"
-    curl -sf "https://crates.io/api/v1/crates/$crate" \
+    curl -sf -A "panther channel package updates (codeberg.org/gofranz/panther)" \
+        "https://crates.io/api/v1/crates/$crate" \
         | jq -r '.crate.newest_version // empty' 2>/dev/null || return 1
 }
 
@@ -294,6 +295,7 @@ gh_release "tpm2-software/tpm2-tss-engine" "tpm2-tss-engine"
 gh_release "tpm2-software/tpm2-tools" "tpm2-tools"
 gh_release "tpm2-software/tpm2-abrmd" "tpm2-abrmd"
 gh_release "tpm2-software/tpm2-pkcs11" "tpm2-pkcs11"
+gh_release "acshk/acsccid" "acsccid"
 gh_release "kaii-lb/overskride" "overskride"
 gh_release "strawberrymusicplayer/strawberry" "strawberry"
 gh_release "flxzt/rnote" "rnote"
@@ -316,7 +318,6 @@ gh_release "franzos/vatic" "vatic"
 gh_release "franzos/vpnmux" "vpnmux"
 gh_release "FastFlowLM/FastFlowLM" "fastflowlm"
 gh_release "importantimport/hatsu" "hatsu"
-gh_release "pranshuparmar/witr" "witr"
 gh_release "amd/xdna-driver" "xrt-plugin-amdxdna"
 gh_release "Jmgr/actiona" "actiona"
 gh_release "Huluti/Curtail" "curtail"
@@ -330,6 +331,8 @@ gh_release "franzos/guix-install" "guix-install"
 gh_release "rustmailer/bichon" "bichon"
 gh_release "peteonrails/voxtype" "voxtype"
 gh_release "firecat53/networkmanager-dmenu" "networkmanager-dmenu"
+gh_release "opentofu/opentofu" "opentofu"
+gh_release "franzos/guix-rs" "guix-gui"
 gh_release "djlint/djLint" "djlint"
 gh_release "biomejs/biome" "biome"
 echo ""
@@ -376,6 +379,7 @@ manual "monit"           "https://mmonit.com/monit/changes/"
 manual "xrt"             "https://github.com/Xilinx/XRT/releases"
 manual "mastodonpp"      "https://schlomp.space/tastytea/mastodonpp/releases (domain offline)"
 manual "ghostty"         "https://github.com/dariogriffo/ghostty-debian/releases"
+manual "ectool"          "https://gitlab.howett.net/DHowett/ectool/-/commits/master (git-pinned)"
 manual "noctalia-qs"     "https://github.com/noctalia-dev/noctalia-qs/commits/main (git-pinned)"
 manual "thunderbird"     "https://archive.mozilla.org/pub/thunderbird/releases/"
 manual "bitwig-studio"   "https://www.bitwig.com/download/"
@@ -385,6 +389,7 @@ manual "rtkit"           "https://gitlab.freedesktop.org/pipewire/rtkit/-/tags"
 manual "chkrootkit"      "http://www.chkrootkit.org/"
 manual "easyeffects-presets-framework" "https://github.com/FrameworkComputer/linux-docs (git-pinned)"
 manual "litebrowser"     "https://github.com/litehtml/litebrowser-linux (git-pinned)"
+manual "radicle-desktop" "https://radicle.dev/desktop"
 echo ""
 
 # --- Summary ---
