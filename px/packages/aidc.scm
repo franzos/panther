@@ -32,8 +32,11 @@
          (sha256
           (base32 "13wzs7dhb7vv7j9i40gib4ns9bfsp4kkdx4gkgykgqqb4imvvvvp"))))
       (arguments
+       ;; GCC 13+ no longer transitively includes <cstdint>, so force-include it
+       ;; for the textcodec sources that use uint8_t without including it.
        '(#:tests? #f
-         #:configure-flags '("-DBUILD_BLACKBOX_TESTS=OFF")))
+         #:configure-flags '("-DBUILD_BLACKBOX_TESTS=OFF"
+                             "-DCMAKE_CXX_FLAGS=-include cstdint")))
       (build-system cmake-build-system)
       (native-inputs (list fmt-8 googletest))
       (synopsis "C++ port of ZXing")
