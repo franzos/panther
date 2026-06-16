@@ -64,25 +64,6 @@ so that it can be used in Haskell programs uniformly on all platforms.")
 time zone conversions in a pure and efficient way.")
     (license license:asl2.0)))
 
-(define-public ghc-attoparsec-aeson
-  (package
-    (name "ghc-attoparsec-aeson")
-    (version "2.1.0.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (hackage-uri "attoparsec-aeson" version))
-       (sha256
-        (base32 "1a86x493mrr7h468imcdjahxfvl2rrg6b6cygvzxja046cfgnjmk"))))
-    (build-system haskell-build-system)
-    (properties '((upstream-name . "attoparsec-aeson")))
-    (inputs (list ghc-aeson))
-    (home-page "https://github.com/haskell/aeson")
-    (synopsis "Parsing of aeson's Value with attoparsec")
-    (description
-     "Compatibility package that re-exports Data.Aeson.Parser from aeson.")
-    (license license:bsd-3)))
-
 (define-public ghc-terminal-progress-bar
   (package
     (name "ghc-terminal-progress-bar")
