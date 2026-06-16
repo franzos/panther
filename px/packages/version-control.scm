@@ -260,14 +260,14 @@ rebasing of descendant commits, and comprehensive history rewriting tools.")
 (define-public keifu
   (package
     (name "keifu")
-    (version "0.3.0")
+    (version "0.4.0")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "keifu" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "0fi930sxcxxs4cjqhi5h7x9f3n7k9rf9g5kw1y1386vlk0ygjlcw"))))
+        (base32 "0xjmipnwkh57jc1dak592pn12kd7bh29y6srp4cln1zv538scvw3"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f))

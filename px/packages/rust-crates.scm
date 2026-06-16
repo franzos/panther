@@ -37477,6 +37477,7 @@
                                   rust-itoa-1.0.15
                                   rust-jobserver-0.1.34
                                   rust-js-sys-0.3.83
+                                  rust-lazy-static-1.5.0
                                   rust-libc-0.2.178
                                   rust-libgit2-sys-0.17.0+1.8.1
                                   rust-libredox-0.1.12
@@ -37489,9 +37490,11 @@
                                   rust-lock-api-0.4.14
                                   rust-log-0.4.29
                                   rust-lru-0.12.5
+                                  rust-matchers-0.2.0
                                   rust-memchr-2.7.6
                                   rust-miniz-oxide-0.8.9
                                   rust-mio-1.1.1
+                                  rust-nu-ansi-term-0.50.3
                                   rust-num-conv-0.2.0
                                   rust-num-traits-0.2.19
                                   rust-once-cell-1.21.3
@@ -37504,6 +37507,7 @@
                                   rust-parking-lot-core-0.9.12
                                   rust-paste-1.0.15
                                   rust-percent-encoding-2.3.2
+                                  rust-pin-project-lite-0.2.17
                                   rust-pkg-config-0.3.32
                                   rust-plist-1.8.0
                                   rust-potential-utf-0.1.4
@@ -37528,6 +37532,7 @@
                                   rust-serde-derive-1.0.228
                                   rust-serde-json-1.0.149
                                   rust-serde-spanned-0.6.9
+                                  rust-sharded-slab-0.1.7
                                   rust-shlex-1.3.0
                                   rust-signal-hook-0.3.18
                                   rust-signal-hook-mio-0.2.5
@@ -37557,6 +37562,11 @@
                                   rust-toml-datetime-0.6.11
                                   rust-toml-edit-0.22.27
                                   rust-toml-write-0.1.2
+                                  rust-tracing-0.1.44
+                                  rust-tracing-attributes-0.1.31
+                                  rust-tracing-core-0.1.36
+                                  rust-tracing-log-0.2.0
+                                  rust-tracing-subscriber-0.3.23
                                   rust-unicode-ident-1.0.22
                                   rust-unicode-segmentation-1.12.0
                                   rust-unicode-truncate-1.1.0
@@ -37565,6 +37575,7 @@
                                   rust-url-2.5.7
                                   rust-utf8-iter-1.0.4
                                   rust-utf8parse-0.2.2
+                                  rust-valuable-0.1.1
                                   rust-vcpkg-0.2.15
                                   rust-walkdir-2.5.0
                                   rust-wasi-0.11.1+wasi-snapshot-preview1
