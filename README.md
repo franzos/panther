@@ -38,6 +38,47 @@ Already configured if using `%os-base-services` or `%os-desktop-services`.
 
 ## Home Services
 
+### Bichon
+
+[Bichon](https://github.com/rustmailer/bichon) is a self-hosted email archiver: it syncs IMAP accounts, indexes messages for full-text search, and serves a REST API and web interface. It is not an email client — it can't send, compose, or reply. This runs it as a user daemon, with data under `$XDG_DATA_HOME/bichon` and the log under `$XDG_LOG_HOME`.
+
+It reuses the shared `bichon-configuration` record from `(px services mail)` — see the [system service](#bichon-1) for the full field list. The encryption password is read from a file you manage, never baked into the store. Differences from the system service:
+
+- **No system user/group** — runs as your user; `user`/`group` are ignored.
+- **Data under XDG** — `root-dir` defaults to `$XDG_DATA_HOME/bichon` (`~/.local/share/bichon`) instead of `/var/lib/bichon`, unless you set it explicitly. The full-text index and blob store nest under it (`bichon-indices/`, `bichon-storage/`), and the daemon log goes to `$XDG_LOG_HOME/bichon.log` (`~/.local/var/log/bichon.log`). The service creates the data and log directories on activation.
+- **Binds localhost** — `bind-ip` defaults to `127.0.0.1`, not all interfaces. Set it explicitly to expose the daemon on your network.
+
+**Encryption password:** create the password file before first start (the daemon won't start without it):
+
+```bash
+install -d -m 700 ~/.config/bichon
+printf '%s' "$(openssl rand -base64 48)" > ~/.config/bichon/encrypt-password
+chmod 600 ~/.config/bichon/encrypt-password
+```
+
+`printf '%s'` keeps the trailing newline out so the file is exactly the secret. Back it up — this key encrypts your stored IMAP credentials, and it's write-once.
+
+**Usage:**
+
+```scheme
+(use-modules (px home services mail)
+             (px services mail))
+
+(service home-bichon-service-type
+         (bichon-configuration
+          (encrypt-password-file "/home/user/.config/bichon/encrypt-password")))
+```
+
+**Default credentials:** first start creates `admin` / `admin@bichon` — change it immediately via the web interface (Settings → Profile).
+
+**Service management:**
+
+```bash
+herd start bichon    # Start daemon
+herd stop bichon     # Stop daemon
+herd status bichon   # Check status
+```
+
 ### Darkman
 
 Darkman is a framework for managing dark/light mode transitions. It automatically switches themes based on sunrise/sunset times.
@@ -195,6 +236,78 @@ herd status podman-healthcheckd   # Check status
 ```
 
 ## System Services
+
+### Bichon
+
+[Bichon](https://github.com/rustmailer/bichon) is a self-hosted email archiver written in Rust: it syncs IMAP accounts, indexes messages for full-text search (embedded storage — no external database), and serves a REST API and web interface on port `15630`. It is not an email client — it cannot send, compose, or reply. The service creates a dedicated `bichon:bichon` system user, the data directory at `/var/lib/bichon`, and rotates `/var/log/bichon.log` — no manual setup beyond the encryption password.
+
+**Encryption password:** Bichon encrypts stored credentials with a password you provide. The service takes a *path* to a file holding that password (`encrypt-password-file`), so the secret never lands in the world-readable store. Create it before first start:
+
+```bash
+sudo install -d -m 700 /etc/bichon
+openssl rand -base64 48 | tr -d '\n' | sudo tee /etc/bichon/encrypt-password >/dev/null
+sudo chmod 600 /etc/bichon/encrypt-password
+```
+
+`tr -d '\n'` strips the trailing newline so the file is exactly the secret. Back it up — this key encrypts your stored IMAP credentials, and it's write-once: regenerating it against an existing data directory makes the stored data undecryptable. Activation warns (without failing) if the file is missing.
+
+**Usage:**
+
+```scheme
+(use-modules (px services mail))
+
+;; Minimal — encrypt-password-file is required
+(service bichon-service-type
+         (bichon-configuration
+          (encrypt-password-file "/etc/bichon/encrypt-password")))
+
+;; Behind a reverse proxy, with the SMTP receiver enabled
+(service bichon-service-type
+         (bichon-configuration
+          (encrypt-password-file "/etc/bichon/encrypt-password")
+          (bind-ip "127.0.0.1")
+          (public-url "https://archive.example.org")
+          (enable-smtp? #t)))
+```
+
+**Default credentials:** first start creates `admin` / `admin@bichon` — change it immediately via the web interface (Settings → Profile).
+
+**Configuration options:**
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `package` | `bichon` | The bichon package to use |
+| `root-dir` | `"/var/lib/bichon"` | Data directory (`BICHON_ROOT_DIR`) |
+| `encrypt-password-file` | (required) | Path to a file holding the credential-encryption password (`BICHON_ENCRYPT_PASSWORD_FILE`) |
+| `http-port` | `15630` | HTTP / web interface port (`BICHON_HTTP_PORT`) |
+| `bind-ip` | unset → `0.0.0.0` | Listen address; bichon binds all interfaces when unset (`BICHON_BIND_IP`) |
+| `public-url` | unset | Public URL used in generated links (`BICHON_PUBLIC_URL`) |
+| `base-url` | unset | Base path when behind a reverse proxy (`BICHON_BASE_URL`) |
+| `log-level` | `"info"` | `trace` / `debug` / `info` / `warn` / `error` (`BICHON_LOG_LEVEL`) |
+| `enable-smtp?` | `#f` | Enable the SMTP receiver (`BICHON_ENABLE_SMTP`) |
+| `smtp-port` | `2525` | SMTP receiver port (`BICHON_SMTP_PORT`) |
+| `index-dir` | `{root}/bichon-indices` | Full-text index directory (`BICHON_INDEX_DIR`) |
+| `data-dir` | `{root}/bichon-storage` | Blob storage directory (`BICHON_DATA_DIR`) |
+| `extra-env` | `'()` | Extra `BICHON_*` settings as an alist of `(string . string)` |
+| `user` | `"bichon"` | System user to run as |
+| `group` | `"bichon"` | System group |
+
+Any setting not exposed above can be passed through `extra-env`, e.g. `(extra-env '(("BICHON_SYNC_CONCURRENCY" . "8")))`.
+
+**Required ports:**
+
+- TCP/15630 — HTTP REST API and web interface
+- TCP/2525 — SMTP receiver (only when `enable-smtp?` is `#t`)
+
+**Storage caveat:** Bichon does not support writing data to network filesystems (NFS, CIFS/SMB) — `root-dir` must be on local storage.
+
+**Service management:**
+
+```bash
+herd status bichon   # Check status
+herd start bichon    # Start daemon
+herd stop bichon     # Stop daemon
+```
 
 ### Unattended Upgrade
 
