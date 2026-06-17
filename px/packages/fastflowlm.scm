@@ -18,7 +18,7 @@
   #:use-module (gnu packages video)         ;; ffmpeg
   #:use-module (gnu packages readline)
   #:use-module (gnu packages ncurses)
-  #:use-module (gnu packages ninja)
+  #:use-module (gnu packages build-tools)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages linux)         ;; util-linux (uuid)
   #:use-module (gnu packages instrumentation) ;; systemtap
