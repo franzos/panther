@@ -7,6 +7,7 @@
   #:use-module (guix download)
   #:use-module (guix gexp)
   #:use-module (guix git-download)
+  #:use-module (guix base32)
   #:use-module (guix build-system cargo)
   #:use-module (guix build-system trivial)
   #:use-module (gnu packages)
@@ -14,7 +15,10 @@
   #:use-module (gnu packages compression)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages tls)
+  #:use-module (gnu packages node)
+  #:use-module (gnu packages nss)
   #:use-module (gnu packages rust)
+  #:use-module (px packages node)
   #:use-module (px packages rust)
   #:use-module (px self))
 
@@ -44,20 +48,18 @@ Maildir, Notmuch, SMTP, and Sendmail backends, along with OAuth 2.0
 authorization for various email providers including Gmail, Outlook, and iCloud.")
     (license license:expat)))
 
-(define-public bichon
-  (package
-    (name "bichon")
-    (version "1.5.1")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://github.com/rustmailer/bichon")
-             (commit version)))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "115y1zm5jgfa78ibw720xc8b0nkj0hkidb9cv6xibn5zv1279nbh"))
-       (snippet
+(define bichon-version "1.5.1")
+
+(define bichon-source
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/rustmailer/bichon")
+          (commit bichon-version)))
+    (file-name (git-file-name "bichon" bichon-version))
+    (sha256
+     (base32 "115y1zm5jgfa78ibw720xc8b0nkj0hkidb9cv6xibn5zv1279nbh"))
+    (snippet
         #~(begin
             (use-modules (guix build utils)
                          (ice-9 regex)
@@ -93,6 +95,39 @@ authorization for various email providers including Gmail, Outlook, and iCloud."
             (rewrite-file "crates/cli/Cargo.toml"
                           "outlook-pst = \\{ git[^}]+\\}"
                           "outlook-pst = { path = \"../../vendored-git/outlook-pst\" }")))))
+
+;; Build the Vite/TypeScript frontend in a fixed-output (network-enabled,
+;; hash-pinned) derivation; its dist/ is embedded by RustEmbed in the server.
+(define bichon-web-dist
+  (computed-file
+   "bichon-web-dist"
+   (with-imported-modules '((guix build utils))
+     #~(begin
+         (use-modules (guix build utils))
+         (setenv "PATH" (string-append #$node "/bin:" #$pnpm-9 "/bin:"
+                                       (getenv "PATH")))
+         (setenv "HOME" "/tmp")
+         (setenv "SSL_CERT_DIR" (string-append #$nss-certs "/etc/ssl/certs"))
+         (setenv "SSL_CERT_FILE"
+                 (string-append #$nss-certs "/etc/ssl/certs/ca-certificates.crt"))
+         (copy-recursively (string-append #$bichon-source "/web") "/tmp/web")
+         (with-directory-excursion "/tmp/web"
+           ;; Skip native postinstall scripts (@swc/core, @parcel/watcher,
+           ;; esbuild); the prebuilt platform binaries are installed anyway.
+           (invoke "pnpm" "install" "--frozen-lockfile" "--ignore-scripts")
+           ;; Run vite directly: the build script's `tsc -b` type-check gets
+           ;; killed in the sandbox and isn't needed to emit dist/.
+           (invoke "node" "node_modules/vite/bin/vite.js" "build"))
+         (copy-recursively "/tmp/web/dist" #$output)))
+   #:options `(#:hash-algo sha256
+               #:hash ,(base32 "0jkrp1z1m3fp8g4scd0gv1glml56knlyya9cn49mylslyn3yskkp")
+               #:recursive? #t)))
+
+(define-public bichon
+  (package
+    (name "bichon")
+    (version bichon-version)
+    (source bichon-source)
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
@@ -102,13 +137,13 @@ authorization for various email providers including Gmail, Outlook, and iCloud."
        '("crates/server" "crates/cli" "crates/admin")
        #:phases
        (modify-phases %standard-phases
-         (add-after 'unpack 'create-web-placeholder
-           (lambda _
-             ;; Minimal web/dist folder for RustEmbed in the server crate
-             (mkdir-p "web/dist")
-             (call-with-output-file "web/dist/index.html"
-               (lambda (port)
-                 (display "<!DOCTYPE html><html><body>Web UI</body></html>" port)))))
+         (add-after 'unpack 'install-web-dist
+           (lambda* (#:key native-inputs inputs #:allow-other-keys)
+             ;; Prebuilt frontend for RustEmbed in the server crate
+             (mkdir-p "web")
+             (copy-recursively
+              (assoc-ref (or native-inputs inputs) "bichon-web-dist")
+              "web/dist")))
          ;; Place the two git-fetched deps under ./vendored-git/ so member
          ;; crates can reference them via path.  outlook-pst's crates/pst is
          ;; extracted as a standalone package — cargo walks up to bichon's
@@ -180,7 +215,8 @@ tracing = \"0.1\"
 " port))))))))
              (for-each handle-input inputs))))))
     (native-inputs
-     (list pkg-config))
+     `(("pkg-config" ,pkg-config)
+       ("bichon-web-dist" ,bichon-web-dist)))
     (inputs
      (cons* openssl `(,zstd "lib") (px-cargo-inputs 'bichon)))
     (home-page "https://github.com/rustmailer/bichon")
