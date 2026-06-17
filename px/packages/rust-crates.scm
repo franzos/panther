@@ -2489,6 +2489,10 @@
   (crate-source "chrono" "0.4.43"
                 "06312amlyys4kkjazl13mbxw0j2f7zxygzjkr1yk7s2sn57p9i7s"))
 
+(define rust-chrono-0.4.45
+  (crate-source "chrono" "0.4.45"
+                "09rkcgk6is2sdhqs9142zv8xqnj8ryx8m9hknllqwyv9wxi9x9qs"))
+
 (define rust-chrono-humanize-0.2.3
   (crate-source "chrono-humanize" "0.2.3"
                 "0fq25fcdqd7s39dx81hq123210q4lpcbjdz82jl2fy6jnkk2g5kr"))
@@ -5780,6 +5784,10 @@
 (define rust-fjall-3.1.4
   (crate-source "fjall" "3.1.4"
                 "0ly4r09yxrp1xnmkdiriakyjw1wzwlpa6jlygn6igbhmv2s2aaxn"))
+
+(define rust-fjall-3.1.5
+  (crate-source "fjall" "3.1.5"
+                "04silj0zzbs66zcl6hsmjz89pkzcz6cz54z01750wzk05m1cv2h3"))
 
 (define rust-flate2-1.0.27
   (crate-source "flate2" "1.0.27"
@@ -9203,6 +9211,10 @@
 (define rust-http-1.4.1
   (crate-source "http" "1.4.1"
                 "1l7k2ia57z3q7q3ka497krzps795kd3fymm2k12lr623y4nldrwb"))
+
+(define rust-http-1.4.2
+  (crate-source "http" "1.4.2"
+                "09b4p8fiivkg7wm0b59fyrn1jkm7px298ci7zb9igz6n647gaw39"))
 
 (define rust-http-body-0.4.6
   (crate-source "http-body" "0.4.6"
@@ -13059,6 +13071,10 @@
 (define rust-lsm-tree-3.1.4
   (crate-source "lsm-tree" "3.1.4"
                 "0rvbaf8ipx8vxgdw15x6j2xcndlk45xm17n1gz04xvvazxksqiz4"))
+
+(define rust-lsm-tree-3.1.5
+  (crate-source "lsm-tree" "3.1.5"
+                "1x0xx49sb5989crshcb1d3gx86ccwhxc81rlqzyfw43wg4y6ry4f"))
 
 (define rust-lsp-types-0.94.1
   (crate-source "lsp-types" "0.94.1"
@@ -19410,6 +19426,10 @@
   (crate-source "snafu" "0.9.0"
                 "1ii9r99x5qcn754m624yzgb9hzvkqkrcygf0aqh0pyb9dbnvrm6i"))
 
+(define rust-snafu-0.9.1
+  (crate-source "snafu" "0.9.1"
+                "08k5yfydxdlshivfhrdq9km8qn02r93q28gkyvazbqz2icr1586i"))
+
 (define rust-snafu-derive-0.7.5
   (crate-source "snafu-derive" "0.7.5"
                 "1gzy9rzggs090zf7hfvgp4lm1glrmg9qzh796686jnq7bxk7j04r"))
@@ -19421,6 +19441,10 @@
 (define rust-snafu-derive-0.9.0
   (crate-source "snafu-derive" "0.9.0"
                 "0h0x61kyj4fvilcr2nj02l85shw1ika64vq9brf2gyna662ln9al"))
+
+(define rust-snafu-derive-0.9.1
+  (crate-source "snafu-derive" "0.9.1"
+                "1nkfi7bis72pz3w7vb64m79w49qsv20sbf19jkd471vbhr83q42z"))
 
 (define rust-snmalloc-rs-0.3.8
   (crate-source "snmalloc-rs" "0.3.8"
@@ -21076,6 +21100,10 @@
 (define rust-tokio-socks-0.5.2
   (crate-source "tokio-socks" "0.5.2"
                 "0gq40sgggz21wfpshiq8pryh062vp7m36rrz3c8c2wj60aw70iqd"))
+
+(define rust-tokio-socks-0.5.3
+  (crate-source "tokio-socks" "0.5.3"
+                "05bndwj4lrycixadgs8gxpfzvhal52n79yy7y8snpqnvc27r9qm7"))
 
 (define rust-tokio-stream-0.1.14
   (crate-source "tokio-stream" "0.1.14"
@@ -28133,7 +28161,7 @@
                               rust-cfg-if-1.0.4
                               rust-cfg-aliases-0.2.1
                               rust-chacha20-0.10.0
-                              rust-chrono-0.4.44
+                              rust-chrono-0.4.45
                               rust-clap-4.6.1
                               rust-clap-builder-4.6.0
                               rust-clap-derive-4.6.1
@@ -28202,7 +28230,7 @@
                               rust-fastdivide-0.4.2
                               rust-fastrand-2.4.1
                               rust-find-msvc-tools-0.1.9
-                              rust-fjall-3.1.4
+                              rust-fjall-3.1.5
                               rust-flate2-1.1.9
                               rust-flume-0.12.0
                               rust-fnv-1.0.7
@@ -28248,7 +28276,7 @@
                               rust-html2text-0.17.1
                               rust-html5ever-0.39.0
                               rust-htmlescape-0.3.1
-                              rust-http-1.4.1
+                              rust-http-1.4.2
                               rust-http-body-1.0.1
                               rust-http-body-util-0.1.3
                               rust-httparse-1.10.1
@@ -28299,7 +28327,7 @@
                               rust-lru-0.16.4
                               rust-lru-0.18.0
                               rust-lru-slab-0.1.2
-                              rust-lsm-tree-3.1.4
+                              rust-lsm-tree-3.1.5
                               rust-lz4-flex-0.13.0
                               rust-mail-auth-0.8.0
                               rust-mail-builder-0.4.4
@@ -28470,8 +28498,8 @@
                               rust-slab-0.4.12
                               rust-smallvec-1.15.1
                               rust-smtp-proto-0.2.1
-                              rust-snafu-0.9.0
-                              rust-snafu-derive-0.9.0
+                              rust-snafu-0.9.1
+                              rust-snafu-derive-0.9.1
                               rust-socket2-0.6.3
                               rust-spin-0.9.8
                               rust-spinning-top-0.3.0
@@ -28516,7 +28544,7 @@
                               rust-tokio-io-timeout-1.2.1
                               rust-tokio-macros-2.7.0
                               rust-tokio-rustls-0.26.4
-                              rust-tokio-socks-0.5.2
+                              rust-tokio-socks-0.5.3
                               rust-tokio-stream-0.1.18
                               rust-tokio-util-0.7.18
                               rust-toml-0.9.12+spec-1.1.0
@@ -28560,7 +28588,7 @@
                               rust-utf8-ranges-1.0.5
                               rust-utf8-iter-1.0.4
                               rust-utf8parse-0.2.2
-                              rust-uuid-1.23.1
+                              rust-uuid-1.23.2
                               rust-valuable-0.1.1
                               rust-varint-rs-2.2.0
                               rust-vcpkg-0.2.15
