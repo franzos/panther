@@ -40,7 +40,17 @@
     (name "gst-plugins-bad-with-webrtc")
     (inputs
      (modify-inputs (package-inputs gst-plugins-bad)
-       (replace "libnice" libnice-0.1.23)))))
+       (replace "libnice" libnice-0.1.23)))
+    (arguments
+     (substitute-keyword-arguments (package-arguments gst-plugins-bad)
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (add-after 'adjust-tests 'disable-vkwindow-test
+              (lambda _
+                ;; vkwindow opens a Vulkan window; hangs (600s timeout) in the
+                ;; headless build sandbox where vulkan is present but no GPU.
+                (substitute* "tests/check/meson.build"
+                  ((".*libs/vkwindow\\.c.*") ""))))))))))
 
 ;; Yields libgstqmlgl.so for qmlgl support
 (define-public gst-plugins-good-qmlgl
