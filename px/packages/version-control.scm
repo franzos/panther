@@ -67,32 +67,6 @@ repositories, pull requests, pipelines, and other Bitbucket features, with
 OAuth and app-password authentication and secure credential storage.")
     (license license:expat)))
 
-(define-public forgejo-cli
-  (package
-    (name "forgejo-cli")
-    (version "0.5.0")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://codeberg.org/forgejo-contrib/forgejo-cli")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name name version))
-       (sha256
-        (base32 "1x3v56my22lckrpkcnpmf90vrn8m45ysdn0k12dfssldr8cjxapa"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:install-source? #f))
-    (native-inputs (list pkg-config perl))
-    (inputs (cons* openssl (px-cargo-inputs 'forgejo-cli)))
-    (home-page "https://codeberg.org/forgejo-contrib/forgejo-cli")
-    (synopsis "CLI tool for Forgejo")
-    (description
-     "forgejo-cli (@command{fj}) is a command-line interface for Forgejo,
-the self-hosted Git forge.  It supports interacting with issues, pull
-requests, repositories, and other Forgejo features from the terminal.")
-    (license (list license:asl2.0 license:expat))))
-
 (define-public gh
   (package
     (name "gh")
