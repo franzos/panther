@@ -29,6 +29,44 @@
   #:use-module (px packages go)
   #:use-module (px self))
 
+(define-public bitbucket-cli
+  (package
+    (name "bitbucket-cli")
+    (version "0.28.2")
+    (source (origin
+              (method go-fetch-vendored)
+              (uri (go-git-reference
+                    (url "https://github.com/avivsinai/bitbucket-cli")
+                    (commit (string-append "v" version))
+                    (sha (base32
+                          "16c1v811ic79kkgr53izcpiikgjxwic6j0sis8dyqdblsnr1g0ba"))))
+              (sha256
+               (base32
+                "1kgipcbdn3pxblxpxcaaij6mnxmlvdwnynhzvr4xpz802iq2mavq"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/avivsinai/bitbucket-cli/cmd/bkt"
+      #:unpack-path "github.com/avivsinai/bitbucket-cli"
+      #:install-source? #f
+      #:go go-1.26
+      #:build-flags
+      #~(list (string-append
+               "-ldflags=-s -w -X "
+               "github.com/avivsinai/bitbucket-cli/internal/build.versionFromLdflags="
+               #$version))
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'check))))
+    (home-page "https://github.com/avivsinai/bitbucket-cli")
+    (synopsis "Command-line interface for Bitbucket")
+    (description
+     "bitbucket-cli provides the @command{bkt} command for interacting with
+Bitbucket Cloud and Data Center from the terminal.  It supports working with
+repositories, pull requests, pipelines, and other Bitbucket features, with
+OAuth and app-password authentication and secure credential storage.")
+    (license license:expat)))
+
 (define-public forgejo-cli
   (package
     (name "forgejo-cli")
