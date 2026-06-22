@@ -27,25 +27,35 @@
 (define-public acsccid
   (package
     (name "acsccid")
-    (version "1.1.8")
+    (version "1.1.13")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "https://github.com/acshk/acsccid/archive/v"
                            version ".tar.gz"))
        (sha256
-        (base32 "1ip7lrhnrnag96x29lfpb663i2y6y0631p7i14sialkz1sr5xlb8"))))
+        (base32 "1f4ddw2fglv3fayizibxb8rwzbmawp4byppxjm6rlhdbvvii3xcw"))))
     (build-system gnu-build-system)
     (arguments
      `(#:configure-flags (list (string-append "--enable-usbdropdir=" %output
                                               "/pcsc/drivers"))
        #:phases (modify-phases %standard-phases
+                  (add-before 'bootstrap 'patch-bootstrap-gettext
+                    (lambda* (#:key inputs #:allow-other-keys)
+                      ;; bootstrap hard-codes /usr/share/gettext for config.rpath.
+                      (substitute* "bootstrap"
+                        (("/usr/share/gettext")
+                         (string-append (assoc-ref inputs "gettext")
+                                        "/share/gettext")))
+                      ;; Tarball lacks the AC_CONFIG_MACRO_DIR dir aclocal needs.
+                      (mkdir-p "m4") #t))
                   (add-after 'configure 'patch-Makefile
                     (lambda _
                       (substitute* "src/Makefile.in"
                         (("/bin/echo")
                          (which "echo"))) #t)))))
     (native-inputs `(("autoconf" ,autoconf)
+                     ("autoconf-archive" ,autoconf-archive)
                      ("automake" ,automake)
                      ("flex" ,flex)
                      ("gettext" ,gettext-minimal)
