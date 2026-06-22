@@ -37,7 +37,7 @@
   (package
     (inherit (@ (gnu packages music) strawberry))
     (name "strawberry")
-    (version "1.2.19")
+    (version "1.2.20")
     (source
      (origin
        (method git-fetch)
@@ -46,7 +46,20 @@
              (commit version)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1bxrqqi2xi057v9qaz73dl44jyyhpqvi51pjs6pzprfiqgy1gi11"))))
+        (base32 "1d55nw3w2mpk2xg25lnrhpr3ymb8zsqisczvzbw8h6dqw7r5k2gi"))))
+    (arguments
+     (substitute-keyword-arguments
+         (package-arguments (@ (gnu packages music) strawberry))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            ;; The waveform tests added in 1.2.20 include
+            ;; <gst/app/gstappsink.h> but the test targets only link
+            ;; gstreamer-base, not gstreamer-app.
+            (add-after 'unpack 'fix-test-gstreamer-app
+              (lambda _
+                (substitute* "tests/CMakeLists.txt"
+                  (("PkgConfig::GSTREAMER_BASE")
+                   "PkgConfig::GSTREAMER_BASE\n  PkgConfig::GSTREAMER_APP"))))))))
     (inputs
      (modify-inputs (package-inputs (@ (gnu packages music) strawberry))
        (append kdsingleapplication
