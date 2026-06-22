@@ -185,35 +185,6 @@ use in your code.")
     (description "todo.")
     (license license:psfl)))
 
-(define-public python-block-io
-  (package
-    (name "python-block-io")
-    (version "1.1.15")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (string-append
-             "https://github.com/BlockIo/block_io-python/archive/" version
-             ".tar.gz"))
-       (sha256
-        (base32 "15n8qapdlx8n9f27vj9qr34wgfahwgnqwh039plc6abs4flqjjrb"))))
-    (build-system python-build-system)
-    (arguments
-     `(#:tests? #f
-       #:phases (modify-phases %standard-phases
-                  (delete 'sanity-check))))
-    (native-inputs (list python-setuptools))
-    (propagated-inputs `(("python-requests" ,python-requests)
-                         ("python-pycryptodome" ,python-pycryptodome)
-                         ("python-ecdsa" ,python-ecdsa)
-                         ("python-six" ,python-six)
-                         ("python-base58" ,python-base58)))
-    (home-page "https://github.com/BlockIo/block_io-python")
-    (synopsis
-     "This Python package is the official reference client for the Block.io payments API.")
-    (description "Please use Python2.7+. Also compatible with Python 3.0+.")
-    (license license:expat)))
-
 (define-public python-persist-queue
   (package
     (name "python-persist-queue")
