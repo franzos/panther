@@ -209,29 +209,6 @@ use in your code.")
      "Python-requests-cache uses python-requests, so it needs an available installation of python-requests.")
     (license license:expat)))
 
-(define-public python-etherscan
-  (package
-    (name "python-etherscan")
-    (version "0.2.3")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (string-append
-             "https://files.pythonhosted.org/packages/d0/7a/d2c0cc7ce6c54854931f0e069997f1b82dafeff1bdd302e34153ccca9f59/etherscan-"
-             version ".tar.gz"))
-       (sha256
-        (base32 "1qqgiy6q8kdsl3gvclgvbnzni8wm3yccsxsq85dlc7mw2dfzhapp"))))
-    (build-system python-build-system)
-    (arguments
-     `(#:tests? #f))
-    (native-inputs (list python-setuptools))
-    (propagated-inputs `(("python-requests-cache" ,python-requests-cache)))
-    (home-page "https://github.com/neoctobers/etherscan")
-    (synopsis "Python-etherscan provides a wrapper for Etherscan.io API.")
-    (description
-     "Python-etherscan uses python-requests-cache, so it needs an available installation of python-requests-cache.")
-    (license license:expat)))
-
 (define-public python-block-io
   (package
     (name "python-block-io")
