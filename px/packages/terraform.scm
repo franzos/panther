@@ -12,14 +12,14 @@
 (define-public opentofu
   (package
     (name "opentofu")
-    (version "1.12.2")
+    (version "1.12.3")
     (source (origin
               (method go-fetch-vendored)
               (uri (go-git-reference
                     (url "https://github.com/opentofu/opentofu")
                     (commit (string-append "v" version))
                     (sha (base32
-                          "0jbnzzmx6xy5bpmjgqcdc8n65f6knw4rf4ijqn9dav0lhzr0vc0w"))))
+                          "1fzh2yg59ayjdd8ld5sg3wbwqjqzhzm4is4gd5yvc69cngxgrspw"))))
               (sha256
                (base32
                 "0kh2x3xl9j5f7zpbjnnz7m5s69d9zqj4s8nb04g4p2r0yn7vqnhf"))))
@@ -34,6 +34,13 @@
       #~(list "-ldflags=-s -w -X github.com/opentofu/opentofu/version.dev=no")
       #:phases
       #~(modify-phases %standard-phases
+          ;; The released git tag embeds a stale version/VERSION file, so
+          ;; stamp the real version like upstream's release pipeline does.
+          (add-after 'unpack 'set-version
+            (lambda _
+              (call-with-output-file
+                  "src/github.com/opentofu/opentofu/version/VERSION"
+                (lambda (port) (display #$version port)))))
           (delete 'check))))
     (home-page "https://opentofu.org")
     (synopsis "Open-source infrastructure as code tool")
