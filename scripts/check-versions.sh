@@ -125,23 +125,28 @@ gitlab_latest() {
 # Extract package version from .scm file (match name exactly via the (name "...") field)
 pkg_version() {
     local pkg="$1"
-    local ver
-    ver=$(grep -A5 "(name \"$pkg\")" "$PKG_DIR"/*.scm 2>/dev/null \
-        | grep -oP '\(version "?\K[^")]+' | head -1) || true
-    # Handle let-bound version: (let ((version "X.Y.Z")) ... (version version))
-    if [ "$ver" = "version" ]; then
-        ver=$(grep -B10 "(name \"$pkg\")" "$PKG_DIR"/*.scm 2>/dev/null \
-            | grep -oP '\(version "\K[^"]+' | head -1) || true
-    fi
-    # Handle variable-bound version: (version %my-var) with (define %my-var "X.Y.Z")
-    if [[ "$ver" =~ ^% ]]; then
-        ver=$(grep -hE "^\(define $ver " "$PKG_DIR"/*.scm 2>/dev/null \
-            | grep -oP '\(define \S+ "\K[^"]+' | head -1) || true
-    fi
-    # Fall back: inherited packages (no explicit (name "...") field)
-    if [ -z "$ver" ]; then
-        ver=$(grep -A10 "^(define-public $pkg\$" "$PKG_DIR"/*.scm 2>/dev/null \
-            | grep -oP '\(version "\K[^"]+' | head -1) || true
+    local ver var
+    # Gather quoted literal versions from every definition of this package: the
+    # named one, any version-suffixed variants that inherit it (foo-0.6, foo-0.9)
+    # and the bare inheriting default. Report the NEWEST, not the first found.
+    ver=$( {
+        grep -A5 "(name \"$pkg\")" "$PKG_DIR"/*.scm 2>/dev/null
+        grep -A10 -hE "^\(define-public ${pkg}(\$|-[0-9])" "$PKG_DIR"/*.scm 2>/dev/null
+    } | grep -oP '\(version "\K[^"]+' | sort -V | tail -1) || true
+    [ -n "$ver" ] && { echo "$ver"; return; }
+
+    # Let-bound version: (let ((version "X.Y.Z")) ... (version version))
+    ver=$(grep -B10 "(name \"$pkg\")" "$PKG_DIR"/*.scm 2>/dev/null \
+        | grep -oP '\(version "\K[^"]+' | head -1) || true
+    [ -n "$ver" ] && { echo "$ver"; return; }
+
+    # Variable-bound version: (version some-var) with (define some-var "X.Y.Z").
+    # Covers both %-prefixed and plain identifiers (e.g. bichon-version).
+    var=$(grep -A5 "(name \"$pkg\")" "$PKG_DIR"/*.scm 2>/dev/null \
+        | grep -oP '\(version \K[^")[:space:]]+' | grep -vx version | head -1) || true
+    if [ -n "$var" ]; then
+        ver=$(grep -hE "^\(define $var " "$PKG_DIR"/*.scm 2>/dev/null \
+            | grep -oP "\\(define \\S+ \"\\K[^\"]+" | head -1) || true
     fi
     echo "$ver"
 }
