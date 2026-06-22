@@ -185,30 +185,6 @@ use in your code.")
     (description "todo.")
     (license license:psfl)))
 
-(define-public python-requests-cache
-  (package
-    (name "python-requests-cache")
-    (version "0.5.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (string-append
-             "https://github.com/reclosedev/requests-cache/archive/v" version
-             ".tar.gz"))
-       (sha256
-        (base32 "05r26hb1ck0q4ffm334x078nq97hz6cg0nr8nlw1vvh9rl4g0ikq"))))
-    (build-system python-build-system)
-    (arguments
-     `(#:tests? #f))
-    (native-inputs (list python-setuptools))
-    (propagated-inputs `(("python-requests" ,python-requests)))
-    (home-page "https://github.com/reclosedev/requests-cache")
-    (synopsis
-     "Python-requests-cache is a transparent persistent cache for python-requests (version >= 1.1.0) library.")
-    (description
-     "Python-requests-cache uses python-requests, so it needs an available installation of python-requests.")
-    (license license:expat)))
-
 (define-public python-block-io
   (package
     (name "python-block-io")
