@@ -518,7 +518,7 @@ and under your control.")
 (define-public rustdesk
   (package
     (name "rustdesk")
-    (version "1.4.7")
+    (version "1.4.8")
     (source
      (origin
        (method url-fetch)
@@ -527,7 +527,7 @@ and under your control.")
              version "/rustdesk-" version "-x86_64.deb"))
        (file-name (string-append "rustdesk-" version "-x86_64.deb"))
        (sha256
-        (base32 "02h770x73wdad32nx98fplcbdp4q3yymfcwhi60702mirssipxhj"))))
+        (base32 "0zjlbxyy13m5n137vswx2pshrhs31y9fwlznmcxvwhg11jjz09n4"))))
     (supported-systems '("x86_64-linux"))
     (build-system binary-build-system)
     (arguments
