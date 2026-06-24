@@ -57,14 +57,14 @@
 (define-public featherpad
   (package
     (name "featherpad")
-    (version "1.6.3")
+    (version "1.6.4")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "https://github.com/tsujan/FeatherPad/archive/V"
                            version ".tar.gz"))
        (sha256
-        (base32 "029ygxwzrncc8q437b9532fgn1caxn50g8pqw3f5as40v29vdsp1"))))
+        (base32 "0kk5w5iv1iy2w2i2ayar0zkb9qmh8v26jban49lf43fvxx5g2hhl"))))
     (build-system cmake-build-system)
     (arguments
      `(#:tests? #f))
