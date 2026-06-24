@@ -9,6 +9,7 @@
   #:use-module (guix build-system cargo)
   #:use-module (guix build-system copy)
   #:use-module (guix build-system go)
+  #:use-module (guix build-system pyproject)
   #:use-module (guix gexp)
   #:use-module (nonguix build-system binary)
   #:use-module (nonguix licenses)
@@ -21,10 +22,14 @@
   #:use-module (gnu packages golang)
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages python-build)
+  #:use-module (gnu packages python-xyz)
+  #:use-module (gnu packages qt)
   #:use-module (gnu packages tls)
   #:use-module (gnu packages perl)
   #:use-module (gnu packages rust)
   #:use-module (gnu packages rust-apps)
+  #:use-module (gnu packages version-control)
   #:use-module (gnu packages webkit)
   #:use-module (px packages go)
   #:use-module (px self))
@@ -209,6 +214,74 @@ branches while still having them applied to your working directory.  Features
 include virtual branches, easy commit management, and GitHub integration.")
     (license (nonfree "https://github.com/gitbutlerapp/gitbutler/blob/master/LICENSE.md"
                       "FSL-1.1-Apache-2.0; converts to Apache 2.0 after 2 years."))))
+
+(define-public git-cola
+  (package
+    (name "git-cola")
+    (version "4.18.2")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/git-cola/git-cola")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0fnq6vdgr0jb3w8gnbm4bk9lvq2v0qaw0ybrqdl6857nb1fpsj51"))))
+    (build-system pyproject-build-system)
+    (arguments
+     (list
+      ;; Tests need a running Git, a writable HOME and pull in extra tooling
+      ;; (pytest-ruff, pytest-checkdocs) that is not packaged.
+      #:tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'pretend-version
+            (lambda _
+              ;; setuptools_scm needs the .git history, which is absent in
+              ;; the release checkout, so provide the version explicitly.
+              (setenv "SETUPTOOLS_SCM_PRETEND_VERSION" #$version)))
+          (add-after 'install 'install-data
+            (lambda _
+              (let ((apps (string-append #$output "/share/applications"))
+                    (icons (string-append #$output
+                                          "/share/icons/hicolor/scalable/apps"))
+                    (metainfo (string-append #$output "/share/metainfo")))
+                (for-each (lambda (file)
+                            (install-file file apps))
+                          (find-files "share/applications" "\\.desktop$"))
+                (install-file "cola/icons/git-cola.svg" icons)
+                (for-each (lambda (file)
+                            (install-file file metainfo))
+                          (find-files "share/metainfo" "\\.xml$")))))
+          (add-after 'create-entrypoints 'wrap-git
+            (lambda _
+              (for-each
+               (lambda (prog)
+                 (wrap-program (string-append #$output "/bin/" prog)
+                   `("PATH" ":" prefix (,(string-append #$git "/bin")))))
+               '("git-cola" "git-dag" "cola"
+                 "git-cola-sequence-editor")))))))
+    (native-inputs
+     (list python-setuptools
+           python-setuptools-scm
+           python-wheel))
+    (inputs
+     (list bash-minimal
+           git
+           python-polib
+           python-pyqt-6
+           python-qtpy
+           python-send2trash))
+    (home-page "https://git-cola.github.io/")
+    (synopsis "Powerful graphical user interface for Git")
+    (description
+     "Git Cola is a sleek and powerful graphical user interface for Git.  It
+lets you stage and commit changes interactively, browse history with the
+@command{git-dag} DAG visualizer, manage branches and remotes, resolve merge
+conflicts, and edit interactive rebase sequences.  Git Cola is written in
+Python and uses Qt for its interface.")
+    (license license:gpl2+)))
 
 (define-public jira-cli
   (package
