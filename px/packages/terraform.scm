@@ -22,7 +22,7 @@
                           "1fzh2yg59ayjdd8ld5sg3wbwqjqzhzm4is4gd5yvc69cngxgrspw"))))
               (sha256
                (base32
-                "0kh2x3xl9j5f7zpbjnnz7m5s69d9zqj4s8nb04g4p2r0yn7vqnhf"))))
+                "0qrjsd2gxwqprvl2a68rak2b7ni6j3v8lsw034yx0jcnv989gcss"))))
     (build-system go-build-system)
     (arguments
      (list
