@@ -48,7 +48,7 @@ Maildir, Notmuch, SMTP, and Sendmail backends, along with OAuth 2.0
 authorization for various email providers including Gmail, Outlook, and iCloud.")
     (license license:expat)))
 
-(define bichon-version "1.5.2")
+(define bichon-version "1.6.0")
 
 (define bichon-source
   (origin
@@ -58,7 +58,7 @@ authorization for various email providers including Gmail, Outlook, and iCloud."
           (commit bichon-version)))
     (file-name (git-file-name "bichon" bichon-version))
     (sha256
-     (base32 "04h7i19ldfmafqmc9f7ai89nz1kkpcd7wy32bkk7cwp7awri9w22"))
+     (base32 "11ldpw1zj53yfxnml0hqh6shhr16k8a591sk91zw3spi0c6rb5z6"))
     (snippet
         #~(begin
             (use-modules (guix build utils)
@@ -69,7 +69,7 @@ authorization for various email providers including Gmail, Outlook, and iCloud."
               (("Command::new\\(\"git\"\\)")
                "Command::new(\"echo\")")
               (("\\.args\\(&\\[\"rev-parse.*\\]\\)")
-               ".arg(\"1.5.2\")"))
+               ".arg(\"1.6.0\")"))
             ;; Replace git deps with path deps (multi-line: read/regex/write)
             (define (rewrite-file path pattern replacement)
               (let* ((content (call-with-input-file path
@@ -120,7 +120,7 @@ authorization for various email providers including Gmail, Outlook, and iCloud."
            (invoke "node" "node_modules/vite/bin/vite.js" "build"))
          (copy-recursively "/tmp/web/dist" #$output)))
    #:options `(#:hash-algo sha256
-               #:hash ,(base32 "0jkrp1z1m3fp8g4scd0gv1glml56knlyya9cn49mylslyn3yskkp")
+               #:hash ,(base32 "1scfma4r6ng4nkarchp3j1l3d64r1a29k0bxyhgdbc8pwr8bkz15")
                #:recursive? #t)))
 
 (define-public bichon
