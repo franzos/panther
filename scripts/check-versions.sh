@@ -91,6 +91,16 @@ npm_latest() {
         | jq -r '.version // empty' 2>/dev/null || return 1
 }
 
+# Fetch the latest Node.js release within a major line (e.g. 24 -> 24.18.0).
+# index.json is newest-first, so the first match is the latest in that line.
+node_latest_major() {
+    local major="$1"
+    curl -sfL "https://nodejs.org/dist/index.json" \
+        | jq -r --arg m "v$major." \
+            '[.[] | select(.version | startswith($m)) | .version][0] // empty' 2>/dev/null \
+        | sed 's/^v//'
+}
+
 # Fetch latest Forgejo (Codeberg) release tag; falls back to latest tag if no release
 forgejo_latest() {
     local repo="$1"
@@ -199,6 +209,15 @@ npm_release() {
     current=$(pkg_version "$pkg")
     [ -z "$current" ] && return
     latest=$(npm_latest "$npm_pkg" 2>/dev/null || echo "")
+    compare "$pkg" "$current" "$latest"
+}
+
+node_release() {
+    local major="$1" pkg="${2:-node}"
+    local current latest
+    current=$(pkg_version "$pkg")
+    [ -z "$current" ] && return
+    latest=$(node_latest_major "$major" 2>/dev/null || echo "")
     compare "$pkg" "$current" "$latest"
 }
 
@@ -355,6 +374,7 @@ echo ""
 
 # --- Other APIs (npm, GitLab, Forgejo) ---
 echo "Other APIs:"
+node_release 24 "node"
 gh_release_semver "microsoft/vscode" "vscode"
 npm_release "@anthropic-ai/claude-code" "claude-code"
 gitlab_release "250833" "gitlab-runner"
