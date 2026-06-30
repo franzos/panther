@@ -59,7 +59,7 @@
 (define-public flowsurface
   (package
     (name "flowsurface")
-    (version "0.8.8")
+    (version "0.8.9")
     (source
      (origin
        (method git-fetch)
@@ -68,7 +68,7 @@
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1fwsa8xasn9wg0dwq9fz9vpssbvmlw8ar3h3kdflx81kh16m3aks"))))
+        (base32 "17jzxgcz247v2pldn0q4kqk1x3iwxl0wkrb2djlq087g52chikjx"))))
     (build-system cargo-build-system)
     (arguments
      (list
