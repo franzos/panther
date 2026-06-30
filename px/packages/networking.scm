@@ -252,7 +252,7 @@ publish/subscribe, RPC-style request/reply, or service discovery.")
 ;; Licensed under the Apache License, Version 2.0
 
 (define-public tailscale
-  (let ((version "1.98.5"))
+  (let ((version "1.98.8"))
     (package
       (name "tailscale")
       (version version)
@@ -260,11 +260,11 @@ publish/subscribe, RPC-style request/reply, or service discovery.")
                 (method go-fetch-vendored)
                 (uri (go-git-reference
                       (url "https://github.com/tailscale/tailscale")
-                      (commit "v1.98.5")
-                      (sha (base32 "18qjb1iwjalzmbfya7jzyg5zxs2055k4d38ny7zs6carqyc45995"))))
+                      (commit "v1.98.8")
+                      (sha (base32 "0msh3rz75f5g4y6n744c5pc4s3yxbaqgwzxg9q87fwm3kn5jv2fw"))))
                 (sha256
                  (base32
-                  "1bwdi3vkgs9vmmm9yk5xqk9xcj4swkci0ijixf55c8px5zfp78vz"))))
+                  "1d4akbcpk1rnjhgrm6p8z8aslqw4fc0r1whg66941cgms0zini15"))))
       (build-system go-build-system)
       (arguments
        `(#:import-path "tailscale.com/cmd/tailscale"
