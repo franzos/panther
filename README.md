@@ -404,6 +404,148 @@ sudo chronyc tracking            # Show clock sync status
 sudo chronyc -N authdata         # Verify NTS: KeyID/Type/KLen should be non-zero
 ```
 
+### Forseti Stack
+
+[Forseti](https://github.com/franzos/forseti) is a login, consent, and account portal for an [Ory Kratos](https://www.ory.sh/kratos/) (identity) and [Ory Hydra](https://www.ory.sh/hydra/) (OAuth2/OIDC) deployment. This channel packages all three (`forseti`, `ory-kratos`, `ory-hydra`) and provides a service-type for each, plus a `forseti-stack-services` helper that wires them together from a single public URL.
+
+The three daemons serve plaintext HTTP on loopback. A TLS-terminating reverse proxy fronts the public origin (`base-url`) and routes browser traffic to Forseti's public port (3000). Hydra (4444) and Kratos (4433) public ports are reached server-to-server; the admin ports (4445 / 4434) and Forseti's internal listener (8081) must not be exposed.
+
+Postgres uses unix-socket peer authentication: each daemon runs as a system user whose name equals its database role (`kratos`, `hydra`, `forseti`), so no database passwords exist anywhere. The stack creates the roles and databases when `manage-postgres?` is `#t`.
+
+**Usage (the whole stack):**
+
+`forseti-stack-services` returns a *list* of services, so splice it into your `services` field rather than wrapping it in `service`:
+
+```scheme
+(use-modules (px services forseti))
+
+(operating-system
+  ;; ...
+  (services
+   (append
+    (forseti-stack-services
+     (forseti-stack-configuration
+      (base-url "https://id.example.com")))
+    %base-services)))
+```
+
+**Secrets:** real secrets stay in operator-supplied env-files under `secrets-directory` (default `/etc/forseti`, root-owned 0600), sourced by each daemon's start wrapper, never baked into the store. The database DSN is *not* a secret (peer auth) and is set for you. Create the env-files before first start:
+
+```bash
+sudo install -d -m 700 /etc/forseti
+AUDIT_TOKEN=$(openssl rand -hex 24)   # shared, only needed when audit-webhook? is on
+
+# Hydra: system secret (>= 16 bytes)
+printf 'SECRETS_SYSTEM=%s\n' "$(openssl rand -hex 16)" \
+  | sudo tee /etc/forseti/hydra.env >/dev/null
+
+# Kratos: cookie (>= 16 bytes) + cipher (EXACTLY 32 bytes)
+sudo tee /etc/forseti/kratos.env >/dev/null <<EOF
+SECRETS_COOKIE=$(openssl rand -hex 16)
+SECRETS_CIPHER=$(openssl rand -hex 16)
+FORSETI_AUDIT_TOKEN=$AUDIT_TOKEN
+EOF
+
+# Forseti: audit token (must match the kratos one) + cookie secret (>= 32 bytes)
+sudo tee /etc/forseti/forseti.env >/dev/null <<EOF
+FORSETI_AUDIT__WEBHOOK_TOKEN=$AUDIT_TOKEN
+FORSETI_SECURITY__COOKIE_SECRET=$(openssl rand -hex 32)
+EOF
+
+sudo chmod 600 /etc/forseti/*.env
+```
+
+`openssl rand -hex 16` produces 32 hex characters (32 bytes), which satisfies the Kratos cipher length. When `audit-webhook?` is `#f`, the `FORSETI_AUDIT_TOKEN` line is unnecessary.
+
+**Reverse proxy (HAProxy, single host):** the three daemons share one public origin (`base-url`), split by path. Forseti is at the root; Hydra mounts under `/hydra` and Kratos under `/kratos`, and the proxy strips those prefixes before the upstream (Hydra and Kratos do not honour subpath mounting). The generated configs follow this layout: Hydra's `issuer`/`public` is `base-url/hydra`, Kratos's `base_url` is `base-url/kratos`, and Forseti's login/consent pages plus the DCR endpoint stay at the root. This matches the "Shape 1" topology in Forseti's own [`docs/operator-guide-proxy.md`](https://github.com/franzos/forseti/blob/master/docs/operator-guide-proxy.md), which is the authoritative reference (it also covers subdomain and CORS/cookie details).
+
+HAProxy is the recommended proxy. The config below targets the stack's loopback ports:
+
+```haproxy
+frontend fe_accounts
+    bind *:443 ssl crt /etc/haproxy/certs/accounts.example.com.pem alpn h2,http/1.1
+    http-request redirect scheme https code 301 unless { ssl_fc }
+
+    # Trust only our own forwarded headers (strip client-sent first).
+    http-request del-header X-Forwarded-For
+    http-request del-header X-Forwarded-Proto
+    http-request del-header X-Forwarded-Host
+    http-request set-header X-Forwarded-Proto https
+    http-request set-header X-Forwarded-Host  %[req.hdr(host)]
+    http-request set-header X-Real-IP         %[src]
+    http-request set-header X-Forwarded-For   %[src]
+
+    # Capture the routing target in a var BEFORE replace-path mutates the path:
+    # use_backend ACLs are evaluated after the rewrite, so a path_beg test on
+    # the use_backend line would miss once the prefix has been stripped.
+    acl p_hydra  path_beg /hydra/
+    acl p_kratos path_beg /kratos/
+    http-request set-var(txn.be) str(hydra)  if p_hydra
+    http-request set-var(txn.be) str(kratos) if p_kratos
+
+    # Strip the prefix before the upstream sees it (they serve at root).
+    http-request replace-path ^/hydra/?(.*)  /\1 if p_hydra
+    http-request replace-path ^/kratos/?(.*) /\1 if p_kratos
+
+    use_backend be_hydra  if { var(txn.be) -m str hydra }
+    use_backend be_kratos if { var(txn.be) -m str kratos }
+    default_backend be_forseti
+
+backend be_forseti
+    server forseti 127.0.0.1:3000 check
+backend be_hydra      # Hydra public; admin :4445 stays on loopback, never proxied
+    server hydra  127.0.0.1:4444 check
+backend be_kratos     # Kratos public; admin :4434 stays on loopback, never proxied
+    server kratos 127.0.0.1:4433 check
+```
+
+`X-Forwarded-Proto: https` is mandatory: without it Hydra and Kratos emit `http://` URLs and drop `Secure` from cookies. The generated Hydra config trusts that header from loopback (`serve.tls.allow_termination_from`), so no `--dev` is needed in production. Never proxy the admin ports (4445 / 4434) or Forseti's internal listener (8081). If you add a `Content-Security-Policy`, it must allow Forseti's inline pre-paint theme script (see the operator guide).
+
+**Quick test without a proxy:** set `dev?` to `#t` so the Ory daemons accept the https issuer over plain HTTP. Never use `dev?` in production.
+
+**forseti-stack-configuration options:**
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `base-url` | (required) | Public https origin; the issuer and all UI/redirect URLs derive from it |
+| `manage-postgres?` | `#t` | Provision Postgres plus the kratos/hydra/forseti roles and databases |
+| `secrets-directory` | `"/etc/forseti"` | Directory holding the per-service env-files |
+| `smtp-connection-uri` | unset | Kratos courier SMTP URI for verification/recovery mail |
+| `enable-dynamic-client-registration?` | `#f` | Enable Hydra DCR (`/oauth2/register`) for MCP-style clients |
+| `audit-webhook?` | `#t` | Emit the Kratos audit web_hook to Forseti's internal listener |
+| `dev?` | `#f` | Run the Ory daemons with `--dev` (no proxy needed); never in production |
+| `kratos` / `hydra` / `forseti` | unset | Override the generated config file for a service with your own file-like |
+| `postgres-host` | `"localhost"` | Reserved; peer auth uses the local socket |
+| `kratos-log-file` / `hydra-log-file` / `forseti-log-file` | `/var/log/{kratos,hydra,forseti}.log` | Per-service log files |
+
+**Standalone services:** Hydra and Kratos do not require Forseti. Use `ory-hydra-service-type` / `ory-kratos-service-type` directly with your own `config-file`; each runs a one-shot `migrate sql` (gated by `auto-migrate?`) before the serve daemon.
+
+| Field (`ory-kratos` / `ory-hydra`) | Default | Description |
+|-------|---------|-------------|
+| `config-file` | (required) | The kratos.yml / hydra.yml |
+| `environment-variables` | `'()` | Non-secret env (e.g. `DSN`) as a `(string . string)` alist |
+| `environment-file` | `/etc/forseti/{kratos,hydra}.env` | Operator-supplied secrets file, sourced at start |
+| `auto-migrate?` | `#t` | Run `migrate sql` as a one-shot before serve |
+| `dev?` | `#f` | Append `--dev` to the serve command |
+| `user` / `group` | `"ory"` | System user/group (the stack overrides these to the per-role names) |
+| `state-directory` | `/var/lib/ory-{kratos,hydra}` | Daemon working directory |
+| `log-file` | `/var/log/{kratos,hydra}.log` | Shepherd log file |
+| `requirement` | `'(postgres)` | Extra shepherd requirements |
+
+`forseti-service-type` mirrors these (default user/group `forseti`, `requirement` `'(hydra kratos postgres)`, no `auto-migrate?` / `dev?`). It reads its config via `FORSETI_CONFIG_PATH` and uses sqlite under its state directory unless you set `FORSETI_DATABASE__URL` in `forseti.env`.
+
+**Service management:**
+
+```bash
+herd status                  # list all services
+herd status forseti          # one daemon
+sudo herd start postgres-roles   # one-shot: create roles + databases
+
+# Verify the stack is wired
+curl -s http://localhost:4444/.well-known/openid-configuration   # issuer == base-url
+curl -s http://localhost:3000/healthz                            # forseti -> ok
+```
+
 ### IOTA Node
 
 Run an IOTA full node or validator node.

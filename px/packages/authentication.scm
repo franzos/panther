@@ -9,12 +9,18 @@
   #:use-module (guix gexp)
   #:use-module (guix build-system cargo)
   #:use-module (guix build-system copy)
+  #:use-module (guix utils)
+  #:use-module (ice-9 match)
+  #:use-module (nonguix build-system binary)
   #:use-module (gnu packages bash)
   #:use-module (gnu packages base)
   #:use-module (gnu packages commencement)
+  #:use-module (gnu packages databases)
   #:use-module (gnu packages elf)
+  #:use-module (gnu packages gcc)
   #:use-module (gnu packages java)
   #:use-module (gnu packages sqlite)
+  #:use-module (gnu packages tls)
   #:use-module (px self))
 
 (define-public keycloak
@@ -200,4 +206,126 @@ of sshd.  The daemon uses rustls for TLS, so no system OpenSSL is linked; the
 NSS module and the sshd helper stay deliberately thin because the module is
 dlopened into every process that performs a name lookup, including setuid
 @command{sshd} and @command{sudo}.")
+    (license license:agpl3+)))
+
+(define-public ory-hydra
+  (package
+    (name "ory-hydra")
+    (version "26.2.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/ory/hydra/releases/download/v" version
+             "/hydra_" version "-linux_static-nosqlite_"
+             (match (or (%current-system) (%current-target-system))
+               ("aarch64-linux" "arm64")
+               (_ "64bit"))
+             ".tar.gz"))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32
+         (match (or (%current-system) (%current-target-system))
+           ("aarch64-linux"
+            "1sc4mgccjfchsfikz1w7jdv5fd0p4g0qk2ydql91kc829fkjkjyp")
+           (_
+            "1afzdfzxpw7jl7i6mff1m7z98z4w678s3i2bd4i8p82yybsv82vv"))))))
+    (build-system binary-build-system)
+    (arguments
+     `(#:install-plan `(("hydra" "bin/"))))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
+    (home-page "https://www.ory.sh/hydra/")
+    (synopsis "OAuth 2.0 and OpenID Connect server")
+    (description
+     "Ory Hydra is an OAuth 2.0 and OpenID Connect provider.  It issues and
+validates access, refresh, and ID tokens, and delegates the user-facing login
+and consent steps to an external application over a redirect-based flow.  This
+package installs the upstream statically linked release binary (Postgres,
+MySQL, and CockroachDB backends; no embedded SQLite).")
+    (license license:asl2.0)))
+
+(define-public ory-kratos
+  (package
+    (name "ory-kratos")
+    (version "26.2.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/ory/kratos/releases/download/v" version
+             "/kratos_" version "-linux_static-nosqlite_"
+             (match (or (%current-system) (%current-target-system))
+               ("aarch64-linux" "arm64")
+               (_ "64bit"))
+             ".tar.gz"))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32
+         (match (or (%current-system) (%current-target-system))
+           ("aarch64-linux"
+            "0mrj4wxlz4a4r0ji0kw3w1dycz3i8zm9ixvl2w647dgj1v4zjshf")
+           (_
+            "0f97414hnxrs07zzyvy094gdchs54s3k97pacrzhw8lm4k7zgvi4"))))))
+    (build-system binary-build-system)
+    (arguments
+     `(#:install-plan `(("kratos" "bin/"))))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
+    (home-page "https://www.ory.sh/kratos/")
+    (synopsis "Identity and user management server")
+    (description
+     "Ory Kratos is an identity and user management server.  It handles
+self-service login, registration, multi-factor authentication, account
+recovery and verification, profile management, and social sign-in, and stores
+identities in an SQL database.  This package installs the upstream statically
+linked release binary (Postgres, MySQL, and CockroachDB backends; no embedded
+SQLite).")
+    (license license:asl2.0)))
+
+(define-public forseti
+  (package
+    (name "forseti")
+    (version "0.1.8")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/franzos/forseti/releases/download/v" version
+             "/forseti-"
+             (match (or (%current-system) (%current-target-system))
+               ("aarch64-linux" "aarch64-unknown-linux-gnu")
+               (_ "x86_64-unknown-linux-gnu"))
+             ".tar.gz"))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32
+         (match (or (%current-system) (%current-target-system))
+           ("aarch64-linux"
+            "1v6zwqar225ha3s3ffi1m4ckxhp1rgwm2d2fri6ds0f5xxx3pp4r")
+           (_
+            "1zg433rw3k99ckvspc1qkipqxl359rjxjq7wfqq4kgj2lp5hmma5"))))))
+    (build-system binary-build-system)
+    (arguments
+     ;; Prebuilt glibc binary: dynamically links libssl/libcrypto (OpenSSL),
+     ;; libpq (Postgres backend), libgcc_s, and libc.  Askama templates are
+     ;; compiled into the binary, so the only runtime asset tree is static/.
+     `(#:patchelf-plan `(("forseti" ("glibc" "gcc:lib" "openssl" "postgresql")))
+       #:install-plan `(("forseti" "bin/")
+                        ("static" "share/forseti/")
+                        ("config.example.toml" "share/forseti/"))))
+    (inputs
+     `(("glibc" ,glibc)
+       ("gcc:lib" ,gcc "lib")
+       ("openssl" ,openssl)
+       ("postgresql" ,postgresql)))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
+    (home-page "https://git.gofranz.com/franz/forseti")
+    (synopsis "Login, consent, and account portal for the Ory stack")
+    (description
+     "Forseti is the user-facing bridge for an Ory Kratos and Hydra
+deployment.  It implements Hydra's login, consent, and logout handlers and the
+Kratos self-service flows (login, registration, recovery, verification,
+multi-factor, and account settings), and adds an admin portal for OAuth2 client
+and organization management.  This package installs the upstream release
+binary together with its @file{static/} assets; HTML templates are compiled
+into the binary.")
     (license license:agpl3+)))
