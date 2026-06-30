@@ -6838,6 +6838,10 @@
   (crate-source "git2" "0.20.4"
                 "0azykjpk3j6s354z23jkyq3r3pbmlw9ha1zsxkw5cnnpi1h2b23v"))
 
+(define rust-git2-0.21.0
+  (crate-source "git2" "0.21.0"
+                "0bmqga9vlyx5sdlr0i28z0362s89xv9i4qcv20vvx9j54y9vzpfx"))
+
 (define rust-gix-0.71.0
   (crate-source "gix" "0.71.0"
                 "0dblc4j5bhs973y04zp2sah6xvjizqn6h4pq2agkrz0pd3n727m6"))
@@ -11215,6 +11219,10 @@
   (crate-source "insta" "1.47.2"
                 "0kh9gspras3vhvx8wkygnw2wzlwjln7gwzgks8g4194kxd464jkv"))
 
+(define rust-insta-1.48.0
+  (crate-source "insta" "1.48.0"
+                "10kbxza7vzj4nvkga8r3rfn6z8i3hnh47bnnb1f429n9x3zgiw46"))
+
 (define rust-instability-0.3.10
   (crate-source "instability" "0.3.10"
                 "170dsap2il7fpx85dylb4q979czrbj77ay6v77vpvvpgdqcv0y37"))
@@ -12554,6 +12562,11 @@
   ;; TODO REVIEW: Check bundled sources.
   (crate-source "libgit2-sys" "0.18.4+1.9.3"
                 "1dqmkgxgxb937kkcsf05r93a9li385b92wfgxwi1p1z16mpzc9lv"))
+
+(define rust-libgit2-sys-0.18.5+1.9.4
+  ;; TODO REVIEW: Check bundled sources.
+  (crate-source "libgit2-sys" "0.18.5+1.9.4"
+                "18lwqnhy7qxg4iw24s1a0n7aj7qbnryry1iy0w32k4f1xbk6lp80"))
 
 (define rust-libgpg-error-sys-0.6.2
   ;; TODO: Check bundled sources.
@@ -15212,6 +15225,11 @@
   ;; TODO: Check bundled sources.
   (crate-source "openssl-sys" "0.9.111"
                 "08f3mpsabivfi3fd0qv9231qidqy68lr8a4qi32y6xda43av5jl2"))
+
+(define rust-openssl-sys-0.9.112
+  ;; TODO REVIEW: Check bundled sources.
+  (crate-source "openssl-sys" "0.9.112"
+                "1nyvn3nvkcknjpkh8c19zjb9q3mbcyxgsvajw4mm09p2ngrmmmap"))
 
 (define rust-openssl-sys-0.9.113
   ;; TODO REVIEW: Check bundled sources.
@@ -29565,7 +29583,7 @@
                                  rust-getrandom-0.3.2
                                  rust-getrandom-0.4.2
                                  rust-gimli-0.32.3
-                                 rust-git2-0.20.4
+                                 rust-git2-0.21.0
                                  rust-glob-0.3.2
                                  rust-globset-0.4.18
                                  rust-globwalk-0.9.1
@@ -29616,7 +29634,7 @@
                                  rust-indicatif-0.18.4
                                  rust-inotify-0.11.0
                                  rust-inotify-sys-0.1.5
-                                 rust-insta-1.47.2
+                                 rust-insta-1.48.0
                                  rust-intrusive-collections-0.9.7
                                  rust-inventory-0.3.24
                                  rust-ipnet-2.12.0
@@ -29637,7 +29655,7 @@
                                  rust-lazy-static-1.5.0
                                  rust-leb128fmt-0.1.0
                                  rust-libc-0.2.186
-                                 rust-libgit2-sys-0.18.3+1.9.2
+                                 rust-libgit2-sys-0.18.5+1.9.4
                                  rust-libmimalloc-sys-0.1.44
                                  rust-libredox-0.1.3
                                  rust-libz-sys-1.1.8
@@ -29673,6 +29691,8 @@
                                  rust-object-0.37.3
                                  rust-once-cell-1.21.4
                                  rust-oorandom-11.1.3
+                                 rust-openssl-probe-0.1.6
+                                 rust-openssl-sys-0.9.112
                                  rust-option-ext-0.2.0
                                  rust-owo-colors-4.3.0
                                  rust-papaya-0.2.4
@@ -29718,7 +29738,7 @@
                                  rust-quickcheck-1.1.0
                                  rust-quickcheck-macros-1.2.0
                                  rust-quinn-0.11.9
-                                 rust-quinn-proto-0.11.14
+                                 rust-quinn-proto-0.11.15
                                  rust-quinn-udp-0.5.14
                                  rust-quote-1.0.45
                                  rust-r-efi-5.2.0
@@ -29738,10 +29758,10 @@
                                  rust-redox-users-0.5.0
                                  rust-ref-cast-1.0.25
                                  rust-ref-cast-impl-1.0.25
-                                 rust-regex-1.12.3
+                                 rust-regex-1.12.4
                                  rust-regex-automata-0.4.13
                                  rust-regex-lite-0.1.6
-                                 rust-regex-syntax-0.8.5
+                                 rust-regex-syntax-0.8.11
                                  rust-regress-0.10.4
                                  rust-reqwest-0.12.28
                                  rust-ring-0.17.13
@@ -29794,7 +29814,7 @@
                                  rust-siphasher-1.0.1
                                  rust-slab-0.4.11
                                  rust-small-btree-0.1.0
-                                 rust-smallvec-1.15.1
+                                 rust-smallvec-1.15.2
                                  rust-socket2-0.6.3
                                  rust-spin-0.9.8
                                  rust-spin-0.10.0
