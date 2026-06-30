@@ -52,7 +52,7 @@ this tool is developed for PantherX team internal usage.")
 (define-public guix-gui
   (package
     (name "guix-gui")
-    (version "0.1.9")
+    (version "0.1.11")
     (source
      (origin
        (method git-fetch)
@@ -61,7 +61,7 @@ this tool is developed for PantherX team internal usage.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1r99kdr4s4dshrrhqlxfcj3k2bazajhqd780qdqng4x45qibixjl"))))
+        (base32 "04ldw81dnw5l1cpwngwh8x3mdp9qzhlwx9k4y8wgmz0igpn45skw"))))
     (build-system cargo-build-system)
     (arguments
      (list
