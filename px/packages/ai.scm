@@ -21,7 +21,7 @@
 (define-public claude-code
   (package
     (name "claude-code")
-    (version "2.1.193")
+    (version "2.1.196")
     (source
      (origin
        (method url-fetch)
@@ -30,7 +30,7 @@
              "86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/"
              version "/linux-x64/claude"))
        (sha256
-        (base32 "07bbsqyxg0r9y2md8044prgg3q71wiyz55rq3w89mg8qky94vw69"))))
+        (base32 "1pmsgg1ywdxs6h7vpqzpjl9vsch9bjfh02dshfdvhkaksmnkr4zb"))))
     (build-system binary-build-system)
     (arguments
      (list
