@@ -767,6 +767,7 @@ This channel provides pre-configured building blocks for Guix system definitions
 | Variable | Description |
 |----------|-------------|
 | `%os-base-packages` | Extends `%base-packages` with wpa-supplicant, libimobiledevice, neovim |
+| `%os-desktop-packages` | Extends `%os-base-packages` with guix-gui (graphical Guix frontend) |
 
 ### Services
 
@@ -785,7 +786,7 @@ This channel provides pre-configured building blocks for Guix system definitions
 ### When to Use What
 
 - **Headless server**: Use `%os-base` directly or inherit from it
-- **Desktop with GDM/SDDM**: Inherit `%os-base` and use `%os-desktop-services`
+- **Desktop with GDM/SDDM**: Inherit `%os-base`, use `%os-desktop-services`, and set `%os-desktop-packages`
 - **Desktop with custom greeter** (greetd, etc.): Use `%os-desktop-services-minimal` to avoid conflicts
 
 ### Usage

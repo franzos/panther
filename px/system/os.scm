@@ -21,11 +21,14 @@
   #:use-module (nongnu packages linux)
   #:use-module (px system common)
   #:use-module (px packages libguix)                ;; libguix-polkit
+  #:use-module ((px packages package-management)
+                #:select (guix-gui))               ;; desktop package-management frontend
 
   #:export (%os-base-services
             %os-desktop-services
             %os-desktop-services-minimal
             %os-base-packages
+            %os-desktop-packages
             %os-base))
 
 (define %os-base-services
@@ -86,6 +89,11 @@
          libimobiledevice
          neovim
          %base-packages))
+
+;; Base packages plus the graphical Guix frontend, for desktop systems.
+(define %os-desktop-packages
+  (cons* guix-gui
+         %os-base-packages))
 
 (define %os-base
   (operating-system

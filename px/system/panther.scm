@@ -43,13 +43,13 @@
 (define %panther-desktop-services-minimal
   %os-desktop-services-minimal)
 
-;; Deprecated: use %os-base-packages from (px system os)
+;; Deprecated: use %os-desktop-packages from (px system os)
 (define %panther-desktop-packages
   (cons* pam-u2f
          libu2f-host
          libu2f-server
          blueman
-         %os-base-packages))
+         %os-desktop-packages))
 
 ;; Deprecated: use %os-base from (px system os)
 (define %panther-os
