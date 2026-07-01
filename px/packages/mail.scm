@@ -48,7 +48,7 @@ Maildir, Notmuch, SMTP, and Sendmail backends, along with OAuth 2.0
 authorization for various email providers including Gmail, Outlook, and iCloud.")
     (license license:expat)))
 
-(define bichon-version "1.6.0")
+(define bichon-version "1.6.1")
 
 (define bichon-source
   (origin
@@ -58,7 +58,7 @@ authorization for various email providers including Gmail, Outlook, and iCloud."
           (commit bichon-version)))
     (file-name (git-file-name "bichon" bichon-version))
     (sha256
-     (base32 "11ldpw1zj53yfxnml0hqh6shhr16k8a591sk91zw3spi0c6rb5z6"))
+     (base32 "1wcmlfw42va6w2b68p7kpbcp223vbw3c2s7kn4dc1jh0apy4jsr1"))
     (snippet
         #~(begin
             (use-modules (guix build utils)
@@ -69,7 +69,7 @@ authorization for various email providers including Gmail, Outlook, and iCloud."
               (("Command::new\\(\"git\"\\)")
                "Command::new(\"echo\")")
               (("\\.args\\(&\\[\"rev-parse.*\\]\\)")
-               ".arg(\"1.6.0\")"))
+               ".arg(\"1.6.1\")"))
             ;; Replace git deps with path deps (multi-line: read/regex/write)
             (define (rewrite-file path pattern replacement)
               (let* ((content (call-with-input-file path
@@ -92,6 +92,9 @@ authorization for various email providers including Gmail, Outlook, and iCloud."
                            "async-imap = { path = \"../../vendored-git/async-imap\""
                            ", default-features = false"
                            ", features = [\"runtime-tokio\", \"compress\"] }"))
+            (rewrite-file "crates/core/Cargo.toml"
+                          "outlook-pst = \\{ git[^}]+\\}"
+                          "outlook-pst = { path = \"../../vendored-git/outlook-pst\" }")
             (rewrite-file "crates/cli/Cargo.toml"
                           "outlook-pst = \\{ git[^}]+\\}"
                           "outlook-pst = { path = \"../../vendored-git/outlook-pst\" }")))))
@@ -120,7 +123,7 @@ authorization for various email providers including Gmail, Outlook, and iCloud."
            (invoke "node" "node_modules/vite/bin/vite.js" "build"))
          (copy-recursively "/tmp/web/dist" #$output)))
    #:options `(#:hash-algo sha256
-               #:hash ,(base32 "1scfma4r6ng4nkarchp3j1l3d64r1a29k0bxyhgdbc8pwr8bkz15")
+               #:hash ,(base32 "19wgg2f0rx7nrd8xkriaany468vqkzjgq0r58cg63b2gndgdq6sm")
                #:recursive? #t)))
 
 (define-public bichon
