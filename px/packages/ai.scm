@@ -132,7 +132,16 @@ handle entire workflows.  This package disables auto-updates.")
                       (string-append #$output "/share/claude-desktop" ":"
                                      (assoc-ref inputs "nss") "/lib/nss")
                       (string-append #$output
-                                     "/share/claude-desktop/claude-desktop")))))))
+                                     "/share/claude-desktop/claude-desktop"))))
+          ;; Chromium picks its password backend from the desktop environment;
+          ;; on unrecognized ones (wlroots compositors such as niri) it falls
+          ;; back to the plaintext store and won't persist logins.  Force
+          ;; libsecret so it reaches whatever Secret Service is running.
+          (add-after 'install-wrapper 'force-libsecret
+            (lambda _
+              (substitute* (string-append #$output "/bin/claude-desktop")
+                (("claude-desktop/claude-desktop\" ")
+                 "claude-desktop/claude-desktop\" --password-store=gnome-libsecret ")))))))
     (supported-systems '("x86_64-linux"))
     (home-page "https://claude.ai/download")
     (synopsis "Claude Desktop for Linux")
