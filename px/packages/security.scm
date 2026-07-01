@@ -186,3 +186,47 @@ wide range of languages and package managers including npm, pip, cargo, go
 modules, maven, composer, and many more.  It can also scan container images
 and OS packages on Linux systems.")
     (license license:asl2.0)))
+
+(define-public scorecard
+  (package
+    (name "scorecard")
+    (version "5.5.0")
+    (source (origin
+              (method go-fetch-vendored)
+              (uri (go-git-reference
+                    (url "https://github.com/ossf/scorecard")
+                    (commit (string-append "v" version))
+                    (sha (base32
+                          "0k93zgh32jcrhag98dy5v43akfdi3fccaxmpghjgliib0qc08vvn"))))
+              (sha256
+               (base32
+                "0hn439587mdwjnlndw2ay5k95y6cy9lgql42jh5fqvqxv3dn3y9a"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/ossf/scorecard/v5"
+      #:install-source? #f
+      #:go go-1.26
+      ;; GO111MODULE=off builds in GOPATH mode, so the version package is
+      ;; reached through the module's vendor/ prefix.
+      #:build-flags
+      #~(let ((v "github.com/ossf/scorecard/v5/vendor/sigs.k8s.io/release-utils/version"))
+          (list (string-append "-ldflags=-X " v ".gitVersion=v" #$version
+                               " -X " v ".gitTreeState=clean")))
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'check)
+          (add-after 'install 'rename-binary
+            (lambda* (#:key outputs #:allow-other-keys)
+              (let ((bin (string-append (assoc-ref outputs "out") "/bin")))
+                (rename-file (string-append bin "/v5")
+                             (string-append bin "/scorecard"))))))))
+    (home-page "https://github.com/ossf/scorecard")
+    (synopsis "Security health metrics for open source projects")
+    (description
+     "OpenSSF Scorecard assesses open source projects for security risks
+through a series of automated checks.  It evaluates practices such as branch
+protection, dependency update tooling, code review, CI tests, fuzzing, signed
+releases, and known vulnerabilities, producing a score that helps maintainers
+and consumers understand a project's security posture.")
+    (license license:asl2.0)))
