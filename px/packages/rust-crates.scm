@@ -2229,6 +2229,10 @@
   (crate-source "camino" "1.2.2"
                 "0j0ayqfbbl8bxg0795ssk1hzkjix3dvl2kk63hdgzf9cd5nscag6"))
 
+(define rust-camino-1.2.4
+  (crate-source "camino" "1.2.4"
+                "183v8ff17fnl8f4rygxz2hqgvc8k0rmivlsi5n9jch1w2zj30baz"))
+
 (define rust-caret-0.8.1
   (crate-source "caret" "0.8.1"
                 "1pz8kcb21krnr16y526dj36raalz5a25fzmc5vcwaw1k6mhphcl2"))
@@ -4325,6 +4329,18 @@
 (define rust-deflate64-0.1.9
   (crate-source "deflate64" "0.1.9"
                 "06scix17pa7wzzfsnhkycpcc6s04shs49cdaxx2k1sl0226jnsfs"))
+
+(define rust-defmt-1.1.0
+  (crate-source "defmt" "1.1.0"
+                "0zvzzimxq1zmw3gj42pi326ghihyzhf7pf3w4cyrb8chci829rd6"))
+
+(define rust-defmt-macros-1.1.0
+  (crate-source "defmt-macros" "1.1.0"
+                "02vaaxgbifai8kchn7nnixyzfa6qyj0q4qwbknkikxy8x5q7g8ph"))
+
+(define rust-defmt-parser-1.0.0
+  (crate-source "defmt-parser" "1.0.0"
+                "0gpfky9sssil5qfaix5wxcwiqk7snszhl5gq3vcwkrxjncs07mhh"))
 
 (define rust-deltae-0.3.2
   (crate-source "deltae" "0.3.2"
@@ -9006,6 +9022,10 @@
   (crate-source "hashlink" "0.11.0"
                 "0c6jpsyb9f3j5yrlbw8rnr5kpkar08z02b1h3b5sf14w39b242za"))
 
+(define rust-hashlink-0.12.0
+  (crate-source "hashlink" "0.12.0"
+                "0fssgkd0bzyk7fm8fi88iciag84xpfv7hisbxabfxbfp9qk1y255"))
+
 (define rust-hashlink-0.9.1
   (crate-source "hashlink" "0.9.1"
                 "1byq4nyrflm5s6wdx5qwp96l1qbp2d0nljvrr5yqrsfy51qzz93b"))
@@ -11323,6 +11343,10 @@
   (crate-source "intmap" "0.7.1"
                 "1ffph34qfda5zxdvy2pvjnip9hgzbjcxw53pvdpcjaxc8n7z4lmf"))
 
+(define rust-intrusive-collections-0.10.2
+  (crate-source "intrusive-collections" "0.10.2"
+                "0qh03cnj4m3gg03sk9919r5fxmwfwa3nglm6888aryhw4icrqwab"))
+
 (define rust-intrusive-collections-0.9.7
   (crate-source "intrusive-collections" "0.9.7"
                 "11hy9ny6rr6qsh289ljrdq20ayw8ik0h4dfzzrgcgs6bwjbhi78q"))
@@ -11597,6 +11621,10 @@
   (crate-source "jiff" "0.2.28"
                 "00lixngcc7amh2fcsxfr0z38j06lllhapz192biv1qj97q1x60s6"))
 
+(define rust-jiff-0.2.31
+  (crate-source "jiff" "0.2.31"
+                "0d6nvffabb1v34x2s2a3xjca4zny1dfdhqm3xy0wyl77rchn3znc"))
+
 (define rust-jiff-0.2.5
   (crate-source "jiff" "0.2.5"
                 "0q3jpq3scznmviiajldyf5xby38zgyvkxbrmgb9hf78r6416f0n1"))
@@ -11624,6 +11652,10 @@
 (define rust-jiff-static-0.2.28
   (crate-source "jiff-static" "0.2.28"
                 "0irbhfh2f4i9w5l53jcmh6ssnhdd92wfy76978chgwnxilvk4bbq"))
+
+(define rust-jiff-static-0.2.31
+  (crate-source "jiff-static" "0.2.31"
+                "1lpdrmzd5yafwzniw0xi5gac4rz0vccsja1qrprjim32ysbyhrg1"))
 
 (define rust-jiff-static-0.2.5
   (crate-source "jiff-static" "0.2.5"
@@ -12691,6 +12723,11 @@
   ;; TODO REVIEW: Check bundled sources.
   (crate-source "libmimalloc-sys" "0.1.44"
                 "0w4q14nfpvwa8q4ygz72syd1cv3rj4nmhz1mqxmzr7gj43n4yzv6"))
+
+(define rust-libmimalloc-sys-0.1.47
+  ;; TODO REVIEW: Check bundled sources.
+  (crate-source "libmimalloc-sys" "0.1.47"
+                "1xkx0r1pwgsdpskvx206dn3gj04zcsjnn4rwhxgc4gn367xaq7id"))
 
 (define rust-libmimalloc-sys-0.1.49
   ;; TODO REVIEW: Check bundled sources.
@@ -13822,6 +13859,10 @@
 (define rust-mimalloc-0.1.48
   (crate-source "mimalloc" "0.1.48"
                 "1n2gi51zb6jhr2d154sisymgxhyr58cvkjwb53pz8x2cnsj6dvp1"))
+
+(define rust-mimalloc-0.1.50
+  (crate-source "mimalloc" "0.1.50"
+                "0h06df0h7ia6yqz4qgbjvqzcjn8xxima9fnac296ny6zf917qqmk"))
 
 (define rust-mimalloc-0.1.52
   (crate-source "mimalloc" "0.1.52"
@@ -15292,6 +15333,11 @@
   ;; TODO REVIEW: Check bundled sources.
   (crate-source "openssl-sys" "0.9.114"
                 "1dhvfj1nvikl4gaq9zb9ka2g7r67n03pb3s3vg7w9z07rm2i5khk"))
+
+(define rust-openssl-sys-0.9.117
+  ;; TODO REVIEW: Check bundled sources.
+  (crate-source "openssl-sys" "0.9.117"
+                "159nf6jsqnmsynkh6gjzx088q1ifll7v88sss8qdk363n9mpwzml"))
 
 (define rust-option-ext-0.2.0
   (crate-source "option-ext" "0.2.0"
@@ -18584,13 +18630,25 @@
   (crate-source "salsa" "0.26.2"
                 "1hwq2j08c400lbcbwrghb9hjl8ckl94vg35kx63mrrh5k1wgy4j6"))
 
+(define rust-salsa-0.27.2
+  (crate-source "salsa" "0.27.2"
+                "1qlmc0w38fbaxs0wkn75r4qbvs6ignc8ywsavapm99rf5s1spfpz"))
+
 (define rust-salsa-macro-rules-0.26.2
   (crate-source "salsa-macro-rules" "0.26.2"
                 "0h9ffp6g82bayllxjmgpl2s68gm536s1zhfrkjqbjfb9mk5m9qsq"))
 
+(define rust-salsa-macro-rules-0.27.2
+  (crate-source "salsa-macro-rules" "0.27.2"
+                "1im91vrmmql0rm7i3x889rma5rk387176ql3kab3jgf759374s6y"))
+
 (define rust-salsa-macros-0.26.2
   (crate-source "salsa-macros" "0.26.2"
                 "1j40i5zyiplxww0l52yz9jwi0xiciyw9zm2az040df62fl88crrh"))
+
+(define rust-salsa-macros-0.27.2
+  (crate-source "salsa-macros" "0.27.2"
+                "0mw4ibm7rf2dzli5g42s4jxv245a618jqn8qb0bskcb5mzzpig3n"))
 
 (define rust-same-file-1.0.6
   (crate-source "same-file" "1.0.6"
@@ -29579,7 +29637,7 @@
                                  rust-allocator-api2-0.2.21
                                  rust-anes-0.1.6
                                  rust-anstyle-1.0.14
-                                 rust-anyhow-1.0.102
+                                 rust-anyhow-1.0.103
                                  rust-approx-0.5.1
                                  rust-arrayvec-0.7.6
                                  rust-ascii-table-4.0.8
@@ -29608,7 +29666,7 @@
                                  rust-bytemuck-derive-1.10.2
                                  rust-byteorder-1.5.0
                                  rust-bytes-1.11.1
-                                 rust-camino-1.2.2
+                                 rust-camino-1.2.4
                                  rust-case-1.0.0
                                  rust-caseless-0.2.2
                                  rust-cast-0.3.0
@@ -29652,7 +29710,10 @@
                                  rust-darling-core-0.14.4
                                  rust-darling-macro-0.14.4
                                  rust-dashmap-5.5.3
-                                 rust-dashmap-6.2.1
+                                 rust-dashmap-6.1.0
+                                 rust-defmt-1.1.0
+                                 rust-defmt-macros-1.1.0
+                                 rust-defmt-parser-1.0.0
                                  rust-deranged-0.5.5
                                  rust-derive-builder-0.13.1
                                  rust-derive-builder-core-0.13.1
@@ -29717,13 +29778,13 @@
                                  rust-globwalk-0.9.1
                                  rust-grit-pattern-matcher-0.5.1
                                  rust-grit-util-0.5.1
-                                 rust-h2-0.4.14
+                                 rust-h2-0.4.13
                                  rust-half-1.8.2
                                  rust-hashbrown-0.14.5
                                  rust-hashbrown-0.15.5
                                  rust-hashbrown-0.16.1
                                  rust-hashbrown-0.17.0
-                                 rust-hashlink-0.10.0
+                                 rust-hashlink-0.12.0
                                  rust-heck-0.5.0
                                  rust-hermit-abi-0.5.2
                                  rust-htmlize-1.0.6
@@ -29731,7 +29792,7 @@
                                  rust-http-body-1.0.1
                                  rust-http-body-util-0.1.3
                                  rust-httparse-1.10.1
-                                 rust-hyper-1.10.0
+                                 rust-hyper-1.9.0
                                  rust-hyper-rustls-0.27.9
                                  rust-hyper-util-0.1.20
                                  rust-iai-0.1.1
@@ -29764,15 +29825,17 @@
                                  rust-inotify-sys-0.1.5
                                  rust-insta-1.48.0
                                  rust-intrusive-collections-0.9.7
+                                 rust-intrusive-collections-0.10.2
                                  rust-inventory-0.3.24
                                  rust-ipnet-2.12.0
+                                 rust-iri-string-0.7.12
                                  rust-is-terminal-0.4.17
                                  rust-is-ci-1.1.1
                                  rust-itertools-0.10.5
                                  rust-itertools-0.14.0
                                  rust-itoa-1.0.15
-                                 rust-jiff-0.2.28
-                                 rust-jiff-static-0.2.28
+                                 rust-jiff-0.2.31
+                                 rust-jiff-static-0.2.31
                                  rust-jiff-tzdb-0.1.4
                                  rust-jiff-tzdb-platform-0.1.3
                                  rust-jobserver-0.1.31
@@ -29784,7 +29847,7 @@
                                  rust-leb128fmt-0.1.0
                                  rust-libc-0.2.186
                                  rust-libgit2-sys-0.18.5+1.9.4
-                                 rust-libmimalloc-sys-0.1.44
+                                 rust-libmimalloc-sys-0.1.47
                                  rust-libredox-0.1.3
                                  rust-libz-sys-1.1.8
                                  rust-linux-raw-sys-0.9.2
@@ -29799,7 +29862,7 @@
                                  rust-matchers-0.2.0
                                  rust-memchr-2.7.4
                                  rust-memoffset-0.9.1
-                                 rust-mimalloc-0.1.48
+                                 rust-mimalloc-0.1.50
                                  rust-miniz-oxide-0.8.0
                                  rust-mio-1.2.0
                                  rust-newtype-uuid-1.3.2
@@ -29820,7 +29883,7 @@
                                  rust-once-cell-1.21.4
                                  rust-oorandom-11.1.3
                                  rust-openssl-probe-0.1.6
-                                 rust-openssl-sys-0.9.112
+                                 rust-openssl-sys-0.9.117
                                  rust-option-ext-0.2.0
                                  rust-owo-colors-4.3.0
                                  rust-papaya-0.2.4
@@ -29906,9 +29969,9 @@
                                  rust-rustversion-1.0.19
                                  rust-ryu-1.0.13
                                  rust-ryu-js-1.0.2
-                                 rust-salsa-0.26.2
-                                 rust-salsa-macro-rules-0.26.2
-                                 rust-salsa-macros-0.26.2
+                                 rust-salsa-0.27.2
+                                 rust-salsa-macro-rules-0.27.2
+                                 rust-salsa-macros-0.27.2
                                  rust-same-file-1.0.6
                                  rust-scc-2.4.0
                                  rust-schemars-1.2.1
@@ -29990,7 +30053,7 @@
                                  rust-toml-parser-1.1.2+spec-1.1.0
                                  rust-toml-writer-1.1.1+spec-1.1.0
                                  rust-tower-0.5.3
-                                 rust-tower-http-0.6.11
+                                 rust-tower-http-0.6.8
                                  rust-tower-layer-0.3.3
                                  rust-tower-lsp-server-0.23.0
                                  rust-tower-service-0.3.3
