@@ -75,14 +75,14 @@ OAuth and app-password authentication and secure credential storage.")
 (define-public gh
   (package
     (name "gh")
-    (version "2.95.0")
+    (version "2.96.0")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "https://github.com/cli/cli/releases/download/v"
                            version "/gh_" version "_linux_amd64.tar.gz"))
        (sha256
-        (base32 "131xvdns6wcahyfwhs6ky9349r7ksgmrcgk17pnwj248krrf9l95"))))
+        (base32 "0q5xr2qjhqzk3cq1qjrsmd1wz215ncdcp2inys5zb62lmp6c5mc3"))))
     (build-system copy-build-system)
     (arguments
      '(#:install-plan
