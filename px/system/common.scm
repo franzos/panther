@@ -12,6 +12,8 @@
             %gofranz-substitute-server-key
             %nonguix-substitute-server-key
             %guix-moe-substitute-server-key
+            %all-substitute-server-urls
+            %all-substitute-server-keys
             %pantherx-default-channels))
 
 (define %gofranz-substitute-server-url
@@ -63,6 +65,19 @@
   )
  )
 "))
+
+;; Aggregates of every server above, in preference order.  Use these to enable
+;; all substitute servers at once instead of listing each one individually.
+(define %all-substitute-server-urls
+  (list %gofranz-substitute-server-url
+        %nonguix-substitute-server-url
+        %nonguix-mirror-substitute-server-url
+        %guix-moe-substitute-server-url))
+
+(define %all-substitute-server-keys
+  (list %gofranz-substitute-server-key
+        %nonguix-substitute-server-key
+        %guix-moe-substitute-server-key))
 
 (define %pantherx-default-channels
   (append (list (channel

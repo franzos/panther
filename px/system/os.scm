@@ -38,15 +38,10 @@
         (inherit config)
         (guix (guix-for-channels %pantherx-default-channels))
         (authorized-keys
-        (cons* %gofranz-substitute-server-key
-                %nonguix-substitute-server-key
-                %guix-moe-substitute-server-key
+        (append %all-substitute-server-keys
                 %default-authorized-guix-keys))
         (substitute-urls
-        (cons* %gofranz-substitute-server-url
-                %nonguix-substitute-server-url
-                %nonguix-mirror-substitute-server-url
-                %guix-moe-substitute-server-url
+        (append %all-substitute-server-urls
                 %default-substitute-urls))
         (channels %pantherx-default-channels)))))
 
@@ -60,15 +55,10 @@
               (inherit config)
               (guix (guix-for-channels %pantherx-default-channels))
               (authorized-keys
-              (cons* %gofranz-substitute-server-key
-                      %nonguix-substitute-server-key
-                      %guix-moe-substitute-server-key
+              (append %all-substitute-server-keys
                       %default-authorized-guix-keys))
               (substitute-urls
-              (cons* %gofranz-substitute-server-url
-                      %nonguix-substitute-server-url
-                      %nonguix-mirror-substitute-server-url
-                      %guix-moe-substitute-server-url
+              (append %all-substitute-server-urls
                       %default-substitute-urls))
               (channels %pantherx-default-channels))))))
 
