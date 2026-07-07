@@ -267,6 +267,49 @@ plugins to track coding activity.  It provides automatic time tracking for
 programmers, with dashboards showing metrics and insights about coding habits.")
     (license license:bsd-3)))
 
+(define-public stripe-cli
+  (package
+    (name "stripe-cli")
+    (version "1.43.6")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/stripe/stripe-cli/releases/download/v"
+             version "/stripe_" version "_linux_"
+             (match (or (%current-system) (%current-target-system))
+               ("x86_64-linux" "x86_64")
+               ("aarch64-linux" "arm64")) ".tar.gz"))
+       (sha256
+        (base32
+         (match (or (%current-system) (%current-target-system))
+           ("x86_64-linux"
+            "0qciv1m2jfyc4his8vq60p4bklf2pkbmvrqlm1n3d7wkxx0wh05g")
+           ("aarch64-linux"
+            "1bc25arkd277h0xkbjwcpl41ygvzs7yvpnfvdc2q7284iff2jk2p"))))))
+    (build-system binary-build-system)
+    (arguments
+     (list
+      #:install-plan
+      #~'(("stripe" "bin/stripe"))
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'unpack
+            (lambda* (#:key inputs #:allow-other-keys)
+              (invoke "tar" "xzf" (assoc-ref inputs "source"))
+              (chmod "stripe" #o755)))
+          (delete 'patchelf)
+          (delete 'validate-runpath))))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
+    (home-page "https://stripe.com/docs/stripe-cli")
+    (synopsis "Command-line interface for Stripe")
+    (description
+     "The Stripe CLI helps build, test, and manage a Stripe integration from
+the terminal.  It can tail API request logs, trigger and forward webhook
+events to a local server, make test-mode API calls, and manage Stripe
+resources.  This package installs the upstream statically linked binary.")
+    (license license:asl2.0)))
+
 (define-public envstash
   (package
     (name "envstash")
