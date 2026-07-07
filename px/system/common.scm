@@ -6,7 +6,7 @@
   #:use-module (guix channels)
 
   #:export (%gofranz-substitute-server-url
-            ;; %nonguix-substitute-server-url
+            %nonguix-substitute-server-url
             %nonguix-mirror-substitute-server-url
             %guix-moe-substitute-server-url
             %gofranz-substitute-server-key
@@ -17,16 +17,15 @@
 (define %gofranz-substitute-server-url
   "https://substitutes.guix.gofranz.com")
 
-;; Official nonguix substitutes - temporarily disabled due to availability
-;; issues; using guix.moe mirrors instead.
+;; Official nonguix substitutes - re-enabled 2026-07-04 (availability
+;; restored). Kept alongside the guix.moe mirror below for coverage.
 ;; See https://ultrarare.space/en/posts/guix-build-farm/
-;; (define %nonguix-substitute-server-url
-;;   "https://substitutes.nonguix.org")
+(define %nonguix-substitute-server-url
+  "https://substitutes.nonguix.org")
 
 ;; Transparent mirror of nonguix substitutes operated by guix.moe.  Retains the
 ;; original nonguix signing key, so %nonguix-substitute-server-key is reused
-;; below.  Marked as a testing endpoint upstream (added 2026-04-03), revisit
-;; if availability of substitutes.nonguix.org is restored.
+;; below.  Marked as a testing endpoint upstream (added 2026-04-03).
 (define %nonguix-mirror-substitute-server-url
   "https://cache-test.guix.moe")
 
