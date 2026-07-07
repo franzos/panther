@@ -20,14 +20,16 @@
   "https://substitutes.guix.gofranz.com")
 
 ;; Official nonguix substitutes - re-enabled 2026-07-04 (availability
-;; restored). Kept alongside the guix.moe mirror below for coverage.
+;; restored).
 ;; See https://ultrarare.space/en/posts/guix-build-farm/
 (define %nonguix-substitute-server-url
   "https://substitutes.nonguix.org")
 
 ;; Transparent mirror of nonguix substitutes operated by guix.moe.  Retains the
 ;; original nonguix signing key, so %nonguix-substitute-server-key is reused
-;; below.  Marked as a testing endpoint upstream (added 2026-04-03).
+;; below.  Marked as a testing endpoint upstream (added 2026-04-03).  Dropped
+;; from %all-substitute-server-urls 2026-07-07 now that the official nonguix
+;; server is back; definition kept for quick fallback.
 (define %nonguix-mirror-substitute-server-url
   "https://cache-test.guix.moe")
 
@@ -71,7 +73,7 @@
 (define %all-substitute-server-urls
   (list %gofranz-substitute-server-url
         %nonguix-substitute-server-url
-        %nonguix-mirror-substitute-server-url
+        ;; %nonguix-mirror-substitute-server-url  ; disabled: official nonguix live again
         %guix-moe-substitute-server-url))
 
 (define %all-substitute-server-keys
