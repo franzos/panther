@@ -9,6 +9,22 @@
 (channel-news
  (version 0)
 
+ (entry (commit "e2077ab")
+        (title
+         (en "Substitute servers: official nonguix restored, guix.moe mirror dropped"))
+        (body
+         (en "@code{substitutes.nonguix.org} is reliable again, so it has been
+re-enabled as the nonguix substitute source.  The transparent mirror
+@code{cache-test.guix.moe} is no longer queried, though its definition is
+kept for quick fallback should availability regress.
+
+@code{cache-fi.guix.moe} (the guix.moe build farm head node) remains
+active as a secondary source.  No action is required: the nonguix key was
+already authorized.
+
+After @code{guix pull}, run @code{sudo guix system reconfigure} to apply
+the updated substitute URLs.")))
+
  (entry (commit "00a45578dc4ea5989503954ca8ccc8efb0fe9717")
         (title
          (en "Substitute servers: nonguix routed through guix.moe mirror"))
