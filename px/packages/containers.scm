@@ -213,3 +213,41 @@ commands against containers without remembering long Docker invocations.")
        (sha256
         (base32 "0ypbiqkzdlw8zk36ggkzmglqgyq6ya7g7zz4fxf2qy0j9w1l48j2"))))
     (inputs (px-cargo-inputs 'aardvark-dns))))
+
+(define-public podman-tui
+  (package
+    (name "podman-tui")
+    (version "1.11.3")
+    (source (origin
+              (method go-fetch-vendored)
+              (uri (go-git-reference
+                    (url "https://github.com/containers/podman-tui")
+                    (commit (string-append "v" version))
+                    (sha (base32
+                          "0gqaifiyclzc0q5gpqvij8y7ad32j14pm29p6vdf51j3s6giird9"))))
+              (sha256
+               (base32
+                "157qj6yw4mfhw4m6gc444s4yhx444rf2z4cal2bhkiyacqy8ilv0"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:import-path "github.com/containers/podman-tui"
+      #:install-source? #f
+      #:go go-1.26
+      #:build-flags
+      #~(list "-tags"
+              "exclude_graphdriver_btrfs containers_image_openpgp remote")
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'build 'disable-cgo
+            (lambda _
+              (setenv "CGO_ENABLED" "0")))
+          (delete 'check))))
+    (home-page "https://github.com/containers/podman-tui")
+    (synopsis "Terminal user interface for Podman")
+    (description
+     "Podman-tui is a terminal user interface for Podman.  It provides an
+interactive way to manage containers, pods, images, volumes, and networks
+against a running Podman service, without memorising long command-line
+invocations.")
+    (license license:asl2.0)))
