@@ -187,3 +187,16 @@ It provides a quick overview of containers, services, images, and volumes,
 streams logs, displays resource usage stats, and allows running custom
 commands against containers without remembering long Docker invocations.")
     (license license:expat)))
+
+(define-public netavark
+  (package
+    (inherit (@ (gnu packages rust-apps) netavark))
+    (version "2.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "netavark" version))
+       (file-name (string-append "netavark-" version ".tar.gz"))
+       (sha256
+        (base32 "12ibyylgnwps6f298jjb49qnr3q9prahzdb4jskhx1gzxhyfxxil"))))
+    (inputs (px-cargo-inputs 'netavark))))
