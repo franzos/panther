@@ -305,7 +305,7 @@ submodule in FastFlowLM.")
 (define-public fastflowlm
   (package
     (name "fastflowlm")
-    (version "0.9.43")
+    (version "0.9.44")
     (source
      (origin
        (method git-fetch)
@@ -315,7 +315,7 @@ submodule in FastFlowLM.")
              (recursive? #t)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0g2g8gpy7mgz04fh6l5wvif3bqi5syyxdfwmq1vxrqbk0a9zp6hk"))))
+        (base32 "0z71zhz87sni7kn58jinrnx33rl13gajzmw9kb7k1z4lribk6by2"))))
     (build-system cmake-build-system)
     (arguments
      (list
@@ -353,7 +353,7 @@ submodule in FastFlowLM.")
                 (("set\\(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION ON\\)")
                  ""))
               (invoke "sed" "-i"
-                      "/if(NOT WIN32 AND NOT CMAKE_INSTALL_PREFIX/,/endif()/d"
+                      "/if(NOT WIN32 AND NOT FLM_PORTABLE_BUILD/,/endif()/d"
                       "CMakeLists.txt")))
 
           (add-after 'chdir-to-src 'patch-tokenizers-skip-cargo
