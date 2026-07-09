@@ -159,7 +159,7 @@ Linux support is currently in beta.")
 (define-public ollama
   (package
     (name "ollama")
-    (version "0.30.10")
+    (version "0.31.2")
     (source
      (origin
        (method url-fetch)
@@ -167,7 +167,7 @@ Linux support is currently in beta.")
              "https://github.com/ollama/ollama/releases/download/v"
              version "/ollama-linux-amd64.tar.zst"))
        (sha256
-        (base32 "1pbqs489r4gz295w94vz525wm09frcdqv3am95x4fn4dwll8yv84"))))
+        (base32 "0cribdbjpnsaan7m97x798fmas65dqlwak5d7idar6wm3brz121c"))))
     (build-system binary-build-system)
     (arguments
      (list
