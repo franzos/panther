@@ -209,7 +209,7 @@ brand icons for easy, scalable vector graphics on websites and beyond.")
 (define-public qtforkawesome
   (package
     (name "qtforkawesome")
-    (version "0.3.3")
+    (version "0.3.4")
     (source
      (origin
        (method url-fetch)
@@ -217,7 +217,7 @@ brand icons for easy, scalable vector graphics on websites and beyond.")
              "https://github.com/Martchus/qtforkawesome/archive/refs/tags/v"
              version ".tar.gz"))
        (sha256
-        (base32 "04q9pf8k3qjpmbk24g40zgvijkam6n99xydq5n2nzwwqbq414s8y"))))
+        (base32 "0fzji348vfb384ada8687slrwldxz5g3swwnq9p16jml138284q0"))))
     (build-system cmake-build-system)
     (native-inputs (list qtutilities
                          cpputilities
