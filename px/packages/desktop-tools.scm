@@ -221,16 +221,15 @@ brand icons for easy, scalable vector graphics on websites and beyond.")
     (build-system cmake-build-system)
     (native-inputs (list qtutilities
                          cpputilities
-                         qtbase-5
-                         qtquickcontrols-5
-                         qtquickcontrols2-5
-                         qtdeclarative-5
+                         qtbase
+                         qtdeclarative
                          perl
                          perl-yaml
                          fork-awesome))
     (arguments
      `(#:tests? #f
-       #:configure-flags ,#~(list (string-append "-DFORK_AWESOME_FONT_FILE="
+       #:configure-flags ,#~(list "-DQT_PACKAGE_PREFIX=Qt6"
+                                  (string-append "-DFORK_AWESOME_FONT_FILE="
                                    #$(this-package-native-input "fork-awesome")
                                    "/share/fonts/forkawesome-webfont.woff2")
                                   (string-append
@@ -270,7 +269,7 @@ brand icons for easy, scalable vector graphics on websites and beyond.")
 (define-public syncthingtray
   (package
     (name "syncthingtray")
-    (version "2.1.2")
+    (version "2.1.3")
     (source
      (origin
        (method url-fetch)
@@ -278,10 +277,13 @@ brand icons for easy, scalable vector graphics on websites and beyond.")
              "https://github.com/Martchus/syncthingtray/archive/refs/tags/v"
              version ".tar.gz"))
        (sha256
-        (base32 "116s04h87hh2mr0x3gn1qxls8vm1fnqf3ka4f9lssgakrs57xyvb"))))
+        (base32 "0vmfzgy3zd5v7a9q99r0ra68jakfqdnbyfrmpgs8jvpmd4a1sz0w"))))
     (build-system cmake-build-system)
     (arguments
      `(#:tests? #f
+       ;; The Plasmoid's Qt Quick GUI calls qt_policy, a Qt6-only CMake
+       ;; command, which fails under this Qt5 build.
+       #:configure-flags '("-DNO_PLASMOID=ON")
        #:phases (modify-phases %standard-phases
                   (replace 'build
                     (lambda _
