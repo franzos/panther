@@ -161,9 +161,10 @@
        (sha256
         (base32 "1f5jdb4r8ln7ia8mid7ch5kcy1zvyd494llfiajxzs7c30h0dzl4"))))
     (build-system cmake-build-system)
-    (native-inputs (list cpputilities qtbase-5 qttools-5))
+    (native-inputs (list cpputilities qtbase qttools))
     (arguments
-     `(#:tests? #f))
+     `(#:tests? #f
+       #:configure-flags '("-DQT_PACKAGE_PREFIX=Qt6")))
     (home-page "https://github.com/Martchus/qtutilities")
     (synopsis "Common Qt related C++ classes and routines")
     (description "Common Qt related C++ classes and routines")
