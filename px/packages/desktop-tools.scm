@@ -281,10 +281,32 @@ brand icons for easy, scalable vector graphics on websites and beyond.")
     (build-system cmake-build-system)
     (arguments
      `(#:tests? #f
-       ;; The Plasmoid's Qt Quick GUI calls qt_policy, a Qt6-only CMake
-       ;; command, which fails under this Qt5 build.
-       #:configure-flags '("-DNO_PLASMOID=ON")
+       #:configure-flags '("-DQT_PACKAGE_PREFIX=Qt6"
+                           "-DKF_PACKAGE_PREFIX=KF6")
        #:phases (modify-phases %standard-phases
+                  (add-after 'unpack 'fix-plasmoid-qml-export
+                    ;; The Qt6 plasmoid calls qt_add_qml_module after
+                    ;; include(LibraryTarget), so the generated resources object
+                    ;; library is never added to the export set and
+                    ;; install(EXPORT) fails.  Register it explicitly.
+                    (lambda _
+                      (let ((port (open-file "plasmoid/lib/CMakeLists.txt" "a")))
+                        (display "\nif (QUICK_GUI)\n\
+    get_target_property(GUIX_PLASMOID_LIBS syncthingplasmoid INTERFACE_LINK_LIBRARIES)\n\
+    set(GUIX_PLASMOID_RESOURCES)\n\
+    foreach (GUIX_LIB ${GUIX_PLASMOID_LIBS})\n\
+        if (\"${GUIX_LIB}\" MATCHES \".*(syncthingplasmoid_resources_[0-9]+).*\")\n\
+            list(APPEND GUIX_PLASMOID_RESOURCES \"${CMAKE_MATCH_1}\")\n\
+        endif ()\n\
+    endforeach ()\n\
+    if (GUIX_PLASMOID_RESOURCES)\n\
+        list(REMOVE_DUPLICATES GUIX_PLASMOID_RESOURCES)\n\
+        install(TARGETS ${GUIX_PLASMOID_RESOURCES} EXPORT syncthingplasmoidTargets)\n\
+    endif ()\n\
+endif ()\n"
+                                 port)
+                        (close-port port))
+                      #t))
                   (replace 'build
                     (lambda _
                       (invoke "make" "-j" "1") #t))
@@ -297,24 +319,24 @@ brand icons for easy, scalable vector graphics on websites and beyond.")
                             (qtwebengineprocess (string-append (assoc-ref
                                                                 inputs
                                                                 "qtwebengine")
-                                                 "/lib/qt5/libexec/QtWebEngineProcess")))
+                                                 "/lib/qt6/libexec/QtWebEngineProcess")))
                         (for-each (lambda (program)
                                     (wrap-program program
                                       `("QTWEBENGINEPROCESS_PATH" =
                                         (,qtwebengineprocess))))
                                   (find-files bin ".*"))) #t)))))
-    (native-inputs (list extra-cmake-modules qttools-5))
-    (inputs `(("qtbase" ,qtbase-5)
-              ("qtquickcontrols2" ,qtquickcontrols2-5)
+    (native-inputs (list extra-cmake-modules qttools))
+    (inputs `(("qtbase" ,qtbase)
               ("qtutilities" ,qtutilities)
               ("boost" ,boost)
-              ("qtdeclarative" ,qtdeclarative-5)
-              ("qtsvg" ,qtsvg-5)
-              ("qtwebchannel-5" ,qtwebchannel-5)
-              ("qtwebengine" ,qtwebengine-5)
-              ("plasma-framework" ,plasma-framework)
-              ("kwindowsystem" ,kwindowsystem-5)
-              ("kio" ,kio-5)
+              ("qtdeclarative" ,qtdeclarative)
+              ("qtsvg" ,qtsvg)
+              ("qtwebchannel" ,qtwebchannel)
+              ("qtwebengine" ,qtwebengine)
+              ("libplasma" ,libplasma)
+              ("kconfig" ,kconfig)
+              ("kwindowsystem" ,kwindowsystem)
+              ("kio" ,kio)
               ("cppunit" ,cppunit)
               ("cpputilities" ,cpputilities)
               ("qtforkawesome" ,qtforkawesome)
