@@ -47,6 +47,7 @@
   #:use-module (gnu packages xml)
   #:use-module (px packages go)
   #:use-module (px packages golang-xyz)
+  #:use-module (px packages rust)
   #:use-module (px self)
   #:use-module (ice-9 match))
 
@@ -414,19 +415,19 @@ reconciles the system to a desired provider state (@code{none}, @code{mullvad},
 (define-public oha
   (package
     (name "oha")
-    (version "1.14.0")
+    (version "1.15.0")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "oha" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "1pr71vifz2mqybq2n8mnaik6mgirrs4jfr2na5d1mj5494xqvkbn"))))
+        (base32 "1j446hs4br1q0h3jfdmn8s8vqlrdwdp2ly49lf1dfyymcb7wpcqy"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
        #:tests? #f
-       #:rust ,rust-1.87
+       #:rust ,rust-1.95
        #:phases
        (modify-phases %standard-phases
          (add-after 'unpack 'override-jemalloc
