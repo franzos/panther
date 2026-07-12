@@ -76,7 +76,7 @@ handle entire workflows.  This package disables auto-updates.")
 (define-public claude-desktop
   (package
     (name "claude-desktop")
-    (version "1.18286.2")
+    (version "1.19367.0")
     (source
      (origin
        (method url-fetch)
@@ -85,7 +85,7 @@ handle entire workflows.  This package disables auto-updates.")
              "main/c/claude-desktop/claude-desktop_" version "_amd64.deb"))
        (file-name (string-append name "-" version ".deb"))
        (sha256
-        (base32 "1w8jsms7syr3w001884hknqijhngxmxqaxrnb33qv9p0agh5vyjn"))))
+        (base32 "16r9m69hw6j0176mw1fvg8g7rhdy4y5gii934i79518i1irp1xbn"))))
     (build-system chromium-binary-build-system)
     (arguments
      (list
@@ -114,7 +114,7 @@ handle entire workflows.  This package disables auto-updates.")
       #~(modify-phases %standard-phases
           (add-before 'install 'patch-desktop
             (lambda _
-              (substitute* "usr/share/applications/claude-desktop.desktop"
+              (substitute* "usr/share/applications/com.anthropic.Claude.desktop"
                 (("Exec=claude-desktop")
                  (string-append "Exec=" #$output "/bin/claude-desktop")))))
           (add-before 'install-wrapper 'install-exe
