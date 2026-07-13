@@ -284,7 +284,7 @@ SQLite).")
 (define-public forseti
   (package
     (name "forseti")
-    (version "0.1.10")
+    (version "0.1.11")
     (source
      (origin
        (method url-fetch)
@@ -300,9 +300,9 @@ SQLite).")
         (base32
          (match (or (%current-system) (%current-target-system))
            ("aarch64-linux"
-            "0i49gzcsv69x8bhfc926qmmizfapz61lqqp1ln0ajcxxqk3w13ik")
+            "1013niqwlya5hgs2ms1wdya8940082ck334rs3g6b1lbjyi3k3xr")
            (_
-            "1sbfiwpmk8phvv5r2y0bwsdfi7a8xr3ql1kkv6mwjdwmksyvrd6a"))))))
+            "1wnv9pya6jrks5jqaqb3ib5k0311y5anwvfsy0xldaj8wg4qvf7d"))))))
     (build-system binary-build-system)
     (arguments
      ;; Prebuilt glibc binary: dynamically links libssl/libcrypto (OpenSSL),
