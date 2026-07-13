@@ -76,7 +76,7 @@ handle entire workflows.  This package disables auto-updates.")
 (define-public claude-desktop
   (package
     (name "claude-desktop")
-    (version "1.19367.0")
+    (version "1.20186.1")
     (source
      (origin
        (method url-fetch)
@@ -85,7 +85,7 @@ handle entire workflows.  This package disables auto-updates.")
              "main/c/claude-desktop/claude-desktop_" version "_amd64.deb"))
        (file-name (string-append name "-" version ".deb"))
        (sha256
-        (base32 "16r9m69hw6j0176mw1fvg8g7rhdy4y5gii934i79518i1irp1xbn"))))
+        (base32 "1nzn33pgvz8ffcnjx87vclsp64729j1m4m8syjhqzfkbzq2yqv8b"))))
     (build-system chromium-binary-build-system)
     (arguments
      (list
