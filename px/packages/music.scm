@@ -37,7 +37,7 @@
   (package
     (inherit (@ (gnu packages music) strawberry))
     (name "strawberry")
-    (version "1.2.23")
+    (version "1.2.24")
     (source
      (origin
        (method git-fetch)
@@ -46,7 +46,7 @@
              (commit version)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "16czsh37g3vr827p2rn6n1icn06k0ijyr4pj2s9ghiidpi227h4k"))))
+        (base32 "1zl91hp6c8sjjc2fdqb4r0q19ah0slzlschjhzz4fix4hvs5478a"))))
     (arguments
      (substitute-keyword-arguments
          (package-arguments (@ (gnu packages music) strawberry))
