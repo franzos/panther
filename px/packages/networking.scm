@@ -311,7 +311,7 @@ the VPN connection."))))
 (define-public ivpn
   (package
     (name "ivpn")
-    (version "3.15.6")
+    (version "3.15.13")
     (source
      (origin
        (method git-fetch)
@@ -320,11 +320,11 @@ the VPN connection."))))
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1ihr004xg82iw399vdidsajskdp1r7bpiy1fj8jjvlpmraaj8vhb"))))
+        (base32 "0y8z3pm2mwb72n8zm3wvqwms9aahaz3xjazybpwa58k29wkj34qp"))))
     (build-system go-build-system)
     (arguments
      (list
-      #:go go-1.24
+      #:go go-1.26
       #:import-path "github.com/ivpn/desktop-app/daemon"
       #:unpack-path "github.com/ivpn/desktop-app"
       #:install-source? #f
@@ -364,6 +364,7 @@ the VPN connection."))))
     (propagated-inputs
      (list go-github-com-fsnotify-fsnotify
            go-github-com-google-uuid
+           go-github-com-shirou-gopsutil-v4
            go-github-com-stretchr-testify
            go-golang-org-x-crypto
            go-golang-org-x-net
