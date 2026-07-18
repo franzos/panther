@@ -218,7 +218,7 @@ include virtual branches, easy commit management, and GitHub integration.")
 (define-public git-cola
   (package
     (name "git-cola")
-    (version "4.18.2")
+    (version "4.19.0")
     (source
      (origin
        (method git-fetch)
@@ -227,7 +227,7 @@ include virtual branches, easy commit management, and GitHub integration.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0fnq6vdgr0jb3w8gnbm4bk9lvq2v0qaw0ybrqdl6857nb1fpsj51"))))
+        (base32 "1g6gvfv79yx10f8ymaamnajb9ha1va3a0q9fi20y6ayc4lmz4z25"))))
     (build-system pyproject-build-system)
     (arguments
      (list
