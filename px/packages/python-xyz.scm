@@ -475,20 +475,19 @@ the CSS counterpart to jsbeautifier.")
 (define-public djlint
   (package
     (name "djlint")
-    (version "1.40.4")
+    (version "1.40.8")
     (source
      (origin
        (method url-fetch)
        (uri (pypi-uri "djlint" version))
        (sha256
-        (base32 "1hs19fnmnhnzr1zp39rf55yvpmy56chh5jwvvsy38wzyvlq9153n"))))
+        (base32 "1bwhjha14aqyr9iay1fw5fsna2dixksnz0x92dsp343psv4d77ij"))))
     (build-system pyproject-build-system)
     (arguments
      (list
       #:tests? #f))
     (native-inputs (list python-hatchling))
     (propagated-inputs (list python-click
-                             python-colorama
                              python-cssbeautifier
                              python-jsbeautifier
                              python-json5
@@ -496,7 +495,6 @@ the CSS counterpart to jsbeautifier.")
                              python-pyyaml
                              python-regex
                              python-tomli
-                             python-tqdm
                              python-typing-extensions))
     (home-page "https://djlint.com")
     (synopsis "HTML template linter and formatter")
