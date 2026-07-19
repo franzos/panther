@@ -464,3 +464,37 @@ It supports flowcharts, sequence diagrams, class diagrams, and more with a
 readable syntax.  D2 includes multiple layout engines and can output to SVG,
 PNG, and PDF formats.")
     (license license:mpl2.0)))
+
+(define-public mdbook
+  (package
+    (name "mdbook")
+    (version "0.5.4")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/rust-lang/mdBook")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1r8na6dy8vcgxvn504l9z52gqfgi5rykjhhplpzx2vz92cbhrdfm"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:install-source? #f
+       ;; These snapshot tests compare exact stderr output; the vendored
+       ;; build creates both .cargo/config and .cargo/config.toml, which
+       ;; makes cargo print an extra "using .cargo/config" warning that
+       ;; breaks the snapshot comparison.  Not a functional failure.
+       #:cargo-test-flags
+       '("--"
+         "--skip=preprocessor::failing_preprocessor"
+         "--skip=preprocessor::nop_preprocessor")))
+    (inputs
+     (px-cargo-inputs 'mdbook))
+    (home-page "https://rust-lang.github.io/mdBook/")
+    (synopsis "Create books from Markdown files")
+    (description
+     "mdBook is a utility to create modern online books from Markdown files,
+similar to Gitbook.  It is used to create the Rust standard library
+documentation, as well as many other books and manuals.")
+    (license license:mpl2.0)))
