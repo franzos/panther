@@ -510,12 +510,22 @@ by modern kernels (4.15+) to load the regulatory database.")))
 ;; empty in a plain solaar profile, the launcher then fails to find its own
 ;; modules ("No module named 'solaar'").  Keep the standard 'wrap phase and add
 ;; GI_TYPELIB_PATH after it instead.
-(define-public solaar-px
+(define-public solaar
   (package
     (inherit (@ (gnu packages admin) solaar))
     (name "solaar")
+    ;; Upstream omits libnotify, so its GI typelib is missing and solaar
+    ;; reports "Namespace Notify not available".  Add it back.
+    (inputs
+     (modify-inputs (package-inputs (@ (gnu packages admin) solaar))
+       (append (@ (gnu packages gnome) libnotify))))
     (arguments
-     (list #:phases
+     (list
+      ;; With libnotify present these tests run but need a real display.
+      #:test-flags
+      #~(list "--ignore=tests/logitech_receiver/test_desktop_notifications.py"
+              "--ignore=tests/solaar/ui/test_desktop_notifications.py")
+      #:phases
            #~(modify-phases %standard-phases
                (add-after 'wrap 'wrap-gi-typelib
                  (lambda _
