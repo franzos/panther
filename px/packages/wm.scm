@@ -17,7 +17,7 @@
   #:use-module (gnu packages python)
   #:use-module (gnu packages vulkan)
   #:use-module (gnu packages wget)
-  #:use-module (gnu packages wm)
+  #:use-module (gnu packages window-management)
   #:use-module (gnu packages xdisorg))
 
 ;; Niri with SHM screencast support (PR #1791)

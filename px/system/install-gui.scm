@@ -22,7 +22,7 @@
   #:use-module (gnu packages vim)
   #:use-module (gnu packages libusb)
   #:use-module (gnu packages linux)
-  #:use-module (gnu packages wm)
+  #:use-module (gnu packages window-management)
   #:use-module (gnu packages gl)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages xdisorg)
