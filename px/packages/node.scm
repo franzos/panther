@@ -6,17 +6,11 @@
                 #:prefix license:)
   #:use-module (ice-9 match)
   #:use-module (guix download)
-  #:use-module (guix git-download)
   #:use-module (guix build-system trivial)
   #:use-module (guix build-system copy)
   #:use-module (guix packages)
-  #:use-module (guix utils)
   #:use-module (gnu packages base)
   #:use-module (gnu packages gcc)
-  #:use-module (gnu packages icu4c)
-  #:use-module (gnu packages libevent)
-  #:use-module (gnu packages node)
-  #:use-module (gnu packages tls)
   #:use-module (nonguix build-system binary))
 
 (define-public pnpm
@@ -147,105 +141,3 @@ other developers from around the world. Yarn does this quickly,
 securely, and reliably so you don’t ever have to worry.")
     (license license:expat)))
 
-;; Node 24 bundles libuv 1.52.x; match it.  Get the version from
-;; https://github.com/nodejs/node/blob/main/deps/uv/include/uv/version.h
-(define-public libuv-for-node-24
-  (package
-    (inherit libuv)
-    (name "libuv")
-    (version "1.52.1")
-    (source (origin
-              (method url-fetch)
-              (uri (string-append "https://dist.libuv.org/dist/v" version
-                                  "/libuv-v" version ".tar.gz"))
-              (sha256
-               (base32
-                "1rzrrylgqyjcnjarph3r2h5i3cxjpx7j7svr4bkc0d73wswi3mb6"))))
-    (properties '((hidden? . #t)))))
-
-;; Node 24 bundles llhttp 9.4.x.  Rebuild the generated C sources from the
-;; upstream TypeScript so we can replace node's pre-generated copies.
-(define-public llhttp-for-node-24
-  (package
-    (inherit llhttp-bootstrap)
-    (version "9.4.2")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/nodejs/llhttp.git")
-                    (commit (string-append "v" version))))
-              (file-name (git-file-name "llhttp" version))
-              (sha256
-               (base32
-                "0yb46qksyw0h14r1qp84xkk8zijfi661991288isivba61hijp2z"))
-              (modules '((guix build utils)))
-              (snippet
-               '(substitute* "Makefile"
-                  (("node --import tsx bin/generate.ts")
-                   "node bin/generate.js")))))))
-
-(define-public node-24
-  (package
-    (inherit node-lts)
-    (name "node")
-    (version "24.18.0")
-    (source (origin
-              (method url-fetch)
-              (uri (string-append "https://nodejs.org/dist/v" version
-                                  "/node-v" version ".tar.gz"))
-              (sha256
-               (base32
-                "1dvy8y51qad7gx5fhlzbfrmav5c9rlasckgxd7n3k1qxnikq0d68"))
-              (modules '((guix build utils)))
-              (snippet
-               '(begin
-                  ;; openssl.cnf is required for build.
-                  (for-each delete-file-recursively
-                            (find-files "deps/openssl"
-                                        (lambda (file stat)
-                                          (not (string-contains file "nodejs-openssl.cnf")))))
-                  ;; Remove bundled software, where possible
-                  (for-each delete-file-recursively
-                            '("deps/brotli"
-                              "deps/cares"
-                              "deps/icu-small"
-                              "deps/nghttp2"
-                              "deps/ngtcp2"
-                              "deps/uv"
-                              "deps/zlib"))))))
-    (arguments
-     (substitute-keyword-arguments (package-arguments node-lts)
-       ((#:phases phases)
-        `(modify-phases ,phases
-           (add-after 'delete-problematic-tests 'delete-node-24-problematic-tests
-             (lambda _
-               ;; setuid/setgid is denied in the build container: spawn fails
-               ;; with EINVAL rather than the expected EPERM.
-               (delete-file "test/parallel/test-child-process-uid-gid.js")
-               ;; These fail against the older shared nghttp2 (1.58 vs node's
-               ;; bundled 1.69): flow-control violations now surface as a
-               ;; stream error instead of a session protocol error.
-               (for-each delete-file
-                         '("test/parallel/test-http2-misbehaving-flow-control.js"
-                           "test/parallel/test-http2-misbehaving-flow-control-paused.js"))))
-           ;; npm's bundled tar moved to a dist/{esm,commonjs} layout, so the
-           ;; inherited phase's lib/write-entry.js path no longer exists.
-           (replace 'ignore-number-of-hardlinks
-             (lambda* (#:key outputs #:allow-other-keys)
-               (let ((dir (string-append (assoc-ref outputs "out")
-                                         "/lib/node_modules/npm/node_modules"
-                                         "/tar/dist")))
-                 (substitute* (list (string-append dir "/commonjs/write-entry.js")
-                                    (string-append dir "/esm/write-entry.js"))
-                   (("this.stat.nlink > 1") "false")))))))))
-    (inputs
-     (modify-inputs (package-inputs node-lts)
-       (replace "openssl" openssl-3.5)
-       (replace "icu4c" icu4c-78)
-       (replace "libuv" libuv-for-node-24)
-       (replace "llhttp" llhttp-for-node-24)))
-    (native-inputs
-     (modify-inputs (package-native-inputs node-lts)
-       (replace "openssl" openssl-3.5)
-       (replace "icu4c" icu4c-78)
-       (replace "libuv" libuv-for-node-24)))))
