@@ -504,3 +504,21 @@ by modern kernels (4.15+) to load the regulatory database.")))
 (define %reterminal-kernel-modules
   (list bq24179-charger-linux-module lis3lv02d-linux-module
         ltr30x-linux-module mipi_dsi-linux-module))
+
+;; The guix package replaces the standard 'wrap phase with a GI_TYPELIB_PATH-only
+;; wrapper, which drops the GUIX_PYTHONPATH wrapping.  Since GUIX_PYTHONPATH is
+;; empty in a plain solaar profile, the launcher then fails to find its own
+;; modules ("No module named 'solaar'").  Keep the standard 'wrap phase and add
+;; GI_TYPELIB_PATH after it instead.
+(define-public solaar-px
+  (package
+    (inherit (@ (gnu packages admin) solaar))
+    (name "solaar")
+    (arguments
+     (list #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'wrap 'wrap-gi-typelib
+                 (lambda _
+                   (wrap-program (string-append #$output "/bin/solaar")
+                     `("GI_TYPELIB_PATH" ":" prefix
+                       (,(getenv "GI_TYPELIB_PATH")))))))))))
