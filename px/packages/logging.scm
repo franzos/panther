@@ -35,7 +35,7 @@
                    #$@(if (%current-target-system)
                           '()
                           '("-DSPDLOG_BUILD_TESTS=ON")))))
-    (native-inputs (list catch2-3))
+    (native-inputs (list catch2-3.5))
     (home-page "https://github.com/gabime/spdlog")
     (synopsis "Fast C++ logging library")
     (description "Spdlog is a very fast header-only/compiled C++ logging
