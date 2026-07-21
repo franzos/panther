@@ -270,7 +270,7 @@ programmers, with dashboards showing metrics and insights about coding habits.")
 (define-public stripe-cli
   (package
     (name "stripe-cli")
-    (version "1.43.8")
+    (version "1.44.0")
     (source
      (origin
        (method url-fetch)
@@ -284,9 +284,9 @@ programmers, with dashboards showing metrics and insights about coding habits.")
         (base32
          (match (or (%current-system) (%current-target-system))
            ("x86_64-linux"
-            "17zry445ip3ix1xhlfgdkg45c4bj94vl5mzrnfbrviyqimxnmj2i")
+            "0k1bzcmhb8gspfsddv68j9lfidqfwz3vj3pfdcmyhqxa5ysaqycb")
            ("aarch64-linux"
-            "1cz8fdmmxg19m30dzc29916pv3xvbcqba09x9010zjlia7vdz68p"))))))
+            "1g08xgwrp2ysgs3k19wirc8cva1wc1pm63f18kyy6lblb344q3y5"))))))
     (build-system binary-build-system)
     (arguments
      (list
