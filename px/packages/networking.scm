@@ -453,14 +453,14 @@ statistics in a terminal user interface powered by ratatui.")
 (define-public sniffnet
   (package
     (name "sniffnet")
-    (version "1.5.0")
+    (version "1.5.1")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "sniffnet" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "0fgdlymdix046y6iavif8qlz2m52fbjpxhrbhsijbaq144xwhg35"))))
+        (base32 "0aaar94hpi7vbzkf9d60hzzpgnc5p4q1by3rks7xm7ajn1ik2khn"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
