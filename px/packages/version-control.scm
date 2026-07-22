@@ -37,17 +37,17 @@
 (define-public bitbucket-cli
   (package
     (name "bitbucket-cli")
-    (version "0.28.2")
+    (version "0.30.0")
     (source (origin
               (method go-fetch-vendored)
               (uri (go-git-reference
                     (url "https://github.com/avivsinai/bitbucket-cli")
                     (commit (string-append "v" version))
                     (sha (base32
-                          "16c1v811ic79kkgr53izcpiikgjxwic6j0sis8dyqdblsnr1g0ba"))))
+                          "0s6ws5g8bfbn7p5jx6vh0jvs0n356cxmw5f41fbnvym0ichyppk3"))))
               (sha256
                (base32
-                "1kgipcbdn3pxblxpxcaaij6mnxmlvdwnynhzvr4xpz802iq2mavq"))))
+                "1341sxrnsah1vp6s5pp8rzsxlp8a1bs8k9f0vwa6dpl0sq8nnpmp"))))
     (build-system go-build-system)
     (arguments
      (list
@@ -56,7 +56,8 @@
       #:install-source? #f
       #:go go-1.26
       #:build-flags
-      #~(list (string-append
+      #~(list "-tags=purego"
+              (string-append
                "-ldflags=-s -w -X "
                "github.com/avivsinai/bitbucket-cli/internal/build.versionFromLdflags="
                #$version))
