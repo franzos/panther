@@ -5,10 +5,12 @@
   #:use-module ((guix licenses)
                 #:prefix license:)
   #:use-module (guix download)
+  #:use-module (guix gexp)
   #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix build-system python)
   #:use-module (guix build-system cargo)
+  #:use-module (gnu packages guile)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-build)
@@ -47,7 +49,7 @@
 (define-public guix-install
   (package
     (name "guix-install")
-    (version "0.1.12")
+    (version "0.1.13")
     (source
      (origin
        (method git-fetch)
@@ -56,19 +58,20 @@
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1330g93mz8yabhfqs2gbf3xvdylv7sm5hrch4hb79ryhqdca500n"))))
+        (base32 "17zh9ba542y9c4lscq6vmqlb9zajjbhvyljz39h65f9bin2ijcy6"))))
     (build-system cargo-build-system)
     (arguments
-     `(#:install-source? #f
-       ;; Workspace also holds the iced GUI crate; build only the CLI here.
-       #:cargo-build-flags '("--release" "-p" "guix-install")
-       #:phases
-       (modify-phases %standard-phases
-         (replace 'install
-           (lambda* (#:key outputs #:allow-other-keys)
-             (let ((bin (string-append (assoc-ref outputs "out") "/bin")))
-               (mkdir-p bin)
-               (install-file "target/release/guix-install" bin)))))))
+     (list
+      #:install-source? #f
+      ;; Workspace also holds the iced GUI crate; build only the CLI here.
+      #:cargo-build-flags ''("--release" "-p" "guix-install")
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'install
+            (lambda _
+              (let ((bin (string-append #$output "/bin")))
+                (mkdir-p bin)
+                (install-file "target/release/guix-install" bin)))))))
     (inputs (px-cargo-inputs 'guix-install))
     (home-page "https://github.com/franzos/guix-install")
     (synopsis "Guix System installer")
