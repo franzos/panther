@@ -49,7 +49,7 @@
 (define-public guix-install
   (package
     (name "guix-install")
-    (version "0.1.13")
+    (version "0.1.14")
     (source
      (origin
        (method git-fetch)
@@ -58,7 +58,7 @@
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "17zh9ba542y9c4lscq6vmqlb9zajjbhvyljz39h65f9bin2ijcy6"))))
+        (base32 "1c48cpvldijp70qdsmf4qgq36bnrcnzc1pm85cnwsj0yl6r267lh"))))
     (build-system cargo-build-system)
     (arguments
      (list
