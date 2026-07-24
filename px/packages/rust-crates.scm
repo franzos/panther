@@ -8790,6 +8790,10 @@
   (crate-source "globset" "0.4.18"
                 "1qsp3wg0mgxzmshcgymdlpivqlc1bihm6133pl6dx2x4af8w3psj"))
 
+(define rust-globset-0.4.19
+  (crate-source "globset" "0.4.19"
+                "1k89ff27dk6x3386nsavqflpdf723c3vf2mnhi42ar24mv93fzg4"))
+
 (define rust-globwalk-0.9.1
   (crate-source "globwalk" "0.9.1"
                 "0mz7bsa66p2rrgnz3l94ac4kbklh7mq8j30iizyxjy4qyvmn1xqb"))
@@ -12132,6 +12136,10 @@
   (crate-source "jiff" "0.2.31"
                 "0d6nvffabb1v34x2s2a3xjca4zny1dfdhqm3xy0wyl77rchn3znc"))
 
+(define rust-jiff-0.2.32
+  (crate-source "jiff" "0.2.32"
+                "03lhbin1rcqx84ag8wn6fpaf14wcdar27ck8dy6dvgsj4qw1c7cn"))
+
 (define rust-jiff-0.2.5
   (crate-source "jiff" "0.2.5"
                 "0q3jpq3scznmviiajldyf5xby38zgyvkxbrmgb9hf78r6416f0n1"))
@@ -12163,6 +12171,10 @@
 (define rust-jiff-static-0.2.31
   (crate-source "jiff-static" "0.2.31"
                 "1lpdrmzd5yafwzniw0xi5gac4rz0vccsja1qrprjim32ysbyhrg1"))
+
+(define rust-jiff-static-0.2.32
+  (crate-source "jiff-static" "0.2.32"
+                "1k02m2afp1k07rbjqlqhvqyl46ir4v0cq5b65ig4r77rkp9rp1yh"))
 
 (define rust-jiff-static-0.2.5
   (crate-source "jiff-static" "0.2.5"
@@ -29834,6 +29846,7 @@
 
 
 
+
 (define-cargo-inputs lookup-cargo-inputs
                      (aardvark-dns =>
                                    (list rust-android-system-properties-0.1.5
@@ -31065,7 +31078,7 @@
                                  rust-allocator-api2-0.2.21
                                  rust-anes-0.1.6
                                  rust-anstyle-1.0.14
-                                 rust-anyhow-1.0.103
+                                 rust-anyhow-1.0.104
                                  rust-approx-0.5.1
                                  rust-arrayvec-0.7.6
                                  rust-ascii-table-4.0.8
@@ -31131,7 +31144,7 @@
                                  rust-crossbeam-0.8.4
                                  rust-crossbeam-channel-0.5.15
                                  rust-crossbeam-deque-0.8.5
-                                 rust-crossbeam-epoch-0.9.18
+                                 rust-crossbeam-epoch-0.9.20
                                  rust-crossbeam-queue-0.3.12
                                  rust-crossbeam-utils-0.8.21
                                  rust-darling-0.14.4
@@ -31202,7 +31215,7 @@
                                  rust-gimli-0.32.3
                                  rust-git2-0.21.0
                                  rust-glob-0.3.2
-                                 rust-globset-0.4.18
+                                 rust-globset-0.4.19
                                  rust-globwalk-0.9.1
                                  rust-grit-pattern-matcher-0.5.1
                                  rust-grit-util-0.5.1
@@ -31262,8 +31275,8 @@
                                  rust-itertools-0.10.5
                                  rust-itertools-0.14.0
                                  rust-itoa-1.0.15
-                                 rust-jiff-0.2.31
-                                 rust-jiff-static-0.2.31
+                                 rust-jiff-0.2.32
+                                 rust-jiff-static-0.2.32
                                  rust-jiff-tzdb-0.1.4
                                  rust-jiff-tzdb-platform-0.1.3
                                  rust-jobserver-0.1.31
@@ -31359,7 +31372,7 @@
                                  rust-quinn-0.11.9
                                  rust-quinn-proto-0.11.15
                                  rust-quinn-udp-0.5.14
-                                 rust-quote-1.0.45
+                                 rust-quote-1.0.47
                                  rust-r-efi-5.2.0
                                  rust-r-efi-6.0.0
                                  rust-radium-0.7.0
@@ -31377,7 +31390,7 @@
                                  rust-redox-users-0.5.0
                                  rust-ref-cast-1.0.25
                                  rust-ref-cast-impl-1.0.25
-                                 rust-regex-1.12.4
+                                 rust-regex-1.13.0
                                  rust-regex-automata-0.4.13
                                  rust-regex-lite-0.1.6
                                  rust-regex-syntax-0.8.11
@@ -31388,7 +31401,7 @@
                                  rust-rust-lapper-1.2.0
                                  rust-rustc-demangle-0.1.24
                                  rust-rustc-hash-1.1.0
-                                 rust-rustc-hash-2.1.2
+                                 rust-rustc-hash-2.1.3
                                  rust-rustc-version-0.2.3
                                  rust-rustix-1.0.1
                                  rust-rustls-0.23.37
@@ -49148,4 +49161,3 @@
                                   rust-winnow-0.7.15
                                   rust-xdg-2.5.2
                                   rust-yaml-rust-0.4.5)))
-
