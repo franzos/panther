@@ -433,7 +433,7 @@ and rich media support for gaming communities.")
 (define-public appflowy
   (package
     (name "appflowy")
-    (version "0.12.5")
+    (version "0.13.0")
     (source
      (origin
        (method url-fetch)
@@ -441,7 +441,7 @@ and rich media support for gaming communities.")
              "https://github.com/AppFlowy-IO/AppFlowy/releases/download/"
              version "/AppFlowy-" version "-linux-x86_64.deb"))
        (sha256
-        (base32 "0x6a0rmvk8qnqpmwfx3bb1h6357phk6jxrm7xg1bckjrbi9j65q1"))))
+        (base32 "15bk4r9ygs91sv0smbl5hnf05306qr8xmlqkw3g4p5jm7y19axwi"))))
     (supported-systems '("x86_64-linux"))
     (build-system binary-build-system)
     (arguments
