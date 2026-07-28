@@ -8,6 +8,7 @@
   #:use-module (guix git-download)
   #:use-module (guix gexp)
   #:use-module (guix build-system cargo)
+  #:use-module (guix build-system copy)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system go)
   #:use-module (guix utils)
@@ -25,6 +26,7 @@
   #:use-module (gnu packages linux)
   #:use-module (gnu packages man)
   #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages python)
   #:use-module (gnu packages rust)
   #:use-module (gnu packages sqlite)
   #:use-module (gnu packages tls)
@@ -432,6 +434,83 @@ including Telegram, Matrix, and email.")
 Drive, Gmail, Calendar, Sheets, Docs, Chat, Admin, and other Google Workspace
 services.  Its command surface is dynamically built from the Google Discovery
 Service, and it includes AI agent skills.")
+    (license license:asl2.0)))
+
+(define-public google-cloud-cli
+  (package
+    (name "google-cloud-cli")
+    (version "577.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "https://storage.googleapis.com/cloud-sdk-release/"
+                           "google-cloud-cli-" version "-linux-x86_64.tar.gz"))
+       (sha256
+        (base32 "0pjjjyka5wn3qqqsr8w73zxihv33nkx7wgi5gzsv1rvc8hqd6chb"))))
+    (build-system copy-build-system)
+    (arguments
+     (list
+      #:strip-binaries? #f
+      #:install-plan
+      #~'(("." "share/google-cloud-sdk")
+          ("completion.bash.inc" "share/bash-completion/completions/gcloud"))
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'validate-runpath)
+          (add-after 'unpack 'unbundle-python
+            (lambda* (#:key inputs #:allow-other-keys)
+              ;; Drop the prebuilt CPython shipped for generic GNU/Linux and
+              ;; point the launcher preamble at the one from the store.  A
+              ;; user-set CLOUDSDK_PYTHON still wins.
+              (delete-file-recursively "platform/bundledpythonunix")
+              (substitute* '("bin/bq"
+                             "bin/docker-credential-gcloud"
+                             "bin/gcloud"
+                             "bin/git-credential-gcloud.sh"
+                             "bin/gsutil"
+                             "bin/java_dev_appserver.sh")
+                (("primary_python=python3\\.14")
+                 (string-append "primary_python="
+                                (search-input-file inputs "/bin/python3"))))))
+          (add-after 'unpack 'disable-component-manager
+            (lambda _
+              ;; Components are installed into a read-only store directory,
+              ;; so the built-in updater can never work.
+              (substitute* "lib/googlecloudsdk/core/config.json"
+                (("\"disable_updater\": false")
+                 "\"disable_updater\": true"))))
+          (add-after 'install 'wrap-launchers
+            (lambda* (#:key inputs #:allow-other-keys)
+              (let* ((sdk (string-append #$output "/share/google-cloud-sdk"))
+                     (bin (string-append #$output "/bin"))
+                     (scripts '("bq"
+                                "docker-credential-gcloud"
+                                "gcloud"
+                                "git-credential-gcloud.sh"
+                                "gsutil")))
+                (for-each (lambda (prog)
+                            ;; The preamble shells out to readlink, dirname
+                            ;; and uname to find its own install directory.
+                            (wrap-program (string-append sdk "/bin/" prog)
+                              `("PATH" ":" prefix
+                                (,(dirname (search-input-file inputs
+                                                              "/bin/uname"))))))
+                          scripts)
+                (mkdir-p bin)
+                (for-each (lambda (prog)
+                            (symlink (string-append sdk "/bin/" prog)
+                                     (string-append bin "/" prog)))
+                          (cons "gcloud-crc32c" scripts))))))))
+    (inputs (list bash-minimal coreutils-minimal python))
+    (supported-systems '("x86_64-linux"))
+    (home-page "https://cloud.google.com/cli")
+    (synopsis "Command-line interface for Google Cloud")
+    (description
+     "The Google Cloud CLI provides @command{gcloud} for managing Google Cloud
+resources and authenticating against Google APIs, alongside @command{gsutil}
+for Cloud Storage and @command{bq} for BigQuery.  This is the upstream binary
+release with the bundled Python interpreter replaced by the one from Guix; the
+component manager is disabled, so extra components are not available.")
     (license license:asl2.0)))
 
 (define-public d2
