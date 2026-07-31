@@ -25,14 +25,14 @@
 (define-public himalaya
   (package
     (name "himalaya")
-    (version "1.2.0")
+    (version "2.0.0")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "himalaya" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "1ca2gmpf9hr5nl9fg2s9j2x2m7xcnc8ifccmblnqfx8h6aq24jiz"))))
+        (base32 "1ayms8shhfh8620anza7v8bh5vmy36icxj5w8zppmgvlipc69mm6"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
