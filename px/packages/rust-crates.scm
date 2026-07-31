@@ -34253,33 +34253,27 @@
                                                   rust-zmij-1.0.21))
                      (forseti-unixd =>
                                     (list rust-ahash-0.8.12
-                                     rust-argon2-0.5.3
-                                     rust-async-trait-0.1.89
-                                     rust-rand-core-0.6.4
-                                     rust-base64ct-1.8.3
-                                     rust-blake2-0.10.6
-                                     rust-block-buffer-0.10.4
-                                     rust-cpufeatures-0.2.17
-                                     rust-crypto-common-0.1.7
-                                     rust-digest-0.10.7
-                                     rust-generic-array-0.14.7
-                                     rust-hmac-0.12.1
-                                     rust-password-hash-0.5.0
-                                     rust-sha2-0.10.9
-                                     rust-typenum-1.20.1
                                      rust-aho-corasick-1.1.4
                                      rust-anyhow-1.0.102
+                                     rust-argon2-0.5.3
                                      rust-assert-json-diff-2.0.2
+                                     rust-async-trait-0.1.89
                                      rust-atomic-waker-1.1.2
                                      rust-base64-0.22.1
+                                     rust-base64ct-1.8.3
                                      rust-bitflags-2.13.0
+                                     rust-blake2-0.10.6
+                                     rust-block-buffer-0.10.4
                                      rust-bumpalo-3.20.3
                                      rust-bytes-1.12.0
                                      rust-cc-1.2.65
                                      rust-cfg-if-1.0.4
                                      rust-cfg-aliases-0.2.1
+                                     rust-cpufeatures-0.2.17
+                                     rust-crypto-common-0.1.7
                                      rust-deadpool-0.12.3
                                      rust-deadpool-runtime-0.1.4
+                                     rust-digest-0.10.7
                                      rust-displaydoc-0.2.6
                                      rust-equivalent-1.0.2
                                      rust-errno-0.3.14
@@ -34298,6 +34292,7 @@
                                      rust-futures-sink-0.3.32
                                      rust-futures-task-0.3.32
                                      rust-futures-util-0.3.32
+                                     rust-generic-array-0.14.7
                                      rust-getrandom-0.2.17
                                      rust-getrandom-0.3.4
                                      rust-getrandom-0.4.3
@@ -34306,6 +34301,7 @@
                                      rust-hashbrown-0.17.1
                                      rust-hashlink-0.9.1
                                      rust-hermit-abi-0.5.2
+                                     rust-hmac-0.12.1
                                      rust-http-1.4.2
                                      rust-http-body-1.0.1
                                      rust-http-body-util-0.1.3
@@ -34341,6 +34337,7 @@
                                      rust-nu-ansi-term-0.50.3
                                      rust-num-cpus-1.17.0
                                      rust-once-cell-1.21.4
+                                     rust-password-hash-0.5.0
                                      rust-paste-1.0.15
                                      rust-percent-encoding-2.3.2
                                      rust-pin-project-lite-0.2.17
@@ -34356,6 +34353,7 @@
                                      rust-r-efi-6.0.0
                                      rust-rand-0.9.4
                                      rust-rand-chacha-0.9.0
+                                     rust-rand-core-0.6.4
                                      rust-rand-core-0.9.5
                                      rust-regex-1.12.4
                                      rust-regex-automata-0.4.14
@@ -34376,6 +34374,7 @@
                                      rust-serde-json-1.0.150
                                      rust-serde-spanned-0.6.9
                                      rust-serde-urlencoded-0.7.1
+                                     rust-sha2-0.10.9
                                      rust-sharded-slab-0.1.7
                                      rust-shlex-2.0.1
                                      rust-signal-hook-registry-1.4.8
@@ -34412,6 +34411,7 @@
                                      rust-tracing-log-0.2.0
                                      rust-tracing-subscriber-0.3.23
                                      rust-try-lock-0.2.5
+                                     rust-typenum-1.20.1
                                      rust-unicode-ident-1.0.24
                                      rust-untrusted-0.9.0
                                      rust-url-2.5.8
