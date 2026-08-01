@@ -577,3 +577,38 @@ PNG, and PDF formats.")
 similar to Gitbook.  It is used to create the Rust standard library
 documentation, as well as many other books and manuals.")
     (license license:mpl2.0)))
+
+(define-public cargo-sweep
+  (package
+    (name "cargo-sweep")
+    (version "0.8.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "cargo-sweep" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1asipxcdaxqq8v3w2c54cgn80iy5jgnxp2q5vpnm5cl4398idiyf"))))
+    (build-system cargo-build-system)
+    (arguments
+     (list
+      #:install-source? #f
+      #:tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          ;; cargo-sweep shells out to `cargo metadata`; without cargo on
+          ;; PATH it skips every project it finds.
+          (add-after 'install 'wrap-cargo
+            (lambda _
+              (wrap-program (string-append #$output "/bin/cargo-sweep")
+                `("PATH" ":" suffix (,(string-append #$rust:cargo "/bin")))))))))
+    (inputs
+     (cons bash-minimal (px-cargo-inputs 'cargo-sweep)))
+    (home-page "https://github.com/holmgr/cargo-sweep")
+    (synopsis "Clean unused build files created by Cargo")
+    (description
+     "cargo-sweep removes stale artifacts from Cargo target directories,
+selecting them by age, by installed toolchain, or by shrinking the directory
+below a size limit.  It can walk a directory tree and sweep every Cargo
+project it finds.")
+    (license license:expat)))
