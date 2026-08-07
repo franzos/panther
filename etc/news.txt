@@ -9,6 +9,19 @@
 (channel-news
  (version 0)
 
+ (entry (commit "feb3720")
+        (title
+         (en "Bichon updated to 2.0.0 - manual data migration required"))
+        (body
+         (en "Bichon 2.0.0 switches its blob storage engine from fjall to
+bichon-blob.  The new server refuses to start against existing data and
+will crash-loop until migrated.
+
+Before starting the service again, run @code{bichon-admin} with the same
+@code{BICHON_ROOT_DIR} used by the server and choose the
+\"v1.x (Fjall) → v2.x (bichon-blob)\" migration.  Then re-enable and start
+the @code{bichon} service.")))
+
  (entry (commit "e2077ab")
         (title
          (en "Substitute servers: official nonguix restored, guix.moe mirror dropped"))
