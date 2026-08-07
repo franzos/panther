@@ -37,7 +37,8 @@
     (arguments
      `(#:install-source? #f
        #:tests? #f
-       #:rust ,rust-1.89))
+       #:rust ,rust-1.89
+       #:features '("maildir")))
     (inputs (px-cargo-inputs 'himalaya))
     (home-page "https://pimalaya.org/")
     (synopsis "CLI to manage emails")
