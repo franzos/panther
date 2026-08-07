@@ -27,8 +27,10 @@
   #:use-module (gnu packages man)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
+  #:use-module (gnu packages rsync)
   #:use-module (gnu packages rust)
   #:use-module (gnu packages sqlite)
+  #:use-module (gnu packages ssh)
   #:use-module (gnu packages tls)
   #:use-module (px packages golang-xyz)
   #:use-module (px packages go)
@@ -611,4 +613,41 @@ documentation, as well as many other books and manuals.")
 selecting them by age, by installed toolchain, or by shrinking the directory
 below a size limit.  It can walk a directory tree and sweep every Cargo
 project it finds.")
+    (license license:expat)))
+
+(define-public crunch
+  (package
+    (name "crunch")
+    (version "0.0.16")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "crunch-app" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "048imydbq50926qnyq0a6fa7w0bh9s5avx9lnq7rpi4nq8idjbdm"))))
+    (build-system cargo-build-system)
+    (arguments
+     (list
+      #:install-source? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          ;; crunch shells out to `cargo` locally, and to `ssh`/`rsync` to
+          ;; reach the remote build host; without them on PATH it fails.
+          (add-after 'install 'wrap-runtime-deps
+            (lambda _
+              (wrap-program (string-append #$output "/bin/crunch")
+                `("PATH" ":" suffix
+                  (,(string-append #$rust:cargo "/bin")
+                   ,(string-append #$openssh "/bin")
+                   ,(string-append #$rsync "/bin")))))))))
+    (inputs
+     (cons bash-minimal (px-cargo-inputs 'crunch-app)))
+    (home-page "https://github.com/liamaharon/crunch")
+    (synopsis "Drop-in @command{cargo} replacement for remote compilation")
+    (description
+     "crunch is a drop-in @command{cargo} replacement that offloads Rust
+compilation to a remote server.  It syncs the local project to the remote
+host over @command{rsync}, runs the requested @command{cargo} command there
+over @command{ssh}, and copies results back, cutting local compile times.")
     (license license:expat)))
