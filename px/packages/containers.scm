@@ -204,14 +204,14 @@ commands against containers without remembering long Docker invocations.")
 (define-public aardvark-dns
   (package
     (inherit (@ (gnu packages rust-apps) aardvark-dns))
-    (version "2.0.0")
+    (version "2.1.0")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "aardvark-dns" version))
        (file-name (string-append "aardvark-dns-" version ".tar.gz"))
        (sha256
-        (base32 "0ypbiqkzdlw8zk36ggkzmglqgyq6ya7g7zz4fxf2qy0j9w1l48j2"))))
+        (base32 "0668wmap060qz83dg06k4h6gcgww6g1sz8mwakd3b3ixgz66yxlz"))))
     (inputs (px-cargo-inputs 'aardvark-dns))))
 
 (define-public podman-tui
