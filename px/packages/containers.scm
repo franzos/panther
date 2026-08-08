@@ -191,14 +191,14 @@ commands against containers without remembering long Docker invocations.")
 (define-public netavark
   (package
     (inherit (@ (gnu packages rust-apps) netavark))
-    (version "2.0.0")
+    (version "2.1.0")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "netavark" version))
        (file-name (string-append "netavark-" version ".tar.gz"))
        (sha256
-        (base32 "12ibyylgnwps6f298jjb49qnr3q9prahzdb4jskhx1gzxhyfxxil"))))
+        (base32 "0q5h9c7n7wi8dynb4nqikvgdlpp38g1j0y260810sw6nyxk9p9m7"))))
     (inputs (px-cargo-inputs 'netavark))))
 
 (define-public aardvark-dns
