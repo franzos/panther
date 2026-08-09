@@ -1986,6 +1986,10 @@
   (crate-source "bpaf" "0.9.26"
                 "0vldd22dw3br4w0i1qqfsxj2vhs6imlfm9js38b01qp7fsc851hb"))
 
+(define rust-bpaf-0.9.27
+  (crate-source "bpaf" "0.9.27"
+                "10nv3p7729in3km8j0ncpmywdicl1b06ixncsmr6i11kx9gdcw66"))
+
 (define rust-bpaf-derive-0.5.26
   (crate-source "bpaf_derive" "0.5.26"
                 "150hx7x04w42i00zfwazzw22w65vcbdszq9wrdv91c9rx379hzig"))
@@ -2386,6 +2390,10 @@
 (define rust-camino-1.2.4
   (crate-source "camino" "1.2.4"
                 "183v8ff17fnl8f4rygxz2hqgvc8k0rmivlsi5n9jch1w2zj30baz"))
+
+(define rust-camino-1.2.5
+  (crate-source "camino" "1.2.5"
+                "03dqn75zw26vf3lvc5m02kb0y3inacv7ps0nhjjvarx95bqhf4xv"))
 
 (define rust-caret-0.8.1
   (crate-source "caret" "0.8.1"
@@ -31500,7 +31508,7 @@
                                  rust-boa-string-0.21.1
                                  rust-borrow-or-share-0.2.4
                                  rust-boxcar-0.2.14
-                                 rust-bpaf-0.9.26
+                                 rust-bpaf-0.9.27
                                  rust-bpaf-derive-0.5.26
                                  rust-bstr-1.12.1
                                  rust-bumpalo-3.12.0
@@ -31508,7 +31516,7 @@
                                  rust-bytemuck-derive-1.10.2
                                  rust-byteorder-1.5.0
                                  rust-bytes-1.11.1
-                                 rust-camino-1.2.4
+                                 rust-camino-1.2.5
                                  rust-case-1.0.0
                                  rust-caseless-0.2.2
                                  rust-cast-0.3.0
@@ -31676,8 +31684,9 @@
                                  rust-itertools-0.10.5
                                  rust-itertools-0.14.0
                                  rust-itoa-1.0.15
-                                 rust-jiff-0.2.32
-                                 rust-jiff-static-0.2.32
+                                 rust-jiff-0.2.35
+                                 rust-jiff-core-0.1.0
+                                 rust-jiff-static-0.2.35
                                  rust-jiff-tzdb-0.1.4
                                  rust-jiff-tzdb-platform-0.1.3
                                  rust-jobserver-0.1.31
@@ -31687,7 +31696,7 @@
                                  rust-kqueue-sys-1.0.4
                                  rust-lazy-static-1.5.0
                                  rust-leb128fmt-0.1.0
-                                 rust-libc-0.2.186
+                                 rust-libc-0.2.189
                                  rust-libgit2-sys-0.18.5+1.9.4
                                  rust-libmimalloc-sys-0.1.47
                                  rust-libredox-0.1.3
@@ -31762,7 +31771,7 @@
                                  rust-proc-macro-crate-3.3.0
                                  rust-proc-macro-error-attr2-2.0.0
                                  rust-proc-macro-error2-2.0.1
-                                 rust-proc-macro2-1.0.106
+                                 rust-proc-macro2-1.0.107
                                  rust-pulldown-cmark-0.13.3
                                  rust-pulldown-cmark-escape-0.11.0
                                  rust-quick-junit-0.6.0
@@ -31791,8 +31800,8 @@
                                  rust-redox-users-0.5.0
                                  rust-ref-cast-1.0.25
                                  rust-ref-cast-impl-1.0.25
-                                 rust-regex-1.13.0
-                                 rust-regex-automata-0.4.13
+                                 rust-regex-1.13.1
+                                 rust-regex-automata-0.4.16
                                  rust-regex-lite-0.1.6
                                  rust-regex-syntax-0.8.11
                                  rust-regress-0.10.4
@@ -31816,8 +31825,8 @@
                                  rust-salsa-macros-0.27.2
                                  rust-same-file-1.0.6
                                  rust-scc-2.4.0
-                                 rust-schemars-1.2.1
-                                 rust-schemars-derive-1.2.1
+                                 rust-schemars-1.2.2
+                                 rust-schemars-derive-1.2.2
                                  rust-scoped-tls-1.0.1
                                  rust-scopeguard-1.1.0
                                  rust-sdd-3.0.10
@@ -31827,12 +31836,12 @@
                                  rust-semver-0.9.0
                                  rust-semver-1.0.27
                                  rust-semver-parser-0.7.0
-                                 rust-serde-1.0.228
+                                 rust-serde-1.0.229
                                  rust-serde-wasm-bindgen-0.6.5
-                                 rust-serde-core-1.0.228
-                                 rust-serde-derive-1.0.228
-                                 rust-serde-derive-internals-0.29.1
-                                 rust-serde-json-1.0.150
+                                 rust-serde-core-1.0.229
+                                 rust-serde-derive-1.0.229
+                                 rust-serde-derive-internals-0.30.0
+                                 rust-serde-json-1.0.151
                                  rust-serde-spanned-1.1.1
                                  rust-serde-test-1.0.177
                                  rust-serde-urlencoded-0.7.1
@@ -31860,6 +31869,7 @@
                                  rust-supports-color-2.1.0
                                  rust-syn-1.0.109
                                  rust-syn-2.0.106
+                                 rust-syn-3.0.3
                                  rust-sync-wrapper-1.0.2
                                  rust-synstructure-0.13.2
                                  rust-tag-ptr-0.1.0
