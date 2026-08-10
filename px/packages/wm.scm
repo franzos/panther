@@ -56,7 +56,7 @@ fallback for PipeWire screencasting.  This fixes screen sharing in browsers
 like Chrome that cannot handle DMA-BUF formats.")))
 
 ;; Noctalia's fork of Quickshell, adding the ext-background-effect-v1 Wayland
-;; protocol and Noctalia-specific build defaults.  Required by noctalia-shell.
+;; protocol and Noctalia-specific build defaults.  Required by noctalia-4.
 (define-public noctalia-qs
   (let ((commit "d3e26ccd9eecde9139be00caf5dc2d4260fb31ee")
         (revision "0"))
@@ -85,15 +85,15 @@ ecosystem.  It adds support for the @code{ext-background-effect-v1} Wayland
 protocol.  The binary is named @code{quickshell} (with a @code{qs} alias) and
 is a drop-in replacement for upstream Quickshell when running Noctalia."))))
 
-(define-public noctalia-shell
+(define-public noctalia-4
   (package
-    (name "noctalia-shell")
+    (name "noctalia-4")
     (version "4.7.7")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
-             (url "https://github.com/noctalia-dev/noctalia-shell")
+             (url "https://github.com/noctalia-dev/noctalia")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
@@ -102,23 +102,23 @@ is a drop-in replacement for upstream Quickshell when running Noctalia."))))
     (arguments
      (list
       #:install-plan
-      #~'(("Assets"  "share/noctalia-shell/")
-          ("Commons" "share/noctalia-shell/")
-          ("Helpers" "share/noctalia-shell/")
-          ("Modules" "share/noctalia-shell/")
-          ("Scripts" "share/noctalia-shell/")
-          ("Services" "share/noctalia-shell/")
-          ("Shaders" "share/noctalia-shell/")
-          ("Widgets" "share/noctalia-shell/")
-          ("shell.qml" "share/noctalia-shell/"))
+      #~'(("Assets"  "share/noctalia-4/")
+          ("Commons" "share/noctalia-4/")
+          ("Helpers" "share/noctalia-4/")
+          ("Modules" "share/noctalia-4/")
+          ("Scripts" "share/noctalia-4/")
+          ("Services" "share/noctalia-4/")
+          ("Shaders" "share/noctalia-4/")
+          ("Widgets" "share/noctalia-4/")
+          ("shell.qml" "share/noctalia-4/"))
       #:phases
       #~(modify-phases %standard-phases
           (add-after 'install 'install-launcher
             (lambda* (#:key inputs outputs #:allow-other-keys)
               (let* ((out (assoc-ref outputs "out"))
                      (bin (string-append out "/bin"))
-                     (share (string-append out "/share/noctalia-shell"))
-                     (launcher (string-append bin "/noctalia-shell"))
+                     (share (string-append out "/share/noctalia-4"))
+                     (launcher (string-append bin "/noctalia-4"))
                      (path (string-join
                             (map (lambda (pkg)
                                    (string-append (assoc-ref inputs pkg) "/bin"))
@@ -156,21 +156,24 @@ exec ~a/bin/quickshell -p ~a \"$@\"~%"
                   wl-clipboard
                   wlr-randr
                   wlsunset))
-    (home-page "https://github.com/noctalia-dev/noctalia-shell")
+    (home-page "https://github.com/noctalia-dev/noctalia")
     (synopsis "Minimal desktop shell for Wayland built on Quickshell")
     (description
      "Noctalia is a minimal desktop shell for Wayland compositors, built on
 Quickshell (Qt/QML).  It provides a status bar, panels, application launcher,
 notifications, lock screen, idle management, OSD, theming, wallpaper
 management, desktop widgets, dock, and multi-monitor support.  Noctalia
-natively supports Niri, Hyprland, Sway, Scroll, Labwc and MangoWC.")
+natively supports Niri, Hyprland, Sway, Scroll, Labwc and MangoWC.  This is
+the v4 line, built on Quickshell; see @code{noctalia-5} for the from-scratch
+C++ rewrite.")
     (license license:expat)))
 
 ;; Noctalia v5: a from-scratch C++ rewrite dropping Qt/Quickshell in favour of
-;; Wayland + OpenGL ES.  Still beta, hence packaged alongside noctalia-shell.
-(define-public noctalia-beta
+;; Wayland + OpenGL ES.  A breaking rewrite, not a drop-in successor, so it's
+;; packaged and tracked separately from noctalia-4 rather than replacing it.
+(define-public noctalia-5
   (package
-    (name "noctalia-beta")
+    (name "noctalia-5")
     (version "5.0.0-beta.7")
     (source
      (origin
