@@ -153,17 +153,17 @@ signatures in log files and system binaries.")
 (define-public osv-scanner
   (package
     (name "osv-scanner")
-    (version "2.4.0")
+    (version "2.5.0")
     (source (origin
               (method go-fetch-vendored)
               (uri (go-git-reference
                     (url "https://github.com/google/osv-scanner")
                     (commit (string-append "v" version))
                     (sha (base32
-                          "0vyfs4924b1a9rv88bm8jn92k5xy2f0gsz9jdklmic6jz70cbw0n"))))
+                          "1yfld27sk25bbda6dvzydcy4pjdhw47xd3mz2rqj5ncq90nqc0p5"))))
               (sha256
                (base32
-                "18znxljm8azk8aymm8mp07pkdf89gh8lmkf33aw9z9pii40n1v6j"))))
+                "11g3n2qg75fhd906qlyia7lgy83vxvh7krkfr22z351dwy02kh37"))))
     (build-system go-build-system)
     (arguments
      (list
