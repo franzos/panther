@@ -162,7 +162,7 @@ and based on the Qt6 framework.")
 (define-public cpputilities
   (package
     (name "cpputilities")
-    (version "5.34.2")
+    (version "5.35.0")
     (source
      (origin
        (method url-fetch)
@@ -170,7 +170,7 @@ and based on the Qt6 framework.")
              "https://github.com/Martchus/cpp-utilities/archive/refs/tags/v"
              version ".tar.gz"))
        (sha256
-        (base32 "13gz84i4s6w46y4zlnhfrjzc47p32yibg97v081nn10jjvwn6fnz"))))
+        (base32 "1fspj6d2r3szvqm6ny4n5r970cga37qaidq3mjpqhrcslldigqpr"))))
     (build-system cmake-build-system)
     (arguments
      `(#:tests? #f
