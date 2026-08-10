@@ -501,7 +501,7 @@ captured data.")
 (define-public halloy
   (package
     (name "halloy")
-    (version "2026.7.2")
+    (version "2026.8")
     (source
      (origin
        (method url-fetch)
@@ -510,13 +510,13 @@ captured data.")
              version ".tar.gz"))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "1fh7q83rqwhs7jq118hlajf73lbgkbi2ikrmrpnlm42sxcildjrd"))))
+        (base32 "16pr52259bgn7288w24vvkx9gwxm59f5gg8kj27k7b0zyi96s85q"))))
     (build-system cargo-build-system)
     (arguments
      (list
       #:install-source? #f
       #:tests? #f
-      #:rust rust-1.92
+      #:rust rust-1.93
       #:phases
       #~(modify-phases %standard-phases
           (add-after 'configure 'patch-git-deps-to-paths
