@@ -269,7 +269,7 @@ brand icons for easy, scalable vector graphics on websites and beyond.")
 (define-public syncthingtray
   (package
     (name "syncthingtray")
-    (version "2.1.3")
+    (version "2.1.4")
     (source
      (origin
        (method url-fetch)
@@ -277,12 +277,14 @@ brand icons for easy, scalable vector graphics on websites and beyond.")
              "https://github.com/Martchus/syncthingtray/archive/refs/tags/v"
              version ".tar.gz"))
        (sha256
-        (base32 "0vmfzgy3zd5v7a9q99r0ra68jakfqdnbyfrmpgs8jvpmd4a1sz0w"))))
+        (base32 "1mrj39p3l94l1qv1g2qn92zjb6ak22vzap5f8l9mara3x7zl6lck"))))
     (build-system cmake-build-system)
     (arguments
      `(#:tests? #f
        #:configure-flags '("-DQT_PACKAGE_PREFIX=Qt6"
-                           "-DKF_PACKAGE_PREFIX=KF6")
+                           "-DKF_PACKAGE_PREFIX=KF6"
+                           "-DNO_PLASMOID=ON"
+                           "-DNO_FILE_ITEM_ACTION_PLUGIN=ON")
        #:phases (modify-phases %standard-phases
                   (add-after 'unpack 'fix-plasmoid-qml-export
                     ;; The Qt6 plasmoid calls qt_add_qml_module after
