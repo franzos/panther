@@ -76,6 +76,17 @@ gh_latest_semver() {
         | sort -V | tail -1
 }
 
+# Fetch latest tag matching a specific major-version line (for repos that host
+# multiple actively-tagged major lines at once, e.g. a v4 stable + v5 beta).
+gh_latest_semver_prefix() {
+    local repo="$1" major="$2"
+    gh_api "https://api.github.com/repos/$repo/tags?per_page=100" \
+        | jq -r '.[].name // empty' 2>/dev/null \
+        | while read -r t; do strip_tag "$t"; done \
+        | grep -E "^${major}\." \
+        | sort -V | tail -1
+}
+
 # Fetch latest crate version
 crate_latest() {
     local crate="$1"
@@ -114,6 +125,21 @@ forgejo_latest() {
     fi
     [ -z "$tag" ] && return 1
     strip_tag "$tag"
+}
+
+# Fetch latest version from a Debian-style apt repo's Packages index
+apt_latest() {
+    local packages_url="$1" apt_pkg="$2"
+    curl -sfL "$packages_url" \
+        | awk -v pkg="$apt_pkg" \
+            '/^Package: / { p = ($2 == pkg) } p && /^Version: /{ print $2 }' \
+        | sort -V | tail -1
+}
+
+# Fetch latest Google Cloud CLI version from the rapid channel manifest
+gcloud_latest() {
+    curl -sfL "https://dl.google.com/dl/cloudsdk/channels/rapid/components-2.json" \
+        | jq -r '.version // empty' 2>/dev/null
 }
 
 # Fetch latest GitLab release tag; falls back to latest tag if no release
@@ -230,6 +256,33 @@ gh_release_semver() {
     compare "$pkg" "$current" "$latest"
 }
 
+gh_release_semver_prefix() {
+    local repo="$1" pkg="$2" major="$3"
+    local current latest
+    current=$(pkg_version "$pkg")
+    [ -z "$current" ] && return
+    latest=$(gh_latest_semver_prefix "$repo" "$major" 2>/dev/null || echo "")
+    compare "$pkg" "$current" "$latest"
+}
+
+apt_release() {
+    local packages_url="$1" apt_pkg="$2" pkg="${3:-$2}"
+    local current latest
+    current=$(pkg_version "$pkg")
+    [ -z "$current" ] && return
+    latest=$(apt_latest "$packages_url" "$apt_pkg" 2>/dev/null || echo "")
+    compare "$pkg" "$current" "$latest"
+}
+
+gcloud_release() {
+    local pkg="$1"
+    local current latest
+    current=$(pkg_version "$pkg")
+    [ -z "$current" ] && return
+    latest=$(gcloud_latest 2>/dev/null || echo "")
+    compare "$pkg" "$current" "$latest"
+}
+
 gitlab_release() {
     local project_id="$1" pkg="$2" host="${3:-gitlab.com}"
     local current latest
@@ -276,7 +329,9 @@ gh_release "Alex313031/thorium" "thorium-browser"
 gh_release "iotaledger/iota" "iota"
 gh_release "vicinaehq/vicinae" "vicinae"
 gh_release "googleworkspace/cli" "google-workspace-cli"
-gh_release "aaddrick/claude-desktop-debian" "claude-desktop"
+gh_release "stripe/stripe-cli" "stripe-cli"
+apt_release "https://downloads.claude.ai/claude-desktop/apt/stable/dists/stable/main/binary-amd64/Packages" "claude-desktop"
+apt_release "https://packagecloud.io/slacktechnologies/slack/debian/dists/jessie/main/binary-amd64/Packages" "slack-desktop"
 gh_release "mullvad/mullvadvpn-app" "mullvad-vpn-desktop"
 echo ""
 
@@ -293,6 +348,8 @@ gh_release "Canop/broot" "broot"
 gh_release "terrastruct/d2" "d2"
 gh_release "google/osv-scanner" "osv-scanner"
 gh_release "franzos/tku" "tku"
+gh_release "avivsinai/bitbucket-cli" "bitbucket-cli"
+gh_release "git-cola/git-cola" "git-cola"
 gh_release "microsoft/edit" "edit"
 gh_release "flowsurface-rs/flowsurface" "flowsurface"
 gh_release "JakeStanger/ironbar" "ironbar"
@@ -316,7 +373,6 @@ gh_release "capnproto/pycapnp" "python-pycapnp"
 gh_release "TamtamHero/fw-fanctrl" "fw-fanctrl"
 gh_release "tpm2-software/tpm2-tss" "tpm2-tss"
 gh_release "tpm2-software/tpm2-tss-engine" "tpm2-tss-engine"
-gh_release "tpm2-software/tpm2-tools" "tpm2-tools"
 gh_release "tpm2-software/tpm2-abrmd" "tpm2-abrmd"
 gh_release "tpm2-software/tpm2-pkcs11" "tpm2-pkcs11"
 gh_release "acshk/acsccid" "acsccid"
@@ -333,8 +389,6 @@ gh_release "snwh/paper-icon-theme" "paper-icon-theme"
 gh_release "thegala/qxkb" "qxkb"
 gh_release "ForkAwesome/Fork-Awesome" "fork-awesome"
 gh_release "getsentry/sentry-native" "sentry-native"
-gh_release "reclosedev/requests-cache" "python-requests-cache"
-gh_release "BlockIo/block_io-python" "python-block-io"
 gh_release "Rikorose/DeepFilterNet" "deepfilternet-ladspa"
 gh_release "franzos/jota" "jota"
 gh_release "franzos/arbtt-capture-wl" "arbtt-capture-wl"
@@ -346,10 +400,17 @@ gh_release "amd/xdna-driver" "xrt-plugin-amdxdna"
 gh_release "Jmgr/actiona" "actiona"
 gh_release "Huluti/Curtail" "curtail"
 gh_release "jesseduffield/lazydocker" "lazydocker"
+gh_release "containers/podman-tui" "podman-tui"
+gh_release "marhkb/pods" "pods"
 gh_release "ankitpokhrel/jira-cli" "jira-cli"
 gh_release "Qalculate/libqalculate" "libqalculate"
 gh_release "Qalculate/qalculate-gtk" "qalculate-gtk"
-gh_release "noctalia-dev/noctalia-shell" "noctalia-shell"
+# noctalia-4 (Quickshell-based) and noctalia-5 (from-scratch rewrite) are
+# both tagged in the same upstream repo (renamed from noctalia-shell to
+# noctalia), so /releases/latest always resolves to the newest v5 tag.
+# Filter by major-version line instead of trusting "latest".
+gh_release_semver_prefix "noctalia-dev/noctalia" "noctalia-4" "4"
+gh_release_semver_prefix "noctalia-dev/noctalia" "noctalia-5" "5"
 gh_release "franzos/shelf" "shelf"
 gh_release "franzos/guix-install" "guix-install"
 gh_release "rustmailer/bichon" "bichon"
@@ -359,6 +420,14 @@ gh_release "opentofu/opentofu" "opentofu"
 gh_release "franzos/guix-rs" "guix-gui"
 gh_release "djlint/djLint" "djlint"
 gh_release "biomejs/biome" "biome"
+gh_release "franzos/forseti" "forseti"
+gh_release "franzos/forseti" "forseti-unix"
+gh_release "ory/hydra" "ory-hydra"
+gh_release "ory/kratos" "ory-kratos"
+gh_release "keycloak/keycloak" "keycloak"
+gh_release "ossf/scorecard" "scorecard"
+gh_release "rust-lang/mdBook" "mdbook"
+gh_release "LizardByte/Sunshine" "sunshine"
 echo ""
 
 # --- Crates.io ---
@@ -370,6 +439,10 @@ crate_release "oculante"
 crate_release "oha"
 crate_release "sniffnet"
 crate_release "envstash"
+crate_release "netavark"
+crate_release "aardvark-dns"
+crate_release "crunch-app" "crunch"
+crate_release "cargo-sweep"
 echo ""
 
 # --- Other APIs (npm, GitLab, Forgejo) ---
@@ -381,7 +454,7 @@ gitlab_release "250833" "gitlab-runner"
 gitlab_release "20101" "papers" "gitlab.gnome.org"
 gh_release "spesmilo/electrum" "electrum-cc"
 gitlab_release "23104371" "darkman"
-forgejo_release "forgejo-contrib/forgejo-cli" "forgejo-cli"
+gcloud_release "google-cloud-cli"
 echo ""
 
 # --- Manual Check Required ---
@@ -399,8 +472,9 @@ manual() {
 manual "cursor"          "https://www.cursor.com/changelog"
 manual "antigravity"     "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/"
 manual "discord"         "https://discord.com/api/download?platform=linux&format=deb"
-manual "slack-desktop"   "https://slack.com/release-notes/linux"
 manual "monit"           "https://mmonit.com/monit/changes/"
+manual "gradle-8"        "https://gradle.org/releases/ (pinned to 8.x line)"
+manual "gradle-7"        "https://gradle.org/releases/ (pinned to 7.x line)"
 manual "xrt"             "https://github.com/Xilinx/XRT/releases"
 manual "mastodonpp"      "https://schlomp.space/tastytea/mastodonpp/releases (domain offline)"
 manual "ghostty"         "https://github.com/dariogriffo/ghostty-debian/releases"
