@@ -532,3 +532,39 @@ by modern kernels (4.15+) to load the regulatory database.")))
                    (wrap-program (string-append #$output "/bin/solaar")
                      `("GI_TYPELIB_PATH" ":" prefix
                        (,(getenv "GI_TYPELIB_PATH")))))))))))
+
+(define-public mouse-debounce
+  (package
+    (name "mouse-debounce")
+    (version "0.1.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/franzos/mouse-debounce.git")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0jy9b5p177i0f70718nyghiyvi6xc4qmjag2fafb8k24j2r7r5kr"))))
+    (build-system gnu-build-system)
+    (arguments
+     (list
+      #:test-target "check"
+      #:make-flags
+      #~(list (string-append "PREFIX=" #$output)
+              (string-append "CC=" #$(cc-for-target)))
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'configure))))
+    (native-inputs (list python-minimal))
+    (home-page "https://github.com/franzos/mouse-debounce")
+    (synopsis "Suppress microswitch chatter on mouse buttons")
+    (description
+     "An @code{interception-tools} filter for mice whose microswitches have worn
+out and bounce open shortly after a press, so that one click registers as two
+and a drag loses its selection.  A release arriving suspiciously soon after its
+press is withheld, and dropped entirely if the button is pressed again within
+the hold window.  libinput debounces buttons too, but only over a 12 to 25
+millisecond window that it does not expose for configuration, which is why this
+sits below it on the raw evdev stream.")
+    (license license:gpl3+)))
