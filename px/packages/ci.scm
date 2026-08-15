@@ -14,14 +14,14 @@
 (define-public gitlab-runner
   (package
     (name "gitlab-runner")
-    (version "v19.2.1")
+    (version "v19.2.2")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "https://gitlab-runner-downloads.s3.amazonaws.com/"
              version "/binaries/gitlab-runner-linux-amd64"))
        (sha256
-        (base32 "172w7y0fj4knbgn2waf178n9v5nassn8j4imqclic7p06mz1sh10"))))
+        (base32 "1y61ywp13by1drrc35gi6vgbh7lqh3ya67ym2y1m500g1wb6g6z5"))))
     (build-system trivial-build-system)
     (supported-systems '("x86_64-linux" "i686-linux")) ;; As long as we download binaries
     (arguments
