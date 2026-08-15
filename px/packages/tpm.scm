@@ -219,7 +219,7 @@ we use tpm2-abrmd and tabrmd interchangeably.")
 (define-public tpm2-pkcs11
   (package
     (name "tpm2-pkcs11")
-    (version "1.10.0")
+    (version "1.10.1")
     (source
      (origin
        (method url-fetch)
@@ -227,7 +227,7 @@ we use tpm2-abrmd and tabrmd interchangeably.")
              "https://github.com/tpm2-software/tpm2-pkcs11/releases/download/"
              version "/tpm2-pkcs11-" version ".tar.gz"))
        (sha256
-        (base32 "159f77szmcr29vhwzmvzlsp7788c66b4njy7cyli3987jzmz1lwr"))))
+        (base32 "1r2j6yjqv37z2fq6m846nnr402h6947a4sq4l5wqg48zh4bmscgk"))))
     (build-system gnu-build-system)
     (arguments
      `(#:tests? #f                      ;only manual test scripts
