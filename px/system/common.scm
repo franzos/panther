@@ -8,10 +8,8 @@
   #:export (%gofranz-substitute-server-url
             %nonguix-substitute-server-url
             %nonguix-mirror-substitute-server-url
-            %guix-moe-substitute-server-url
             %gofranz-substitute-server-key
             %nonguix-substitute-server-key
-            %guix-moe-substitute-server-key
             %all-substitute-server-urls
             %all-substitute-server-keys
             %pantherx-default-channels))
@@ -33,11 +31,6 @@
 (define %nonguix-mirror-substitute-server-url
   "https://cache-test.guix.moe")
 
-;; guix.moe build farm head node (nuporta, Finland).  Builds upstream Guix
-;; substitutes signed with its own key (see %guix-moe-substitute-server-key).
-(define %guix-moe-substitute-server-url
-  "https://cache-fi.guix.moe")
-
 (define %gofranz-substitute-server-key
   (plain-file "substitutes.guix.gofranz.com.pub"
    "(public-key
@@ -58,28 +51,17 @@
  )
 "))
 
-(define %guix-moe-substitute-server-key
-  (plain-file "cache-fi.guix.moe.pub"
-   "(public-key
- (ecc
-  (curve Ed25519)
-  (q #552F670D5005D7EB6ACF05284A1066E52156B51D75DE3EBD3030CD046675D543#)
-  )
- )
-"))
-
 ;; Aggregates of every server above, in preference order.  Use these to enable
 ;; all substitute servers at once instead of listing each one individually.
 (define %all-substitute-server-urls
   (list %gofranz-substitute-server-url
         %nonguix-substitute-server-url
         ;; %nonguix-mirror-substitute-server-url  ; disabled: official nonguix live again
-        %guix-moe-substitute-server-url))
+        ))
 
 (define %all-substitute-server-keys
   (list %gofranz-substitute-server-key
-        %nonguix-substitute-server-key
-        %guix-moe-substitute-server-key))
+        %nonguix-substitute-server-key))
 
 (define %pantherx-default-channels
   (append (list (channel
