@@ -55,7 +55,17 @@
             vpnmux-configuration-log-level
             vpnmux-configuration-group
             vpnmux-shepherd-service
-            vpnmux-service-type))
+            vpnmux-service-type
+
+            dnclient-configuration
+            dnclient-configuration?
+            dnclient-configuration-dnclient
+            dnclient-configuration-state-dir
+            dnclient-configuration-log-file
+            dnclient-configuration-server
+            dnclient-configuration-name
+            dnclient-shepherd-service
+            dnclient-service-type))
 
 ;;
 ;; Nebula SERVICE
@@ -410,3 +420,100 @@ the dirs root-only (CLI then requires @command{sudo}).  Mirrors
    (description
     "Run vpnmux, a control-loop daemon that keeps Mullvad and Tailscale from
 conflicting at the netfilter and DNS layer.")))
+
+;;
+;; dnclient SERVICE
+;;
+
+(define-configuration/no-serialization dnclient-configuration
+  (dnclient
+   (package dnclient)
+   "The @code{dnclient} package to run.")
+  (state-dir
+   (string "/var/lib/defined")
+   "Directory where @command{dnclient} persists its enrollment, certificates
+and Nebula config.  Passed as @option{-config}; must be the same directory
+that @command{dnclient enroll} was pointed at.")
+  (log-file
+   (string "/var/log/dnclient.log")
+   "File the Shepherd redirects the daemon's output to.")
+  (server
+   (maybe-string)
+   "When set, the control plane to use for API calls, e.g. for a self-hosted
+deployment.  Defaults to @url{https://api.defined.net} inside the client.")
+  (name
+   (maybe-string)
+   "When set, the instance name the host was enrolled under.  Only needed when
+@command{dnclient enroll} was given @option{-name}; the Shepherd service is
+then provisioned as @code{dnclient-@var{name}} instead of @code{dnclient}."))
+
+(define (dnclient-provision config)
+  (let ((name (dnclient-configuration-name config)))
+    (if (maybe-value-set? name)
+        (list (string->symbol (string-append "dnclient-" name)))
+        '(dnclient))))
+
+(define (dnclient-activation config)
+  ;; Only the state directory: dnclient creates its socket dir under /run
+  ;; itself on every start, which it has to since /run is a tmpfs.
+  (let ((state-dir (dnclient-configuration-state-dir config)))
+    (with-imported-modules '((guix build utils))
+      #~(begin
+          (use-modules (guix build utils))
+          (mkdir-p #$state-dir)
+          (chmod #$state-dir #o700)))))
+
+(define (dnclient-shepherd-service config)
+  (let ((dnclient (dnclient-configuration-dnclient config))
+        (state-dir (dnclient-configuration-state-dir config))
+        (log-file (dnclient-configuration-log-file config))
+        (server (dnclient-configuration-server config))
+        (name (dnclient-configuration-name config)))
+    (let ((server-flag (if (maybe-value-set? server)
+                           (list "-server" server)
+                           '()))
+          (name-flag (if (maybe-value-set? name)
+                         (list "-name" name)
+                         '())))
+      (list
+       (shepherd-service
+        (provision (dnclient-provision config))
+        (requirement '(networking user-processes))
+        (documentation
+         "Run the Defined Networking managed Nebula client.")
+        (respawn? #t)
+        (start
+         #~(make-forkexec-constructor
+            (list #$(file-append dnclient "/bin/dnclient") "run"
+                  "-config" #$state-dir
+                  #$@name-flag
+                  #$@server-flag)
+            #:log-file #$log-file
+            #:environment-variables
+            (cons*
+             "HOME=/root"
+             "SSL_CERT_DIR=/run/current-system/profile/etc/ssl/certs"
+             "SSL_CERT_FILE=/run/current-system/profile/etc/ssl/certs/ca-certificates.crt"
+             (default-environment-variables))))
+        (stop #~(make-kill-destructor)))))))
+
+(define dnclient-service-type
+  (service-type
+   (name 'dnclient)
+   (extensions
+    (list (service-extension shepherd-root-service-type
+                             dnclient-shepherd-service)
+          (service-extension profile-service-type
+                             (lambda (config)
+                               (list (dnclient-configuration-dnclient config))))
+          (service-extension activation-service-type
+                             dnclient-activation)
+          (service-extension log-rotation-service-type
+                             (lambda (config)
+                               (list (dnclient-configuration-log-file config))))))
+   (default-value (dnclient-configuration))
+   (description
+    "Run @command{dnclient}, the host agent for Defined Networking's managed
+Nebula service, under the Shepherd.  The host still has to be enrolled once by
+hand with @command{dnclient enroll -code CODE}; the daemon has nothing to do
+until that has happened.")))
