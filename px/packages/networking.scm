@@ -51,6 +51,56 @@
   #:use-module (px self)
   #:use-module (ice-9 match))
 
+(define (dnclient-arch)
+  (match (or (%current-system) (%current-target-system))
+    ("x86_64-linux" "amd64")
+    ("aarch64-linux" "arm64")))
+
+(define-public dnclient
+  (package
+    (name "dnclient")
+    (version "0.9.7")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://dl.defined.net/stable/binaries/dnclient/v" version
+             "/linux/" (dnclient-arch) "/dnclient"))
+       (file-name (string-append name "-" version "-" (dnclient-arch)))
+       (sha256
+        (base32
+         (match (dnclient-arch)
+           ("amd64" "1hvfnh62vriixh3zyva5z3giha7zxpf8p7z1fa1l2i21gna7wgrp")
+           ("arm64" "0wy3v0jwsilma31ayakxricb708f08nd6lhz9p8rmkrghc7l4rl2"))))))
+    (build-system binary-build-system)
+    (arguments
+     (list
+      ;; Statically linked Go binary: nothing to patch, and stripping breaks
+      ;; the Go build info the client reports to the control plane.
+      #:strip-binaries? #f
+      #:patchelf-plan #~'()
+      #:install-plan #~'(("dnclient" "bin/"))
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'unpack
+            (lambda* (#:key inputs #:allow-other-keys)
+              (copy-file (assoc-ref inputs "source") "dnclient")
+              (chmod "dnclient" #o755))))))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
+    (home-page "https://www.defined.net")
+    (synopsis "Managed Nebula client from Defined Networking")
+    (description
+     "@command{dnclient} is the host agent for Defined Networking's managed
+Nebula service.  It enrolls a host into a managed network, fetches and renews
+its certificates from the control plane, and runs the embedded Nebula client.
+
+The @code{install}, @code{start} and @code{stop} sub-commands only know about
+systemd, OpenRC, upstart and launchd, so they do nothing useful here; use
+@code{dnclient-service-type} from @code{(px services networking)} to run the
+daemon under the Shepherd.  Enrollment stays a manual step:
+@command{dnclient enroll -code CODE}.")
+    (license (nonfree "https://www.defined.net/terms/"))))
+
 (define-public nebula
   (package
     (name "nebula")
