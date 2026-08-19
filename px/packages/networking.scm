@@ -608,7 +608,7 @@ follow management, and backfeeding of replies from Fediverse users to your
 static site.")
     (license license:agpl3+)))
 
-(define %mullvad-vpn-desktop-version "2026.3")
+(define %mullvad-vpn-desktop-version "2026.4")
 
 (define (mullvad-vpn-desktop-origin-url system)
   (string-append "https://github.com/mullvad/mullvadvpn-app/releases/"
@@ -625,8 +625,8 @@ static site.")
 (define-public mullvad-vpn-desktop
   (define-values (url hash)
     (mullvad-vpn-desktop-origin-values
-     #:amd64-hash "1jhsjf707mv3i29i1r62cb6dml5n4n2s48h9as40d1w0mrryxiiq"
-     #:aarch64-hash "0m1p837mgfyahc5m4i441zfz7493i4s1knawgvcpyglja3dxnk54"))
+     #:amd64-hash "0fs5b4f8axk73a32qs3rk3gf25xpk5jjaj4d1kzhzj8xkq3mimzi"
+     #:aarch64-hash "028xivsjd586zifzj8ia90nq2b50b0yjzkq2k7j3yz7p4ps9gn1r"))
   (package
     (name "mullvad-vpn-desktop")
     (version %mullvad-vpn-desktop-version)
@@ -670,7 +670,8 @@ static site.")
             (replace 'binary-unpack
               (lambda* (#:key inputs #:allow-other-keys)
                  (invoke "ar" "x" #$source)
-                 (invoke "rm" "-v" "control.tar.xz"
+                 ;; _gpgbuilder is absent from newer debs.
+                 (invoke "rm" "-vf" "control.tar.xz"
                                    "debian-binary"
                                    "_gpgbuilder"
                                    (string-append #$name "-" #$version "-" #$(%current-system) ".deb"))
