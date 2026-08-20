@@ -119,7 +119,7 @@ single-binary replacement for tools such as Prettier and ESLint.")
 (define-public bun
   (package
     (name "bun")
-    (version "1.3.14")
+    (version "1.4.0")
     (source
      (origin
        (method url-fetch)
@@ -127,7 +127,7 @@ single-binary replacement for tools such as Prettier and ESLint.")
              "https://github.com/oven-sh/bun/releases/download/bun-v"
              version "/bun-linux-x64.zip"))
        (sha256
-        (base32 "13w4gvgwrjq9bi3ddp53hgm3z399d8i2aqpcmsaqbw2mx2pf47lm"))))
+        (base32 "0lp45zljagwcv1l2jv7mi3a1j6hsrsr838m0mikvbj1sp1gzn0rd"))))
     (build-system binary-build-system)
     (arguments
      (list
