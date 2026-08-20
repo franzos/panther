@@ -51,7 +51,7 @@ Maildir, Notmuch, SMTP, and Sendmail backends, along with OAuth 2.0
 authorization for various email providers including Gmail, Outlook, and iCloud.")
     (license license:expat)))
 
-(define bichon-version "2.0.1")
+(define bichon-version "2.0.2")
 
 (define bichon-source
   (origin
@@ -61,7 +61,7 @@ authorization for various email providers including Gmail, Outlook, and iCloud."
           (commit bichon-version)))
     (file-name (git-file-name "bichon" bichon-version))
     (sha256
-     (base32 "1ph1b4jfrf4vm11riw26z2p1r7kg56sp9wxj3ja9mxbikmdzbgx4"))
+     (base32 "0jn1zggnm4b6184v7cnai3sn82rfbijdxjcjy0spflkads94q46i"))
     (snippet
         #~(begin
             (use-modules (guix build utils)
@@ -72,7 +72,7 @@ authorization for various email providers including Gmail, Outlook, and iCloud."
               (("Command::new\\(\"git\"\\)")
                "Command::new(\"echo\")")
               (("\\.args\\(&?\\[\"rev-parse.*\\]\\)")
-               ".arg(\"2.0.1\")"))
+               ".arg(\"2.0.2\")"))
             ;; Replace git deps with path deps (multi-line: read/regex/write)
             (define (rewrite-file path pattern replacement)
               (let* ((content (call-with-input-file path
