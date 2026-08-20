@@ -18,6 +18,7 @@
   #:use-module (gnu packages node)
   #:use-module (gnu packages nss)
   #:use-module (gnu packages rust)
+  #:use-module (gnu packages sqlite)
   #:use-module (px packages node)
   #:use-module (px packages rust)
   #:use-module (px self))
@@ -25,21 +26,22 @@
 (define-public himalaya
   (package
     (name "himalaya")
-    (version "2.0.0")
+    (version "2.1.0")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "himalaya" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "1ayms8shhfh8620anza7v8bh5vmy36icxj5w8zppmgvlipc69mm6"))))
+        (base32 "1fy11y2fnjhdc3w72h6lm0zj7mq1j95f32581ga82sz04xxyzq85"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
        #:tests? #f
-       #:rust ,rust-1.89
+       #:rust ,rust-1.95
        #:features '("maildir")))
-    (inputs (px-cargo-inputs 'himalaya))
+    (native-inputs (list pkg-config))
+    (inputs (cons* sqlite (px-cargo-inputs 'himalaya)))
     (home-page "https://pimalaya.org/")
     (synopsis "CLI to manage emails")
     (description
