@@ -157,10 +157,12 @@ but is also able to connect tens of thousands of computers.")
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
+           ;; Equinox rebuilds and republishes each release in place, so these
+           ;; change without the version changing.
            ("x86_64-linux"
-            "1l1jx407cknglpl0q9lhp289czybj8d6ypydffc7y9gd9h3by7gp")
+            "1krhygyki5q300374s7r2nli2k9ma28cifklzjfm4pycgycv9h6f")
            ("aarch64-linux"
-            "1jn1cannq1724vyzj8fwgmy7l7aslwnn0vpm5v0rbcw0297nx80p"))))))
+            "0acyyzvmqw046bkbj1mmylwkicfdjpx1j27sax0w71cmkmda0srv"))))))
     (build-system binary-build-system)
     (arguments
      (list
