@@ -159,6 +159,12 @@ repository, patching the bundled Chromium runtime for the Guix store.
 Linux support is currently in beta.")
     (license (nonfree "https://www.anthropic.com/legal/consumer-terms"))))
 
+;; Node's architecture tag, which names the bundled prebuilt addon directories.
+(define (chatgpt-arch)
+  (match (or (%current-system) (%current-target-system))
+    ("x86_64-linux" "x64")
+    ("aarch64-linux" "arm64")))
+
 (define-public chatgpt
   (package
     (name "chatgpt")
@@ -168,42 +174,68 @@ Linux support is currently in beta.")
        (method url-fetch)
        (uri (string-append
              "https://persistent.oaistatic.com/codex-app-prod/linux/deb/"
-             "pool/main/c/chatgpt/chatgpt_" version "_amd64.deb"))
+             "pool/main/c/chatgpt/chatgpt_" version "_"
+             (match (or (%current-system) (%current-target-system))
+               ("x86_64-linux" "amd64")
+               ("aarch64-linux" "arm64")) ".deb"))
        (file-name (string-append name "-" version ".deb"))
        (sha256
-        (base32 "0cs4sm0rmwdklwzcaxpldnggbjkdr84xvhwwbawcw51shgb67094"))))
+        (base32
+         (match (or (%current-system) (%current-target-system))
+           ("x86_64-linux" "0cs4sm0rmwdklwzcaxpldnggbjkdr84xvhwwbawcw51shgb67094")
+           ("aarch64-linux" "0jir5sj5xr3iqgizqb3lwdm3xmfcbimf58gqk6dbigylrzb20dhz"))))))
     (build-system chromium-binary-build-system)
     (arguments
      (list
       ;; ~390MB deb, faster to fetch from OpenAI than a substitute.
       #:substitutable? #f
       #:wrapper-plan
-      #~(map (lambda (file)
-               (string-append "usr/lib/chatgpt/" file))
-             '("ChatGPT"
-               "browser_crashpad_handler"
-               "libEGL.so"
-               "libGLESv2.so"
-               "libvk_swiftshader.so"
-               "libvulkan.so.1"
-               "resources/native/hid-topology-watcher.node"
-               "resources/app.asar.unpacked/node_modules/better-sqlite3/build/Release/better_sqlite3.node"
-               "resources/app.asar.unpacked/node_modules/node-pty/build/Release/pty.node"
-               "resources/app.asar.unpacked/node_modules/@parcel/watcher-linux-x64-glibc/watcher.node"
-               "resources/app.asar.unpacked/node_modules/@worklouder/device-kit-oai/node_modules/@worklouder/wl-device-kit/dist/native/linux/x64/serial_control.node"
-               "resources/app.asar.unpacked/node_modules/@worklouder/device-kit-oai/node_modules/@worklouder/wl-device-kit/node_modules/node-hid/prebuilds/HID-linux-x64/node-napi-v4.node"
-               "resources/app.asar.unpacked/node_modules/@worklouder/device-kit-oai/node_modules/@worklouder/wl-device-kit/node_modules/node-hid/prebuilds/HID_hidraw-linux-x64/node-napi-v4.node"
-               "resources/app.asar.unpacked/node_modules/@worklouder/device-kit-oai/node_modules/@worklouder/wl-device-kit/node_modules/serialport/node_modules/@serialport/bindings-cpp/prebuilds/linux-x64/node.napi.glibc.node"
-               "resources/plugins/openai-bundled/plugins/browser/node_modules/classic-level/prebuilds/linux-x64/classic-level.node"
-               "resources/plugins/openai-bundled/plugins/chrome/node_modules/classic-level/prebuilds/linux-x64/classic-level.node"
-               "resources/plugins/openai-bundled/plugins/chrome/extension-host/linux/x64/extension-host"
-               "resources/cua_node/bin/node"
-               "resources/cua_node/bin/node_repl"
-               "resources/cua_node/lib/node_modules/.bin/sky_linux_x64"
-               "resources/cua_node/lib/node_modules/@oai/sky/bin/linux/sky_linux_x64"
-               "resources/cua_node/lib/node_modules/@img/sharp-libvips-linux-x64/lib/libvips-cpp.so.8.18.3"
-               "resources/cua_node/lib/node_modules/@img/sharp-linux-x64/lib/sharp-linux-x64-0.35.3.node"
-               "resources/cua_node/lib/node_modules/@napi-rs/canvas-linux-x64-gnu/skia.linux-x64-gnu.node"))
+      #~(let ((arch #$(chatgpt-arch))
+              ;; These prebuilt addons are named after the ABI, not the arch.
+              (napi #$(match (or (%current-system) (%current-target-system))
+                        ("x86_64-linux" "node.napi.glibc.node")
+                        ("aarch64-linux" "node.napi.armv8.node")))
+              (level #$(match (or (%current-system) (%current-target-system))
+                         ("x86_64-linux" "classic-level.node")
+                         ("aarch64-linux" "classic-level.armv8.node"))))
+          (map (lambda (file)
+                 (string-append "usr/lib/chatgpt/" file))
+               (list "ChatGPT"
+                     "browser_crashpad_handler"
+                     "libEGL.so"
+                     "libGLESv2.so"
+                     "libvk_swiftshader.so"
+                     "libvulkan.so.1"
+                     "resources/native/hid-topology-watcher.node"
+                     "resources/app.asar.unpacked/node_modules/better-sqlite3/build/Release/better_sqlite3.node"
+                     "resources/app.asar.unpacked/node_modules/node-pty/build/Release/pty.node"
+                     (string-append "resources/app.asar.unpacked/node_modules/@parcel/watcher-linux-"
+                                    arch "-glibc/watcher.node")
+                     (string-append "resources/app.asar.unpacked/node_modules/@worklouder/device-kit-oai/node_modules/@worklouder/wl-device-kit/dist/native/linux/"
+                                    arch "/serial_control.node")
+                     (string-append "resources/app.asar.unpacked/node_modules/@worklouder/device-kit-oai/node_modules/@worklouder/wl-device-kit/node_modules/node-hid/prebuilds/HID-linux-"
+                                    arch "/node-napi-v4.node")
+                     (string-append "resources/app.asar.unpacked/node_modules/@worklouder/device-kit-oai/node_modules/@worklouder/wl-device-kit/node_modules/node-hid/prebuilds/HID_hidraw-linux-"
+                                    arch "/node-napi-v4.node")
+                     (string-append "resources/app.asar.unpacked/node_modules/@worklouder/device-kit-oai/node_modules/@worklouder/wl-device-kit/node_modules/serialport/node_modules/@serialport/bindings-cpp/prebuilds/linux-"
+                                    arch "/" napi)
+                     (string-append "resources/plugins/openai-bundled/plugins/browser/node_modules/classic-level/prebuilds/linux-"
+                                    arch "/" level)
+                     (string-append "resources/plugins/openai-bundled/plugins/chrome/node_modules/classic-level/prebuilds/linux-"
+                                    arch "/" level)
+                     (string-append "resources/plugins/openai-bundled/plugins/chrome/extension-host/linux/"
+                                    arch "/extension-host")
+                     "resources/cua_node/bin/node"
+                     "resources/cua_node/bin/node_repl"
+                     (string-append "resources/cua_node/lib/node_modules/.bin/sky_linux_" arch)
+                     (string-append "resources/cua_node/lib/node_modules/@oai/sky/bin/linux/sky_linux_"
+                                    arch)
+                     (string-append "resources/cua_node/lib/node_modules/@img/sharp-libvips-linux-"
+                                    arch "/lib/libvips-cpp.so.8.18.3")
+                     (string-append "resources/cua_node/lib/node_modules/@img/sharp-linux-"
+                                    arch "/lib/sharp-linux-" arch "-0.35.3.node")
+                     (string-append "resources/cua_node/lib/node_modules/@napi-rs/canvas-linux-"
+                                    arch "-gnu/skia.linux-" arch "-gnu.node"))))
       #:install-plan
       #~'(("usr/lib/chatgpt/" "/share/chatgpt")
           ("usr/share/applications/" "/share/applications")
@@ -232,11 +264,12 @@ Linux support is currently in beta.")
               ;; patchelf replaced sharp's $ORIGIN-relative RUNPATH, which is
               ;; how it finds its own libvips.
               (invoke "patchelf" "--add-rpath"
-                      "$ORIGIN/../../sharp-libvips-linux-x64/lib"
+                      (string-append "$ORIGIN/../../sharp-libvips-linux-"
+                                     #$(chatgpt-arch) "/lib")
                       (string-append
                        #$output "/share/chatgpt/resources/cua_node/lib"
-                       "/node_modules/@img/sharp-linux-x64/lib"
-                       "/sharp-linux-x64-0.35.3.node"))))
+                       "/node_modules/@img/sharp-linux-" #$(chatgpt-arch) "/lib"
+                       "/sharp-linux-" #$(chatgpt-arch) "-0.35.3.node"))))
           ;; Chromium picks its password backend from the desktop environment;
           ;; on unrecognized ones (wlroots compositors such as niri) it falls
           ;; back to the plaintext store and won't persist logins.  Force
@@ -248,7 +281,7 @@ Linux support is currently in beta.")
                  "share/chatgpt/ChatGPT\" --password-store=gnome-libsecret ")))))))
     (inputs
      (list gdk-pixbuf libusb))
-    (supported-systems '("x86_64-linux"))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
     (home-page "https://developers.openai.com/codex/app")
     (synopsis "ChatGPT desktop client for Linux")
     (description
