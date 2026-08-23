@@ -10,6 +10,7 @@
   #:use-module (guix gexp)
   #:use-module (guix git-download)
   #:use-module (guix packages)
+  #:use-module (ice-9 match)
   #:use-module (gnu packages databases)
   #:use-module (gnu packages elf)
   #:use-module (gnu packages freedesktop)
@@ -34,9 +35,15 @@
        (method url-fetch)
        (uri (string-append
              "https://github.com/iotaledger/iota/releases/download/v"
-             version "/iota-v" version "-linux-x86_64.tgz"))
+             version "/iota-v" version "-linux-"
+             (match (or (%current-system) (%current-target-system))
+               ("x86_64-linux" "x86_64")
+               ("aarch64-linux" "arm64")) ".tgz"))
        (sha256
-        (base32 "06f7rd8mndva8pdbjsanz1a9na4hfmmwxifgfghjiscq2k472w02"))))
+        (base32
+         (match (or (%current-system) (%current-target-system))
+           ("x86_64-linux" "06f7rd8mndva8pdbjsanz1a9na4hfmmwxifgfghjiscq2k472w02")
+           ("aarch64-linux" "0r0ghzacczfxnv52c6z319xn4wwnayd676mcf0xsgbz2ipkrr5hd"))))))
     (build-system binary-build-system)
     (arguments
      (list
@@ -64,7 +71,7 @@
      (list eudev
            `(,gcc "lib")
            postgresql))
-    (supported-systems '("x86_64-linux"))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
     (home-page "https://github.com/iotaledger/iota")
     (synopsis "Scalable distributed ledger technology infrastructure")
     (description
