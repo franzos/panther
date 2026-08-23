@@ -14,6 +14,7 @@
   #:use-module (guix gexp)
   #:use-module (guix packages)
   #:use-module (guix build-system cmake)
+  #:use-module (ice-9 match)
   #:use-module (nonguix build-system binary)
   #:use-module ((guix licenses)
                 #:prefix license:))
@@ -51,9 +52,15 @@
        (method url-fetch)
        (uri (string-append
              "https://github.com/dbeaver/dbeaver/releases/download/"
-             version "/dbeaver-ce-" version "-linux-x86_64.tar.gz"))
+             version "/dbeaver-ce-" version "-linux-"
+             (match (or (%current-system) (%current-target-system))
+               ("x86_64-linux" "x86_64")
+               ("aarch64-linux" "aarch64")) ".tar.gz"))
        (sha256
-        (base32 "1why9jx3pqdhdfw4xvz0vz0zahq3rsdsp3rzhqfiri8li00a52hf"))))
+        (base32
+         (match (or (%current-system) (%current-target-system))
+           ("x86_64-linux" "1why9jx3pqdhdfw4xvz0vz0zahq3rsdsp3rzhqfiri8li00a52hf")
+           ("aarch64-linux" "0x6ny6vrnn7kgpmlq01lwspcyjxp1pc9zdj32i5x2jvw692wpkiv"))))))
     (build-system binary-build-system)
     (arguments
      (list
@@ -61,8 +68,13 @@
       #:patchelf-plan
       ;; After unpack, we're in the dbeaver/ directory
       ;; glibc is provided automatically by binary-build-system
-      #~'(("dbeaver" ())
-          ("plugins/org.eclipse.equinox.launcher.gtk.linux.x86_64_1.2.1500.v20250801-0854/eclipse_11916.so" ())
+      #~`(("dbeaver" ())
+          (,(string-append
+             "plugins/org.eclipse.equinox.launcher.gtk.linux."
+             #$(match (or (%current-system) (%current-target-system))
+                 ("x86_64-linux" "x86_64")
+                 ("aarch64-linux" "aarch64"))
+             "_1.2.1500.v20250801-0854/eclipse_11916.so") ())
           ;; JRE binaries
           ("jre/bin/java" ())
           ("jre/bin/jcmd" ())
@@ -151,7 +163,7 @@ MimeType=application/sql
            libxrender
            libxtst
            zlib))
-    (supported-systems '("x86_64-linux"))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
     (home-page "https://dbeaver.io/")
     (synopsis "Universal database manager and SQL client")
     (description
