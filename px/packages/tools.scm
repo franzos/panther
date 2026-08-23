@@ -125,9 +125,15 @@ single-binary replacement for tools such as Prettier and ESLint.")
        (method url-fetch)
        (uri (string-append
              "https://github.com/oven-sh/bun/releases/download/bun-v"
-             version "/bun-linux-x64.zip"))
+             version "/bun-linux-"
+             (match (or (%current-system) (%current-target-system))
+               ("x86_64-linux" "x64")
+               ("aarch64-linux" "aarch64")) ".zip"))
        (sha256
-        (base32 "0lp45zljagwcv1l2jv7mi3a1j6hsrsr838m0mikvbj1sp1gzn0rd"))))
+        (base32
+         (match (or (%current-system) (%current-target-system))
+           ("x86_64-linux" "0lp45zljagwcv1l2jv7mi3a1j6hsrsr838m0mikvbj1sp1gzn0rd")
+           ("aarch64-linux" "03pdivjkbvf8lfpbv263n8qkwkprzxqggrng7fwkx631x0p366jb"))))))
     (build-system binary-build-system)
     (arguments
      (list
@@ -139,7 +145,14 @@ single-binary replacement for tools such as Prettier and ESLint.")
           (replace 'unpack
             (lambda* (#:key inputs #:allow-other-keys)
               (invoke "unzip" "-q" (assoc-ref inputs "source"))
-              (invoke "mv" "bun-linux-x64/bun" "bun")))
+              (invoke "mv"
+                      (string-append
+                       "bun-linux-"
+                       #$(match (or (%current-system) (%current-target-system))
+                           ("x86_64-linux" "x64")
+                           ("aarch64-linux" "aarch64"))
+                       "/bun")
+                      "bun")))
           (add-after 'install 'create-wrapper
             (lambda* (#:key inputs outputs #:allow-other-keys)
               (let* ((out (assoc-ref outputs "out"))
@@ -152,13 +165,17 @@ single-binary replacement for tools such as Prettier and ESLint.")
                     (format #t "#!~a/bin/bash~%" (assoc-ref inputs "bash"))
                     (format #t "export LD_LIBRARY_PATH=~a/lib:~a/lib:$LD_LIBRARY_PATH~%"
                             glibc openssl)
-                    (format #t "exec ~a/lib/ld-linux-x86-64.so.2 ~a/bin/bun.real \"$@\"~%"
-                            glibc out)))
+                    (format #t "exec ~a/lib/~a ~a/bin/bun.real \"$@\"~%"
+                            glibc
+                            #$(match (or (%current-system) (%current-target-system))
+                                ("x86_64-linux" "ld-linux-x86-64.so.2")
+                                ("aarch64-linux" "ld-linux-aarch64.so.1"))
+                            out)))
                 (chmod (string-append bin "/bun") #o755)))))))
     (native-inputs (list unzip bash))
     (inputs `(("glibc" ,glibc)
               ("openssl" ,openssl)))
-    (supported-systems '("x86_64-linux"))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
     (home-page "https://bun.sh")
     (synopsis "Fast JavaScript runtime, package manager, and bundler")
     (description
