@@ -17,6 +17,7 @@
   #:use-module (guix packages)
   #:use-module (guix gexp)
   #:use-module (guix utils)
+  #:use-module (ice-9 match)
   #:use-module (nonguix build-system binary)
   #:use-module (nonguix build-system chromium-binary)
   #:use-module (gnu packages backup)
@@ -550,11 +551,21 @@ and under your control.")
        (method url-fetch)
        (uri (string-append
              "https://github.com/rustdesk/rustdesk/releases/download/"
-             version "/rustdesk-" version "-x86_64.deb"))
-       (file-name (string-append "rustdesk-" version "-x86_64.deb"))
+             version "/rustdesk-" version "-"
+             (match (or (%current-system) (%current-target-system))
+               ("x86_64-linux" "x86_64")
+               ("aarch64-linux" "aarch64")) ".deb"))
+       (file-name
+        (string-append "rustdesk-" version "-"
+                       (match (or (%current-system) (%current-target-system))
+                         ("x86_64-linux" "x86_64")
+                         ("aarch64-linux" "aarch64")) ".deb"))
        (sha256
-        (base32 "18zx2bbg21h4ij6fg62cam3cwm3w8rcydysb0ir4300fqi3vli3j"))))
-    (supported-systems '("x86_64-linux"))
+        (base32
+         (match (or (%current-system) (%current-target-system))
+           ("x86_64-linux" "18zx2bbg21h4ij6fg62cam3cwm3w8rcydysb0ir4300fqi3vli3j")
+           ("aarch64-linux" "1h29zdlmsfgpadwmm205gz7bli2aci9yjc53wfxz6csdy6bcjqnf"))))))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
     (build-system binary-build-system)
     (arguments
      `(#:validate-runpath? #f
