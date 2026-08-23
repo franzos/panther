@@ -14,6 +14,7 @@
   #:use-module (guix git-download)
   #:use-module (guix gexp)
   #:use-module (guix packages)
+  #:use-module (ice-9 match)
   #:use-module (nonguix build-system binary)
   #:use-module (nonguix build-system chromium-binary)
   #:use-module (nonguix licenses)
@@ -268,9 +269,15 @@ Linux support is currently a preview; Computer Use is not available on it.")
        (method url-fetch)
        (uri (string-append
              "https://github.com/ollama/ollama/releases/download/v"
-             version "/ollama-linux-amd64.tar.zst"))
+             version "/ollama-linux-"
+             (match (or (%current-system) (%current-target-system))
+               ("x86_64-linux" "amd64")
+               ("aarch64-linux" "arm64")) ".tar.zst"))
        (sha256
-        (base32 "0cribdbjpnsaan7m97x798fmas65dqlwak5d7idar6wm3brz121c"))))
+        (base32
+         (match (or (%current-system) (%current-target-system))
+           ("x86_64-linux" "0cribdbjpnsaan7m97x798fmas65dqlwak5d7idar6wm3brz121c")
+           ("aarch64-linux" "0c9a23yyngg8cgzxc5zqsrvkykfajz4cwfra1q8zyj7dygyav807"))))))
     (build-system binary-build-system)
     (arguments
      (list
@@ -291,7 +298,7 @@ Linux support is currently a preview; Computer Use is not available on it.")
     (inputs
      (list glibc
            `(,gcc "lib")))
-    (supported-systems '("x86_64-linux"))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
     (home-page "https://ollama.com")
     (synopsis "Run large language models locally")
     (description
