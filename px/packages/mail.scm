@@ -126,7 +126,7 @@ authorization for various email providers including Gmail, Outlook, and iCloud."
            (invoke "node" "node_modules/vite/bin/vite.js" "build"))
          (copy-recursively "/tmp/web/dist" #$output)))
    #:options `(#:hash-algo sha256
-               #:hash ,(base32 "104m5420m5jy0ygmch8nq93mz49asc8iclc08982ikn3ap9fx694")
+               #:hash ,(base32 "0nplqgvhp4prlqyq47vnkl3p4rfh2g0bj03f1ic2133hwfk6h402")
                #:recursive? #t)))
 
 (define-public bichon
