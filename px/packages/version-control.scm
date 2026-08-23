@@ -134,9 +134,19 @@ with git and your code.")
        (method url-fetch)
        (uri (string-append
              "https://releases.gitbutler.com/releases/release/"
-             version "-3180/linux/x86_64/GitButler_" version "_amd64.deb"))
+             version "-3180/linux/"
+             (match (or (%current-system) (%current-target-system))
+               ("x86_64-linux" "x86_64")
+               ("aarch64-linux" "aarch64"))
+             "/GitButler_" version
+             (match (or (%current-system) (%current-target-system))
+               ("x86_64-linux" "_amd64")
+               ("aarch64-linux" "_arm64")) ".deb"))
        (sha256
-        (base32 "00vsp618b0xj7gqccq77wdnqrm3cnfnr8dy5n2zlir615pxfl2s7"))))
+        (base32
+         (match (or (%current-system) (%current-target-system))
+           ("x86_64-linux" "00vsp618b0xj7gqccq77wdnqrm3cnfnr8dy5n2zlir615pxfl2s7")
+           ("aarch64-linux" "1d19z2gmhq5m9j0yx2qwig0zv44sqxchf3z0cmm5spydj9w6q3bz"))))))
     (build-system binary-build-system)
     (arguments
      `(#:patchelf-plan `(("usr/bin/gitbutler-tauri"
@@ -212,7 +222,7 @@ with git and your code.")
               ("libsoup" ,libsoup)
               ("webkitgtk-for-gtk3" ,webkitgtk-for-gtk3)
               ("zlib" ,zlib)))
-    (supported-systems '("x86_64-linux"))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
     (home-page "https://gitbutler.com")
     (synopsis "Git branch management tool")
     (description
