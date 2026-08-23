@@ -507,9 +507,17 @@ predictive code completion, and integrations with development workflows.")
                   (method url-fetch)
                   (uri (string-append
                         "https://github.com/zed-industries/zed/releases/download/v"
-                        version "/zed-linux-x86_64.tar.gz"))
+                        version "/zed-linux-"
+                        (match (or (%current-system) (%current-target-system))
+                          ("x86_64-linux" "x86_64")
+                          ("aarch64-linux" "aarch64")) ".tar.gz"))
                   (sha256
-                   (base32 "0qf6jw6y4z5jip57pp14972h3lbqgcnqlibj0canps201kfilqcy"))))
+                   (base32
+                    (match (or (%current-system) (%current-target-system))
+                      ("x86_64-linux"
+                       "0qf6jw6y4z5jip57pp14972h3lbqgcnqlibj0canps201kfilqcy")
+                      ("aarch64-linux"
+                       "0yq0ingy5yb3k5xwabd3m95pfvvghpcc3nqh66ssmikmbp3rji1q"))))))
               ("bash-minimal" ,bash-minimal)
               ("glib" ,glib)
               ("gtk+" ,gtk+)
@@ -528,7 +536,7 @@ predictive code completion, and integrations with development workflows.")
               ("sqlite" ,sqlite)
               ("xkeyboard-config" ,xkeyboard-config)
               ("gcc:lib" ,gcc "lib")))
-    (supported-systems '("x86_64-linux"))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
     (home-page "https://zed.dev/")
     (synopsis "High-performance multiplayer code editor")
     (description
