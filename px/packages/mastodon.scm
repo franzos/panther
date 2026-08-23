@@ -7,6 +7,7 @@
                 #:prefix license:)
   #:use-module (guix utils)
   #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix build-system cmake)
   #:use-module (gnu packages pkg-config)
@@ -16,14 +17,20 @@
   (package
     (name "mastodonpp")
     (version "0.5.7")
+    ;; Upstream's own host, schlomp.space, is gone: it answers with a 1 kB
+    ;; parking page under an unrelated expired certificate, which is what the
+    ;; old url-fetch was silently hashing. The GitHub mirror is the surviving
+    ;; copy, and git-fetch pins a commit rather than a Gitea-generated archive
+    ;; whose bytes were never stable anyway.
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append
-             "https://schlomp.space/tastytea/mastodonpp/archive/" version
-             ".tar.gz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/tastytea/mastodonpp")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "1vga22c85r86hidvfqysfj01d2y6w69m9rkmc1nsr8ffglcw83qy"))))
+        (base32 "0cr780583h2grb3cpdy06m80k5j6c3xcsy6dfbh8a4ycq6vrsavc"))))
     (build-system cmake-build-system)
     (arguments
      `(#:tests? #f))
