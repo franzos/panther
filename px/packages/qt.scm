@@ -7,6 +7,7 @@
   #:use-module (gnu packages documentation)
   #:use-module (guix packages)
   #:use-module (guix build-system cmake)
+  #:use-module (guix build-system gnu)
   #:use-module (guix utils)
   #:use-module (guix build-system qt)
   #:use-module (gnu packages sqlite)
@@ -127,16 +128,20 @@
         (sha256
          (base32 "1w2vgall1alc2mw5vd4c0wfxa75vri4q1qqwhvrdyxbyj6azkhma"))))
     (arguments
-     `(#:tests? #f ; no tests))
+     `(#:tests? #f ; no tests
        #:phases
        (modify-phases %standard-phases
          (replace 'configure
            (lambda* (#:key outputs #:allow-other-keys)
              (substitute* "googlemaps.pro"
-               (("\\$\\$\\[QT_INSTALL_PLUGINS\\]") 
+               (("\\$\\$\\[QT_INSTALL_PLUGINS\\]")
                 (string-append (assoc-ref outputs "out") "/lib/qt5/plugins")))
              (invoke "qmake" "googlemaps.pro" ))))))
-    (build-system qt-build-system)
+    ;; gnu-build-system, not qt-build-system: the latter extends
+    ;; cmake-build-system, so its build phase runs `cmake --build .` against a
+    ;; tree qmake configured, which fails with "could not load cache". This is
+    ;; how Guix packages every other qmake project.
+    (build-system gnu-build-system)
     (inputs
      (list qtbase-5
            qtlocation-5
