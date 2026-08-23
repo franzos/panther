@@ -11,6 +11,7 @@
   #:use-module (guix build-system go)
   #:use-module (guix build-system pyproject)
   #:use-module (guix gexp)
+  #:use-module (ice-9 match)
   #:use-module (nonguix build-system binary)
   #:use-module (nonguix licenses)
   #:use-module (gnu packages base)
@@ -81,9 +82,15 @@ OAuth and app-password authentication and secure credential storage.")
      (origin
        (method url-fetch)
        (uri (string-append "https://github.com/cli/cli/releases/download/v"
-                           version "/gh_" version "_linux_amd64.tar.gz"))
+                           version "/gh_" version "_linux_"
+                           (match (or (%current-system) (%current-target-system))
+                             ("x86_64-linux" "amd64")
+                             ("aarch64-linux" "arm64")) ".tar.gz"))
        (sha256
-        (base32 "04l104py27lfx1cy8qg4p00qh29fc9d8pdzw1nnv318zgr4vijd2"))))
+        (base32
+         (match (or (%current-system) (%current-target-system))
+           ("x86_64-linux" "04l104py27lfx1cy8qg4p00qh29fc9d8pdzw1nnv318zgr4vijd2")
+           ("aarch64-linux" "19a1ns7sslrcyrz3bfkgpkvwcyspjdpyx5wr8a2f5jfrr8749skk"))))))
     (build-system copy-build-system)
     (arguments
      '(#:install-plan
@@ -109,7 +116,7 @@ OAuth and app-password authentication and secure credential storage.")
                (with-output-to-file (string-append fish-comp "/gh.fish")
                  (lambda () (invoke gh "completion" "-s" "fish")))
                #t))))))
-    (supported-systems '("x86_64-linux"))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
     (home-page "https://cli.github.com")
     (synopsis "GitHub command-line tool")
     (description
