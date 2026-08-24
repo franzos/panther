@@ -137,6 +137,18 @@
               (substitute* "comm/python/rocbuild/rocbuild/rust.py"
                 (("result = check_vendored_dependencies\\(topsrcdir)")
                  "sys.exit(0)"))))
+          ;; cbindgen renders an array length written as an associated const,
+          ;; `[BudgetType; BudgetType::COUNT]`, as a bare `[COUNT]` and never
+          ;; emits COUNT, so webrender_ffi_generated.h fails to compile with
+          ;; "use of undeclared identifier 'COUNT'".  Mozilla requires cbindgen
+          ;; >= 0.29.1 so downgrading is not an option, and 0.29.4 is the
+          ;; newest release.  COUNT is defined two lines up as literally 7;
+          ;; inlining it is identical Rust and leaves cbindgen nothing to
+          ;; mistranslate.
+          (add-after 'unpack 'inline-budgettype-count
+            (lambda _
+              (substitute* "gfx/wr/webrender/src/texture_cache.rs"
+                (("BudgetType::COUNT") "7"))))
           (add-after 'patch-source-shebangs 'patch-cargo-checksums
             (lambda _
               (use-modules (guix build cargo-utils))
