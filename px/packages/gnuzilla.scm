@@ -54,8 +54,8 @@
   #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages xorg))
 
-(define %thunderbird-version "149.0.1")
-(define %thunderbird-build-id "20260326000000") ;must be YYYYMMDDhhmmss
+(define %thunderbird-version "154.0")
+(define %thunderbird-build-id "20260818000000") ;must be YYYYMMDDhhmmss
 
 (define-public thunderbird
   (package
@@ -68,7 +68,7 @@
                            "releases/" version "/source/"
                            "thunderbird-" version ".source.tar.xz"))
        (sha256
-        (base32 "0g7mavaxkb1l5wffdya7gkqbgckxlbzwfm34hng36vxppca8vpgn"))))
+        (base32 "155qai6fbr10dsj6p9m4xkkx5cbn8gig7gwzf8gcm5csahj5yanj"))))
     (properties
      `((cpe-name . "thunderbird")))
     (build-system gnu-build-system)
@@ -145,6 +145,14 @@
           ;; newest release.  COUNT is defined two lines up as literally 7;
           ;; inlining it is identical Rust and leaves cbindgen nothing to
           ;; mistranslate.
+          ;; nsXREDirProvider.cpp shares a unified compilation unit with a
+          ;; file that pulls in X11/X.h, whose "#define Success 0" clobbers
+          ;; mozpkix's Result::Success in the Thunderbird-only NSS includes.
+          (add-after 'unpack 'undef-x11-success
+            (lambda _
+              (substitute* "toolkit/xre/nsXREDirProvider.cpp"
+                (("#  include \"ScopedNSSTypes\\.h\"")
+                 "#  undef Success\n#  include \"ScopedNSSTypes.h\""))))
           (add-after 'unpack 'inline-budgettype-count
             (lambda _
               (substitute* "gfx/wr/webrender/src/texture_cache.rs"
