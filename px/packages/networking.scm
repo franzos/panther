@@ -139,36 +139,45 @@ but is also able to connect tens of thousands of computers.")
     (name "ngrok")
     (version "3.39.11")
     (source
+     ;; The equinox.io download serves whatever release is current, ignoring
+     ;; the version in the path, so its hash changes without the version
+     ;; changing.  The APT pool keeps every release at an immutable URL.
      (origin
        (method url-fetch)
        (uri (string-append
-             "https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-" version
-             "-linux-"
+             "https://ngrok-agent.s3.amazonaws.com/pool/main/n/ngrok/ngrok_"
+             version "-0_"
              (match (or (%current-system) (%current-target-system))
                ("x86_64-linux" "amd64")
                ("aarch64-linux" "arm64"))
-             ".tgz"))
+             ".deb"))
        (file-name (string-append name "-" version "-"
                                  (match (or (%current-system)
                                             (%current-target-system))
                                    ("x86_64-linux" "amd64")
                                    ("aarch64-linux" "arm64"))
-                                 ".tgz"))
+                                 ".deb"))
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ;; Equinox serves the current release from any version URL, so these
-           ;; change without the version changing.
            ("x86_64-linux"
-            "1krhygyki5q300374s7r2nli2k9ma28cifklzjfm4pycgycv9h6f")
+            "1583wgdi2qqhb7ngm8fmndcb009m595n46p2fykj1krv50sa46p5")
            ("aarch64-linux"
-            "0acyyzvmqw046bkbj1mmylwkicfdjpx1j27sax0w71cmkmda0srv"))))))
+            "1k4bg4bg4kr0cbmwwn8x44nnw5lqzs1j539ckdraa4ywplixw1xk"))))))
     (build-system binary-build-system)
     (arguments
      (list
       #:strip-binaries? #f
       #:patchelf-plan #~'()
-      #:install-plan #~'(("ngrok" "bin/"))))
+      #:install-plan #~'(("usr/local/bin/ngrok" "bin/ngrok"))
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'unpack
+            (lambda* (#:key inputs #:allow-other-keys)
+              (invoke "ar" "x" (assoc-ref inputs "source"))
+              (invoke "tar" "xf" "data.tar.xz")
+              (for-each delete-file
+                        '("control.tar.xz" "data.tar.xz" "debian-binary")))))))
     (supported-systems '("x86_64-linux" "aarch64-linux"))
     (home-page "https://ngrok.com")
     (synopsis "Secure tunnels to localhost")
