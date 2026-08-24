@@ -137,7 +137,7 @@ but is also able to connect tens of thousands of computers.")
 (define-public ngrok
   (package
     (name "ngrok")
-    (version "3.37.3")
+    (version "3.39.11")
     (source
      (origin
        (method url-fetch)
@@ -157,7 +157,7 @@ but is also able to connect tens of thousands of computers.")
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ;; Equinox rebuilds and republishes each release in place, so these
+           ;; Equinox serves the current release from any version URL, so these
            ;; change without the version changing.
            ("x86_64-linux"
             "1krhygyki5q300374s7r2nli2k9ma28cifklzjfm4pycgycv9h6f")
