@@ -183,7 +183,7 @@ ngrok.")
 (define-public v2ray
   (package
     (name "v2ray")
-    (version "5.52.0")
+    (version "5.53.0")
     (source
      (origin
        (method url-fetch)
@@ -191,7 +191,7 @@ ngrok.")
              "https://github.com/v2fly/v2ray-core/releases/download/v" version
              "/v2ray-linux-64.zip"))
        (sha256
-        (base32 "0xvig5pdh20a6zkd2038rcv94a756mcv5s9bvkp3h4dsyg027ccq"))))
+        (base32 "1yml675lgi0m83cn3rin8k5dml1s5f27qjwvb490nzd5cpp8mfvb"))))
     (build-system binary-build-system)
     (arguments
      `(#:install-plan '(("v2ray" "/bin/")
