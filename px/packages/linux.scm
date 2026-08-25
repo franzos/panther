@@ -283,7 +283,9 @@ by modern kernels (4.15+) to load the regulatory database.")))
 
 (define-public linux-raspberry-5.15
   (package
-    (inherit linux-libre-5.15)
+    ;; Only the generic build phases are inherited; the source, configure phase
+    ;; and kernel version all come from the Raspberry Pi tree below.
+    (inherit linux-libre-6.12)
     (name "linux-raspberry")
     (version "5.15.32")
     (source
@@ -297,7 +299,7 @@ by modern kernels (4.15+) to load the regulatory database.")))
         (base32 "1k18cwnsqdy5ckymy92kp8czckzwgn8wn2zdibzrrg9jxrflx6vl"))))
     (supported-systems '("aarch64-linux"))
     (arguments
-     (substitute-keyword-arguments (package-arguments linux-libre-5.15)
+     (substitute-keyword-arguments (package-arguments linux-libre-6.12)
        ((#:phases phases)
         #~(modify-phases #$phases
 
