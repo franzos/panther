@@ -782,7 +782,7 @@ support, customizable themes, font ligatures, and sixel image support.")
 (define-public networkmanager-dmenu
   (package
     (name "networkmanager-dmenu")
-    (version "2.6.2")
+    (version "2.7.1")
     (source
      (origin
        (method git-fetch)
@@ -791,7 +791,7 @@ support, customizable themes, font ligatures, and sixel image support.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1r57znpd3rkrm836jw2wb1fx82p724r85n8jb1chzi3p8qlhcf9m"))))
+        (base32 "0x5k2bpn87cy3rmv03akjkayvvhm5zmd7gdhxsjdjb0c0zx8h9dw"))))
     (build-system copy-build-system)
     (arguments
      (list
