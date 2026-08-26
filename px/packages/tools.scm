@@ -75,10 +75,25 @@ a terminal environment, providing code suggestions, explanations, and
 automated coding assistance.")
     (license license:asl2.0)))
 
+;; Biome pulls the React compiler crates straight from the react monorepo at a
+;; pinned revision; they have no crates.io release.
+(define %react-compiler-commit "e71a6393e66b0d2add46ba2b2c5db563a0563828")
+
+(define %react-compiler-source
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/react/react")
+          (commit %react-compiler-commit)))
+    ;; Doubles as the input label the build phases look up.
+    (file-name "react-compiler-source")
+    (sha256
+     (base32 "1m6w2aa4jhxnzm0gl13ysnkddlxrqyj1ixqgmdlgsqcnvx592g1m"))))
+
 (define-public biome
   (package
     (name "biome")
-    (version "2.5.7")
+    (version "2.5.10")
     (source
      (origin
        (method git-fetch)
@@ -87,7 +102,7 @@ automated coding assistance.")
              (commit (string-append "@biomejs/biome@" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1x2b4csjb8w1rlb1qd3mfmab4vzwn715h2j5sfvq505j2cir35ii"))))
+        (base32 "0nlf563lzy8sshvf8vrw3ac7msdyijf8vjslq6spz3xb6qj42g5z"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
@@ -96,6 +111,22 @@ automated coding assistance.")
        #:cargo-install-paths '("crates/biome_cli")
        #:phases
        (modify-phases %standard-phases
+         (add-after 'unpack 'patch-react-compiler-deps
+           (lambda* (#:key inputs #:allow-other-keys)
+             ;; Kept outside the source tree so cargo does not expect these
+             ;; crates to be members of biome's workspace.
+             (copy-recursively
+              (string-append (assoc-ref inputs "react-compiler-source")
+                             "/compiler/crates")
+              "../react-compiler-crates")
+             (for-each
+              (lambda (crate)
+                (substitute* "crates/biome_react_compiler/Cargo.toml"
+                  (((string-append "^" crate "( *)= \\{ git = [^}]*\\}") _ spaces)
+                   (string-append crate spaces
+                                  "= { path = \"../../../react-compiler-crates/"
+                                  crate "\" }"))))
+              '("react_compiler" "react_compiler_ast" "react_compiler_hir"))))
          (add-before 'build 'set-build-env
            (lambda* (#:key inputs #:allow-other-keys)
              ;; The crate version is "0.0.0"; the real version is injected
@@ -107,7 +138,8 @@ automated coding assistance.")
                      (string-append (assoc-ref inputs "jemalloc")
                                     "/lib/libjemalloc.so")))))))
     (native-inputs (list pkg-config))
-    (inputs (cons* jemalloc zlib (px-cargo-inputs 'biome_cli)))
+    (inputs (cons* jemalloc zlib %react-compiler-source
+                   (px-cargo-inputs 'biome_cli)))
     (home-page "https://biomejs.dev")
     (synopsis "Fast formatter and linter for web projects")
     (description
