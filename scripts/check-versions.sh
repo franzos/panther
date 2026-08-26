@@ -429,6 +429,9 @@ gh_release "keycloak/keycloak" "keycloak"
 gh_release "ossf/scorecard" "scorecard"
 gh_release "rust-lang/mdBook" "mdbook"
 gh_release "LizardByte/Sunshine" "sunshine"
+gh_release "any1/wayvnc" "wayvnc"
+gh_release "any1/neatvnc" "neatvnc"
+gh_release "any1/aml" "aml"
 echo ""
 
 # --- Crates.io ---
