@@ -754,6 +754,52 @@ herd restart usbguard   # Reload after editing rules.conf by hand
 
 **Hardening:** The daemon is launched with `-C` (drop capabilities after startup) and `-W` (seccomp syscall allowlist). The D-Bus configuration and Polkit action from the `usbguard` package are registered automatically, so `usbguard-dbus` and desktop front-ends work without extra wiring.
 
+### wayvnc PAM
+
+Installs `/etc/pam.d/wayvnc`, the policy [the wayvnc home service](#wayvnc) authenticates against when `enable-pam?` is on. wayvnc calls `pam_start` with that service name but ships no policy file, so without this the login falls through to Guix's deny-all `other` - closed, but useless.
+
+`users` is mandatory and it's the reason the service exists: wayvnc passes the client-supplied user name straight to PAM without comparing it to anything, so on a stock policy any account on the machine gets in - and whoever gets in drives the session being shared, no matter whose password they used. The generated policy puts `pam_succeed_if` in front of `pam_unix` to stop that. Listing several accounts gives each of them that power over the others, so prefer a single name.
+
+**Usage:**
+
+```scheme
+(use-modules (px services vnc))
+
+(service wayvnc-pam-service-type
+         (wayvnc-pam-configuration
+          (users '("franz"))))
+
+;; Tighter lockout
+(service wayvnc-pam-service-type
+         (wayvnc-pam-configuration
+          (users '("franz"))
+          (deny 3)
+          (fail-interval 300)
+          (unlock-time 1800)))
+```
+
+**Configuration options:**
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `users` | (required) | Accounts allowed to authenticate against wayvnc |
+| `deny` | `3` | Consecutive failures before the account is locked out |
+| `fail-interval` | `900` | Window, in seconds, over which failures are counted |
+| `unlock-time` | `600` | Seconds before a locked account may try again |
+| `faillock-directory` | `"/var/lib/wayvnc/faillock"` | Directory holding the per-user failure tallies |
+
+Two details in the generated policy are deliberate. The tally directory is `/var/lib/wayvnc/faillock`, not `pam_faillock`'s `/var/run/faillock` default: nothing on Guix creates that, and wayvnc runs unprivileged so it can't either, at which point the module reads the missing tally as "no failures yet" and lockout silently never happens. Activation creates it root-owned with one tally per listed account, owned `user:root` at 0660 - a directory the users could write to would let them plant tallies for each other.
+
+Every module gets `nodelay`, because wayvnc calls PAM synchronously from its event loop and the two second failure delay would freeze capture and input for everyone connected. libpam applies the largest delay any module asks for, so it has to be off everywhere - upstream's own `wayvnc.pam` misses that and ends up with neither lockout nor a delay. Measured: ~2.1s for a rejection either way, against 3.5-4.3s with the delay left in.
+
+**Inspecting lockouts:**
+
+```bash
+sudo faillock --dir /var/lib/wayvnc/faillock --user franz           # recorded failures
+sudo faillock --dir /var/lib/wayvnc/faillock --user franz --reset   # clear them
+sudo cat /etc/pam.d/wayvnc                                          # the generated policy
+```
+
 ## System Configuration
 
 This channel provides pre-configured building blocks for Guix system definitions. Import with:
