@@ -235,6 +235,86 @@ herd stop podman-healthcheckd     # Stop daemon
 herd status podman-healthcheckd   # Check status
 ```
 
+### wayvnc
+
+[wayvnc](https://github.com/any1/wayvnc) shares a running wlroots-based Wayland session over VNC. It attaches to the compositor you're already using, creates virtual input devices, and serves an output over RFB.
+
+Credentials stay out of the world-readable store. Activation creates `~/.local/state/wayvnc` at 0700 and, if they aren't there yet, generates a self-signed secp384r1 certificate and a PKCS#1 RSA key; the config file is written next to them at 0600. The RSA key isn't really optional - neatvnc offers RSA-AES either way, and with no key on disk it makes a fresh one per start, so clients warn about a changed host key on every restart.
+
+Authentication defaults to PAM, which needs [the PAM system service](#wayvnc-pam). For a fixed password instead, set `enable-pam?` to `#f` and point `password-file` at a file you manage.
+
+**Usage:**
+
+```scheme
+(use-modules (px home services wayvnc))
+
+;; PAM auth, generated TLS + RSA credentials, listening on localhost
+(service home-wayvnc-service-type)
+
+;; Reachable over a Tailscale address, with that address in the certificate
+(service home-wayvnc-service-type
+         (home-wayvnc-configuration
+          (address "100.64.0.5")
+          (tls-common-name "desk.tail1234.ts.net")
+          (tls-subject-alt-names
+           '("DNS:desk.tail1234.ts.net" "IP:100.64.0.5"))))
+
+;; Fixed password instead of PAM
+(service home-wayvnc-service-type
+         (home-wayvnc-configuration
+          (enable-pam? #f)
+          (username "franz")
+          (password-file "/home/franz/.config/wayvnc/password")))
+```
+
+Whatever address you connect to has to appear in `tls-subject-alt-names`, or clients that check the certificate refuse it. The default binds localhost; prefer an overlay network address over `0.0.0.0`.
+
+**Configuration options:**
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `wayvnc` | `wayvnc-0.10` | The wayvnc package to run |
+| `openssl` | `openssl` | Package used to generate credentials |
+| `address` | `"localhost"` | Listen address |
+| `port` | `5900` | Listen port |
+| `enable-auth?` | `#t` | Require clients to authenticate |
+| `enable-pam?` | `#t` | Authenticate against PAM instead of a fixed password |
+| `username` | unset | User name clients must supply; ignored under PAM |
+| `password-file` | unset | File whose first line is the password; ignored under PAM |
+| `tls` | `'generate` | `'generate`, a `(key-file . cert-file)` pair, or `#f` for no TLS |
+| `tls-common-name` | `"localhost"` | CN of the generated certificate |
+| `tls-subject-alt-names` | `'("DNS:localhost" "IP:127.0.0.1")` | SANs of the generated certificate |
+| `rsa-key` | `'generate` | `'generate`, a path to your own key, or `#f` |
+| `credentials-directory` | `".local/state/wayvnc"` | Credentials and config, relative to `$HOME` |
+| `desktop?` | `#f` | Capture every output instead of one |
+| `output` | unset | Name of the output to capture |
+| `seat` | unset | Seat to use for input |
+| `desktop-name` | unset | Desktop name reported to clients |
+| `max-fps` | `30` | Frame rate limit |
+| `gpu?` | `#f` | Enable the features that need a GPU |
+| `render-cursor?` | `#f` | Draw the cursor into the frame |
+| `disable-input?` | `#f` | Refuse remote input, making the session view-only |
+| `detached?` | `#f` | Start without a compositor and wait to be attached |
+| `log-level` | `"warning"` | `error` / `warning` / `info` / `debug` / `trace` / `quiet` |
+| `extra-config` | `'()` | Extra lines appended to the wayvnc config file |
+| `extra-options` | `'()` | Extra command line options |
+| `environment-variables` | `'()` | `NAME=value` strings added to wayvnc's environment |
+| `auto-start?` | `#f` | Start with the home Shepherd |
+
+**Starting it:**
+
+`auto-start?` is `#f` on purpose: wayvnc needs `WAYLAND_DISPLAY` pointing at a compositor that's already up, which isn't true at login, and the home Shepherd passes on the environment it inherited back then. Either `herd start wayvnc` from inside the session, or set `detached? #t` and attach once it exists:
+
+```bash
+wayvncctl attach wayland-1   # attach to that compositor's socket
+wayvncctl output-list        # show what can be captured
+wayvncctl detach
+```
+
+If the socket isn't `wayland-0`, pin it with `(environment-variables '("WAYLAND_DISPLAY=wayland-1"))`.
+
+Reconfiguring rewrites the config file, but wayvnc can't reload it - a running server keeps the old settings until you restart it.
+
 ## System Services
 
 ### Bichon
