@@ -758,6 +758,63 @@ vpnmux set                    # Neither (empty set)
 herd status vpnmux            # Daemon status
 ```
 
+### AppArmor
+
+Mounts `securityfs` and loads AppArmor profiles into the kernel with `apparmor_parser`, at boot and again on every reconfigure. Profiles are file-like objects and load straight from the store, so a profile change is a reconfigure away and never needs a copy under `/etc`. The service has no opinion about what the profiles confine.
+
+The kernel must have AppArmor in its LSM stack — check with `cat /sys/module/apparmor/parameters/enabled` (`Y`) and add `apparmor` to the `lsm=` kernel argument if it isn't there.
+
+The service defaults to px's `apparmor` 5.0.2 rather than the 4.1.2 in Guix, because 4.1.2 cannot emit `network_v9` policy. That matters for any profile that denies a unix socket by path: under 4.1.2 the rule blocks `open()` but not `connect()`, so the socket stays reachable and the rule looks like it works. Declare `abi <abi/5.0>,` in such a profile — 5.0.2 ships that feature file, and 4.1.2 fails loudly on it rather than compiling something weaker.
+
+**Usage:**
+
+```scheme
+(use-modules (px services apparmor))
+
+(service apparmor-service-type
+         (apparmor-configuration
+          (profiles (list (local-file "my-app.profile")))))
+```
+
+A profile attaches by executable path, which on Guix changes with every upgrade, so glob the store path:
+
+```
+abi <abi/5.0>,
+include <tunables/global>
+
+profile my-app /gnu/store/*-my-app-*/bin/my-app {
+  include <abstractions/base>
+  file,
+  audit deny /run/dbus/system_bus_socket rw,
+}
+```
+
+`deny` rules are **not** enforced in complain mode, whatever `aa-complain(8)` says — a profile carrying `flags=(complain)` denies nothing at all. Complain mode only logs what the allow rules missed, so a profile whose point is its denies has to run in enforce.
+
+Check a profile before reconfiguring — `-b` points its `include` directives at the package's own policy:
+
+```bash
+P=$(guix build -L ~/git/panther -e '(@ (px packages apparmor) apparmor)')
+$P/sbin/apparmor_parser -Q --config-file=/dev/null -b $P/etc/apparmor.d my-app.profile
+```
+
+**Configuration options:**
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `package` | `apparmor` (px, 5.0.2) | The apparmor package providing the parser and tools |
+| `profiles` | `'()` | List of file-like objects, each an AppArmor profile to load |
+
+**After reconfiguration:**
+
+```bash
+sudo aa-status                                  # Which profiles are loaded, and in which mode
+sudo herd status apparmor                       # The parser one-shot; stopped is its normal state
+sudo herd status file-system-/sys/kernel/security
+```
+
+The `aa-*` tools and `apparmor_parser` live in `sbin`, not `bin`. Mode is set declaratively in the profile text, not with `aa-complain`/`aa-enforce` — store profiles are immutable, and the next reconfigure would undo the change anyway.
+
 ### USBGuard
 
 Runs `usbguard-daemon` to enforce a USB device authorization policy — a whitelist for USB devices that blocks BadUSB-style attacks. The generated `usbguard-daemon.conf` lives in the store; rules are kept at `/etc/usbguard/rules.conf` so they can be updated without a reconfigure.
