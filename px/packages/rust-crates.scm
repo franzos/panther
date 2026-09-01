@@ -6058,6 +6058,10 @@
   (crate-source "evdev" "0.12.2"
                 "19qh6r1z4v8ja6qqigjbg9vckbhlycc6wkqgzfz9fcln7almaq5b"))
 
+(define rust-evdev-0.13.2
+  (crate-source "evdev" "0.13.2"
+                "16gaxdjwv0ng6jx1qd196vlg878g2wibmxhgi298vw577dk8ddi5"))
+
 (define rust-evdev-rs-0.6.3
   (crate-source "evdev-rs" "0.6.3"
                 "16l8d3sa3h7rz3b5ay0jq2b74vpsby5hx3qvx4m570yqirivb2nj"))
@@ -20221,6 +20225,10 @@
 (define rust-rubato-0.14.1
   (crate-source "rubato" "0.14.1"
                 "1mdh2xyczy9nwn1s5xr58sp3ha80fdb4lmfzx96qj8gw1kl55pg6"))
+
+(define rust-rubato-0.16.2
+  (crate-source "rubato" "0.16.2"
+                "18anbvy8kfc640vxbf7iw6jxk160p7z4bdmfh80gs745k6b0jn2j"))
 
 (define rust-rusqlite-0.31.0
   (crate-source "rusqlite" "0.31.0"
@@ -49952,7 +49960,7 @@
                                rust-errno-0.3.14
                                rust-esaxx-rs-0.1.10
                                rust-euclid-0.22.14
-                               rust-evdev-0.12.2
+                               rust-evdev-0.13.2
                                rust-event-listener-5.4.1
                                rust-event-listener-strategy-0.5.4
                                rust-eyre-0.6.12
@@ -50121,7 +50129,6 @@
                                rust-matrixmultiply-0.3.10
                                rust-memchr-2.8.0
                                rust-memmap2-0.9.10
-                               rust-memoffset-0.6.5
                                rust-memoffset-0.9.1
                                rust-mime-0.3.17
                                rust-mime-guess-2.0.5
@@ -50141,7 +50148,6 @@
                                rust-ndk-context-0.1.1
                                rust-ndk-sys-0.5.0+25.2.9519653
                                rust-ndk-sys-0.6.0+11769913
-                               rust-nix-0.23.2
                                rust-nix-0.29.0
                                rust-nohash-hasher-0.2.0
                                rust-nom-7.1.3
@@ -50248,6 +50254,7 @@
                                rust-ring-0.17.14
                                rust-rodio-0.19.0
                                rust-roff-0.2.2
+                               rust-rubato-0.16.2
                                rust-rusqlite-0.32.1
                                rust-rustc-hash-1.1.0
                                rust-rustc-hash-2.1.1

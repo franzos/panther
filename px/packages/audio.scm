@@ -161,7 +161,7 @@ minimize its security impact.")
 (define-public voxtype
   (package
     (name "voxtype")
-    (version "1.0.0-rc4")
+    (version "1.0.1")
     (source
      (origin
        (method git-fetch)
@@ -170,13 +170,20 @@ minimize its security impact.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "146hvws0rbz9lzygp0q2x8kqpgda0amvd6gcdhs5da525pk81ymv"))))
+        (base32 "0rcsrd4llp9sgdlf3ijn2kfy8dd24r6m66886wxpbixx51ajsg9r"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
        #:cargo-test-flags
        '("--release" "--"
-         "--skip=test_network")))
+         "--skip=test_network")
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'patch-test-shebang
+           (lambda _
+             ;; /bin/sh doesn't exist in the build sandbox.
+             (substitute* "src/setup/binary.rs"
+               (("#!/bin/sh") (string-append "#!" (which "sh")))))))))
     (native-inputs (list clang cmake git pkg-config))
     (inputs (cons* alsa-lib sqlite (px-cargo-inputs 'voxtype)))
     (home-page "https://github.com/peteonrails/voxtype")
@@ -203,6 +210,11 @@ acceleration (Vulkan, CUDA) is available but not yet enabled.")
          "--skip=test_network")
        #:phases
        (modify-phases %standard-phases
+         (add-after 'unpack 'patch-test-shebang
+           (lambda _
+             ;; /bin/sh doesn't exist in the build sandbox.
+             (substitute* "src/setup/binary.rs"
+               (("#!/bin/sh") (string-append "#!" (which "sh"))))))
          (add-after 'unpack 'patch-vulkan-detection
            (lambda* (#:key inputs #:allow-other-keys)
              (let ((vulkan-loader (assoc-ref inputs "vulkan-loader")))
