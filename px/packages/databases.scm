@@ -46,7 +46,7 @@
 (define-public dbeaver
   (package
     (name "dbeaver")
-    (version "26.1.5")
+    (version "26.2.0")
     (source
      (origin
        (method url-fetch)
@@ -59,8 +59,8 @@
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "1why9jx3pqdhdfw4xvz0vz0zahq3rsdsp3rzhqfiri8li00a52hf")
-           ("aarch64-linux" "0x6ny6vrnn7kgpmlq01lwspcyjxp1pc9zdj32i5x2jvw692wpkiv"))))))
+           ("x86_64-linux" "1va80z0hqcqfyfrmgr1bd1pm4r6ahlmq9mk31cpa0fknfh5ff17m")
+           ("aarch64-linux" "0qsrz7nhsjkr37wiyvjafh0kaap9k296cw3p3j7zqwn074x81nka"))))))
     (build-system binary-build-system)
     (arguments
      (list
