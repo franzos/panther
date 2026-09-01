@@ -447,7 +447,7 @@ predictive code completion, and integrations with development workflows.")
 (define-public zed
   (package
     (name "zed")
-    (version "1.16.2")
+    (version "1.17.2")
     (source #f)
     (build-system binary-build-system)
     (arguments
@@ -515,9 +515,9 @@ predictive code completion, and integrations with development workflows.")
                    (base32
                     (match (or (%current-system) (%current-target-system))
                       ("x86_64-linux"
-                       "19q6n549fkpjqvifkhgmpvk8aadprwj0589nd9694xr9wnwsqqf7")
+                       "11ggkbnj51m2nlimsx97dsh8cbplzhcl9mhld8j2np9hi82xv0in")
                       ("aarch64-linux"
-                       "0nzbgmsxd8g3avqq4dsfv52agfp4qkrv43901xciqbxr9qlf4pqa"))))))
+                       "0ac9gsfrcx99bqab1liwrxcqk4zq7i3p7i6dn1i5lnhmp0m36xag"))))))
               ("bash-minimal" ,bash-minimal)
               ("glib" ,glib)
               ("gtk+" ,gtk+)
