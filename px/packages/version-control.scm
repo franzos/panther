@@ -128,13 +128,13 @@ with git and your code.")
 (define-public gitbutler
   (package
     (name "gitbutler")
-    (version "0.22.1")
+    (version "0.22.3")
     (source
      (origin
        (method url-fetch)
        (uri (string-append
              "https://releases.gitbutler.com/releases/release/"
-             version "-3215/linux/"
+             version "-3234/linux/"
              (match (or (%current-system) (%current-target-system))
                ("x86_64-linux" "x86_64")
                ("aarch64-linux" "aarch64"))
@@ -145,8 +145,8 @@ with git and your code.")
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "1ncv96cvr3gd826sb5dxqgmsv9pic4645zijzpv52zydzr4pjizb")
-           ("aarch64-linux" "1k1wl761wzcja3b9hlqbkfcnjvx5pq62jxj63phw5plf072i7imy"))))))
+           ("x86_64-linux" "0g4pqkl3wmhv9jwx1kpmr89sg57b4xv6prsvdny276xxailzm0s5")
+           ("aarch64-linux" "1b1ha8qnzdkk4wmypg816wa9rk16ijmwvg71hkn6cb6p0ysm9x34"))))))
     (build-system binary-build-system)
     (arguments
      `(#:patchelf-plan `(("usr/bin/gitbutler-tauri"
