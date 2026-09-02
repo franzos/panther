@@ -17344,6 +17344,10 @@
   (crate-source "papaya" "0.2.4"
                 "1dqrr8bliqk60vzpjrlyrc5qha5dy0a3fr26f2d4c0ccscyf0zlr"))
 
+(define rust-papaya-0.2.5
+  (crate-source "papaya" "0.2.5"
+                "1bn07sad6cq30a1kwjahgfy9s91pyikqk6sh8a66j14l993l496s"))
+
 (define rust-parakeet-rs-0.3.0
   (crate-source "parakeet-rs" "0.3.0"
                 "14rckh2i3a0bramga26yh5mg8485s9njx6inb6mxi8frnc857gbc"))
@@ -18408,9 +18412,17 @@
   (crate-source "proc-macro-error-attr2" "2.0.0"
                 "1ifzi763l7swl258d8ar4wbpxj4c9c2im7zy89avm6xv6vgl5pln"))
 
+(define rust-proc-macro-error-attr3-3.1.0
+  (crate-source "proc-macro-error-attr3" "3.1.0"
+                "19wv8qxf6f04xkqyh9ck6wxpmc7nn8k0c612v3da4rx90ri4w25h"))
+
 (define rust-proc-macro-error2-2.0.1
   (crate-source "proc-macro-error2" "2.0.1"
                 "00lq21vgh7mvyx51nwxwf822w2fpww1x0z8z0q47p8705g2hbv0i"))
+
+(define rust-proc-macro-error3-3.1.0
+  (crate-source "proc-macro-error3" "3.1.0"
+                "0l2sblnxj90c14hyf1xh35h3bh7apmljnyc42rqvqwr3bwi6dw0c"))
 
 (define rust-proc-macro-hack-0.4.3
   (crate-source "proc-macro-hack" "0.4.3"
@@ -32844,8 +32856,8 @@
                                  rust-darling-macro-0.14.4
                                  rust-dashmap-5.5.3
                                  rust-dashmap-6.1.0
-                                 rust-defmt-1.1.0
-                                 rust-defmt-macros-1.1.0
+                                 rust-defmt-1.1.1
+                                 rust-defmt-macros-1.1.1
                                  rust-defmt-parser-1.0.0
                                  rust-deranged-0.5.5
                                  rust-derive-builder-0.13.1
@@ -33021,7 +33033,7 @@
                                  rust-openssl-sys-0.9.117
                                  rust-option-ext-0.2.0
                                  rust-owo-colors-4.3.0
-                                 rust-papaya-0.2.4
+                                 rust-papaya-0.2.5
                                  rust-parking-2.2.1
                                  rust-parking-lot-0.12.5
                                  rust-parking-lot-core-0.9.12
@@ -33053,8 +33065,8 @@
                                  rust-ppv-lite86-0.2.17
                                  rust-prettyplease-0.2.37
                                  rust-proc-macro-crate-3.5.0
-                                 rust-proc-macro-error-attr2-2.0.0
-                                 rust-proc-macro-error2-2.0.1
+                                 rust-proc-macro-error-attr3-3.1.0
+                                 rust-proc-macro-error3-3.1.0
                                  rust-proc-macro2-1.0.107
                                  rust-pulldown-cmark-0.13.3
                                  rust-pulldown-cmark-escape-0.11.0
