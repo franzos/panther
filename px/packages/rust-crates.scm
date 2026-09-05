@@ -9219,6 +9219,10 @@
   (crate-source "globset" "0.4.19"
                 "1k89ff27dk6x3386nsavqflpdf723c3vf2mnhi42ar24mv93fzg4"))
 
+(define rust-globset-0.4.20
+  (crate-source "globset" "0.4.20"
+                "1249r63326pzaz6z1c04mmdp6dqg6z3kni47jyylans622a4mhq7"))
+
 (define rust-globwalk-0.9.1
   (crate-source "globwalk" "0.9.1"
                 "0mz7bsa66p2rrgnz3l94ac4kbklh7mq8j30iizyxjy4qyvmn1xqb"))
@@ -26123,6 +26127,10 @@
   (crate-source "ureq" "3.3.0"
                 "1h6gmx5kbafh4vn1dbypc01m5gy9imja2n0vxd74v1nmvjf119yy"))
 
+(define rust-ureq-3.4.0
+  (crate-source "ureq" "3.4.0"
+                "0kd966vrf14zyix8s75ajirs84pdyryyv2hb86ajcpvkr017jbcp"))
+
 (define rust-ureq-proto-0.2.3
   (crate-source "ureq-proto" "0.2.3"
                 "1cwyr58lzlhhnj32r349s0f9rwni3giir49ak546yhhm5kyjjxx2"))
@@ -26134,6 +26142,10 @@
 (define rust-ureq-proto-0.6.0
   (crate-source "ureq-proto" "0.6.0"
                 "1340ga8p9qi70c0vdrwg21h1fp4ai7pvfy18z461n6xxn22bm579"))
+
+(define rust-ureq-proto-0.6.1
+  (crate-source "ureq-proto" "0.6.1"
+                "04qnjyrmgfwlnl8yq2jy9nspf0qj9dg6j3p3yahf2hb9ksq7hpys"))
 
 (define rust-url-2.5.2
   (crate-source "url" "2.5.2"
@@ -32793,6 +32805,7 @@
                                  rust-autocfg-1.1.0
                                  rust-backtrace-0.3.76
                                  rust-base64-0.22.1
+                                 rust-base64-0.23.1
                                  rust-bitflags-1.3.2
                                  rust-bitflags-2.9.3
                                  rust-bitvec-1.0.1
@@ -32920,7 +32933,7 @@
                                  rust-gimli-0.32.3
                                  rust-git2-0.21.0
                                  rust-glob-0.3.2
-                                 rust-globset-0.4.19
+                                 rust-globset-0.4.20
                                  rust-globwalk-0.9.1
                                  rust-grit-pattern-matcher-0.5.1
                                  rust-grit-util-0.5.1
@@ -33109,7 +33122,7 @@
                                  rust-ref-cast-1.0.25
                                  rust-ref-cast-impl-1.0.25
                                  rust-regex-1.13.1
-                                 rust-regex-automata-0.4.16
+                                 rust-regex-automata-0.4.18
                                  rust-regex-lite-0.1.6
                                  rust-regex-syntax-0.8.11
                                  rust-regress-0.10.4
@@ -33203,7 +33216,7 @@
                                  rust-tinytemplate-1.2.1
                                  rust-tinyvec-1.10.0
                                  rust-tinyvec-macros-0.1.1
-                                 rust-tokio-1.51.1
+                                 rust-tokio-1.53.1
                                  rust-tokio-macros-2.7.0
                                  rust-tokio-rustls-0.26.4
                                  rust-tokio-util-0.7.2
@@ -33239,8 +33252,8 @@
                                  rust-unit-prefix-0.5.1
                                  rust-unsafe-libyaml-0.2.11
                                  rust-untrusted-0.9.0
-                                 rust-ureq-3.3.0
-                                 rust-ureq-proto-0.6.0
+                                 rust-ureq-3.4.0
+                                 rust-ureq-proto-0.6.1
                                  rust-url-2.5.8
                                  rust-urlencoding-2.1.3
                                  rust-utf16-iter-1.0.5
