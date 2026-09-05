@@ -82,7 +82,7 @@ on OpenJDK 21.")
 (define-public forseti-unix
   (package
     (name "forseti-unix")
-    (version "0.2.2")
+    (version "0.2.4")
     (source
      (origin
        (method git-fetch)
@@ -91,7 +91,7 @@ on OpenJDK 21.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1gi4r8gpcqlvcrxknjnhs3cjahfmwvsx2r1wnp9p086bx4f3yhv3"))))
+        (base32 "1k309k33j80389f3cawjfjj69wgnlyb02m1kc5qwvdnyna8d99h5"))))
     (build-system cargo-build-system)
     (arguments
      (list
@@ -110,6 +110,22 @@ on OpenJDK 21.")
           (add-after 'unpack 'enter-workspace
             (lambda _
               (chdir "forseti-unix")))
+          ;; The workspace patches libnss to a fork whose repository root is
+          ;; itself a Cargo workspace, and cargo-build-system only vendors
+          ;; single-crate sources.  Lift the crate out of the checkout and
+          ;; redirect the patch entry at it so cargo stays offline.
+          (add-after 'unpack-rust-crates 'vendor-libnss-fork
+            (lambda* (#:key inputs #:allow-other-keys)
+              (let ((checkout (car (filter (lambda (path)
+                                             (string-contains path
+                                              "rust-libnss-0.9.0.34ceb19"))
+                                           (map cdr inputs)))))
+                (copy-recursively (string-append checkout "/libnss")
+                                  "guix-libnss"
+                                  #:follow-symlinks? #t)
+                (substitute* "Cargo.toml"
+                  (("^libnss = \\{ git = .*$")
+                   "libnss = { path = \"guix-libnss\" }")))))
           ;; Build the workspace members explicitly so artifacts land
           ;; predictably regardless of cargo's default member selection.
           (replace 'build
