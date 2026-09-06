@@ -973,7 +973,7 @@ dependencies.")
 (define-public vicinae
   (package
     (name "vicinae")
-    (version "0.27.5")
+    (version "0.28.1")
     (source
      (origin
        (method url-fetch)
@@ -981,7 +981,7 @@ dependencies.")
              "https://github.com/vicinaehq/vicinae/releases/download/v"
              version "/vicinae-linux-x86_64-v" version ".tar.gz"))
        (sha256
-        (base32 "19l52z605jqvkvdixhq6s8qhwqrag8nk9q5jjf0yx5960i76c6zs"))))
+        (base32 "122lgc26crapmc2m8rda2mi1q2c5zyy2sp8b3rvqm9228yasvjab"))))
     (supported-systems '("x86_64-linux"))
     (build-system binary-build-system)
     (arguments
@@ -1022,7 +1022,7 @@ dependencies.")
     (inputs
      (list bash-minimal
            glibc
-           `(,gcc "lib")
+           `(,gcc-16 "lib")
            qtbase
            qtdeclarative
            qtsvg
