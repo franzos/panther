@@ -2,8 +2,11 @@
 ;;; Copyright © 2021-2026 Franz Geffke <mail@gofranz.com>
 
 (define-module (px system common)
+  #:use-module (gnu packages package-management)
   #:use-module (guix gexp)
   #:use-module (guix channels)
+  #:use-module (guix describe)
+  #:use-module (ice-9 match)
 
   #:export (%gofranz-substitute-server-url
             %nonguix-substitute-server-url
@@ -12,7 +15,8 @@
             %nonguix-substitute-server-key
             %all-substitute-server-urls
             %all-substitute-server-keys
-            %pantherx-default-channels))
+            %pantherx-default-channels
+            pantherx-guix))
 
 (define %gofranz-substitute-server-url
   "https://substitutes.guix.gofranz.com")
@@ -74,3 +78,13 @@
                     (openpgp-fingerprint
                      "A36A D41E ECC7 A871 1003  5D24 524F EB1A 9D33 C9CB")))))
           %default-channels))
+
+;; Pinning to the running guix's commits avoids a channel fetch and a full
+;; Guix rebuild on every reconfigure; the derivation is the one 'guix pull'
+;; already built. Falls back to the unpinned list when there is no provenance
+;; (e.g. running from a source checkout).
+(define (pantherx-guix)
+  (guix-for-channels
+   (match (current-channels)
+     (() %pantherx-default-channels)
+     (channels channels))))

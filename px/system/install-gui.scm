@@ -142,7 +142,7 @@
        (guix-service-type
         config => (guix-configuration
                    (inherit config)
-                   (guix (guix-for-channels %pantherx-default-channels))
+                   (guix (pantherx-guix))
                    (authorized-keys
                     (append %all-substitute-server-keys
                             %default-authorized-guix-keys))
