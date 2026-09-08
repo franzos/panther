@@ -8,13 +8,8 @@
   #:use-module (guix packages)
   #:use-module (guix download)
   #:use-module (guix gexp)
-  #:use-module (guix build-system cmake)
   #:use-module (guix build-system gnu)
-  #:use-module (guix build-system python)
   #:use-module (gnu packages autotools)
-  #:use-module (gnu packages check)
-  #:use-module (gnu packages cpp)
-  #:use-module (gnu packages python-build)
   #:use-module (gnu packages base)
   #:use-module (gnu packages curl)
   #:use-module (gnu packages compiler-tools)
@@ -23,9 +18,7 @@
   #:use-module (gnu packages tex)
   #:use-module (gnu packages perl)
   #:use-module (gnu packages pkg-config)
-  #:use-module (gnu packages python-xyz)
-  #:use-module (gnu packages security-token)
-  #:use-module (px packages python-xyz))
+  #:use-module (gnu packages security-token))
 
 (define-public acsccid
   (package
@@ -74,53 +67,4 @@
 readers. This library provides a PC/SC IFD handler implementation and
 communicates with the readers through the PC/SC Lite resource manager (pcscd).")
     (license license:lgpl2.1+)))
-
-(define-public id-card-reader
-  (package
-    (name "id-card-reader")
-    (version "0.1.27")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (string-append "https://source.pantherx.org/" name "_v" version
-                           ".tgz"))
-       (sha256
-        (base32 "0xkly0qhgr96y6qk4h24a5llm6yl650ad26i2nbilzx1csyxryf2"))))
-    (build-system python-build-system)
-    (arguments
-     `(#:tests? #f))
-    (native-inputs (list python-setuptools))
-    (inputs `(("python-pillow" ,python-pillow)
-              ("python-pyscard" ,python-pyscard)))
-    (home-page "https://www.pantherx.org/")
-    (synopsis " ")
-    (description " ")
-    (license license:expat)))
-
-(define-public id-card-reader-cpp
-  (package
-    (name "id-card-reader-cpp")
-    (version "0.1.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (string-append "https://source.pantherx.org/" name "_v" version
-                           ".tgz"))
-       (sha256
-        (base32 "0c9nxg1690jj7nzyc363vp2kni6ajvqmwd00vw2nlnn3zfhv4kdi"))))
-    (build-system cmake-build-system)
-    (arguments
-     (list #:tests? #t
-           #:configure-flags #~(list "-DCMAKE_BUILD_TYPE=Release")))
-    (native-inputs (list googletest pkg-config))
-    (inputs (list pcsc-lite))
-    ;; nlohmann-json is in the public headers and the pkg-config Requires.
-    (propagated-inputs (list nlohmann-json))
-    (home-page "https://git.gofranz.com/softmax/id-card-reader-cpp")
-    (synopsis "Thai national ID card reader over PC/SC")
-    (description
-     "Library and @code{id-card-reader} command that read a Thai national ID
-card through pcsc-lite and print it as JSON.  Same arguments and output as the
-Python @code{id-card-reader} it replaces.")
-    (license license:expat)))
 
