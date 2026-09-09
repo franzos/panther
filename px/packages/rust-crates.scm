@@ -17245,6 +17245,10 @@
   (crate-source "openssl" "0.10.78"
                 "08lj1fvhpfcga3nxs40vnl4spxfrswljvncxqwyazniw85r4737k"))
 
+(define rust-openssl-0.10.79
+  (crate-source "openssl" "0.10.79"
+                "0hpma19c8qrjwgi6jb4iwv5iifyaw4vh3wdsy3s34a7f8r3l62xz"))
+
 (define rust-openssl-0.10.81
   (crate-source "openssl" "0.10.81"
                 "0ibsv2ppsjrp62jqyzprhay9vczk1bw9xvdr3h4h7fxsy0kkm0kp"))
@@ -17328,6 +17332,11 @@
   ;; TODO REVIEW: Check bundled sources.
   (crate-source "openssl-sys" "0.9.114"
                 "1dhvfj1nvikl4gaq9zb9ka2g7r67n03pb3s3vg7w9z07rm2i5khk"))
+
+(define rust-openssl-sys-0.9.115
+  ;; TODO REVIEW: Check bundled sources.
+  (crate-source "openssl-sys" "0.9.115"
+                "10cpkh7aswv97k108a2ya10jvdxfal76jzksdsm40r3ljarfb3qm"))
 
 (define rust-openssl-sys-0.9.117
   ;; TODO REVIEW: Check bundled sources.
@@ -32258,6 +32267,7 @@
                               rust-anstyle-wincon-3.0.11
                               rust-anyhow-1.0.102
                               rust-arc-swap-1.9.1
+                              rust-argon2-0.5.3
                               rust-arrayref-0.3.9
                               rust-arrayvec-0.7.6
                               rust-asn1-rs-0.7.1
@@ -32275,11 +32285,13 @@
                               rust-base64-0.13.1
                               rust-base64-0.22.1
                               rust-base64-0.23.0
+                              rust-base64ct-1.8.3
                               rust-bincode-1.3.3
                               rust-bincode-reloaded-3.1.10
                               rust-bit-vec-0.9.1
                               rust-bitflags-2.11.1
                               rust-bitpacking-0.9.3
+                              rust-blake2-0.10.6
                               rust-blake3-1.8.5
                               rust-block-buffer-0.10.4
                               rust-bon-3.9.1
@@ -32287,7 +32299,7 @@
                               rust-brotli-8.0.2
                               rust-brotli-decompressor-5.0.0
                               rust-bstr-1.12.3
-                              rust-bumpalo-3.20.2
+                              rust-bumpalo-3.20.3
                               rust-bytecount-0.6.9
                               rust-byteorder-1.5.0
                               rust-byteorder-lite-0.1.0
@@ -32467,7 +32479,7 @@
                               rust-jni-sys-0.4.1
                               rust-jni-sys-macros-0.4.1
                               rust-jobserver-0.1.34
-                              rust-js-sys-0.3.95
+                              rust-js-sys-0.3.102
                               rust-lazy-static-1.5.0
                               rust-leb128fmt-0.1.0
                               rust-lettre-0.11.21
@@ -32535,16 +32547,18 @@
                               rust-once-cell-polyfill-1.70.2
                               rust-oneshot-0.1.13
                               rust-oorandom-11.1.5
-                              rust-openssl-0.10.78
+                              rust-openssl-0.10.79
                               rust-openssl-macros-0.1.1
+                              rust-openssl-probe-0.1.6
                               rust-openssl-probe-0.2.1
-                              rust-openssl-sys-0.9.114
+                              rust-openssl-sys-0.9.115
                               rust-ordered-float-5.3.0
                               rust-outlook-pst-1.1.0.3d36200
                               rust-ownedbytes-0.9.0
                               rust-parking-2.2.1
                               rust-parking-lot-0.12.5
                               rust-parking-lot-core-0.9.12
+                              rust-password-hash-0.5.0
                               rust-pem-3.0.6
                               rust-percent-encoding-2.3.2
                               rust-phf-0.11.3
@@ -32622,7 +32636,7 @@
                               rust-rusticata-macros-4.1.0
                               rust-rustix-1.1.4
                               rust-rustls-0.23.41
-                              rust-rustls-native-certs-0.8.3
+                              rust-rustls-native-certs-0.8.1
                               rust-rustls-pemfile-2.2.0
                               rust-rustls-pki-types-1.15.0
                               rust-rustls-platform-verifier-0.7.0
@@ -32756,7 +32770,7 @@
                               rust-utf8-ranges-1.0.5
                               rust-utf8-iter-1.0.4
                               rust-utf8parse-0.2.2
-                              rust-uuid-1.24.0
+                              rust-uuid-1.26.0
                               rust-valuable-0.1.1
                               rust-varint-rs-2.2.1
                               rust-vcpkg-0.2.15
@@ -32764,18 +32778,18 @@
                               rust-walkdir-2.5.0
                               rust-want-0.3.1
                               rust-wasi-0.11.1+wasi-snapshot-preview1
-                              rust-wasip2-1.0.3+wasi-0.2.9
+                              rust-wasip2-1.0.4+wasi-0.2.12
                               rust-wasip3-0.4.0+wasi-0.3.0-rc-2026-01-06
-                              rust-wasm-bindgen-0.2.118
-                              rust-wasm-bindgen-futures-0.4.68
-                              rust-wasm-bindgen-macro-0.2.118
-                              rust-wasm-bindgen-macro-support-0.2.118
-                              rust-wasm-bindgen-shared-0.2.118
+                              rust-wasm-bindgen-0.2.125
+                              rust-wasm-bindgen-futures-0.4.75
+                              rust-wasm-bindgen-macro-0.2.125
+                              rust-wasm-bindgen-macro-support-0.2.125
+                              rust-wasm-bindgen-shared-0.2.125
                               rust-wasm-encoder-0.244.0
                               rust-wasm-metadata-0.244.0
                               rust-wasm-streams-0.4.2
                               rust-wasmparser-0.244.0
-                              rust-web-sys-0.3.95
+                              rust-web-sys-0.3.102
                               rust-web-time-1.1.0
                               rust-web-atoms-0.2.4
                               rust-webpki-root-certs-1.0.7
