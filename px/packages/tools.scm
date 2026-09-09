@@ -34,7 +34,6 @@
   #:use-module (gnu packages tls)
   #:use-module (px packages golang-xyz)
   #:use-module (px packages go)
-  #:use-module (px packages rust)
   #:use-module (px self))
 
 (define-public codex

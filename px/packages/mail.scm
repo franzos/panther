@@ -20,7 +20,6 @@
   #:use-module (gnu packages rust)
   #:use-module (gnu packages sqlite)
   #:use-module (px packages node)
-  #:use-module (px packages rust)
   #:use-module (px self))
 
 (define-public himalaya
