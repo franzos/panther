@@ -29,6 +29,7 @@
   #:use-module (gnu packages nss)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages pulseaudio)
+  #:use-module (gnu packages qt)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-build)
   #:use-module (gnu packages python-xyz)
@@ -134,7 +135,7 @@ audio simultaneously, and can save recordings in WebM, MP4, GIF, and
 Matroska formats.")
     (license license:gpl3+)))
 
-(define %sunshine-version "2026.516.143833")
+(define %sunshine-version "2026.906.222525")
 
 (define (sunshine-submodule name url commit hash)
   (origin
@@ -158,29 +159,29 @@ Matroska formats.")
                       "73db193f853e2ee079bf3ca8a64aa2eaf6459043"
                       "0c9cygiq35aiq6bpdvbwqs0wxc2dvxsh4jnx50466savscxalsk9"))
 
-(define sunshine-inputtino
-  (sunshine-submodule "inputtino"
-                      "https://github.com/games-on-whales/inputtino"
-                      "f4ce2b0df536ef309e9ff318f75b460f7097d7c1"
-                      "04y9m7g9jx0cp3yn8rlf7syhrsvrb1znbknyr25x8s5vh9n1f04q"))
-
 (define sunshine-libdisplaydevice
   (sunshine-submodule "libdisplaydevice"
                       "https://github.com/LizardByte/libdisplaydevice"
-                      "fe7e6a81f65deae91594702e1a185f47229745b9"
-                      "1jgn82f4zfbkk24nb58ynrjj6x1f7kl7yfkdsybc9p4sjj8hhjd5"))
+                      "6e9722f89103320c948dc1199066c9e17a69e88a"
+                      "07325w0xlzm95ds5pxr9y6qsz5r7cnz5szpf04vfk0qa1zb8vd5m"))
+
+(define sunshine-libvirtualhid
+  (sunshine-submodule "libvirtualhid"
+                      "https://github.com/LizardByte/libvirtualhid"
+                      "6fdb8bd4de3b68d96c30e5303ac2ebb333c09746"
+                      "102ci8snnxmzrmmpljnal3mxvanyb1hxvig8l3wvcp4jz7ik04zl"))
+
+(define sunshine-lizardbyte-common
+  (sunshine-submodule "lizardbyte-common"
+                      "https://github.com/LizardByte/lizardbyte-common"
+                      "f9d91e1d29b7473f58e43acde4579da4e56c4abe"
+                      "0f3xjnmnb3537v4dkdnykm6dzcl3kdvdmzvyvw56giaqzdjvbqwj"))
 
 (define sunshine-moonlight-common-c
   (sunshine-submodule "moonlight-common-c"
                       "https://github.com/moonlight-stream/moonlight-common-c"
-                      "2600beaf13f18bfa43453609cf5e3b84a4227760"
-                      "1jxi6gfsxli9apijjbylfi5mlfqjy5lzvlyxjdmfdm1l6zypl0a7"))
-
-(define sunshine-nanors
-  (sunshine-submodule "nanors"
-                      "https://github.com/sleepybishop/nanors"
-                      "19f07b513e924e471cadd141943c1ec4adc8d0e0"
-                      "05y8jkj6x9kwvzx5rvkdqzmm9ip0kbyx6llrfh7m762rj9dh74cn"))
+                      "874ac9548f1bd6f095ef2b435c42cdde460e7821"
+                      "19k7lca67v0qy17ngd0pj9ar8rczy1k3g2dggs7akhrcx23png3s"))
 
 (define sunshine-nv-codec-headers
   (sunshine-submodule "nv-codec-headers"
@@ -197,14 +198,14 @@ Matroska formats.")
 (define sunshine-tray
   (sunshine-submodule "tray"
                       "https://github.com/LizardByte/tray"
-                      "563dee475f8878d252ab2b9938d3a014e776ed08"
-                      "0ig973xrvv62n5chqmr428bn6hbnmqqq2418cnhy7is0k9yhqcan"))
+                      "c329d9fd0d39dfb47f0f2fb5467e1db2e8a1d623"
+                      "1n3pjqjpy5f086wv4ac3735yq9bpadd2kbscg3xyvkdk9q34bvd0"))
 
 (define sunshine-wayland-protocols
   (sunshine-submodule "wayland-protocols"
                       "https://github.com/LizardByte-infrastructure/wayland-protocols"
-                      "88223018d1b578d0d8869866da66d9608e05f928"
-                      "0i30fp6p03qrvv4msm9yj39sk6gmcryp3q6x29v2wycbv27wsgmw"))
+                      "ee78491a237eaff9389a0ccf8680521d074407d3"
+                      "1810ymkhgxhrslmllz4zkadi71mjpa7srw4wm1kq22vqp08rp04i"))
 
 (define sunshine-wlr-protocols
   (sunshine-submodule "wlr-protocols"
@@ -220,7 +221,7 @@ Matroska formats.")
           (commit (string-append "v" %sunshine-version))))
     (file-name (git-file-name "sunshine" %sunshine-version))
     (sha256
-     (base32 "0diq6gj6dfs0v32dg394pmb9cvgvg2b567dabsf475kyajjs05mr"))))
+     (base32 "0m4jr95x8blzfzjqdkrksq929h3gyxzndiaj8glkrvnscbll627m"))))
 
 ;; Sunshine calls FFmpeg's private codec bitstream API (ff_cbs_*), so it cannot
 ;; link against a normal shared FFmpeg.  Upstream downloads a purpose-built
@@ -230,14 +231,14 @@ Matroska formats.")
 (define sunshine-ffmpeg
   (package
     (name "sunshine-ffmpeg")
-    (version "2026.516.30821")
+    (version "2026.724.203728")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "https://github.com/LizardByte/build-deps/releases/download/v"
                            version "/Linux-x86_64-ffmpeg.tar.gz"))
        (sha256
-        (base32 "1v667cf34scrkh1gkzhvkhx8qdsq796npqiszzlfyyw6qby1j8y3"))))
+        (base32 "1czb3r207dy45ngsdlnyqjxjqrmky5ibvm4pyhsfgl2f9dlx89rc"))))
     (build-system copy-build-system)
     (arguments
      (list #:strip-binaries? #f
@@ -282,7 +283,7 @@ bitstream API.  Sunshine links against these.")
            (invoke "node" "node_modules/vite/bin/vite.js" "build"))
          (copy-recursively "/tmp/sunshine/build" #$output)))
    #:options `(#:hash-algo sha256
-               #:hash ,(base32 "16fm9h53jyy6ji41jm62jril68j8skmxfi6fnfk6yzzvhy887z02")
+               #:hash ,(base32 "0nyq3k3r5djg618602m0zc5l4cyhm06x8hjclfly0890f8hplhyy")
                #:recursive? #t)))
 
 (define-public sunshine
@@ -325,11 +326,14 @@ bitstream API.  Sunshine links against these.")
                             (find-files target #:directories? #t))))
               (install-submodule "Simple-Web-Server" #$sunshine-simple-web-server)
               (install-submodule "glad" #$sunshine-glad)
-              (install-submodule "inputtino" #$sunshine-inputtino)
               (install-submodule "libdisplaydevice" #$sunshine-libdisplaydevice)
+              (install-submodule "libvirtualhid" #$sunshine-libvirtualhid)
+              (install-submodule "lizardbyte-common" #$sunshine-lizardbyte-common)
               (install-submodule "moonlight-common-c" #$sunshine-moonlight-common-c)
-              (install-submodule "nanors" #$sunshine-nanors)
-              (install-submodule "nv-codec-headers" #$sunshine-nv-codec-headers)
+              ;; cmake reaches for the headers through the build-deps
+              ;; submodule; only this one path out of it is used.
+              (install-submodule "build-deps/third-party/FFmpeg/nv-codec-headers"
+                                 #$sunshine-nv-codec-headers)
               (install-submodule "plasma-wayland-protocols"
                                  #$sunshine-plasma-wayland-protocols)
               (install-submodule "tray" #$sunshine-tray)
@@ -376,7 +380,6 @@ bitstream API.  Sunshine links against these.")
            boost
            curl
            glib
-           libappindicator
            libcap
            libdrm
            libevdev
@@ -397,6 +400,8 @@ bitstream API.  Sunshine links against these.")
            opus
            pipewire
            pulseaudio
+           qtbase
+           qtsvg
            vulkan-loader
            wayland))
     (supported-systems '("x86_64-linux"))
