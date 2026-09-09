@@ -168,7 +168,7 @@ Linux support is currently in beta.")
 (define-public chatgpt
   (package
     (name "chatgpt")
-    (version "26.901.51231")
+    (version "26.903.61454")
     (source
      (origin
        (method url-fetch)
@@ -182,8 +182,8 @@ Linux support is currently in beta.")
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "0pn0qpmdsrk4mrdjv2nzshc2b8x888xwgdysd69klgbwv2402n32")
-           ("aarch64-linux" "183y0wjf1pcx4cvpbppdm4ndp70kdg3i7pfbmdi9ql39rg3gb8h2"))))))
+           ("x86_64-linux" "0xd7vmk4nx8p1x8vzmjl7d55f94flyjfdn2rhc2fjdyf2krpvaic")
+           ("aarch64-linux" "14v6gs6xlcnp2d9shz1m01249rsfvmr7fdqd7zzi64rfcxwcsig5"))))))
     (build-system chromium-binary-build-system)
     (arguments
      (list
@@ -231,11 +231,9 @@ Linux support is currently in beta.")
                      (string-append "resources/cua_node/lib/node_modules/@oai/sky/bin/linux/sky_linux_"
                                     arch)
                      (string-append "resources/cua_node/lib/node_modules/@img/sharp-libvips-linux-"
-                                    arch "/lib/libvips-cpp.so.8.18.3")
+                                    arch "/lib/libvips-cpp.so.8.18.6")
                      (string-append "resources/cua_node/lib/node_modules/@img/sharp-linux-"
-                                    arch "/lib/sharp-linux-" arch "-0.35.3.node")
-                     (string-append "resources/cua_node/lib/node_modules/@napi-rs/canvas-linux-"
-                                    arch "-gnu/skia.linux-" arch "-gnu.node"))))
+                                    arch "/lib/sharp-linux-" arch "-0.35.4.node"))))
       #:install-plan
       #~'(("usr/lib/chatgpt/" "/share/chatgpt")
           ("usr/share/applications/" "/share/applications")
@@ -269,7 +267,7 @@ Linux support is currently in beta.")
                       (string-append
                        #$output "/share/chatgpt/resources/cua_node/lib"
                        "/node_modules/@img/sharp-linux-" #$(chatgpt-arch) "/lib"
-                       "/sharp-linux-" #$(chatgpt-arch) "-0.35.3.node"))))
+                       "/sharp-linux-" #$(chatgpt-arch) "-0.35.4.node"))))
           ;; Chromium picks its password backend from the desktop environment;
           ;; on unrecognized ones (wlroots compositors such as niri) it falls
           ;; back to the plaintext store and won't persist logins.  Force
