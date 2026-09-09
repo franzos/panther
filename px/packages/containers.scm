@@ -217,17 +217,17 @@ commands against containers without remembering long Docker invocations.")
 (define-public podman-tui
   (package
     (name "podman-tui")
-    (version "1.11.3")
+    (version "2.0.0")
     (source (origin
               (method go-fetch-vendored)
               (uri (go-git-reference
                     (url "https://github.com/containers/podman-tui")
                     (commit (string-append "v" version))
                     (sha (base32
-                          "0gqaifiyclzc0q5gpqvij8y7ad32j14pm29p6vdf51j3s6giird9"))))
+                          "1i2j8i4cg0j5mm4dsyx0b8wq6f6x7653y8y1ai5a6f6nds4bfmfk"))))
               (sha256
                (base32
-                "157qj6yw4mfhw4m6gc444s4yhx444rf2z4cal2bhkiyacqy8ilv0"))))
+                "0rbdjch44wgdi389c4pg3hchp3kfhdmapbrhp0j7r306gz5k8s88"))))
     (build-system go-build-system)
     (arguments
      (list
