@@ -28,14 +28,14 @@
 (define-public px-device-identity
   (package
    (name "px-device-identity")
-   (version "0.13.0")
+   (version "0.13.1")
    (source
     (origin
        (method url-fetch)
        (uri (string-append "https://source.pantherx.org/" name "_v" version
                            ".tgz"))
        (sha256
-        (base32 "1gd9s04brlw3qd9b633j9r68blbbrp038j7b2c7y9c2gx1fq10yq"))))
+        (base32 "15mmzshkm0vaxajwbr3c1lnch17lp62s2slnx0j6rmdxj6z5h1ka"))))
    (build-system python-build-system)
     (arguments
      `(#:tests? #f
@@ -90,14 +90,14 @@
 (define-public px-device-identity-service
   (package
    (name "px-device-identity-service")
-   (version "0.11.6")
+   (version "0.11.7")
    (source
     (origin
      (method url-fetch)
      (uri (string-append "https://source.pantherx.org/" name "_v" version
                          ".tgz"))
      (sha256
-      (base32 "02cs4rb4xrvrszzdwr38kqi0ha5vma5z1yi4zc16nd9q7v2s2rvy"))))
+      (base32 "0dmw90ag3fhflgxlijrvi4h3x8jg5ad3291kb6l52r45gl2r2gfy"))))
    (build-system python-build-system)
    (arguments
     `(#:tests? #f
