@@ -937,6 +937,35 @@ sudo faillock --dir /var/lib/wayvnc/faillock --user franz --reset   # clear them
 sudo cat /etc/pam.d/wayvnc                                          # the generated policy
 ```
 
+### NSS FHS
+
+Symlinks the NSS (Network Security Services) libraries into `/usr/lib/nss`. Applications that `dlopen` NSS instead of linking against it usually hard-code the FHS paths and find nothing on Guix. Guix does the same thing for Dovecot, which hard-codes `/usr/lib/dovecot`.
+
+The one that needs it here is `autofirma`: it walks a fixed list of directories looking for `libsoftokn3.so`, and without a hit it cannot read certificates out of the Firefox or Chromium key stores - signing then only works from a PKCS#12 file or a smart card. `/usr/lib/nss` is the first entry on that list a Guix system can populate.
+
+The lookup wants `libsoftokn3.so`, the NSPR libraries and `libsqlite3.so` in one directory, so the service builds a union of the three packages rather than symlinking nss alone.
+
+**Usage:**
+
+```scheme
+(use-modules (px services nss))
+
+(service nss-fhs-service-type)
+```
+
+| Field | Default | Meaning |
+| --- | --- | --- |
+| `nss` | `nss` | Package providing `lib/nss` |
+| `nspr` | `nspr` | Package providing the NSPR libraries |
+| `sqlite` | `sqlite` | Package providing `libsqlite3.so` |
+
+**Verifying:**
+
+```bash
+ls -l /usr/lib/nss                       # -> /gnu/store/...-nss-fhs
+autofirmacl listaliases -store mozilla   # lists your Firefox/Chromium certificates
+```
+
 ## System Configuration
 
 This channel provides pre-configured building blocks for Guix system definitions. Import with:
