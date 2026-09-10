@@ -142,6 +142,17 @@ gcloud_latest() {
         | jq -r '.version // empty' 2>/dev/null
 }
 
+# The Autofirma Linux builds sit behind unversioned URLs that are replaced in
+# place, so the download page is the only place their version is published.
+# Windows, Linux and macOS each move on their own schedule; take the number
+# from the "Para Linux" section.
+autofirma_latest() {
+    curl -sfL "https://firmaelectronica.gob.es/Home/Descargas.html" \
+        | tr '<' '\n' | sed 's/^[^>]*>//' | tr -s ' \t\n' ' ' \
+        | grep -oE 'Para Linux Versi[^ ]+ [0-9]+(\.[0-9]+)+' \
+        | grep -oE '[0-9]+(\.[0-9]+)+' | head -1
+}
+
 # Fetch latest GitLab release tag; falls back to latest tag if no release
 gitlab_latest() {
     local project_id="$1"
@@ -289,6 +300,15 @@ gitlab_release() {
     current=$(pkg_version "$pkg")
     [ -z "$current" ] && return
     latest=$(gitlab_latest "$project_id" "$host" 2>/dev/null || echo "")
+    compare "$pkg" "$current" "$latest"
+}
+
+autofirma_release() {
+    local pkg="${1:-autofirma}"
+    local current latest
+    current=$(pkg_version "$pkg")
+    [ -z "$current" ] && return
+    latest=$(autofirma_latest 2>/dev/null || echo "")
     compare "$pkg" "$current" "$latest"
 }
 
@@ -459,6 +479,7 @@ gitlab_release "20101" "papers" "gitlab.gnome.org"
 gh_release "spesmilo/electrum" "electrum-cc"
 gitlab_release "23104371" "darkman"
 gcloud_release "google-cloud-cli"
+autofirma_release "autofirma"
 echo ""
 
 # --- Manual Check Required ---

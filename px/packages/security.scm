@@ -8,14 +8,19 @@
   #:use-module (guix download)
   #:use-module (guix gexp)
   #:use-module (guix utils)
+  #:use-module (guix build-system copy)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system go)
   #:use-module (gnu packages base)
   #:use-module (gnu packages bash)
+  #:use-module (gnu packages compression)
   #:use-module (gnu packages file)
   #:use-module (gnu packages gawk)
   #:use-module (gnu packages golang)
+  #:use-module (gnu packages java)
   #:use-module (gnu packages linux)
+  #:use-module (gnu packages nss)
+  #:use-module (gnu packages security-token)
   #:use-module (gnu packages admin)
   #:use-module (px packages go))
 
@@ -149,6 +154,135 @@ checks including examining network interfaces for promiscuous mode, checking
 for deleted files still being accessed, and scanning for known rootkit
 signatures in log files and system binaries.")
     (license license:bsd-2)))
+
+(define-public autofirma
+  (package
+    (name "autofirma")
+    (version "1.9")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "https://firmaelectronica.gob.es/content/dam/"
+                           "firmaelectronica/descargas-software/autofirma19/"
+                           "Autofirma_Linux_Debian.zip"))
+       (file-name (string-append name "-" version ".zip"))
+       (sha256
+        (base32 "1637f6pcwrghgx0v0slqclsshdnlvdvjcn7rhzy0vw795qgjb762"))))
+    (build-system copy-build-system)
+    (arguments
+     (list
+      #:install-plan
+      #~'(("usr/lib/Autofirma/autofirma.jar" "lib/Autofirma/")
+          ("usr/lib/Autofirma/autofirmaConfigurador.jar" "lib/Autofirma/")
+          ("usr/lib/Autofirma/Autofirma.png"
+           "share/icons/hicolor/128x128/apps/autofirma.png")
+          ("usr/share/Autofirma/Autofirma.svg"
+           "share/icons/hicolor/scalable/apps/autofirma.svg")
+          ("usr/share/metainfo/es.gob.afirma.metainfo.xml" "share/metainfo/")
+          ("usr/share/common-licenses" "share/doc/autofirma"))
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'unpack
+            (lambda* (#:key source #:allow-other-keys)
+              (invoke "unzip" "-q" source)
+              (invoke "ar" "x" (car (find-files "." "\\.deb$")))
+              (invoke "tar" "-xzf" "data.tar.gz")))
+          (add-after 'install 'install-launchers
+            (lambda* (#:key inputs #:allow-other-keys)
+              (let* ((bin (string-append #$output "/bin"))
+                     (lib (string-append #$output "/lib/Autofirma"))
+                     (sh (search-input-file inputs "/bin/sh"))
+                     (java (search-input-file inputs "/bin/java"))
+                     ;; The configurator and the in-app "restore installation"
+                     ;; both shell out to a bare "certutil" to register the
+                     ;; generated CA with the browser NSS stores.  nss:bin
+                     ;; keeps its tools at the top level, not under bin/.
+                     (certutil (dirname (search-input-file inputs "certutil")))
+                     (common-flags
+                      (list "-Djdk.tls.maxHandshakeMessageSize=65536"
+                            ;; Autofirma renames the AWT window by reflection
+                            ;; so that it matches StartupWMClass; without this
+                            ;; the module system refuses and the window ends up
+                            ;; unmatched by the desktop entry.
+                            "--add-opens=java.desktop/sun.awt.X11=ALL-UNNAMED"
+                            ;; javax.smartcardio only looks for libpcsclite
+                            ;; under /usr and /usr/local, so without this the
+                            ;; DNIe and every other reader stays invisible.
+                            (string-append
+                             "-Dsun.security.smartcardio.library="
+                             (search-input-file inputs
+                                                "/lib/libpcsclite.so.1")))))
+                (define (launcher name jvm-flags)
+                  (let ((file (string-append bin "/" name)))
+                    (call-with-output-file file
+                      (lambda (port)
+                        (format port "\
+#!~a
+export PATH=\"~a${PATH:+:}$PATH\"
+exec ~a ~a-jar ~a \"$@\"
+"
+                                sh certutil java
+                                (string-join jvm-flags " " 'suffix)
+                                (string-append lib "/autofirma.jar"))))
+                    (chmod file #o555)))
+
+                (mkdir-p bin)
+                (launcher "autofirma" common-flags)
+                (launcher "autofirmacl"
+                          (append common-flags '("-Dafirma_debug_level=OFF")))
+                ;; "-jnlp" makes the configurator treat ~/.afirma/Autofirma as
+                ;; the application directory; without it it would try to write
+                ;; the generated keystore next to the jar, in the store.  The
+                ;; configurator only writes script.sh, leaving it to the .deb's
+                ;; postinst to run it, so run it here as well.
+                (let ((file (string-append bin "/autofirma-configurador")))
+                  (call-with-output-file file
+                    (lambda (port)
+                      (format port "\
+#!~a
+export PATH=\"~a${PATH:+:}$PATH\"
+~a -jar ~a -jnlp \"$@\" || exit
+script=\"$HOME/.afirma/Autofirma/script.sh\"
+if [ -f \"$script\" ]; then
+    sh \"$script\" && rm -f \"$script\"
+fi
+"
+                              sh certutil java
+                              (string-append lib
+                                             "/autofirmaConfigurador.jar"))))
+                  (chmod file #o555)))))
+          (add-after 'install-launchers 'install-desktop-file
+            (lambda _
+              (let ((apps (string-append #$output "/share/applications")))
+                (mkdir-p apps)
+                (copy-file "usr/share/applications/afirma.desktop"
+                           (string-append apps "/afirma.desktop"))
+                (substitute* (string-append apps "/afirma.desktop")
+                  (("Exec=/usr/bin/autofirma")
+                   (string-append "Exec=" #$output "/bin/autofirma"))
+                  (("Icon=/usr/lib/Autofirma/Autofirma\\.png")
+                   "Icon=autofirma"))))))))
+    (native-inputs (list unzip))
+    (inputs (list bash-minimal openjdk21 pcsc-lite `(,nss "bin")))
+    (home-page "https://firmaelectronica.gob.es/descargas")
+    (synopsis "Spanish government electronic signature client")
+    (description
+     "Autofirma signs documents with certificates held in a PKCS#12 file or on
+a smart card such as the Spanish DNIe, producing CAdES, XAdES, PAdES and OOXML
+signatures.  It registers itself as the handler for @code{afirma://} links so
+that public administration websites can drive it from the browser.
+
+Browser integration talks to Autofirma over a local TLS socket, which needs a
+certificate generated on the machine.  Run @command{autofirma-configurador}
+once to create it under @file{~/.afirma/Autofirma} and add its CA to the
+Firefox and Chromium certificate stores; the same can be done from the
+application under Herramientas, Restaurar instalación.
+
+Reading certificates out of the Mozilla Firefox and Chromium key stores needs
+the NSS libraries at one of the FHS locations Autofirma looks in.  On Guix
+System, @code{nss-fhs-service-type} from @code{(px services nss)} puts them
+there; without it only PKCS#12 files and smart cards are available.")
+    (license (list license:gpl2 license:eupl1.1))))
 
 (define-public osv-scanner
   (package
