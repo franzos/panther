@@ -109,7 +109,7 @@ the Crashpad backend for enhanced crash reporting capabilities.")))
 (define-public sentry-native
   (package
     (inherit sentry-native-0.9)
-    (version "0.16.5")
+    (version "0.16.6")
     (source
      (origin
        (method git-fetch)
@@ -119,4 +119,4 @@ the Crashpad backend for enhanced crash reporting capabilities.")))
              (recursive? #t)))
        (file-name (git-file-name "sentry-native" version))
        (sha256
-        (base32 "176jlkkbl7s7b5a3gswn0a1f1xw5vkby5z8rmwzzy4flxhmijpvh"))))))
+        (base32 "0h0wqnvkmsakbvq80kagfbp63jmxbcvx12w0a2yfs74x41g85ns8"))))))
