@@ -29,7 +29,7 @@
 (define-public iota
   (package
     (name "iota")
-    (version "1.30.1")
+    (version "1.31.2")
     (source
      (origin
        (method url-fetch)
@@ -42,8 +42,8 @@
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "0xj9jalx552qmdvbb6y6ghwx0abfvc3nwap0mvkhzfwh9mw60v8r")
-           ("aarch64-linux" "1v5ys5zzffq7ndq7cr6pna070kjavpbwwc7xcsbzfqxh88kblw52"))))))
+           ("x86_64-linux" "0vibzym4k89801n4lvy0lr3gz34sp14ghzhp4w5l0n2mvshmz08w")
+           ("aarch64-linux" "0d0qwl5p7xx19mj8wx29qjiikcyja0drphx0bzywdami38z5j1jg"))))))
     (build-system binary-build-system)
     (arguments
      (list
