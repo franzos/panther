@@ -28,26 +28,31 @@
   go-git-reference?
   (url go-git-reference-url)
   (commit go-git-reference-commit)
-  (sha go-git-reference-sha256))
+  (sha go-git-reference-sha256)
+  ;; Bumping this changes the vendored tarball, so it is set per reference
+  ;; rather than globally.
+  (go go-git-reference-go (default go-1.26)))
 
 (define* (go-fetch-vendored uri hash-algorithm hash-value name #:key system)
-  (let ((src
-         (match uri
-           (($ <go-git-reference> url commit sha)
-            (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url url)
-                    (commit commit)))
-              (sha256 sha)))))
-        (name (or name "go-git-checkout")))
+  (let* ((go (match uri
+               (($ <go-git-reference> _ _ _ go) go)))
+         (src
+          (match uri
+            (($ <go-git-reference> url commit sha)
+             (origin
+               (method git-fetch)
+               (uri (git-reference
+                     (url url)
+                     (commit commit)))
+               (sha256 sha)))))
+         (name (or name "go-git-checkout")))
     (gexp->derivation
      (string-append name "-vendored.tar.gz")
      (with-imported-modules '((guix build utils))
        #~(begin
            (use-modules (guix build utils))
            (let ((inputs (list
-                          #+go-1.26
+                          #+go
                           #+tar
                           #+bzip2
                           #+gzip)))
