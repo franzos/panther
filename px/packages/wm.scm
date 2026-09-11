@@ -174,7 +174,7 @@ C++ rewrite.")
 (define-public noctalia-5
   (package
     (name "noctalia-5")
-    (version "5.0.1")
+    (version "5.1.0")
     (source
      (origin
        (method git-fetch)
@@ -183,7 +183,7 @@ C++ rewrite.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0f07y0jglkx1jxkcsm90d9149wpk3lxz3zqig8mg5dvbmxpvf93n"))))
+        (base32 "1zf4q6lrpb0zp3sdwlqmj1cxfhislkssya8cslj0w9y096ha3dq3"))))
     (build-system meson-build-system)
     (arguments
      (list
