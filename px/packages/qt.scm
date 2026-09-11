@@ -156,7 +156,7 @@
 (define-public qtutilities
   (package
     (name "qtutilities")
-    (version "6.22.0")
+    (version "6.22.1")
     (source
      (origin
        (method url-fetch)
@@ -164,7 +164,7 @@
              "https://github.com/Martchus/qtutilities/archive/refs/tags/v"
              version ".tar.gz"))
        (sha256
-        (base32 "1bryhvirk1ryvv4xhy70c5j5ppbgkikvcgxdaj89qn1i2sbdn3l4"))))
+        (base32 "1jkla19787f584rn7103qsnl9r9h8zdcwlxsfrczshmq9hklh6j2"))))
     (build-system cmake-build-system)
     (native-inputs (list cpputilities qtbase qttools))
     (arguments
