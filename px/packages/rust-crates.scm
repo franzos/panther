@@ -42666,11 +42666,11 @@
                                   rust-percent-encoding-2.3.2
                                   rust-pin-project-lite-0.2.17
                                   rust-pkg-config-0.3.32
-                                  rust-plist-1.8.0
+                                  rust-plist-1.10.0
                                   rust-potential-utf-0.1.4
                                   rust-powerfmt-0.2.0
                                   rust-proc-macro2-1.0.103
-                                  rust-quick-xml-0.38.4
+                                  rust-quick-xml-0.41.0
                                   rust-quote-1.0.42
                                   rust-r-efi-5.3.0
                                   rust-ratatui-0.29.0
