@@ -660,7 +660,7 @@ TeamViewer and AnyDesk.")
 (define-public wluma
   (package
     (name "wluma")
-    (version "4.11.1")
+    (version "5.0.0")
     (source
      (origin
        (method git-fetch)
@@ -669,7 +669,7 @@ TeamViewer and AnyDesk.")
              (commit version)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0lyk6bzldq85rjm2fzknls3igaswsbkrc82i2rzyyv0ymp99vms6"))
+        (base32 "036rxa5wbnw2w91xlzjsmv31hqcjawyadvl75rflb2f2sqkld1h6"))
        (snippet
         #~(begin
             (use-modules (guix build utils))
@@ -685,15 +685,14 @@ TeamViewer and AnyDesk.")
          (add-after 'install 'install-auxiliary-files
            (lambda* (#:key outputs #:allow-other-keys)
              (let* ((out (assoc-ref outputs "out"))
-                    (udev-rules (string-append out "/lib/udev/rules.d"))
-                    (examples (string-append out "/share/doc/wluma/examples")))
-               (install-file "90-wluma-backlight.rules" udev-rules)
-               (install-file "config.toml" examples)))))))
+                    (udev-rules (string-append out "/lib/udev/rules.d")))
+               (install-file "90-wluma-backlight.rules" udev-rules)))))))
     (native-inputs
      (list clang git pkg-config))
     (inputs
      (cons* dbus
             eudev
+            pipewire
             v4l-utils
             vulkan-loader
             (px-cargo-inputs 'wluma)))
