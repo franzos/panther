@@ -336,14 +336,14 @@ assignment, transitions, comments, and search via JQL.")
 (define-public jj-vcs
   (package
     (name "jj-vcs")
-    (version "0.44.0")
+    (version "0.45.1")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "jj-cli" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "0kbv8ddai144a1x8n7xzxw4ldgr94s8r5rv0gay57j338wdhv1l7"))))
+        (base32 "0vq7zysy57slnnb3gqnw9wxfyziw684zbswqbcmn67vkrq260cp7"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
