@@ -12,20 +12,33 @@
 (define-public px-auth-library-cpp
   (package
     (name "px-auth-library-cpp")
-    (version "0.0.34")
+    (version "0.0.35")
     (source
      (origin
        (method url-fetch)
-       (uri (string-append "https://source.pantherx.org/" name "_" version
-                           ".tgz"))
+       (uri (string-append "https://source.pantherx.org/px-auth-library-cpp_"
+                           version ".tgz"))
        (sha256
-        (base32 "1c9vqx3mh18sbh79m6pw7ya27jj3dq96hm3wgqw7qwyj30f6vhpr"))))
+        (base32 "0hqhpxn31wx2m81ard1jdfzcmhcbsbjncx6y01ckn1lln8gjpliq"))))
     (build-system qt-build-system)
     (arguments
      (list
-      #:tests? #f))
-    (inputs (list qtbase-5))
+      #:tests? #f
+      #:qtbase qtbase))
+    (inputs (list qtbase))
     (home-page "https://www.pantherx.org/")
     (synopsis "CIBA, QR and Device Authentication")
     (description "CIBA and QR flow and device authentication library")
     (license license:expat)))
+
+;; Qt is ABI-visible here, so consumers must link the variant matching their own Qt.
+(define-public px-auth-library-cpp-qt5
+  (package
+    (inherit px-auth-library-cpp)
+    (name "px-auth-library-cpp-qt5")
+    (arguments
+     (list
+      #:tests? #f
+      #:qtbase qtbase-5))
+    (inputs (modify-inputs (package-inputs px-auth-library-cpp)
+              (replace "qtbase" qtbase-5)))))
