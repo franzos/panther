@@ -76,29 +76,30 @@ in multiple languages.")
 (define-public cpp-webrtc
   (package
     (name "cpp-webrtc")
-    (version "0.6.5")
+    (version "0.7.0")
     (source
     (origin
       (method url-fetch)
       (uri (string-append "https://source.pantherx.org/webrtc-cpp_v" version ".tgz"))
       (sha256
-       (base32 "03917g3qs238pikdz5m9m125993hiczcmbj007g475f170casim7"))))
+       (base32 "0ghaihw82qnxarghnzzz84g0xhvz2hpwg8lkdv6a6syaz8q9zh2p"))))
     (build-system qt-build-system)
     (arguments
-     `(#:tests? #f))
-    (inputs (list qtbase-5
-                  qtwayland-5
-                  qtdeclarative-5
-                  qtmultimedia-5
-                  qtquickcontrols-5
-                  qtquickcontrols2-5
-                  qtwebsockets-5
-                  qtsvg-5
+     (list
+      #:tests? #f
+      #:qtbase qtbase))
+    (inputs (list qtbase
+                  qtwayland
+                  qtdeclarative
+                  qtmultimedia
+                  qtshadertools
+                  qtwebsockets
+                  qtsvg
                   gstreamer
                   gst-plugins-base
                   gst-plugins-good
                   gst-plugins-bad-with-webrtc
-                  gst-plugins-good-qmlgl
+                  gst-plugins-good-qt
                   libnice-0.1.23
                   cli11
                   xz))
@@ -108,12 +109,37 @@ in multiple languages.")
     (description "Ease integration of GStreamer WebRTC in C++/Qt applications.")
     (license license:expat)))
 
+;; Qt is ABI-visible here, so consumers must link the variant matching their own Qt.
+(define-public cpp-webrtc-qt5
+  (package
+    (inherit cpp-webrtc)
+    (name "cpp-webrtc-qt5")
+    (arguments
+     (list
+      #:tests? #f
+      #:qtbase qtbase-5))
+    (inputs (list qtbase-5
+                  qtwayland-5
+                  qtdeclarative-5
+                  qtmultimedia-5
+                  qtwebsockets-5
+                  qtsvg-5
+                  gstreamer
+                  gst-plugins-base
+                  gst-plugins-good
+                  gst-plugins-bad-with-webrtc
+                  gst-plugins-good-qmlgl
+                  libnice-0.1.23
+                  cli11
+                  xz))))
+
 (define-public cpp-webrtc-demo
   (package
     (inherit cpp-webrtc)
     (name "cpp-webrtc-demo")
     (arguments
      `(#:tests? #f
+       #:qtbase ,qtbase
        #:phases
        (modify-phases %standard-phases
          (add-after 'unpack 'configure-for-demo
@@ -142,7 +168,8 @@ set(GSTREAMER_MODULES
 )
 
 pkg_check_modules(GSTREAMER REQUIRED IMPORTED_TARGET ${GSTREAMER_MODULES})
-find_package(Qt5 COMPONENTS Core Network WebSockets Gui Qml Quick REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Network WebSockets Gui Qml Quick REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Network WebSockets Gui Qml Quick REQUIRED)
 
 # Find webrtclib
 find_package(webrtclib REQUIRED)
@@ -171,12 +198,42 @@ install(TARGETS webrtc-cpp-demo
                (("#include <sentry_integration.hpp>") "#include <webrtclib/sentry_integration.hpp>"))
              #t)))))
     (inputs (list cpp-webrtc
+                  qtbase
+                  qtwayland
+                  qtdeclarative
+                  qtmultimedia
+                  qtshadertools
+                  qtwebsockets
+                  qtsvg
+                  libnice-0.1.23
+                  cli11
+                  xz))
+    (propagated-inputs (list libnice-0.1.23
+                             gstreamer
+                             gst-plugins-base
+                             gst-plugins-good
+                             gst-plugins-bad-with-webrtc
+                             gst-plugins-good-qt))
+    (native-inputs (list pkg-config
+                         sentry-native-0.9))
+    (home-page "https://f-a.nz/")
+    (synopsis "WebRTC C++ library demo application")
+    (description "Demo application showcasing the webrtc-cpp library functionality.")
+    (license license:expat)))
+
+;; Qt is ABI-visible here, so consumers must link the variant matching their own Qt.
+(define-public cpp-webrtc-demo-qt5
+  (package
+    (inherit cpp-webrtc-demo)
+    (name "cpp-webrtc-demo-qt5")
+    (arguments
+     (substitute-keyword-arguments (package-arguments cpp-webrtc-demo)
+       ((#:qtbase _ #f) qtbase-5)))
+    (inputs (list cpp-webrtc-qt5
                   qtbase-5
                   qtwayland-5
                   qtdeclarative-5
                   qtmultimedia-5
-                  qtquickcontrols-5
-                  qtquickcontrols2-5
                   qtwebsockets-5
                   qtsvg-5
                   libnice-0.1.23
@@ -187,13 +244,7 @@ install(TARGETS webrtc-cpp-demo
                              gst-plugins-base
                              gst-plugins-good
                              gst-plugins-bad-with-webrtc
-                             gst-plugins-good-qmlgl))
-    (native-inputs (list pkg-config
-                         sentry-native-0.9))
-    (home-page "https://f-a.nz/")
-    (synopsis "WebRTC C++ library demo application")
-    (description "Demo application showcasing the webrtc-cpp library functionality.")
-    (license license:expat)))
+                             gst-plugins-good-qmlgl))))
 
 (define-public cpp-socketio-client
   (package
