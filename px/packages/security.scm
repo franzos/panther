@@ -287,24 +287,25 @@ there; without it only PKCS#12 files and smart cards are available.")
 (define-public osv-scanner
   (package
     (name "osv-scanner")
-    (version "2.5.1")
+    (version "2.6.0")
     (source (origin
               (method go-fetch-vendored)
               (uri (go-git-reference
                     (url "https://github.com/google/osv-scanner")
                     (commit (string-append "v" version))
                     (sha (base32
-                          "0nyzi5r30752c0hf19q615ib9il9xqib9gw3ggyl067y7jahc44h"))))
+                          "1swhq4jsjpn6ihhapl89j8hmfqqd2vl3wc793kwsd9v1mq51ixy3"))
+                    (go go-1.27)))
               (sha256
                (base32
-                "1dxwdpfvxw13n9dlcym1scmb4zwx5bh4pnsnhgxdk8npqck4bi8l"))))
+                "0g0jhpn0iyjzi7h39c09qsmw96205nx6m5nvkvrn7hb49jl6141n"))))
     (build-system go-build-system)
     (arguments
      (list
       #:import-path "github.com/google/osv-scanner/v2/cmd/osv-scanner"
       #:unpack-path "github.com/google/osv-scanner/v2"
       #:install-source? #f
-      #:go go-1.26
+      #:go go-1.27
       ;; segmentio/asm's amd64 assembly fails to link in our environment;
       ;; fall back to the pure-Go implementations via the 'purego' tag.
       #:build-flags #~(list "-tags=purego")
