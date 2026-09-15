@@ -13,7 +13,7 @@
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gtk)
-  #:use-module (gnu packages textutils)
+  #:use-module (gnu packages regex)
   #:use-module (gnu packages xorg))
 
 (define-public ghostty
