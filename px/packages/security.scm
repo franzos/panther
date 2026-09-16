@@ -6,6 +6,7 @@
                 #:prefix license:)
   #:use-module (guix packages)
   #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix gexp)
   #:use-module (guix utils)
   #:use-module (guix build-system copy)
@@ -20,6 +21,7 @@
   #:use-module (gnu packages java)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages nss)
+  #:use-module (gnu packages python)
   #:use-module (gnu packages security-token)
   #:use-module (gnu packages admin)
   #:use-module (px packages go))
@@ -365,3 +367,61 @@ protection, dependency update tooling, code review, CI tests, fuzzing, signed
 releases, and known vulnerabilities, producing a score that helps maintainers
 and consumers understand a project's security posture.")
     (license license:asl2.0)))
+
+(define-public hardened-malloc
+  (package
+    (name "hardened-malloc")
+    (version "14")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/GrapheneOS/hardened_malloc")
+             ;; Tag "14", pinned to the commit it dereferences to.
+             (commit "3bee8d3e0e4fd82b684521891373f40ab4982a5a")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1gw101rcj5bpds81wl6mxdyq151rv61p69a30lp963z74hkq6ha1"))))
+    (build-system gnu-build-system)
+    (arguments
+     (list
+      ;; Both upstream configs set CONFIG_NATIVE, i.e. -march=native. That
+      ;; bakes in the build machine's CPU and SIGILLs on anything older, so a
+      ;; substitute would be a coin flip; build portable instead.
+      #:make-flags #~(list (string-append "CC=" #$(cc-for-target))
+                           (string-append "CXX=" #$(cxx-for-target))
+                           "CONFIG_NATIVE=false")
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'configure)
+          ;; Two configurations, as upstream recommends shipping both: the
+          ;; default is for hardening-sensitive workloads, light trades some
+          ;; checks for throughput and is the one to preload on a desktop.
+          (replace 'build
+            (lambda* (#:key make-flags #:allow-other-keys)
+              (apply invoke "make" make-flags)
+              (apply invoke "make" "VARIANT=light" make-flags)))
+          (replace 'check
+            (lambda* (#:key tests? make-flags #:allow-other-keys)
+              (when tests?
+                (apply invoke "make" "test" make-flags))))
+          (replace 'install
+            (lambda _
+              (let ((lib (string-append #$output "/lib")))
+                (install-file "out/libhardened_malloc.so" lib)
+                (install-file "out-light/libhardened_malloc-light.so" lib)))))))
+    (native-inputs (list python-minimal))
+    (home-page "https://github.com/GrapheneOS/hardened_malloc")
+    (synopsis "Hardened memory allocator")
+    (description
+     "This is a memory allocator built for modern hardened systems, replacing
+the C library's own through @code{LD_PRELOAD} or @file{/etc/ld.so.preload}.  It
+isolates metadata from allocations, places guard pages around slabs, randomizes
+allocation order, zeroes memory on free and detects a range of heap corruption
+at the cost of some throughput and memory.  It needs a raised
+@code{vm.max_map_count} to accommodate the extra mappings.
+
+The @code{light} variant drops the slow-path checks and the write-after-free
+detection while keeping the layout hardening, and is the one meant for general
+desktop use.")
+    (license license:expat)))
