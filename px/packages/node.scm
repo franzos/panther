@@ -16,7 +16,7 @@
 (define-public pnpm
   (package
     (name "pnpm")
-    (version "12.4.1")
+    (version "12.4.2")
     (source
      (origin
        (method url-fetch)
@@ -32,9 +32,9 @@
          (match (or (%current-system)
                     (%current-target-system))
            ("x86_64-linux"
-            "0090vsq1gb07xhrqv9h1i1zphdbgb3iy0fi0dvjssp88k5i8isb6")
+            "1v6j8w8s9551zm457sbpnn5v1aw0jfzazqb7f8fhjbwwzs8dc7nf")
            ("aarch64-linux"
-            "06srh5ngsavxpac9zwm9avh5zp17gxba0aic02l4r3b5gpka7xql"))))))
+            "1gr0smzpzhrkgwx0l4ccn71mw4abx2m4jvfkqfz0bw4fhkcjjjnw"))))))
     (build-system binary-build-system)
     (arguments
      `(#:patchelf-plan `(("pnpm" ("glibc" "gcc:lib")))
