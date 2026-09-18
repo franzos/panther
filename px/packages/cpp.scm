@@ -207,6 +207,7 @@ install(TARGETS webrtc-cpp-demo
                   qtsvg
                   libnice-0.1.23
                   cli11
+                  sentry-native
                   xz))
     (propagated-inputs (list libnice-0.1.23
                              gstreamer
@@ -214,8 +215,7 @@ install(TARGETS webrtc-cpp-demo
                              gst-plugins-good
                              gst-plugins-bad-with-webrtc
                              gst-plugins-good-qt))
-    (native-inputs (list pkg-config
-                         sentry-native-0.9))
+    (native-inputs (list pkg-config))
     (home-page "https://f-a.nz/")
     (synopsis "WebRTC C++ library demo application")
     (description "Demo application showcasing the webrtc-cpp library functionality.")
@@ -238,6 +238,7 @@ install(TARGETS webrtc-cpp-demo
                   qtsvg-5
                   libnice-0.1.23
                   cli11
+                  sentry-native
                   xz))
     (propagated-inputs (list libnice-0.1.23
                              gstreamer
