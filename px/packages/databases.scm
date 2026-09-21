@@ -103,7 +103,6 @@
                 (call-with-output-file wrapper
                   (lambda (port)
                     (format port "#!~a
-export GDK_BACKEND=x11
 export GTK_PATH=\"~a/lib/gtk-3.0\"
 export XDG_DATA_DIRS=\"~a/share:$XDG_DATA_DIRS\"
 export GIO_EXTRA_MODULES=\"~a/lib/gio/modules\"
