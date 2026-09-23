@@ -103,7 +103,7 @@ daemon under the Shepherd.  Enrollment stays a manual step:
 (define-public nebula
   (package
     (name "nebula")
-    (version "1.11.1")
+    (version "1.11.2")
     (source
      (origin
        (method url-fetch)
@@ -111,7 +111,7 @@ daemon under the Shepherd.  Enrollment stays a manual step:
              "https://github.com/slackhq/nebula/releases/download/v" version
              "/nebula-linux-amd64.tar.gz"))
        (sha256
-        (base32 "0f8llzypxja67xaxk0qrqs1jaawil87zijwqdqvlqswwgn4a1k1b"))))
+        (base32 "07mciarba93kj37xvl2igvcq99lk1s1brdamnvvff7625qzx6h31"))))
     (build-system binary-build-system)
     (arguments
      `(#:phases (modify-phases %standard-phases
