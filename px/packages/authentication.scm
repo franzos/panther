@@ -300,7 +300,7 @@ SQLite).")
 (define-public forseti
   (package
     (name "forseti")
-    (version "0.2.5")
+    (version "0.2.10")
     (source
      (origin
        (method url-fetch)
@@ -316,17 +316,17 @@ SQLite).")
         (base32
          (match (or (%current-system) (%current-target-system))
            ("aarch64-linux"
-            "0ap4ckpgnzs867ginb8qghyccirqq36af8izypnbgiaj9h441gh9")
+            "03459j3vzfhc6jvplhwk2bf3qs5yix7ng21nc7d5zaca3wgvabdl")
            (_
-            "17fpcm933a0pnxiaknfm8lgi09vrlsf7iq3z15xxcbav5333i7vq"))))))
+            "15f3njv39fj018hqhxi5q80plk60rdfwp67qysblf18a4mfnv20x"))))))
     (build-system binary-build-system)
     (arguments
      ;; Prebuilt glibc binary: dynamically links libssl/libcrypto (OpenSSL),
-     ;; libpq (Postgres backend), libgcc_s, and libc.  Askama templates are
-     ;; compiled into the binary, so the only runtime asset tree is static/.
+     ;; libpq (Postgres backend), libgcc_s, and libc.  Templates, static assets,
+     ;; locales and migrations are all compiled in, so there is nothing else to
+     ;; ship but the example config.
      `(#:patchelf-plan `(("forseti" ("glibc" "gcc:lib" "openssl" "postgresql")))
        #:install-plan `(("forseti" "bin/")
-                        ("static" "share/forseti/")
                         ("config.example.toml" "share/forseti/"))))
     (inputs
      `(("glibc" ,glibc)
@@ -342,6 +342,5 @@ deployment.  It implements Hydra's login, consent, and logout handlers and the
 Kratos self-service flows (login, registration, recovery, verification,
 multi-factor, and account settings), and adds an admin portal for OAuth2 client
 and organization management.  This package installs the upstream release
-binary together with its @file{static/} assets; HTML templates are compiled
-into the binary.")
+binary, which carries its HTML templates and static assets inside it.")
     (license license:agpl3+)))
