@@ -22,7 +22,7 @@
 (define-public ironbar
   (package
     (name "ironbar")
-    (version "0.19.0")
+    (version "0.19.1")
     (source
      (origin
        (method url-fetch)
@@ -31,12 +31,12 @@
              version ".tar.gz"))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "169nr9wv5f0jpfh2krkgrr3bj10xlxvbh4mf3109p0rgqzqc498d"))))
+        (base32 "04d2h195l5m02b0i8m91izmy9cfxkf9h8aa0si81m92vb987l3nf"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
        #:tests? #f
-       #:rust ,rust-1.88))
+       #:rust ,rust-1.95))
     (native-inputs
      (list pkg-config))
     (inputs
