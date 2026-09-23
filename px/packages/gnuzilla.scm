@@ -69,8 +69,8 @@
        (sha256
         (base32 "0lb3b35fh7s191kp6ijyxy034bcav3v9mvw28yr43hsg9s7n7skh"))))))
 
-(define %thunderbird-version "156.0")
-(define %thunderbird-build-id "20260915000000") ;must be YYYYMMDDhhmmss
+(define %thunderbird-version "156.0.1")
+(define %thunderbird-build-id "20260922000000") ;must be YYYYMMDDhhmmss
 
 (define-public thunderbird
   (package
@@ -83,7 +83,7 @@
                            "releases/" version "/source/"
                            "thunderbird-" version ".source.tar.xz"))
        (sha256
-        (base32 "13ljqp55h7ak0swgx420xafnryc5q4i1dwp6p21v9a8r1qb8a0fj"))))
+        (base32 "078w26q4zlbvzvrxkcd9jjhjycxf02w90snxcjky01jipx6mf4jb"))))
     (properties
      `((cpe-name . "thunderbird")))
     (build-system gnu-build-system)
