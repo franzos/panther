@@ -447,13 +447,13 @@ predictive code completion, and integrations with development workflows.")
 (define-public zed
   (package
     (name "zed")
-    (version "1.20.2")
+    (version "1.21.0")
     (source #f)
     (build-system binary-build-system)
     (arguments
      `(#:patchelf-plan
        '(("opt/zed/bin/zed"
-          ("gcc:lib"))
+          ("libc" "gcc:lib"))
          ("opt/zed/libexec/zed-editor"
           ("gcc:lib" "glib" "gtk+" "libx11" "libxcb" "libxkbcommon"
            "fontconfig" "freetype" "mesa" "vulkan-loader" "alsa-lib"
@@ -515,9 +515,9 @@ predictive code completion, and integrations with development workflows.")
                    (base32
                     (match (or (%current-system) (%current-target-system))
                       ("x86_64-linux"
-                       "003n5yldz0zbws5fni28ki39dkqcnyvqjninfp8rrngw15gchzb4")
+                       "0022yy0dsw8yiw7nmvc02zmqwqfqkrw6c3dmn9y0dm0fjqp9k6mp")
                       ("aarch64-linux"
-                       "0vxa4hfb8l76i9y3plpfh4lbpxrc8sdiz32aisgbq8j54d954nki"))))))
+                       "18xr8b6z6mxglaprmyz8hd8lvgca9a3g17gxs2jfffr048dzbvv9"))))))
               ("bash-minimal" ,bash-minimal)
               ("glib" ,glib)
               ("gtk+" ,gtk+)
