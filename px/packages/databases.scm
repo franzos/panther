@@ -46,7 +46,7 @@
 (define-public dbeaver
   (package
     (name "dbeaver")
-    (version "26.2.0")
+    (version "26.2.1")
     (source
      (origin
        (method url-fetch)
@@ -59,8 +59,8 @@
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "1va80z0hqcqfyfrmgr1bd1pm4r6ahlmq9mk31cpa0fknfh5ff17m")
-           ("aarch64-linux" "0qsrz7nhsjkr37wiyvjafh0kaap9k296cw3p3j7zqwn074x81nka"))))))
+           ("x86_64-linux" "1s3742pk66g4vjscjlq907n7hmm2gw9aqxk9dpsdi32gx00vvmqn")
+           ("aarch64-linux" "13nck4is4b9qirmc938hg9wwlpk77fri3j3svzddl3jd0vcx3ykn"))))))
     (build-system binary-build-system)
     (arguments
      (list
@@ -74,7 +74,7 @@
              #$(match (or (%current-system) (%current-target-system))
                  ("x86_64-linux" "x86_64")
                  ("aarch64-linux" "aarch64"))
-             "_1.2.1500.v20250801-0854/eclipse_11916.so") ())
+             "_1.2.1600.v20260804-1928/eclipse_11924.so") ())
           ;; JRE binaries
           ("jre/bin/java" ())
           ("jre/bin/jcmd" ())
