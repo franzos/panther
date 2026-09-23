@@ -76,7 +76,7 @@ automated coding assistance.")
 
 ;; Biome pulls the React compiler crates straight from the react monorepo at a
 ;; pinned revision; they have no crates.io release.
-(define %react-compiler-commit "e71a6393e66b0d2add46ba2b2c5db563a0563828")
+(define %react-compiler-commit "78c2d377d79a7284339fc24b560dd503daf314cc")
 
 (define %react-compiler-source
   (origin
@@ -87,12 +87,12 @@ automated coding assistance.")
     ;; Doubles as the input label the build phases look up.
     (file-name "react-compiler-source")
     (sha256
-     (base32 "1m6w2aa4jhxnzm0gl13ysnkddlxrqyj1ixqgmdlgsqcnvx592g1m"))))
+     (base32 "000av3b7wkyfq8wyy5pajcpfng91h6pblz8cp381vyzqai3y4hvi"))))
 
 (define-public biome
   (package
     (name "biome")
-    (version "2.5.13")
+    (version "2.5.14")
     (source
      (origin
        (method git-fetch)
@@ -101,7 +101,7 @@ automated coding assistance.")
              (commit (string-append "@biomejs/biome@" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1shcjmp3zbh75f5xyiq5xi1lbhl95ns96mchagwif6j76507si58"))))
+        (base32 "093ap3dx8dxbj44dsmya5aacbvg6smfxy6gx8ibh9qj3vd2v1ld7"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
@@ -114,16 +114,23 @@ automated coding assistance.")
            (lambda* (#:key inputs #:allow-other-keys)
              ;; Kept outside the source tree so cargo does not expect these
              ;; crates to be members of biome's workspace.
+             ;; The crates inherit `edition' and friends from the compiler
+             ;; workspace root, so the root manifest has to come along.
              (copy-recursively
               (string-append (assoc-ref inputs "react-compiler-source")
-                             "/compiler/crates")
-              "../react-compiler-crates")
+                             "/compiler")
+              "../react-compiler")
+             (for-each make-file-writable
+                       (find-files "../react-compiler" #:directories? #t))
+             ;; The napi binding needs crates biome does not vendor.
+             (substitute* "../react-compiler/Cargo.toml"
+               (("^ *\"packages/babel-plugin-react-compiler-rust/native\",\n") ""))
              (for-each
               (lambda (crate)
                 (substitute* "crates/biome_react_compiler/Cargo.toml"
                   (((string-append "^" crate "( *)= \\{ git = [^}]*\\}") _ spaces)
                    (string-append crate spaces
-                                  "= { path = \"../../../react-compiler-crates/"
+                                  "= { path = \"../../../react-compiler/crates/"
                                   crate "\" }"))))
               '("react_compiler" "react_compiler_ast" "react_compiler_hir"))))
          (add-before 'build 'set-build-env

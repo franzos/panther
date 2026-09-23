@@ -21333,6 +21333,10 @@
   (crate-source "rustls" "0.23.43"
                 "01nsagj78r88pifaz55ln1rw31py5n00h7bnw58h3g1aw1n3i0q2"))
 
+(define rust-rustls-0.23.45
+  (crate-source "rustls" "0.23.45"
+                "0d6n90q52x5cjyxb6bwcnf9hwg6yb31cwr63rk8n5yfjqwqxfh8d"))
+
 (define rust-rustls-0.23.7
   (crate-source "rustls" "0.23.7"
                 "0yv7bh16rwhn6fnlb3wnixb2y4in9gf3z3ysa8k3zbgh3nbdpfzb"))
@@ -26982,6 +26986,10 @@
   (crate-source "ureq" "3.4.0"
                 "0kd966vrf14zyix8s75ajirs84pdyryyv2hb86ajcpvkr017jbcp"))
 
+(define rust-ureq-3.4.2
+  (crate-source "ureq" "3.4.2"
+                "1z6pmhf27s54f3sn2ja1rnqsrnbnjq2lr5xzpl5nwwmpx45w4yls"))
+
 (define rust-ureq-proto-0.2.3
   (crate-source "ureq-proto" "0.2.3"
                 "1cwyr58lzlhhnj32r349s0f9rwni3giir49ak546yhhm5kyjjxx2"))
@@ -26997,6 +27005,10 @@
 (define rust-ureq-proto-0.6.1
   (crate-source "ureq-proto" "0.6.1"
                 "04qnjyrmgfwlnl8yq2jy9nspf0qj9dg6j3p3yahf2hb9ksq7hpys"))
+
+(define rust-ureq-proto-0.6.3
+  (crate-source "ureq-proto" "0.6.3"
+                "1bd5kajl7cz334yfy1b5a8m5hmwil6r2pcqdlwfab98w3nh0j22v"))
 
 (define rust-url-2.5.2
   (crate-source "url" "2.5.2"
@@ -33960,9 +33972,9 @@
                                  rust-itertools-0.15.0
                                  rust-itoa-1.0.18
                                  rust-ixdtf-0.6.6
-                                 rust-jiff-0.2.35
+                                 rust-jiff-0.2.37
                                  rust-jiff-core-0.1.0
-                                 rust-jiff-static-0.2.35
+                                 rust-jiff-static-0.2.37
                                  rust-jiff-tzdb-0.1.4
                                  rust-jiff-tzdb-platform-0.1.3
                                  rust-jobserver-0.1.31
@@ -34104,9 +34116,9 @@
                                  rust-rustc-hash-2.1.3
                                  rust-rustc-version-0.2.3
                                  rust-rustix-1.0.1
-                                 rust-rustls-0.23.37
+                                 rust-rustls-0.23.45
                                  rust-rustls-pki-types-1.14.0
-                                 rust-rustls-webpki-0.103.13
+                                 rust-rustls-webpki-0.103.15
                                  rust-rustversion-1.0.19
                                  rust-ryu-1.0.13
                                  rust-ryu-js-1.0.3
@@ -34223,8 +34235,8 @@
                                  rust-unit-prefix-0.5.1
                                  rust-unsafe-libyaml-0.2.11
                                  rust-untrusted-0.9.0
-                                 rust-ureq-3.4.0
-                                 rust-ureq-proto-0.6.1
+                                 rust-ureq-3.4.2
+                                 rust-ureq-proto-0.6.3
                                  rust-url-2.5.8
                                  rust-urlencoding-2.1.3
                                  rust-utf16-iter-1.0.5
