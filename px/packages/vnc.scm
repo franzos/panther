@@ -70,7 +70,7 @@
   (package
     (inherit wayvnc)
     (name "wayvnc")
-    (version "0.10.1")
+    (version "0.10.2")
     (source (origin
               (method git-fetch)
               (uri (git-reference
@@ -79,7 +79,7 @@
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "082g6kfn66yqjr2qi3dx6m381ljk0zs1mr2qbq2ypsnf7srbwnsx"))))
+                "1j9qs7lzqa7gf0pdfpikan3pcydh15vi15bgirv02zhivf64y7lv"))))
     ;; The pam option defaults to "auto", which would quietly produce a wayvnc
     ;; without PAM support if detection ever broke.
     (arguments
