@@ -24441,6 +24441,10 @@
   (crate-source "thiserror" "2.0.20"
                 "0kxs6p295jffxhzaxpxv1dwaaf5iqlm6sx8h0djp6ancbxgj71pc"))
 
+(define rust-thiserror-2.0.21
+  (crate-source "thiserror" "2.0.21"
+                "17hq1lh5dyr3bkc7zzjrbrp4qgkvhc48kgq1n5fdxkindaw2rr89"))
+
 (define rust-thiserror-2.0.4
   (crate-source "thiserror" "2.0.4"
                 "146lr2x3hy3n1jhcn5s3rwvcl8nnykh7f3wmnzil69zq7j2s2j9g"))
@@ -24500,6 +24504,10 @@
 (define rust-thiserror-impl-2.0.20
   (crate-source "thiserror-impl" "2.0.20"
                 "1bwjc94gi0xn5jz26h1a8bjj1wdkvvr6jifamyc4mp9n28zcs15w"))
+
+(define rust-thiserror-impl-2.0.21
+  (crate-source "thiserror-impl" "2.0.21"
+                "0945n8agp7kg6n6b35yyjb4g5xv2q22vrw15h6jj1nw76a99flgy"))
 
 (define rust-thiserror-impl-2.0.4
   (crate-source "thiserror-impl" "2.0.4"
@@ -47147,42 +47155,59 @@
                                    rust-zvariant-derive-5.12.0
                                    rust-zvariant-utils-3.4.0))
                      (podman-healthcheckd =>
-                                          (list rust-aho-corasick-1.1.4
-                                           rust-bytes-1.11.1
-                                           rust-env-logger-0.10.2
+                                          (list rust-aho-corasick-1.1.5
+                                           rust-anstream-1.0.0
+                                           rust-anstyle-1.0.14
+                                           rust-anstyle-parse-1.0.0
+                                           rust-anstyle-query-1.1.5
+                                           rust-anstyle-wincon-3.0.11
+                                           rust-bitflags-1.3.2
+                                           rust-bytes-1.12.1
+                                           rust-colorchoice-1.0.5
+                                           rust-defmt-1.1.1
+                                           rust-defmt-macros-1.1.1
+                                           rust-defmt-parser-1.0.0
+                                           rust-env-filter-2.0.0
+                                           rust-env-logger-0.11.11
                                            rust-errno-0.3.14
-                                           rust-futures-core-0.3.31
-                                           rust-futures-sink-0.3.31
-                                           rust-hermit-abi-0.5.2
-                                           rust-humantime-2.3.0
-                                           rust-is-terminal-0.4.17
-                                           rust-itoa-1.0.17
-                                           rust-libc-0.2.180
-                                           rust-log-0.4.29
-                                           rust-memchr-2.7.6
-                                           rust-mio-1.1.1
-                                           rust-pin-project-lite-0.2.16
-                                           rust-proc-macro2-1.0.106
-                                           rust-quote-1.0.44
-                                           rust-regex-1.12.3
-                                           rust-regex-automata-0.4.14
-                                           rust-regex-syntax-0.8.9
-                                           rust-serde-1.0.228
-                                           rust-serde-core-1.0.228
-                                           rust-serde-derive-1.0.228
-                                           rust-serde-json-1.0.149
+                                           rust-futures-core-0.3.34
+                                           rust-futures-sink-0.3.34
+                                           rust-is-terminal-polyfill-1.70.2
+                                           rust-itoa-1.0.18
+                                           rust-jiff-0.2.37
+                                           rust-jiff-core-0.1.1
+                                           rust-jiff-static-0.2.37
+                                           rust-libc-0.2.189
+                                           rust-log-0.4.34
+                                           rust-memchr-2.8.3
+                                           rust-mio-1.2.3
+                                           rust-once-cell-polyfill-1.70.2
+                                           rust-pin-project-lite-0.2.17
+                                           rust-portable-atomic-1.15.0
+                                           rust-portable-atomic-util-0.2.8
+                                           rust-proc-macro2-1.0.107
+                                           rust-quote-1.0.47
+                                           rust-regex-1.13.1
+                                           rust-regex-automata-0.4.18
+                                           rust-regex-syntax-0.8.11
+                                           rust-serde-1.0.229
+                                           rust-serde-core-1.0.229
+                                           rust-serde-derive-1.0.229
+                                           rust-serde-json-1.0.151
                                            rust-signal-hook-registry-1.4.8
-                                           rust-syn-2.0.114
-                                           rust-termcolor-1.4.1
-                                           rust-tokio-1.49.0
-                                           rust-tokio-macros-2.6.0
-                                           rust-tokio-util-0.7.18
-                                           rust-unicode-ident-1.0.22
+                                           rust-syn-2.0.119
+                                           rust-syn-3.0.6
+                                           rust-thiserror-2.0.21
+                                           rust-thiserror-impl-2.0.21
+                                           rust-tokio-1.53.1
+                                           rust-tokio-macros-2.7.2
+                                           rust-tokio-util-0.7.19
+                                           rust-unicode-ident-1.0.26
+                                           rust-utf8parse-0.2.2
                                            rust-wasi-0.11.1+wasi-snapshot-preview1
-                                           rust-winapi-util-0.1.11
                                            rust-windows-link-0.2.1
                                            rust-windows-sys-0.61.2
-                                           rust-zmij-1.0.19))
+                                           rust-zmij-1.0.23))
                      (pods =>
                            (list rust-adler2-2.0.1
                                  rust-aes-0.8.4
