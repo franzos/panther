@@ -58,7 +58,7 @@
 (define-public dnclient
   (package
     (name "dnclient")
-    (version "0.9.8")
+    (version "0.9.9")
     (source
      (origin
        (method url-fetch)
@@ -69,8 +69,8 @@
        (sha256
         (base32
          (match (dnclient-arch)
-           ("amd64" "1dvz2z203fy7v8lkx5bs27rhbs0qfwx1wr5pdrc9z7ss3b8b00gq")
-           ("arm64" "08d4h0wapfpi0anb0i9x2l3396h1vz8pvqbn0zaykv91samn1xjh"))))))
+           ("amd64" "17ppj5z2sd7s0aah0z04agv2a2nc2zx7nynpsszd75gqis13hhc5")
+           ("arm64" "1fzy4rfm7w6vcxhv10kazvzz8alh3ph72y20crphybiq416xjc63"))))))
     (build-system binary-build-system)
     (arguments
      (list
