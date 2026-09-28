@@ -40,7 +40,7 @@
   (package
     (inherit neatvnc)
     (name "neatvnc")
-    (version "1.0.1")
+    (version "1.0.2")
     (source (origin
               (method git-fetch)
               (uri (git-reference
@@ -49,7 +49,7 @@
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "1q7sqck7xvnxk0sr43z9hmph3q85b04vcxdip6jiy5p8vgf721v5"))))
+                "0fpwwbhrajf978dnhp5i5vcsg6wcvl92g81rlih993ln608zqxlx"))))
     (inputs '())
     ;; These land in neatvnc.pc's Requires.private, which pkg-config resolves
     ;; even for --cflags, so a consumer's configure fails unless they are on
