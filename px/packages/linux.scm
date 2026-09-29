@@ -191,8 +191,9 @@ network cards supported by the brcmsmac or brcmfmac driver.")
                 (install-file "regulatory.db.p7s" firmware-dir)
                 ;; Install regulatory.bin for legacy CRDA
                 (install-file "regulatory.bin" crda-dir)
-                (install-file "sforshee.key.pub.pem"
-                              (string-append crda-dir "/pubkeys"))
+                (for-each (lambda (key)
+                            (install-file key (string-append crda-dir "/pubkeys")))
+                          (find-files "." "\\.key\\.pub\\.pem$"))
                 ;; Documentation
                 (install-file "LICENSE" doc-dir)
                 (install-file "regulatory.db.5" man5)
