@@ -14,6 +14,7 @@
   #:use-module (guix utils)
   #:use-module (ice-9 match)
   #:use-module (nonguix build-system binary)
+  #:use-module (nonguix build-system chromium-binary)
   #:use-module (gnu packages base)
   #:use-module (gnu packages bash)
   #:use-module (gnu packages compression)
@@ -706,4 +707,89 @@ project it finds.")
 compilation to a remote server.  It syncs the local project to the remote
 host over @command{rsync}, runs the requested @command{cargo} command there
 over @command{ssh}, and copies results back, cutting local compile times.")
+    (license license:expat)))
+
+(define-public bruno
+  (package
+    (name "bruno")
+    (version "4.2.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/usebruno/bruno/releases/download/v" version
+             "/bruno_" version "_"
+             (match (or (%current-system) (%current-target-system))
+               ("x86_64-linux" "amd64")
+               ("aarch64-linux" "arm64"))
+             "_linux.deb"))
+       (file-name (string-append name "-" version ".deb"))
+       (sha256
+        (base32
+         (match (or (%current-system) (%current-target-system))
+           ("x86_64-linux" "123ssjpi5vlnvl9sybvh5hwxq7kll8nkd399md4bp6aqy7bz0dkw")
+           ("aarch64-linux" "14s81i8n8azaiq691n6i8brcdqdnscgg1ig7r8h8vr6lijf3amga"))))))
+    (build-system chromium-binary-build-system)
+    (arguments
+     (list
+      #:wrapper-plan
+      #~(map (lambda (file)
+               (string-append "opt/Bruno/" file))
+             '("bruno"
+               "chrome-sandbox"
+               "chrome_crashpad_handler"
+               "libEGL.so"
+               "libGLESv2.so"
+               "libffmpeg.so"
+               "libvk_swiftshader.so"
+               "libvulkan.so.1"))
+      #:install-plan
+      #~'(("opt/Bruno/" "/share/bruno")
+          ("usr/share/applications/" "/share/applications")
+          ("usr/share/icons/" "/share/icons"))
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'install 'patch-desktop
+            (lambda _
+              (substitute* "usr/share/applications/bruno.desktop"
+                (("Exec=/opt/Bruno/bruno")
+                 (string-append "Exec=" #$output "/bin/bruno")))))
+          ;; Bruno skips the auto-updater for portable builds, detected by
+          ;; this marker; it has no other effect.
+          (add-before 'install 'disable-auto-update
+            (lambda _
+              (call-with-output-file "opt/Bruno/resources/portable.json"
+                (lambda (port)
+                  (display "{}" port)))))
+          (add-before 'install-wrapper 'install-exe
+            (lambda _
+              (let ((bin (string-append #$output "/bin")))
+                (mkdir-p bin)
+                (symlink (string-append #$output "/share/bruno/bruno")
+                         (string-append bin "/bruno")))))
+          ;; patchelf drops $ORIGIN, so the bundled libffmpeg.so and the NSS
+          ;; libs in nss/lib/nss are otherwise not found.
+          (add-after 'install-exe 'set-bundled-rpath
+            (lambda* (#:key inputs #:allow-other-keys)
+              (invoke "patchelf" "--add-rpath"
+                      (string-append #$output "/share/bruno" ":"
+                                     (assoc-ref inputs "nss") "/lib/nss")
+                      (string-append #$output "/share/bruno/bruno"))))
+          ;; Chromium falls back to the plaintext store on unrecognized
+          ;; desktops (wlroots compositors such as niri); force libsecret.
+          (add-after 'install-wrapper 'force-libsecret
+            (lambda _
+              (substitute* (string-append #$output "/bin/bruno")
+                (("bruno/bruno\" ")
+                 "bruno/bruno\" --password-store=gnome-libsecret ")))))))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
+    (home-page "https://www.usebruno.com")
+    (synopsis "Offline-first API client")
+    (description
+     "Bruno is an API client for exploring and testing HTTP, GraphQL and gRPC
+APIs.  Collections are stored as plain-text files on disk, so they can be
+versioned with Git alongside the code they exercise.
+
+This package repackages the upstream Debian build, patching the bundled
+Electron runtime for the Guix store.")
     (license license:expat)))
