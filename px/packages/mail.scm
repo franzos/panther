@@ -46,8 +46,9 @@
     (description
      "Himalaya is a command-line interface for managing emails, providing a
 modern and efficient way to interact with email accounts.  It supports IMAP,
-Maildir, Notmuch, SMTP, and Sendmail backends, along with OAuth 2.0
-authorization for various email providers including Gmail, Outlook, and iCloud.")
+SMTP, JMAP, ManageSieve, the Gmail and Microsoft Graph APIs, as well as local
+Maildir, mbox and pimdir stores.  IMAP and SMTP authentication includes XOAUTH2
+and OAUTHBEARER.")
     (license (list license:expat license:asl2.0))))
 
 (define bichon-version "2.0.3")
