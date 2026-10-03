@@ -13,15 +13,18 @@
   #:use-module (guix gexp)
   #:use-module (ice-9 match)
   #:use-module (nonguix build-system binary)
+  #:use-module (nonguix build-system chromium-binary)
   #:use-module (nonguix licenses)
   #:use-module (gnu packages base)
   #:use-module (gnu packages bash)
   #:use-module (gnu packages compression)
+  #:use-module (gnu packages curl)
   #:use-module (gnu packages gcc)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages golang)
   #:use-module (gnu packages gtk)
+  #:use-module (gnu packages linux)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python-build)
   #:use-module (gnu packages python-xyz)
@@ -300,6 +303,70 @@ lets you stage and commit changes interactively, browse history with the
 conflicts, and edit interactive rebase sequences.  Git Cola is written in
 Python and uses Qt for its interface.")
     (license license:gpl2+)))
+
+(define-public gitkraken
+  (package
+    (name "gitkraken")
+    (version "12.6.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://api.gitkraken.dev/releases/production/linux/x64/"
+             version "/gitkraken-amd64.deb"))
+       (file-name (string-append name "-" version ".deb"))
+       (sha256
+        (base32 "0w5kqqgzcpskw2wkwgjbanjq1dd6kassfxml08avg75rqgzpiqp2"))))
+    (supported-systems '("x86_64-linux"))
+    (build-system chromium-binary-build-system)
+    (arguments
+     (list
+      #:validate-runpath? #f
+      #:wrapper-plan
+      #~(let ((app "share/gitkraken/resources/app.asar.unpacked/"))
+          (append
+           '(("share/gitkraken/gitkraken" (("out" "/share/gitkraken")))
+             "share/gitkraken/chrome_crashpad_handler")
+           (map (lambda (file) (string-append app file))
+                '("node_modules/@axosoft/nodegit/build/Release/nodegit.node"
+                  "node_modules/native-keymap/build/Release/keymapping.node"
+                  "git/bin/git"
+                  "git/bin/scalar"
+                  "git/libexec/git-core/git"
+                  "git/libexec/git-core/git-daemon"
+                  "git/libexec/git-core/git-http-backend"
+                  "git/libexec/git-core/git-http-fetch"
+                  "git/libexec/git-core/git-http-push"
+                  "git/libexec/git-core/git-imap-send"
+                  "git/libexec/git-core/git-remote-http"
+                  "git/libexec/git-core/git-sh-i18n--envsubst"
+                  "git/libexec/git-core/git-shell"
+                  "git/libexec/git-core/scalar"))))
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'binary-unpack 'setup-cwd
+            (lambda _
+              (copy-recursively "usr/" ".")
+              (delete-file-recursively "usr")
+              (delete-file-recursively "bin")
+              (substitute* (find-files "share/applications" "\\.desktop$")
+                (("/usr/share/gitkraken/gitkraken|/usr/bin/gitkraken")
+                 (string-append #$output "/bin/gitkraken"))
+                (("/usr/share/pixmaps/gitkraken.png") "gitkraken")
+                (("MimeType=text/plain;\n") ""))))
+          (add-after 'install 'symlink-binary-file
+            (lambda _
+              (mkdir-p (string-append #$output "/bin"))
+              (symlink (string-append #$output "/share/gitkraken/gitkraken")
+                       (string-append #$output "/bin/gitkraken")))))))
+    (inputs (list curl e2fsprogs openssl))
+    (home-page "https://www.gitkraken.com/")
+    (synopsis "Graphical Git client")
+    (description
+     "GitKraken Desktop is an Electron-based Git client with a commit graph,
+merge conflict editor, and integrations for GitHub, GitLab, Bitbucket and Azure
+DevOps.")
+    (license (nonfree "https://www.gitkraken.com/eula"))))
 
 (define-public jira-cli
   (package
