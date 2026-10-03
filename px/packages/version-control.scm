@@ -527,7 +527,7 @@ information, file change statistics, and basic Git operations.")
 (define-public radicle-desktop
   (package
     (name "radicle-desktop")
-    (version "0.10.0")
+    (version "0.16.0")
     (source
      (origin
        (method url-fetch)
@@ -535,12 +535,12 @@ information, file change statistics, and basic Git operations.")
              "https://files.radicle.dev/apt/pool/main/r/radicle-desktop/"
              "radicle-desktop_" version "_amd64.deb"))
        (sha256
-        (base32 "1p1flha80jzy0sb1pbgv5ivzqibk0fwcyvw1drnaxpz1mpq9572y"))))
+        (base32 "082qaqwxpbwba8igilqjv71jrlww8nfjsn45rmmaw70rpgd9yzsf"))))
     (build-system binary-build-system)
     (arguments
      `(#:patchelf-plan `(("usr/bin/radicle-desktop"
                           ("glib" "gtk+" "gdk-pixbuf" "cairo" "pango"
-                           "webkitgtk-for-gtk3" "libsoup" "gcc:lib")))
+                           "webkitgtk-for-gtk3" "libsoup" "gcc:lib" "zlib" "dbus")))
        #:phases
        (modify-phases %standard-phases
          (replace 'unpack
@@ -585,13 +585,15 @@ information, file change statistics, and basic Git operations.")
     (native-inputs `(("binutils" ,binutils)))
     (inputs `(("bash-minimal" ,bash-minimal)
               ("cairo" ,cairo)
+              ("dbus" ,dbus)
               ("gdk-pixbuf" ,gdk-pixbuf)
               ("glib" ,glib)
               ("gcc:lib" ,gcc "lib")
               ("gtk+" ,gtk+)
               ("libsoup" ,libsoup)
               ("pango" ,pango)
-              ("webkitgtk-for-gtk3" ,webkitgtk-for-gtk3)))
+              ("webkitgtk-for-gtk3" ,webkitgtk-for-gtk3)
+              ("zlib" ,zlib)))
     (propagated-inputs (list radicle))
     (supported-systems '("x86_64-linux"))
     (home-page "https://radicle.dev/desktop")
