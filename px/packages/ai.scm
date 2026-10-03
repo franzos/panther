@@ -79,7 +79,7 @@ handle entire workflows.  This package disables auto-updates.")
 (define-public claude-desktop
   (package
     (name "claude-desktop")
-    (version "1.32885.1")
+    (version "2.9939.4")
     (source
      (origin
        (method url-fetch)
@@ -88,7 +88,7 @@ handle entire workflows.  This package disables auto-updates.")
              "main/c/claude-desktop/claude-desktop_" version "_amd64.deb"))
        (file-name (string-append name "-" version ".deb"))
        (sha256
-        (base32 "1z52a69pr5ds44k21y4vn4m56p9dhghw46fgi6apdglcgkmdv9gq"))))
+        (base32 "185wjpwpqcgbknskab1vcjadz5g7p1b3ivdl4xgf0499pwixpz9w"))))
     (build-system chromium-binary-build-system)
     (arguments
      (list
@@ -100,8 +100,6 @@ handle entire workflows.  This package disables auto-updates.")
              '("claude-desktop"
                "chrome-sandbox"
                "chrome_crashpad_handler"
-               "libEGL.so"
-               "libGLESv2.so"
                "libffmpeg.so"
                "libvk_swiftshader.so"
                "libvulkan.so.1"
