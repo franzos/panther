@@ -37,7 +37,7 @@
   (package
     (inherit (@ (gnu packages music) strawberry))
     (name "strawberry")
-    (version "1.2.30")
+    (version "1.2.31")
     (source
      (origin
        (method git-fetch)
@@ -46,7 +46,7 @@
              (commit version)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1ymvy85dbna4ha4cikhrbgdhs3p626v4kainria50n9dahw67v7x"))))
+        (base32 "03aq9aa4avpkk6gbz8vy8rb3583wd04f3lhkb2rpk131lxlr3njk"))))
     (arguments
      (substitute-keyword-arguments
          (package-arguments (@ (gnu packages music) strawberry))
@@ -65,7 +65,9 @@
        (append kdsingleapplication
                (@ (gnu packages music) libgpod)
                rapidjson
-               sparsehash)))))
+               sparsehash
+               (@ (gnu packages freedesktop) uchardet)
+               libsecret)))))
 
 (define-public tidal-hifi
   (package
