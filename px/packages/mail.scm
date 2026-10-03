@@ -25,14 +25,14 @@
 (define-public himalaya
   (package
     (name "himalaya")
-    (version "2.1.0")
+    (version "2.2.1")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "himalaya" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "1fy11y2fnjhdc3w72h6lm0zj7mq1j95f32581ga82sz04xxyzq85"))))
+        (base32 "03mc52n6sx6vgk2wk2kz03jv8f8dmd71m760ah3z53bpwcak29zz"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
@@ -48,7 +48,7 @@
 modern and efficient way to interact with email accounts.  It supports IMAP,
 Maildir, Notmuch, SMTP, and Sendmail backends, along with OAuth 2.0
 authorization for various email providers including Gmail, Outlook, and iCloud.")
-    (license license:expat)))
+    (license (list license:expat license:asl2.0))))
 
 (define bichon-version "2.0.3")
 
