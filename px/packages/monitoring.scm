@@ -20,14 +20,14 @@
 (define-public monit
   (package
     (name "monit")
-    (version "5.25.3")
+    (version "6.0.0")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "https://mmonit.com/monit/dist/monit-" version
                            ".tar.gz"))
        (sha256
-        (base32 "0s8577ixcmx45b081yx6cw54iq7m5yzpq3ir616qc84xhg45h0n1"))))
+        (base32 "0fsv5b7lvg19v10j17z9mq250avq2x5f0vj8wi8j7sqa2ald5b6x"))))
     (build-system gnu-build-system)
     (arguments
      `(#:configure-flags '("--without-pam" "--without-ssl")
