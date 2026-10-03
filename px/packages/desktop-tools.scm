@@ -513,7 +513,7 @@ and rich media support for gaming communities.")
                (mkdir-p bin)
                (call-with-output-file (string-append bin "/appflowy")
                  (lambda (port)
-                   (format port "#!~a~%export LD_LIBRARY_PATH=\"~a:$LD_LIBRARY_PATH\"~%export GDK_BACKEND=x11~%exec ~a/lib/AppFlowy/AppFlowy \"$@\"~%"
+                   (format port "#!~a~%export LD_LIBRARY_PATH=\"~a:$LD_LIBRARY_PATH\"~%exec ~a/lib/AppFlowy/AppFlowy \"$@\"~%"
                            bash lib-path out)))
                (chmod (string-append bin "/appflowy") #o755)))))))
     (native-inputs `(("binutils" ,binutils)))
