@@ -688,19 +688,15 @@ TeamViewer and AnyDesk.")
              (commit version)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "04jkcwkdqfm2wjwlp9ybxsi68dkh1xh2qmnvnfz44cyz7ixcfib2"))
-       (snippet
-        #~(begin
-            (use-modules (guix build utils))
-            ;; Fix build.rs to not panic when git-describe fails
-            (substitute* "build.rs"
-              (("Ok\\(o\\) => panic.*git-describe exited non-zero.*")
-               "Ok(_) => version.to_string(),\n"))))))
+        (base32 "04jkcwkdqfm2wjwlp9ybxsi68dkh1xh2qmnvnfz44cyz7ixcfib2"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
        #:phases
        (modify-phases %standard-phases
+         (add-before 'build 'set-version
+           (lambda _
+             (setenv "WLUMA_VERSION" ,version)))
          (add-after 'install 'install-auxiliary-files
            (lambda* (#:key outputs #:allow-other-keys)
              (let* ((out (assoc-ref outputs "out"))
