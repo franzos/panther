@@ -2152,6 +2152,10 @@
   (crate-source "bpaf" "0.9.27"
                 "10nv3p7729in3km8j0ncpmywdicl1b06ixncsmr6i11kx9gdcw66"))
 
+(define rust-bpaf-0.9.28
+  (crate-source "bpaf" "0.9.28"
+                "1ghgdb8bmmj25dlsqg3cwwd6cyjb5bw4kd7pdvia7dq4ckjq2zjr"))
+
 (define rust-bpaf-derive-0.5.26
   (crate-source "bpaf_derive" "0.5.26"
                 "150hx7x04w42i00zfwazzw22w65vcbdszq9wrdv91c9rx379hzig"))
@@ -2580,6 +2584,10 @@
 (define rust-camino-1.2.5
   (crate-source "camino" "1.2.5"
                 "03dqn75zw26vf3lvc5m02kb0y3inacv7ps0nhjjvarx95bqhf4xv"))
+
+(define rust-camino-1.2.6
+  (crate-source "camino" "1.2.6"
+                "14g55g2pn08yb29rqq8nqdbp4cial62x1bn87jga652c9c7d7fmv"))
 
 (define rust-caret-0.10.0
   (crate-source "caret" "0.10.0"
@@ -6861,6 +6869,10 @@
 (define rust-float16-0.1.5
   (crate-source "float16" "0.1.5"
                 "10w4zwbrdw4zclzps5pldhk02xkmrzlrlxy2qy8h2llx0yyszzvv"))
+
+(define rust-float16-0.1.7
+  (crate-source "float16" "0.1.7"
+                "18glxznz7hx6mmzyzvmr06ka2s8v3khbmplh977fm5vrk9g2ni59"))
 
 (define rust-fluent-0.16.1
   (crate-source "fluent" "0.16.1"
@@ -22057,6 +22069,10 @@
   (crate-source "salsa" "0.27.2"
                 "1qlmc0w38fbaxs0wkn75r4qbvs6ignc8ywsavapm99rf5s1spfpz"))
 
+(define rust-salsa-0.28.5
+  (crate-source "salsa" "0.28.5"
+                "0d3dzslpy65q56338c88zln02kabai0l3b01kkciqn9rkvhydli7"))
+
 (define rust-salsa-macro-rules-0.26.2
   (crate-source "salsa-macro-rules" "0.26.2"
                 "0h9ffp6g82bayllxjmgpl2s68gm536s1zhfrkjqbjfb9mk5m9qsq"))
@@ -22065,6 +22081,10 @@
   (crate-source "salsa-macro-rules" "0.27.2"
                 "1im91vrmmql0rm7i3x889rma5rk387176ql3kab3jgf759374s6y"))
 
+(define rust-salsa-macro-rules-0.28.5
+  (crate-source "salsa-macro-rules" "0.28.5"
+                "0znbwb8v21c555m5wgwnhldqx8bshbax64ci93c5xwiq3iahmyds"))
+
 (define rust-salsa-macros-0.26.2
   (crate-source "salsa-macros" "0.26.2"
                 "1j40i5zyiplxww0l52yz9jwi0xiciyw9zm2az040df62fl88crrh"))
@@ -22072,6 +22092,10 @@
 (define rust-salsa-macros-0.27.2
   (crate-source "salsa-macros" "0.27.2"
                 "0mw4ibm7rf2dzli5g42s4jxv245a618jqn8qb0bskcb5mzzpig3n"))
+
+(define rust-salsa-macros-0.28.5
+  (crate-source "salsa-macros" "0.28.5"
+                "0j85zc1qcrm99d9as6pzrmrrwd4d9k2ggpgl2kip43n1dvw7gpb9"))
 
 (define rust-same-file-1.0.6
   (crate-source "same-file" "1.0.6"
@@ -27685,6 +27709,10 @@
 (define rust-uuid-1.26.0
   (crate-source "uuid" "1.26.0"
                 "04kqmzwdqbh1lgci3dhv4ir1nk12bff98z8iq9m8m2myr5qjsxxm"))
+
+(define rust-uuid-1.26.1
+  (crate-source "uuid" "1.26.1"
+                "1kl5nb7r3gpmkc43d6nbayvzqhcp2grczk6c7bxv80b6x70xmxif"))
 
 (define rust-uuid-1.4.1
   (crate-source "uuid" "1.4.1"
@@ -34339,7 +34367,7 @@
                                  rust-boa-string-0.22.0
                                  rust-borrow-or-share-0.2.4
                                  rust-boxcar-0.2.14
-                                 rust-bpaf-0.9.27
+                                 rust-bpaf-0.9.28
                                  rust-bpaf-derive-0.5.26
                                  rust-bstr-1.12.1
                                  rust-bumpalo-3.12.0
@@ -34347,13 +34375,12 @@
                                  rust-bytemuck-derive-1.10.2
                                  rust-byteorder-1.5.0
                                  rust-bytes-1.11.1
-                                 rust-calendrical-calculations-0.2.4
-                                 rust-camino-1.2.5
+                                 rust-camino-1.2.6
                                  rust-case-1.0.0
                                  rust-caseless-0.2.2
                                  rust-cast-0.3.0
                                  rust-cc-1.4.1
-                                 rust-cfg-if-1.0.4
+                                 rust-cfg-if-1.0.5
                                  rust-cfg-aliases-0.2.1
                                  rust-chacha20-0.10.2
                                  rust-chrono-0.4.44
@@ -34377,7 +34404,6 @@
                                  rust-console-error-panic-hook-0.1.7
                                  rust-cookie-0.18.1
                                  rust-cookie-store-0.22.0
-                                 rust-core-maths-0.1.1
                                  rust-countme-3.0.1
                                  rust-cow-utils-0.1.3
                                  rust-cpufeatures-0.3.1
@@ -34430,7 +34456,7 @@
                                  rust-find-msvc-tools-0.1.10
                                  rust-fixedbitset-0.5.7
                                  rust-flate2-1.0.35
-                                 rust-float16-0.1.5
+                                 rust-float16-0.1.7
                                  rust-fluent-uri-0.3.2
                                  rust-flume-0.10.14
                                  rust-fnv-1.0.7
@@ -34478,13 +34504,9 @@
                                  rust-hyper-rustls-0.27.9
                                  rust-hyper-util-0.1.20
                                  rust-iai-0.1.1
-                                 rust-icu-calendar-2.3.0
-                                 rust-icu-calendar-data-2.3.0
                                  rust-icu-collections-1.5.0
                                  rust-icu-collections-2.3.0
                                  rust-icu-locale-core-2.3.0
-                                 rust-icu-locale-fallback-2.3.0
-                                 rust-icu-locale-fallback-data-2.3.0
                                  rust-icu-locid-1.5.0
                                  rust-icu-locid-transform-1.5.0
                                  rust-icu-locid-transform-data-1.5.0
@@ -34519,7 +34541,6 @@
                                  rust-itertools-0.14.0
                                  rust-itertools-0.15.0
                                  rust-itoa-1.0.18
-                                 rust-ixdtf-0.6.6
                                  rust-jiff-0.2.37
                                  rust-jiff-core-0.1.0
                                  rust-jiff-static-0.2.37
@@ -34533,7 +34554,6 @@
                                  rust-lazy-static-1.5.0
                                  rust-libc-0.2.189
                                  rust-libgit2-sys-0.18.5+1.9.4
-                                 rust-libm-0.2.16
                                  rust-libmimalloc-sys-0.1.44
                                  rust-libredox-0.1.3
                                  rust-libz-sys-1.1.8
@@ -34658,11 +34678,10 @@
                                  rust-reqwest-0.12.28
                                  rust-ring-0.17.13
                                  rust-roaring-0.11.3
-                                 rust-rust-lapper-1.3.0
                                  rust-rustc-demangle-0.1.24
                                  rust-rustc-hash-1.1.0
                                  rust-rustc-hash-2.1.3
-                                 rust-rustc-version-0.2.3
+                                 rust-rustc-version-0.4.1
                                  rust-rustix-1.0.1
                                  rust-rustls-0.23.45
                                  rust-rustls-pki-types-1.14.0
@@ -34670,9 +34689,9 @@
                                  rust-rustversion-1.0.19
                                  rust-ryu-1.0.13
                                  rust-ryu-js-1.0.3
-                                 rust-salsa-0.27.2
-                                 rust-salsa-macro-rules-0.27.2
-                                 rust-salsa-macros-0.27.2
+                                 rust-salsa-0.28.5
+                                 rust-salsa-macro-rules-0.28.5
+                                 rust-salsa-macros-0.28.5
                                  rust-same-file-1.0.6
                                  rust-scc-2.4.0
                                  rust-schemars-1.2.2
@@ -34682,9 +34701,7 @@
                                  rust-seize-0.5.0
                                  rust-self-replace-1.5.0
                                  rust-self-update-0.42.0
-                                 rust-semver-0.9.0
                                  rust-semver-1.0.27
-                                 rust-semver-parser-0.7.0
                                  rust-serde-1.0.229
                                  rust-serde-transcode-1.1.1
                                  rust-serde-wasm-bindgen-0.6.5
@@ -34706,7 +34723,7 @@
                                  rust-siphasher-1.0.1
                                  rust-slab-0.4.11
                                  rust-small-btree-0.1.0
-                                 rust-smallvec-1.15.2
+                                 rust-smallvec-1.16.2
                                  rust-socket2-0.6.3
                                  rust-spin-0.9.9
                                  rust-stable-deref-trait-1.2.0
@@ -34728,7 +34745,6 @@
                                  rust-tap-1.0.1
                                  rust-target-triple-1.0.0
                                  rust-tempfile-3.23.0
-                                 rust-temporal-rs-0.2.6
                                  rust-termcolor-1.4.1
                                  rust-terminal-size-0.4.4
                                  rust-thin-vec-0.2.19
@@ -34742,7 +34758,6 @@
                                  rust-time-0.3.55
                                  rust-time-core-0.1.9
                                  rust-time-macros-0.2.32
-                                 rust-timezone-provider-0.2.6
                                  rust-tinystr-0.7.6
                                  rust-tinystr-0.8.4
                                  rust-tinytemplate-1.2.1
@@ -34790,7 +34805,7 @@
                                  rust-utf16-iter-1.0.5
                                  rust-utf8-zero-0.8.1
                                  rust-utf8-iter-1.0.4
-                                 rust-uuid-1.24.1
+                                 rust-uuid-1.26.1
                                  rust-valuable-0.1.0
                                  rust-vcpkg-0.2.15
                                  rust-version-check-0.9.4
