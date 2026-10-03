@@ -4334,6 +4334,10 @@
   (crate-source "crc-catalog" "2.5.0"
                 "0lq8dl60g457za8la86pak6i7ydxanm2lrpkqh5kyjkbz7m9hxi1"))
 
+(define rust-crc-fast-1.10.0
+  (crate-source "crc-fast" "1.10.0"
+                "19fv025y2yb0hrvirvfqb3zkrigr56v0b2n67akpsnksx61j8nz7"))
+
 (define rust-crc24-0.1.6
   (crate-source "crc24" "0.1.6"
                 "1876c92swdpq1iv8j3y21vvfar96pxayn8rhvl42rf1yrx0if4px"))
@@ -17748,6 +17752,10 @@
   (crate-source "object" "0.39.1"
                 "16vkcaamik55jd9f04g73hvgsm5w636gb4w06x3nafvsih4nqnif"))
 
+(define rust-object-store-0.14.2
+  (crate-source "object_store" "0.14.2"
+                "157bwjxavcjv72ahmpns5b91i5nwp9c2v7x6c1bqrxq36v4nnygi"))
+
 (define rust-oboe-0.5.0
   (crate-source "oboe" "0.5.0"
                 "1l4mqdvxwc9qxlgb39g7q8zvpf98sal276jk32b2sbp0gqiwqs48"))
@@ -20790,6 +20798,10 @@
 (define rust-redb-4.1.0
   (crate-source "redb" "4.1.0"
                 "0fg8ja0gxnkkriqnxk9xpkpbql7h5mp5nbzl5g9ifpsbf12594lf"))
+
+(define rust-redb-4.3.0
+  (crate-source "redb" "4.3.0"
+                "08igvi7lyljpg6yic1m207s1zarln0mqrdr4v2z622l3cxn8lczv"))
 
 (define rust-redox-syscall-0.2.16
   (crate-source "redox_syscall" "0.2.16"
@@ -33533,6 +33545,7 @@
                               rust-blake2-0.10.6
                               rust-blake3-1.8.5
                               rust-block-buffer-0.10.4
+                              rust-block-buffer-0.12.1
                               rust-bon-3.9.1
                               rust-bon-macros-3.9.1
                               rust-brotli-8.0.2
@@ -33580,6 +33593,7 @@
                               rust-core-foundation-sys-0.8.7
                               rust-cpufeatures-0.2.17
                               rust-cpufeatures-0.3.0
+                              rust-crc-fast-1.10.0
                               rust-crc32fast-1.5.0
                               rust-criterion-0.6.0
                               rust-criterion-plot-0.5.0
@@ -33592,6 +33606,7 @@
                               rust-crossbeam-utils-0.8.21
                               rust-crunchy-0.2.4
                               rust-crypto-common-0.1.7
+                              rust-crypto-common-0.2.2
                               rust-darling-0.20.11
                               rust-darling-0.23.0
                               rust-darling-core-0.20.11
@@ -33608,6 +33623,7 @@
                               rust-deunicode-1.6.2
                               rust-dialoguer-0.12.0
                               rust-digest-0.10.7
+                              rust-digest-0.11.3
                               rust-dispatch2-0.3.1
                               rust-displaydoc-0.2.5
                               rust-downcast-rs-2.0.2
@@ -33629,7 +33645,7 @@
                               rust-fastrand-2.4.1
                               rust-find-msvc-tools-0.1.9
                               rust-fjall-3.1.6
-                              rust-flate2-1.1.9
+                              rust-flate2-1.1.10
                               rust-flume-0.12.0
                               rust-fnv-1.0.7
                               rust-foldhash-0.1.5
@@ -33682,6 +33698,8 @@
                               rust-http-body-util-0.1.3
                               rust-httparse-1.10.1
                               rust-httpdate-1.0.3
+                              rust-humantime-2.4.0
+                              rust-hybrid-array-0.4.15
                               rust-hyper-1.9.0
                               rust-hyper-rustls-0.27.9
                               rust-hyper-util-0.1.20
@@ -33723,7 +33741,7 @@
                               rust-leb128fmt-0.1.0
                               rust-lettre-0.11.21
                               rust-levenshtein-automata-0.2.1
-                              rust-libc-0.2.185
+                              rust-libc-0.2.189
                               rust-linked-hash-map-0.5.6
                               rust-linux-raw-sys-0.12.1
                               rust-litemap-0.8.2
@@ -33741,6 +33759,7 @@
                               rust-mail-send-0.6.1
                               rust-markup5ever-0.39.0
                               rust-matchers-0.2.0
+                              rust-md-5-0.11.0
                               rust-md5-0.8.0
                               rust-measure-time-0.9.0
                               rust-memchr-2.8.0
@@ -33748,7 +33767,7 @@
                               rust-mime-0.3.17
                               rust-mime-guess-2.0.5
                               rust-minimal-lexical-0.2.1
-                              rust-miniz-oxide-0.8.9
+                              rust-miniz-oxide-0.9.1
                               rust-mio-1.2.0
                               rust-moka-0.12.15
                               rust-multer-3.1.0
@@ -33762,6 +33781,7 @@
                               rust-ndk-context-0.1.1
                               rust-new-debug-unreachable-1.0.6
                               rust-nix-0.30.1
+                              rust-nix-0.31.3
                               rust-nom-7.1.3
                               rust-nom-8.0.0
                               rust-nonzero-ext-0.3.0
@@ -33780,6 +33800,7 @@
                               rust-objc2-foundation-0.3.2
                               rust-objc2-io-kit-0.3.2
                               rust-objc2-open-directory-0.3.2
+                              rust-object-store-0.14.2
                               rust-oem-cp-1.3.0
                               rust-oid-registry-0.8.1
                               rust-once-cell-1.21.4
@@ -33857,12 +33878,13 @@
                               rust-rcgen-0.14.8
                               rust-redb-1.5.1
                               rust-redb-2.6.3
-                              rust-redb-4.1.0
+                              rust-redb-4.3.0
                               rust-redox-syscall-0.5.18
                               rust-regex-1.13.0
                               rust-regex-automata-0.4.14
                               rust-regex-syntax-0.8.11
                               rust-reqwest-0.12.28
+                              rust-reqwest-0.13.5
                               rust-resolv-conf-0.7.6
                               rust-rfc7239-0.1.3
                               rust-ring-0.17.14
@@ -33919,6 +33941,7 @@
                               rust-snafu-derive-0.9.1
                               rust-socket2-0.6.3
                               rust-spin-0.9.8
+                              rust-spin-0.10.1
                               rust-spinning-top-0.3.0
                               rust-sse-codec-0.3.2
                               rust-stable-deref-trait-1.2.1
@@ -34027,6 +34050,7 @@
                               rust-wasm-encoder-0.244.0
                               rust-wasm-metadata-0.244.0
                               rust-wasm-streams-0.4.2
+                              rust-wasm-streams-0.5.0
                               rust-wasmparser-0.244.0
                               rust-web-sys-0.3.102
                               rust-web-time-1.1.0
@@ -34098,6 +34122,7 @@
                               rust-zerovec-0.11.6
                               rust-zerovec-derive-0.11.3
                               rust-zip-8.5.1
+                              rust-zlib-rs-0.6.8
                               rust-zmij-1.0.21
                               rust-zstd-0.13.3
                               rust-zstd-safe-7.2.4
