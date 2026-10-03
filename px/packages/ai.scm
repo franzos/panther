@@ -294,7 +294,7 @@ Linux support is currently a preview; Computer Use is not available on it.")
 (define-public ollama
   (package
     (name "ollama")
-    (version "0.34.0")
+    (version "0.35.0")
     (source
      (origin
        (method url-fetch)
@@ -307,8 +307,8 @@ Linux support is currently a preview; Computer Use is not available on it.")
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "0108gkaw5wnkjxqmkd83h3vaii8wr9fdwd5v22cs16lm51kqi5fg")
-           ("aarch64-linux" "13njqn43c3zcwpbn4cksclwa5vpnfqwb51nsg254s0n2a0v5p7ka"))))))
+           ("x86_64-linux" "09g56ll5scl9hj66glfndipy4dg5s40my7ibxyigqphc49mll48w")
+           ("aarch64-linux" "0x4ks0xyr42k6yg20j3n8jg45a2xb46s2p28smdhbr8z5crpsqnb"))))))
     (build-system binary-build-system)
     (arguments
      (list
