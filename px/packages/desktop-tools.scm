@@ -545,7 +545,7 @@ and under your control.")
 (define-public rustdesk
   (package
     (name "rustdesk")
-    (version "1.4.9")
+    (version "1.5.0")
     (source
      (origin
        (method url-fetch)
@@ -563,8 +563,8 @@ and under your control.")
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "18zx2bbg21h4ij6fg62cam3cwm3w8rcydysb0ir4300fqi3vli3j")
-           ("aarch64-linux" "1h29zdlmsfgpadwmm205gz7bli2aci9yjc53wfxz6csdy6bcjqnf"))))))
+           ("x86_64-linux" "1v50wa1mfjkdx3r1bax6jwpr1mip99cdm6yhydrz6zjss80rfasf")
+           ("aarch64-linux" "1wvx0c2fzh7lh6n5hpic4zn6m5baihci7jrkm93h7h91hfzcjbqz"))))))
     (supported-systems '("x86_64-linux" "aarch64-linux"))
     (build-system binary-build-system)
     (arguments
@@ -579,8 +579,7 @@ and under your control.")
            "xdotool" "pulseaudio" "libxkbcommon" "libxcb" "gstreamer"
            "gst-plugins-base" "dbus" "linux-pam" "zlib" "gcc:lib")))
        #:install-plan
-       '(("share" "share")
-         ("etc" "etc"))
+       '(("share" "share"))
        #:phases
        (modify-phases %standard-phases
          (replace 'unpack
@@ -615,7 +614,8 @@ and under your control.")
                                      (string-append (assoc-ref inputs "libxcb") "/lib")
                                      (string-append (assoc-ref inputs "dbus") "/lib")
                                      (string-append (assoc-ref inputs "linux-pam") "/lib")
-                                     (string-append (assoc-ref inputs "mesa") "/lib"))
+                                     (string-append (assoc-ref inputs "mesa") "/lib")
+                                     (string-append (assoc-ref inputs "wayland") "/lib"))
                                ":"))
                     (bash (string-append (assoc-ref inputs "bash-minimal") "/bin/bash")))
                (mkdir-p bin)
@@ -646,6 +646,7 @@ and under your control.")
               ("mesa" ,mesa)
               ("pango" ,pango)
               ("pulseaudio" ,pulseaudio)
+              ("wayland" ,wayland)
               ("xdotool" ,xdotool)
               ("zlib" ,zlib)))
     (home-page "https://rustdesk.com/")
