@@ -19,12 +19,15 @@
   #:use-module (gnu packages bash)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages curl)
+  #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages gcc)
+  #:use-module (gnu packages gl)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages golang)
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages linux)
+  #:use-module (gnu packages node)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python-build)
   #:use-module (gnu packages python-xyz)
@@ -34,7 +37,10 @@
   #:use-module (gnu packages rust)
   #:use-module (gnu packages rust-apps)
   #:use-module (gnu packages version-control)
+  #:use-module (gnu packages vulkan)
   #:use-module (gnu packages webkit)
+  #:use-module (gnu packages xdisorg)
+  #:use-module (gnu packages xorg)
   #:use-module (px packages go)
   #:use-module (px self))
 
@@ -529,3 +535,79 @@ code collaboration stack built on Git.  It provides a local-first interface
 for browsing repositories, reviewing patches with inline comments, managing
 issues, and following an inbox of notifications across the Radicle network.")
     (license license:gpl3)))
+
+(define-public reviu
+  (package
+    (name "reviu")
+    (version "1.5.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/reviu-dev/reviu/releases/download/v"
+             version "/Reviu-" version "-linux-"
+             (match (or (%current-target-system) (%current-system))
+               ("aarch64-linux" "aarch64")
+               (_ "x86_64"))
+             ".tar.gz"))
+       (sha256
+        (base32
+         (match (or (%current-target-system) (%current-system))
+           ("aarch64-linux" "0i352w3zpdv8z1yq6aybma4ddpkzagiklxjaz3j3k1bbdcbimh82")
+           (_ "0j89hsrql76kyk7l68yfli527z9jjc3rcq189iv8x3cifzkd9px0"))))))
+    (build-system binary-build-system)
+    (arguments
+     (list
+      #:patchelf-plan
+      #~'(("bin/reviu"
+           ("libc" "gcc" "glib" "gtk+" "gdk-pixbuf" "libxcb"
+            "libxkbcommon" "xdotool" "zlib")))
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'install 'wrap-and-install-desktop-file
+            (lambda* (#:key inputs #:allow-other-keys)
+              ;; Loaded with dlopen at runtime.
+              (wrap-program (string-append #$output "/bin/reviu")
+                `("LD_LIBRARY_PATH" ":" prefix
+                  ,(map (lambda (input)
+                          (string-append (assoc-ref inputs input) "/lib"))
+                        '("libappindicator" "mesa" "vulkan-loader"
+                          "wayland")))
+                `("XKB_CONFIG_ROOT" ":" prefix
+                  (,(string-append (assoc-ref inputs "xkeyboard-config")
+                                   "/share/X11/xkb")))
+                ;; Registry agents are launched through npx.
+                `("PATH" ":" suffix
+                  (,(string-append (assoc-ref inputs "node") "/bin"))))
+              (make-desktop-entry-file
+               (string-append #$output "/share/applications/reviu.desktop")
+               #:name "Reviu"
+               #:comment "Review code your agent writes"
+               #:exec (string-append #$output "/bin/reviu")
+               #:icon "reviu"
+               #:categories '("Development" "RevisionControl")))))))
+    (inputs
+     (list bash-minimal
+           `(,gcc "lib")
+           gdk-pixbuf
+           glib
+           gtk+
+           libappindicator
+           libxcb
+           libxkbcommon
+           mesa
+           node-lts
+           vulkan-loader
+           wayland
+           xdotool
+           xkeyboard-config
+           zlib))
+    (supported-systems '("x86_64-linux" "aarch64-linux"))
+    (home-page "https://reviu.dev/")
+    (synopsis "Desktop app for reviewing code written by coding agents")
+    (description
+     "Reviu is a native desktop app for reviewing changes made by coding
+agents.  It shows diffs alongside the agent session, supports inline comments
+that go back to the agent, and covers common Git workflows such as staging,
+committing, fetching and pushing.")
+    (license (nonfree "https://github.com/reviu-dev/reviu/blob/master/LICENSE"))))
