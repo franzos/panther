@@ -374,6 +374,73 @@ merge conflict editor, and integrations for GitHub, GitLab, Bitbucket and Azure
 DevOps.")
     (license (nonfree "https://www.gitkraken.com/eula"))))
 
+(define-public github-desktop
+  (package
+    (name "github-desktop")
+    (version "3.4.13-linux1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/shiftkey/desktop/releases/download/release-"
+             version "/GitHubDesktop-linux-amd64-" version ".deb"))
+       (sha256
+        (base32 "11yr72mncamyc9r46wg7dj5s9bpmi0fvqpvbi71cl03r3iv7fmcb"))))
+    (supported-systems '("x86_64-linux"))
+    (build-system chromium-binary-build-system)
+    (arguments
+     (list
+      #:validate-runpath? #f
+      #:wrapper-plan
+      #~(let ((app "lib/github-desktop/resources/app/"))
+          (append
+           '(("lib/github-desktop/github-desktop"
+              (("out" "/lib/github-desktop")))
+             "lib/github-desktop/chrome_crashpad_handler")
+           (map (lambda (file) (string-append app file))
+                '("keytar.node"
+                  "fs_admin.node"
+                  "desktop-notifications.node"
+                  "desktop-trampoline/desktop-askpass-trampoline"
+                  "git/bin/git"
+                  "git/bin/scalar"
+                  "git/libexec/git-core/git"
+                  "git/libexec/git-core/git-credential-desktop"
+                  "git/libexec/git-core/git-daemon"
+                  "git/libexec/git-core/git-http-backend"
+                  "git/libexec/git-core/git-http-fetch"
+                  "git/libexec/git-core/git-http-push"
+                  "git/libexec/git-core/git-imap-send"
+                  "git/libexec/git-core/git-remote-http"
+                  "git/libexec/git-core/git-sh-i18n--envsubst"
+                  "git/libexec/git-core/git-shell"
+                  "git/libexec/git-core/scalar"))))
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'binary-unpack 'setup-cwd
+            (lambda _
+              (copy-recursively "usr/" ".")
+              (delete-file-recursively "usr")
+              (delete-file-recursively "bin")
+              (delete-file-recursively "share/lintian")
+              (substitute* "share/applications/github-desktop.desktop"
+                (("^Exec=github-desktop")
+                 (string-append "Exec=" #$output "/bin/github-desktop")))))
+          (add-after 'install 'symlink-binary-file
+            (lambda _
+              (mkdir-p (string-append #$output "/bin"))
+              (symlink (string-append #$output
+                                      "/lib/github-desktop/github-desktop")
+                       (string-append #$output "/bin/github-desktop")))))))
+    (inputs (list curl))
+    (home-page "https://github.com/shiftkey/desktop")
+    (synopsis "Graphical Git client for GitHub")
+    (description
+     "GitHub Desktop is an Electron-based Git client focused on GitHub
+workflows: cloning, committing, branching, and opening pull requests.  This is
+the community-maintained Linux fork of the upstream application.")
+    (license license:expat)))
+
 (define-public jira-cli
   (package
     (name "jira-cli")
