@@ -724,7 +724,7 @@ displays through both laptop backlights and external monitors via DDC.")
 (define-public rio
   (package
     (name "rio")
-    (version "0.4.5")
+    (version "0.5.28")
     (source
      (origin
        (method git-fetch)
@@ -733,13 +733,13 @@ displays through both laptop backlights and external monitors via DDC.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1wynhnp0sbhci49d0i5hd0227dg4g01vlx5npkivgh23ackw5piq"))))
+        (base32 "1s64xdjcd263cb0rn6jvyqq76dypdhh52sv9dlb23q46h7cldzsa"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
        #:tests? #f
-       #:rust ,rust-1.92
-       #:cargo-build-flags '("--release" "-p" "rioterm")
+       #:rust ,rust-1.95
+       #:cargo-build-flags '("--release" "--ignore-rust-version" "-p" "rioterm")
        #:phases
        (modify-phases %standard-phases
          (replace 'install
