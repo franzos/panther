@@ -561,7 +561,7 @@ captured data.")
 (define-public halloy
   (package
     (name "halloy")
-    (version "2026.8")
+    (version "2026.9")
     (source
      (origin
        (method url-fetch)
@@ -570,13 +570,13 @@ captured data.")
              version ".tar.gz"))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "16pr52259bgn7288w24vvkx9gwxm59f5gg8kj27k7b0zyi96s85q"))))
+        (base32 "1kflgk5ac5lc2i200v568y0hh7glscij9dk7a9dj40i9rgvg2dax"))))
     (build-system cargo-build-system)
     (arguments
      (list
       #:install-source? #f
       #:tests? #f
-      #:rust rust-1.93
+      #:rust rust-1.95
       #:phases
       #~(modify-phases %standard-phases
           (add-after 'configure 'patch-git-deps-to-paths
@@ -587,7 +587,8 @@ captured data.")
                                         #:fail-on-error? #f)))
                   (if (pair? dirs) (car dirs) #f)))
               (let ((iced-dir (find-vendor-dir "^rust-iced-0\\.15"))
-                    (cryoglyph-dir (find-vendor-dir "^rust-cryoglyph-0\\.1\\.0\\.53ba3e8"))
+                    (cryoglyph-dir (find-vendor-dir "^rust-cryoglyph-0\\.1\\.0\\.b457678"))
+                    (cosmic-text-dir (find-vendor-dir "^rust-cosmic-text-0\\.19\\.0\\.1cdc3e0"))
                     (winit-dir (find-vendor-dir "^rust-winit-0\\.30.*05b8ff")))
                 ;; Patch halloy's [patch.crates-io] git refs to local paths
                 (substitute* "Cargo.toml"
@@ -597,16 +598,23 @@ captured data.")
                    (string-append "iced_core = { path = \"" iced-dir "/core\" }"))
                   (("iced_wgpu = \\{ git = [^}]+\\}")
                    (string-append "iced_wgpu = { path = \"" iced-dir "/wgpu\" }")))
-                ;; Patch iced workspace's own git deps (cryoglyph, winit)
+                ;; Patch iced workspace's own git deps (cosmic-text, cryoglyph, winit)
                 (let ((iced-cargo (string-append iced-dir "/Cargo.toml")))
                   (when (file-exists? iced-cargo)
                     (substitute* iced-cargo
+                      (("cosmic-text = \\{ git = [^}]+\\}")
+                       (string-append "cosmic-text = { path = \"../../"
+                                      cosmic-text-dir "\" }"))
                       (("cryoglyph = \\{ git = [^}]+\\}")
                        (string-append "cryoglyph = { path = \"../../"
                                       cryoglyph-dir "\" }"))
                       (("winit = \\{ git = [^}]+\\}")
                        (string-append "winit = { path = \"../../"
                                       winit-dir "\" }")))))
+                (substitute* (string-append cryoglyph-dir "/Cargo.toml")
+                  (("cosmic-text = \\{ git = [^}]+\\}")
+                   (string-append "cosmic-text = { path = \"../../"
+                                  cosmic-text-dir "\" }")))
                 (when (file-exists? "Cargo.lock")
                   (delete-file "Cargo.lock")))))
           (add-after 'install 'wrap-program
