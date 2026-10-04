@@ -339,7 +339,7 @@ as well as a library of pre-built models that can be easily used.")
 (define-public tku
   (package
     (name "tku")
-    (version "0.1.24")
+    (version "0.1.25")
     (source
      (origin
        (method git-fetch)
@@ -348,7 +348,7 @@ as well as a library of pre-built models that can be easily used.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "05g0z83x52pmjxphpvz0qa01mfjaq7z4q65kz171zwnr7s3p01bq"))))
+        (base32 "12ybsn6sx54zxi7r69w5jmrn3f6mnrdbynw6z3f0pfrsx8fnrpr6"))))
     (build-system cargo-build-system)
     (arguments
      (list
@@ -357,7 +357,11 @@ as well as a library of pre-built models that can be easily used.")
       #:tests? #t
       #:phases
       #~(modify-phases %standard-phases
-          (delete 'check-for-pregenerated-files))))
+          (delete 'check-for-pregenerated-files)
+          (add-after 'unpack 'patch-test-shebangs
+            (lambda _
+              (substitute* "src/creds.rs"
+                (("#!/bin/sh") (string-append "#!" (which "sh")))))))))
     (inputs
      (px-cargo-inputs 'tku))
     (home-page "https://github.com/franzos/tku")
