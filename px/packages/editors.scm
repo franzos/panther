@@ -3,6 +3,8 @@
 
 (define-module (px packages editors)
   #:use-module (nonguix build-system binary)
+  #:use-module (nonguix build-system chromium-binary)
+  #:use-module (nonguix licenses)
   #:use-module ((guix licenses)
                 :prefix license:)
   #:use-module (guix build-system cargo)
@@ -609,200 +611,109 @@ editors that support the Language Server Protocol.")
 (define-public antigravity
   (package
     (name "antigravity")
-    (version "1.11.9-4787439284912128")
+    (version "2.0.6-5413878570549248")
     (source
      (origin
        (method url-fetch)
        (uri (string-append
-             "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/"
+             "https://storage.googleapis.com/antigravity-public/antigravity-hub/"
              version "/linux-x64/Antigravity.tar.gz"))
+       (file-name (string-append name "-" version ".tar.gz"))
        (sha256
         (base32
-         "0ba79s00ijp1bm44kkk578frc2mbjbl715ijpipm5330v9hllfhr"))))
-    (build-system binary-build-system)
+         "1iacwi4zpkdcp75hn0irrf4a7zaf1zafmc8f0ckprc29a59h87md"))))
+    (build-system chromium-binary-build-system)
     (arguments
-     `(#:patchelf-plan `(("Antigravity/antigravity"
-                          ("glib"
-                           "libx11"
-                           "dbus"
-                           "gdk-pixbuf"
-                           "gtk+"
-                           "pango"
-                           "fontconfig"
-                           "cairo"
-                           "libxcomposite"
-                           "libxdamage"
-                           "libxext"
-                           "libxfixes"
-                           "libxshmfence"
-                           "libxkbfile"
-                           "libxrandr"
-                           "expat"
-                           "libdrm"
-                           "libxkbcommon"
-                           "mesa"
-                           "alsa-lib"
-                           "cups"
-                           "at-spi2-core"
-                           "libxcb"
-                           "nspr"
-                           "gcc"
-                           "zlib"
-                           "gcc:lib"
-                           "libsecret"))
-                         ("Antigravity/chrome_crashpad_handler"
-                          ("gcc:lib"))
-                         ("Antigravity/resources/app/extensions/antigravity/bin/language_server_linux_x64"
-                          ()))
-       #:phases (modify-phases %standard-phases
-                  (replace 'unpack
-                    (lambda* (#:key inputs outputs #:allow-other-keys)
-                      (invoke "tar" "xzf" (assoc-ref inputs "source"))
-                      #t))
-                  (add-after 'install 'add-desktop-file
-                    (lambda* (#:key inputs outputs #:allow-other-keys)
-                      (let* ((out (assoc-ref outputs "out"))
-                             (iconpath (string-append out
-                                        "/share/icons/hicolor/512x512/apps/"))
-                             (desktoppath (string-append out
-                                           "/share/applications/"))
-                             (desktopdata (string-append "[Desktop Entry]\n"
-                                           "Name=Google Antigravity\n"
-                                           "Comment=Experience liftoff\n"
-                                           "GenericName=IDE\n"
-                                           "Exec="
-                                           out
-                                           "/Antigravity/bin/antigravity\n"
-                                           "Icon=antigravity\n"
-                                           "Type=Application\n"
-                                           "StartupNotify=true\n"
-                                           "StartupWMClass=Antigravity\n"
-                                           "Categories=Development;IDE;\n"
-                                           "Keywords=editor;ide;ai;\n\n")))
-                        (mkdir-p iconpath)
-                        (invoke "cp"
-                         "Antigravity/resources/app/resources/linux/code.png"
-                         (string-append iconpath "antigravity.png"))
-                        (mkdir-p desktoppath)
-                        (with-output-to-file (string-append desktoppath
-                                                            ,name ".desktop")
-                          (lambda _
-                            (format #t desktopdata))))
-                      (invoke "rm"
-                              (string-append %output "/environment-variables"))
-                      (mkdir-p (string-append %output "/bin"))
-                      (invoke "ln" "-s"
-                              (string-append %output "/Antigravity/bin/antigravity")
-                              (string-append %output "/bin/antigravity")) #t))
-                  (add-after 'install 'wrap-where-patchelf-does-not-work
-                    (lambda* (#:key inputs outputs #:allow-other-keys)
-                      (let ((out (assoc-ref outputs "out")))
-                        (wrap-program (string-append out "/Antigravity/antigravity")
-                          `("FONTCONFIG_PATH" ":" prefix
-                            (,(string-join (list (string-append (assoc-ref
-                                                                 inputs
-                                                                 "fontconfig")
-                                                                "/etc/fonts")
-                                                 out) ":"))))
-                        (wrap-program (string-append out "/Antigravity/antigravity")
-                          `("LD_LIBRARY_PATH" ":" prefix
-                            (,(string-join (list (string-append (assoc-ref
-                                                                 inputs "nss")
-                                                                "/lib/nss")
-                                                 (string-append (assoc-ref
-                                                                 inputs
-                                                                 "eudev")
-                                                                "/lib")
-                                                 (string-append (assoc-ref
-                                                                 inputs "gcc")
-                                                                "/lib")
-                                                 (string-append (assoc-ref
-                                                                 inputs
-                                                                 "libxkbfile")
-                                                                "/lib")
-                                                 (string-append (assoc-ref
-                                                                 inputs "zlib")
-                                                                "/lib")
-                                                 (string-append (assoc-ref
-                                                                 inputs
-                                                                 "libsecret")
-                                                                "/lib")
-                                                 (string-append out
-                                                                "/Antigravity")
-                                                 out) ":"))))
-                        (wrap-program (string-append out "/Antigravity/chrome_crashpad_handler")
-                          `("FONTCONFIG_PATH" ":" prefix
-                            (,(string-join (list (string-append (assoc-ref
-                                                                 inputs
-                                                                 "fontconfig")
-                                                                "/etc/fonts")
-                                                 out) ":"))))
-                        (wrap-program (string-append out "/Antigravity/chrome_crashpad_handler")
-                          `("LD_LIBRARY_PATH" ":" prefix
-                            (,(string-join (list (string-append (assoc-ref
-                                                                 inputs "nss")
-                                                                "/lib/nss")
-                                                 (string-append (assoc-ref
-                                                                 inputs
-                                                                 "eudev")
-                                                                "/lib")
-                                                 (string-append (assoc-ref
-                                                                 inputs "gcc")
-                                                                "/lib")
-                                                 (string-append (assoc-ref
-                                                                 inputs
-                                                                 "libxkbfile")
-                                                                "/lib")
-                                                 (string-append (assoc-ref
-                                                                 inputs "zlib")
-                                                                "/lib")
-                                                 (string-append (assoc-ref
-                                                                 inputs
-                                                                 "libsecret")
-                                                                "/lib")
-                                                 (string-append out
-                                                                "/Antigravity")
-                                                 out) ":"))))) #t)))))
-    (native-inputs `(("tar" ,tar)))
-    (inputs `(("gcc:lib" ,gcc "lib")
-              ("gcc" ,gcc "lib")
-              ("glib" ,glib)
-              ("nss" ,nss)
-              ("nspr" ,nspr)
-              ("libx11" ,libx11)
-              ("dbus" ,dbus)
-              ("librsvg" ,librsvg)
-              ("gtk+" ,gtk+)
-              ("pango" ,pango)
-              ("cairo" ,cairo)
-              ("libxcomposite" ,libxcomposite)
-              ("libxdamage" ,libxdamage)
-              ("libxext" ,libxext)
-              ("libxfixes" ,libxfixes)
-              ("libxrandr" ,libxrandr)
-              ("libxkbfile" ,libxkbfile)
-              ("libxshmfence" ,libxshmfence)
-              ("libsecret" ,libsecret)
-              ("expat" ,expat)
-              ("libdrm" ,libdrm)
-              ("libxkbcommon" ,libxkbcommon)
-              ("mesa" ,mesa)
-              ("alsa-lib" ,alsa-lib)
-              ("cups" ,cups)
-              ("at-spi2-core" ,at-spi2-core)
-              ("libxcb" ,libxcb)
-              ("eudev" ,eudev)
-              ("fontconfig" ,fontconfig)
-              ("zlib" ,zlib)
-              ("bash-minimal" ,bash-minimal)))
+     (list
+      #:substitutable? #f
+      #:wrapper-plan
+      #~'("antigravity"
+          "chrome-sandbox"
+          "chrome_crashpad_handler"
+          "libEGL.so"
+          "libGLESv2.so"
+          "libffmpeg.so"
+          "libvk_swiftshader.so"
+          "libvulkan.so.1"
+          "resources/bin/language_server")
+      #:install-plan
+      #~'(("." "share/antigravity/"))
+      #:phases
+      #~(modify-phases %standard-phases
+          ;; Patching the RUNPATH of this Go binary makes it segfault; it only
+          ;; needs libc, so set the interpreter alone.
+          (add-before 'install 'patch-webm-encoder
+            (lambda* (#:key inputs #:allow-other-keys)
+              (invoke "patchelf" "--set-interpreter"
+                      (search-input-file inputs "/lib/ld-linux-x86-64.so.2")
+                      "resources/bin/webm_encoder")))
+          ;; The only icon ships inside app.asar; read it out of the archive
+          ;; (header: 16-byte pickle prefix, JSON index, then file data).
+          (add-before 'install 'extract-icon
+            (lambda _
+              (use-modules (ice-9 binary-ports) (ice-9 regex)
+                           (rnrs bytevectors))
+              (call-with-input-file "resources/app.asar"
+                (lambda (port)
+                  (let* ((head (get-bytevector-n port 16))
+                         (size (bytevector-u32-ref head 4 'little))
+                         (len (bytevector-u32-ref head 12 'little))
+                         (index (utf8->string (get-bytevector-n port len)))
+                         (m (string-match
+                             "\"icon.png\":\\{\"size\":([0-9]+),[^}]*\\},\"offset\":\"([0-9]+)\""
+                             index)))
+                    (seek port (+ 8 size (string->number (match:substring m 2)))
+                          SEEK_SET)
+                    (call-with-output-file "antigravity.png"
+                      (lambda (out)
+                        (put-bytevector
+                         out (get-bytevector-n
+                              port (string->number (match:substring m 1)))))
+                      #:binary #t)))
+                #:binary #t)))
+          (add-after 'install 'install-extras
+            (lambda _
+              (let ((apps (string-append #$output "/share/applications"))
+                    (icons (string-append #$output
+                                          "/share/icons/hicolor/512x512/apps")))
+                (install-file "antigravity.png" icons)
+                (mkdir-p apps)
+                (call-with-output-file
+                    (string-append apps "/antigravity.desktop")
+                  (lambda (port)
+                    (format port "[Desktop Entry]
+Name=Google Antigravity
+Comment=Agentic desktop application
+Exec=~a/bin/antigravity %U
+Icon=antigravity
+Type=Application
+StartupNotify=true
+StartupWMClass=Antigravity
+Categories=Development;
+" #$output))))))
+          (add-before 'install-wrapper 'install-exe
+            (lambda _
+              (mkdir-p (string-append #$output "/bin"))
+              (symlink (string-append #$output "/share/antigravity/antigravity")
+                       (string-append #$output "/bin/antigravity"))))
+          ;; The main binary NEEDs the co-located libffmpeg.so and the NSS
+          ;; libs in nss/lib/nss, neither of which patchelf adds.
+          (add-after 'install-exe 'set-bundled-rpath
+            (lambda* (#:key inputs #:allow-other-keys)
+              (invoke "patchelf" "--add-rpath"
+                      (string-append #$output "/share/antigravity" ":"
+                                     (assoc-ref inputs "nss") "/lib/nss")
+                      (string-append #$output
+                                     "/share/antigravity/antigravity")))))))
+    (supported-systems '("x86_64-linux"))
     (home-page "https://antigravity.google")
-    (synopsis
-     "AI-powered IDE from Google with Gemini integration")
+    (synopsis "Agentic desktop application from Google")
     (description
-     "Google Antigravity is a next-generation AI-powered IDE built on Electron,
-featuring deep integration with Gemini 3 for agentic development workflows,
-intelligent code generation, and collaborative AI assistance.")
-    (license license:expat)))
+     "Google Antigravity is an Electron desktop application for running and
+managing Gemini-powered coding agents.
+
+This package repackages the official Linux build.")
+    (license (nonfree "https://antigravity.google/terms"))))
 
 (define-public edit
   (package
