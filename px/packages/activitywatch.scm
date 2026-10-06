@@ -49,7 +49,7 @@
 (define-public activitywatch
   (package
     (name "activitywatch")
-    (version "0.13.2")
+    (version "0.14.0")
     (source
      #f)
     (build-system binary-build-system)
@@ -78,7 +78,6 @@
                       ;; remove for conflicting issue with mesa
                       (invoke "rm" "opt/activitywatch/libstdc++.so.6")
                       ;; remove for conflicting wayland libraries
-                      (invoke "rm" "opt/activitywatch/libwayland-client.so.0")
                       (invoke "rm" "opt/activitywatch/libwayland-egl.so.1")
                       (invoke "rm" "opt/activitywatch/libwayland-cursor.so.0")
                       ;; mv desktop file
@@ -172,7 +171,7 @@
                                                  out) ":"))))) #t)))))
     (native-inputs `(("unzip" ,unzip)))
     (inputs `(("activitywatch" ,(make-aw-release-asset version "activitywatch"
-                                 "0q1k7s06nhdk63r3b5gsf2ly475w5z06fwnzrc4g3a7qmc5v2qlg"))
+                                 "007g61i0gyzv1jrpcdvf3505qgkimdb649dh31frv55m5pwz46hi"))
               ("gcc:lib" ,gcc "lib")
               ("gcc" ,gcc "lib")
               ("glibc" ,glibc)
