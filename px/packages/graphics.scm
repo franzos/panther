@@ -182,14 +182,14 @@ and technical formats.  It handles various pixel types from 1-bit mono to
 (define-public oculante
   (package
     (name "oculante")
-    (version "0.9.2")
+    (version "0.9.6")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "oculante" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "0jdwz5i01bmvm9n5bhs3wly6295s13ca5jv9991ysmbpd1n83bq4"))))
+        (base32 "0lpskr81kcqlf48lvb59kd2hzl8c9ipavfwpy82vp3hidycgsn9v"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
@@ -200,6 +200,10 @@ and technical formats.  It handles various pixel types from 1-bit mono to
            (lambda _
              ;; Workaround for bundled glslang having old cmake_minimum_required
              (setenv "CMAKE_POLICY_VERSION_MINIMUM" "3.5")))
+         (add-before 'build 'use-system-shaderc
+           (lambda* (#:key inputs #:allow-other-keys)
+             (setenv "SHADERC_LIB_DIR"
+                     (string-append (assoc-ref inputs "shaderc") "/lib"))))
          (add-after 'install 'wrap-program
            (lambda* (#:key inputs outputs #:allow-other-keys)
              (let ((out (assoc-ref outputs "out"))
@@ -227,6 +231,7 @@ and technical formats.  It handles various pixel types from 1-bit mono to
             libxcb
             libxkbcommon
             mesa
+            shaderc
             vulkan-loader
             wayland
             `(,zstd "lib")
