@@ -82,7 +82,7 @@ on OpenJDK 21.")
 (define-public forseti-unix
   (package
     (name "forseti-unix")
-    (version "0.2.10")
+    (version "0.2.11")
     (source
      (origin
        (method git-fetch)
@@ -91,7 +91,7 @@ on OpenJDK 21.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1cqpgz6rwq35k3mp9hcaasclf1ncxylkchh74wi4vli0l9rp442x"))))
+        (base32 "0rnfxyvqpwvlxdjj37pnmw10awyqwrhwk6xf4nch735l40rlrwsg"))))
     (build-system cargo-build-system)
     (arguments
      (list
