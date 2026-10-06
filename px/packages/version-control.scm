@@ -608,7 +608,7 @@ issues, and following an inbox of notifications across the Radicle network.")
 (define-public reviu
   (package
     (name "reviu")
-    (version "1.5.0")
+    (version "1.6.0")
     (source
      (origin
        (method url-fetch)
@@ -622,8 +622,8 @@ issues, and following an inbox of notifications across the Radicle network.")
        (sha256
         (base32
          (match (or (%current-target-system) (%current-system))
-           ("aarch64-linux" "0i352w3zpdv8z1yq6aybma4ddpkzagiklxjaz3j3k1bbdcbimh82")
-           (_ "0j89hsrql76kyk7l68yfli527z9jjc3rcq189iv8x3cifzkd9px0"))))))
+           ("aarch64-linux" "0810zcpnnbx0j1xy8cl4k3icsrnzhqf4mcnd6yqc3jfm0prhp9xg")
+           (_ "0314l442wiz1d035nskgzk16fn0fav9npclhqzg2hh0prngi9im5"))))))
     (build-system binary-build-system)
     (arguments
      (list
