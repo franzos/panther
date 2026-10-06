@@ -13,7 +13,7 @@
 (define-public libqalculate
   (package
     (inherit (@ (gnu packages maths) libqalculate))
-    (version "5.12.0")
+    (version "5.13.1")
     (source
      (origin
        (method git-fetch)
@@ -22,7 +22,7 @@
              (commit (string-append "v" version))))
        (file-name (git-file-name "libqalculate" version))
        (sha256
-        (base32 "04md7xw2myqm2wvbsmcrkd3xx1ms7f5ab6hyx16d0bmnrcap7lbz"))))))
+        (base32 "1w9ncjsgj3lbqzpxdn272mc5c4b7arlsljlra3bnb3jljppqfx45"))))))
 
 (define-public qalculate-gtk
   (package
