@@ -9,6 +9,7 @@
   #:use-module (gnu packages elf)
   #:use-module (gnu packages fcitx5)
   #:use-module (gnu packages fontutils)
+  #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages gcc)
   #:use-module (gnu packages gl)
   #:use-module (gnu packages glib)
@@ -17,13 +18,16 @@
   #:use-module (gnu packages linux)
   #:use-module (gnu packages music)
   #:use-module (gnu packages nss)
+  #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages pulseaudio)
   #:use-module (gnu packages qt)
+  #:use-module (gnu packages rust)
   #:use-module (gnu packages vulkan)
   #:use-module (gnu packages web)
   #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages xml)
   #:use-module (gnu packages xorg)
+  #:use-module (guix build-system cargo)
   #:use-module (guix build-system gnu)
   #:use-module (guix download)
   #:use-module (guix gexp)
@@ -31,7 +35,8 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix packages)
   #:use-module (guix utils)
-  #:use-module (nonguix licenses))
+  #:use-module (nonguix licenses)
+  #:use-module (px self))
 
 (define-public strawberry
   (package
@@ -212,6 +217,108 @@
 a high-fidelity music streaming experience for TIDAL.  It supports Widevine
 DRM for high-quality audio playback and includes features like custom themes,
 Discord integration, and media key support.")
+    (license license:expat)))
+
+(define-public spotifast
+  (package
+    (name "spotifast")
+    (version "0.12.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/crmne/spotifast")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "02lgcbs2x0s2rnhcq7a3dysdxpdqr436swdj47lr4hd0d4yspd7q"))))
+    (build-system cargo-build-system)
+    (arguments
+     (list
+      #:install-source? #f
+      #:tests? #f
+      #:rust rust-1.95
+      ;; milkdrop builds a bundled static libprojectM.
+      #:cargo-build-flags
+      ''("--release" "--ignore-rust-version" "--no-default-features")
+      #:phases
+      #~(modify-phases %standard-phases
+          ;; Workspace git checkouts are not vendored; build them as path
+          ;; dependencies instead.
+          (add-after 'configure 'use-git-checkouts
+            (lambda* (#:key inputs #:allow-other-keys)
+              (define (checkout repo prefix)
+                (let ((src (car (filter
+                                 (lambda (dir)
+                                   (let ((base (strip-store-file-name dir)))
+                                     (and (string-prefix? prefix base)
+                                          (string-suffix? "-checkout" base))))
+                                 (map cdr inputs))))
+                      (dst (string-append "guix-git/" repo)))
+                  (copy-recursively src dst #:keep-permissions? #f)))
+              (checkout "egui" "rust-egui-0.36.1")
+              (checkout "fastframe" "rust-fastframe-text-0.4.1")
+              (checkout "winit" "rust-winit-0.30.13")
+              (checkout "librespot" "rust-librespot-core-0.8.0")
+              (checkout "hyper-proxy2" "rust-hyper-proxy2-0.1.0")
+              (checkout "projectm-rs" "rust-projectm-sys-1.2.3")
+              (substitute* "guix-git/egui/Cargo.toml"
+                (("^winit = \\{ git = \"[^\"]+\", rev = \"[^\"]+\"")
+                 "winit = { path = \"../winit\""))
+              (substitute* "Cargo.toml"
+                (("^(fastframe-[a-z0-9-]+) = \\{ git = \"[^\"]+\", tag = \"[^\"]+\""
+                  _ name)
+                 (string-append name " = { path = \"guix-git/fastframe/crates/"
+                                name "\""))
+                (("^(ecolor|eframe|egui|egui-wgpu|egui-winit|egui_extras|egui_glow|emath|epaint|epaint_default_fonts) = \\{ git = [^}]+\\}"
+                  _ name)
+                 (string-append name " = { path = \"guix-git/egui/crates/"
+                                name "\" }"))
+                (("^librespot-([a-z]+) = \\{ git = [^}]+\\}" _ name)
+                 (string-append "librespot-" name
+                                " = { path = \"guix-git/librespot/" name "\" }"))
+                (("^winit = \\{ git = [^}]+\\}")
+                 "winit = { path = \"guix-git/winit\" }")
+                (("^hyper-proxy2 = \\{ git = [^}]+\\}")
+                 "hyper-proxy2 = { path = \"guix-git/hyper-proxy2\" }")
+                (("^projectm-sys = \\{ git = [^}]+\\}")
+                 "projectm-sys = { path = \"guix-git/projectm-rs/projectm-sys\" }"))))
+          (replace 'install
+            (lambda _
+              (install-file "target/release/spotifast"
+                            (string-append #$output "/bin"))
+              (install-file "packaging/applications/spotifast.desktop"
+                            (string-append #$output "/share/applications"))
+              (install-file "packaging/icons/spotifast.svg"
+                            (string-append #$output
+                                           "/share/icons/hicolor/scalable/apps"))))
+          (add-after 'install 'wrap-program
+            (lambda* (#:key inputs #:allow-other-keys)
+              (wrap-program (string-append #$output "/bin/spotifast")
+                `("LD_LIBRARY_PATH" ":" prefix
+                  ,(map (lambda (lib)
+                          (string-append (assoc-ref inputs lib) "/lib"))
+                        '("mesa" "libxkbcommon" "wayland"
+                          "libx11" "libxcursor" "libxi" "libxrandr")))))))))
+    (native-inputs (list pkg-config))
+    (inputs
+     (cons* alsa-lib
+            dbus
+            libx11
+            libxcursor
+            libxi
+            libxkbcommon
+            libxrandr
+            mesa
+            pulseaudio
+            wayland
+            (px-cargo-inputs 'spotifast)))
+    (home-page "https://spotifast.rocks")
+    (synopsis "Native Spotify client")
+    (description
+     "Spotifast is a Spotify client written in Rust with egui.  It plays
+music through librespot, integrates with MPRIS and the system tray, and has
+no browser engine.  Playback requires a Spotify Premium account.")
     (license license:expat)))
 
 (define-public bitwig-studio
