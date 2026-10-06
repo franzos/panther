@@ -248,13 +248,13 @@ images.")
     (license license:expat)))
 
 (define-public oculante-next
-  ;; Development branch tracking the egui 0.34 / Rust 2024 rewrite.
+  ;; Development branch tracking the egui 0.36 / Rust 2024 rewrite.
   (let ((revision "0")
-        (commit "39f4e92dd081980fdb1fd93e3278bf9e270bec75"))
+        (commit "34a1cf91374eedbece40af5e9cd1561a5820102d"))
     (package
       (inherit oculante)
       (name "oculante-next")
-      (version (git-version "0.9.2" revision commit))
+      (version (git-version "0.9.6" revision commit))
       (source
        (origin
          (method git-fetch)
@@ -263,24 +263,20 @@ images.")
                (commit commit)))
          (file-name (git-file-name name version))
          (sha256
-          (base32 "09hf8npvwp942anraq9wjs24fqrg4fdvz1wwdwhlc2jiks38b2sw"))
-         (snippet
-          #~(begin
-              (use-modules (guix build utils))
-              (substitute* "Cargo.toml"
-                ;; Resolve the pinned dark-light git revision from the
-                ;; vendored crate source instead of fetching it offline.
-                (("^dark-light = \\{ git =.*")
-                 "dark-light = \"2.0.0\"\n")
-                ;; sysinfo 0.39 requires rustc 1.95 (cfg_select!); 0.38 keeps
-                ;; the same Disks API and builds with the packaged toolchain.
-                (("^sysinfo = \"0.39\"") "sysinfo = \"0.38\""))))))
+          (base32 "0dkqsgxx3yqq07jydcpdgdv8b7sm4xz6dh6cqiwpks6v2rrly57i"))))
       (arguments
        `(#:install-source? #f
          #:tests? #f
-         #:rust ,rust-1.94
+         #:rust ,rust-1.95
          #:phases
          (modify-phases %standard-phases
+           (add-after 'configure 'patch-heic-rs-to-path
+             (lambda _
+               (let ((dir (car (find-files "guix-vendor" "^rust-heic-rs-"
+                                           #:directories? #t))))
+                 (substitute* "Cargo.toml"
+                   (("^heic-rs = \\{ git = [^}]+\\}")
+                    (string-append "heic-rs = { path = \"" dir "\" }"))))))
            (add-before 'build 'set-cmake-policy
              (lambda _
                ;; Workaround for bundled glslang having old cmake_minimum_required
