@@ -19,6 +19,7 @@
   #:use-module (gnu packages gl)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages polkit)
+  #:use-module (gnu packages rust)
   #:use-module (gnu packages sqlite)
   #:use-module (gnu packages version-control)
   #:use-module (gnu packages vim)
@@ -161,7 +162,7 @@ minimize its security impact.")
 (define-public voxtype
   (package
     (name "voxtype")
-    (version "1.0.1")
+    (version "1.1.0")
     (source
      (origin
        (method git-fetch)
@@ -170,15 +171,25 @@ minimize its security impact.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0rcsrd4llp9sgdlf3ijn2kfy8dd24r6m66886wxpbixx51ajsg9r"))))
+        (base32 "09szb7fnidmh0x62l74qr7z85q0fq5cys7n0lzxdnx08rskx83ng"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
+       #:rust ,rust-1.95
        #:cargo-test-flags
-       '("--release" "--"
+       ;; Skip doctests: rust-1.95 doesn't provide rustdoc.
+       '("--release" "--lib" "--bins" "--tests" "--"
          "--skip=test_network")
        #:phases
        (modify-phases %standard-phases
+         (add-after 'unpack 'drop-openvino
+           (lambda _
+             ;; The optional OpenVINO backend pins a git fork that can't be
+             ;; vendored; it isn't enabled here.
+             (substitute* "Cargo.toml"
+               (("^\\[patch.crates-io\\]") "")
+               (("^openvino-genai = .*$") "")
+               (("^openvino-whisper = .*$") ""))))
          (add-after 'unpack 'patch-test-shebang
            (lambda _
              ;; /bin/sh doesn't exist in the build sandbox.
@@ -204,12 +215,21 @@ acceleration (Vulkan, CUDA) is available but not yet enabled.")
     (name "voxtype-vulkan")
     (arguments
      `(#:install-source? #f
+       #:rust ,rust-1.95
        #:cargo-build-flags '("--release" "--features" "gpu-vulkan")
        #:cargo-test-flags
-       '("--release" "--features" "gpu-vulkan" "--"
+       '("--release" "--features" "gpu-vulkan" "--lib" "--bins" "--tests" "--"
          "--skip=test_network")
        #:phases
        (modify-phases %standard-phases
+         (add-after 'unpack 'drop-openvino
+           (lambda _
+             ;; The optional OpenVINO backend pins a git fork that can't be
+             ;; vendored; it isn't enabled here.
+             (substitute* "Cargo.toml"
+               (("^\\[patch.crates-io\\]") "")
+               (("^openvino-genai = .*$") "")
+               (("^openvino-whisper = .*$") ""))))
          (add-after 'unpack 'patch-test-shebang
            (lambda _
              ;; /bin/sh doesn't exist in the build sandbox.

@@ -19080,6 +19080,46 @@
   (crate-source "openssl-sys" "0.9.117"
                 "159nf6jsqnmsynkh6gjzx088q1ifll7v88sss8qdk363n9mpwzml"))
 
+(define rust-openvino-finder-0.11.0.8109638
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/voxtype/openvino-rs")
+          (commit "8109638cfc78eb16953316627bf194d59ca521ab")))
+    (file-name (git-file-name "rust-openvino-finder" "0.11.0.8109638"))
+    (sha256 (base32 "02xy8ywskl9hmx2pdjsvghy98qkijgdb7hbv0idsxhaf1mr80nca"))))
+
+(define rust-openvino-genai-0.11.0.8109638
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/voxtype/openvino-rs")
+          (commit "8109638cfc78eb16953316627bf194d59ca521ab")))
+    (file-name (git-file-name "rust-openvino-genai" "0.11.0.8109638"))
+    (sha256 (base32 "02xy8ywskl9hmx2pdjsvghy98qkijgdb7hbv0idsxhaf1mr80nca"))))
+
+(define rust-openvino-genai-sys-0.11.0.8109638
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/voxtype/openvino-rs")
+          (commit "8109638cfc78eb16953316627bf194d59ca521ab")))
+    (file-name (git-file-name "rust-openvino-genai-sys" "0.11.0.8109638"))
+    (sha256 (base32 "02xy8ywskl9hmx2pdjsvghy98qkijgdb7hbv0idsxhaf1mr80nca"))))
+
+(define rust-openvino-sys-0.11.0.8109638
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/voxtype/openvino-rs")
+          (commit "8109638cfc78eb16953316627bf194d59ca521ab")))
+    (file-name (git-file-name "rust-openvino-sys" "0.11.0.8109638"))
+    (sha256 (base32 "02xy8ywskl9hmx2pdjsvghy98qkijgdb7hbv0idsxhaf1mr80nca"))))
+
 (define rust-option-ext-0.2.0
   (crate-source "option-ext" "0.2.0"
                 "0zbf7cx8ib99frnlanpyikm1bx8qn8x602sw1n7bg6p9x94lyx04"))
@@ -53952,8 +53992,10 @@
                                rust-alsa-sys-0.3.1
                                rust-android-system-properties-0.1.5
                                rust-anstream-0.6.21
+                               rust-anstream-1.0.0
                                rust-anstyle-1.0.13
                                rust-anstyle-parse-0.2.7
+                               rust-anstyle-parse-1.0.0
                                rust-anstyle-query-1.1.5
                                rust-anstyle-wincon-3.0.11
                                rust-anyhow-1.0.100
@@ -54054,6 +54096,9 @@
                                rust-dary-heap-0.3.8
                                rust-dasp-sample-0.11.0
                                rust-data-encoding-2.11.0
+                               rust-defmt-1.1.1
+                               rust-defmt-macros-1.1.1
+                               rust-defmt-parser-1.0.0
                                rust-der-0.7.10
                                rust-deranged-0.5.8
                                rust-derive-builder-0.20.2
@@ -54082,7 +54127,9 @@
                                rust-endi-1.1.1
                                rust-enumflags2-0.7.12
                                rust-enumflags2-derive-0.7.12
+                               rust-env-filter-2.0.0
                                rust-env-home-0.1.0
+                               rust-env-logger-0.11.11
                                rust-epaint-0.34.1
                                rust-epaint-default-fonts-0.34.1
                                rust-equivalent-1.0.2
@@ -54216,6 +54263,9 @@
                                rust-itertools-0.13.0
                                rust-itertools-0.14.0
                                rust-itoa-1.0.17
+                               rust-jiff-0.2.35
+                               rust-jiff-core-0.1.0
+                               rust-jiff-static-0.2.35
                                rust-jni-0.21.1
                                rust-jni-sys-0.3.0
                                rust-jobserver-0.1.34
@@ -54309,6 +54359,10 @@
                                rust-openssl-macros-0.1.1
                                rust-openssl-probe-0.1.6
                                rust-openssl-sys-0.9.111
+                               rust-openvino-finder-0.11.0.8109638
+                               rust-openvino-genai-0.11.0.8109638
+                               rust-openvino-genai-sys-0.11.0.8109638
+                               rust-openvino-sys-0.11.0.8109638
                                rust-option-ext-0.2.0
                                rust-ordered-float-5.3.0
                                rust-ordered-stream-0.2.0
@@ -54375,9 +54429,9 @@
                                rust-redox-syscall-0.5.18
                                rust-redox-users-0.4.6
                                rust-redox-users-0.5.2
-                               rust-regex-1.12.2
-                               rust-regex-automata-0.4.13
-                               rust-regex-syntax-0.8.8
+                               rust-regex-1.13.1
+                               rust-regex-automata-0.4.16
+                               rust-regex-syntax-0.8.11
                                rust-renderdoc-sys-1.1.0
                                rust-reqwest-0.12.28
                                rust-ring-0.17.14
