@@ -19,16 +19,16 @@
 (define-public ghostty
   (package
     (name "ghostty")
-    (version "1.3.1-3")
+    (version "1.3.1-6")
     (source
      (origin
        (method url-fetch)
        (uri (string-append
              "https://github.com/dariogriffo/ghostty-debian/releases/download/"
-             "1.3.1%2B3/ghostty_1.3.1-3%2Btrixie_amd64.deb"))
+             "1.3.1%2B6/ghostty_1.3.1-6.trixie_amd64.deb"))
        (file-name (string-append name "-" version ".deb"))
        (sha256
-        (base32 "04npnfl4xarsj0g24xnag3b56clqmyqjlbnvswsw4qhyns29ssy4"))))
+        (base32 "09c94rv3py0kinydn8iqp2jzbviy15mmgc7xq2x6lxa06q8yf4nh"))))
     (supported-systems '("x86_64-linux"))
     (build-system binary-build-system)
     (arguments
