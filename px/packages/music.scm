@@ -324,7 +324,7 @@ no browser engine.  Playback requires a Spotify Premium account.")
 (define-public bitwig-studio
   (package
     (name "bitwig-studio")
-    (version "6.0")
+    (version "6.1.3")
     (source
      (origin
        (method url-fetch)
@@ -333,7 +333,7 @@ no browser engine.  Playback requires a Spotify Premium account.")
              "/installer_linux/"))
        (file-name (string-append name "-" version ".deb"))
        (sha256
-        (base32 "1jcvcqm0l9s24zm72mjv2pnr41admawjiph25dgnhyazmj0r7c4f"))))
+        (base32 "16d0jfd9gq3b21c4ki6s1waq393ijyp60rxqpwiar0vrgna2iary"))))
     (supported-systems '("x86_64-linux"))
     (build-system gnu-build-system)
     (arguments
