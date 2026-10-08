@@ -14,18 +14,20 @@
   #:use-module (gnu packages libftdi))
 
 (define-public ectool
+  (let ((commit "38f92b1f2773c30c0d911453051619c0a07773d3")
+        (revision "1"))
   (package
     (name "ectool")
-    (version "1.0.0")
+    (version (git-version "1.0.0" revision commit))
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
              (url "https://gitlab.howett.net/DHowett/ectool")
-             (commit "0ac6155abbb7d4622d3bcf2cdf026dde2f80dad7")))
+             (commit commit)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0zwb2b8yldhxkwwh680mfb15mlk6n7b16zl0mmr4q1wnxj5abhqh"))))
+        (base32 "006ms61dpr7z1ksb426dvf1h5iszdf39kq9spl7wz8l483pvnd8m"))))
     (build-system cmake-build-system)
     (arguments
      `(#:tests? #f
@@ -47,4 +49,4 @@
     (description
      "ECTool is a utility for interacting with the Embedded Controller (EC) 
       in ChromeOS devices and Framework laptops.")
-    (license license:expat)))
+    (license license:expat))))
