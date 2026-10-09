@@ -3,13 +3,25 @@
 
 (define-module (px packages ai)
   #:use-module ((guix licenses) #:prefix license:)
+  #:use-module (gnu packages algebra)
   #:use-module (gnu packages base)
   #:use-module (gnu packages bash)
+  #:use-module (gnu packages boost)
+  #:use-module (gnu packages calendar)
   #:use-module (gnu packages compression)
+  #:use-module (gnu packages cpp)
   #:use-module (gnu packages gcc)
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages libusb)
+  #:use-module (gnu packages machine-learning)
+  #:use-module (gnu packages parallel)
+  #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages protobuf)
+  #:use-module (gnu packages python)
+  #:use-module (gnu packages regex)
+  #:use-module (gnu packages serialization)
   #:use-module (guix build-system cargo)
+  #:use-module (guix build-system cmake)
   #:use-module (guix download)
   #:use-module (guix git-download)
   #:use-module (guix gexp)
@@ -371,3 +383,79 @@ as well as a library of pre-built models that can be easily used.")
 multiple AI coding assistants. It scans local session files, fetches live
 pricing, and shows aggregated reports by day, month, session, or model.")
     (license license:expat)))
+
+(define onnx-for-onnxruntime-next
+  (package
+    (inherit onnx-for-onnxruntime)
+    (version "1.22.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/onnx/onnx")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name "onnx" version))
+       (sha256
+        (base32 "14ffc3zkq6apvlkdhldqjwwkwb79lj1icqnvaxplgpjdynvvkkl1"))
+       (patches
+        (list (local-file "patches/onnx-1.22.0-for-onnxruntime.patch")))))))
+
+(define-public onnxruntime-next
+  (package
+    (inherit onnxruntime)
+    (name "onnxruntime")
+    (version "1.31.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/microsoft/onnxruntime")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1k13wf6s2rqmx2510pwddyc8ap3r1264pa5hc6ilj07ixkp2zahk"))))
+    (build-system cmake-build-system)
+    (arguments
+     (list
+      #:tests? #f                       ;unit tests are not built
+      #:configure-flags
+      #~(list "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
+              "-Donnxruntime_BUILD_UNIT_TESTS=OFF"
+              "-Donnxruntime_BUILD_SHARED_LIB=ON"
+              "-Donnxruntime_USE_FULL_PROTOBUF=ON"
+              "-DProtobuf_USE_STATIC_LIBS=ON"
+              "-DCMAKE_CXX_FLAGS=-Wl,-z,noexecstack")
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'chdir
+            (lambda _
+              (chdir "cmake")))
+          (add-after 'unpack 'use-system-dependencies
+            (lambda _
+              (with-output-to-file "cmake/external/eigen.cmake"
+                (lambda _
+                  (display "find_package(Eigen3 REQUIRED)\n")))
+              ;; Upstream only looks up installed cpuinfo and Boost with vcpkg.
+              (substitute* "cmake/external/onnxruntime_external_deps.cmake"
+                (("if\\(onnxruntime_USE_VCPKG AND NOT APPLE\\)")
+                 "if(TRUE)")
+                (("^if\\(NOT TARGET Boost::mp11\\)")
+                 "find_package(Boost REQUIRED)
+add_library(Boost::mp11 ALIAS Boost::headers)
+if(NOT TARGET Boost::mp11)")))))))
+    (outputs (list "out"))
+    (inputs (list abseil-cpp
+                  boost
+                  c++-gsl
+                  cpuinfo
+                  date
+                  eigen-for-onnxruntime
+                  flatbuffers-23.5
+                  nlohmann-json
+                  onnx-for-onnxruntime-next
+                  protobuf-static-for-onnxruntime
+                  re2-next
+                  safeint
+                  zlib))
+    (native-inputs (list pkg-config python-minimal-wrapper))
+    (propagated-inputs '())))
