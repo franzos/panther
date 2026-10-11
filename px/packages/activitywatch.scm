@@ -49,7 +49,7 @@
 (define-public activitywatch
   (package
     (name "activitywatch")
-    (version "0.14.0")
+    (version "0.14.1")
     (source
      #f)
     (build-system binary-build-system)
@@ -77,9 +77,6 @@
                       (invoke "rm" "opt/activitywatch/libz.so.1")
                       ;; remove for conflicting issue with mesa
                       (invoke "rm" "opt/activitywatch/libstdc++.so.6")
-                      ;; remove for conflicting wayland libraries
-                      (invoke "rm" "opt/activitywatch/libwayland-egl.so.1")
-                      (invoke "rm" "opt/activitywatch/libwayland-cursor.so.0")
                       ;; mv desktop file
                       (mkdir-p "share/applications/")
                       (invoke "mv" "opt/activitywatch/aw-qt.desktop"
@@ -166,17 +163,21 @@
                                                                  inputs
                                                                  "freetype")
                                                                 "/lib")
+                                                 (string-append (assoc-ref
+                                                                 inputs "glib")
+                                                                "/lib")
                                                  (string-append out
                                                   "/opt/activitywatch")
                                                  out) ":"))))) #t)))))
     (native-inputs `(("unzip" ,unzip)))
     (inputs `(("activitywatch" ,(make-aw-release-asset version "activitywatch"
-                                 "007g61i0gyzv1jrpcdvf3505qgkimdb649dh31frv55m5pwz46hi"))
+                                 "0ahz1675qk9h4k95w6z8npnjy2lyd4di0j3hijd3j2icj6l18591"))
               ("gcc:lib" ,gcc "lib")
               ("gcc" ,gcc "lib")
               ("glibc" ,glibc)
               ("fontconfig" ,fontconfig)
               ("freetype" ,freetype)
+              ("glib" ,glib)
               ("libxcb" ,libxcb)
               ("xcb-util-cursor" ,xcb-util-cursor)
               ("libxkbcommon" ,libxkbcommon)
