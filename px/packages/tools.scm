@@ -158,7 +158,7 @@ single-binary replacement for tools such as Prettier and ESLint.")
 (define-public bun
   (package
     (name "bun")
-    (version "1.4.2")
+    (version "1.4.3")
     (source
      (origin
        (method url-fetch)
@@ -171,8 +171,8 @@ single-binary replacement for tools such as Prettier and ESLint.")
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "04x94ba6hh6nin521diym3r425q2936m6bm5zzapay2jyyp8ydin")
-           ("aarch64-linux" "19zxr0d8yxc1xvjhjjg3750vi0vsqmk4sm1ci6ghr3lw5ny8ncjl"))))))
+           ("x86_64-linux" "063fh4iwnadqwx9g5wrp1afhkx2dgiw0cp7hhwzz0xcpv0l0awry")
+           ("aarch64-linux" "08dam46y2xba09a275yxd9vhsz64sbl1dya7z0xl4wpdllyq3agg"))))))
     (build-system binary-build-system)
     (arguments
      (list
