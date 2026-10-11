@@ -12,15 +12,6 @@
     (inherit atril)
     (name "atril-thumbnailer")
     (version (package-version atril))
-    (source
-     (origin
-       (inherit (package-source atril))
-       (uri (string-append "mirror://mate/"
-                           (version-major+minor version)
-                           "/"
-                           "atril-"
-                           version
-                           ".tar.xz"))))
     (arguments
      (substitute-keyword-arguments (package-arguments atril)
        ((#:phases phases)
