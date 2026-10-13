@@ -289,18 +289,18 @@ there; without it only PKCS#12 files and smart cards are available.")
 (define-public osv-scanner
   (package
     (name "osv-scanner")
-    (version "2.6.0")
+    (version "2.7.0")
     (source (origin
               (method go-fetch-vendored)
               (uri (go-git-reference
                     (url "https://github.com/google/osv-scanner")
                     (commit (string-append "v" version))
                     (sha (base32
-                          "1swhq4jsjpn6ihhapl89j8hmfqqd2vl3wc793kwsd9v1mq51ixy3"))
+                          "1dqm3kzfpwk7yb9laf92d4ik9lbnph16a63va9zfk441wfm649a2"))
                     (go go-1.27)))
               (sha256
                (base32
-                "0g0jhpn0iyjzi7h39c09qsmw96205nx6m5nvkvrn7hb49jl6141n"))))
+                "0hykg4sgzw1lbda5fl1m5i58h34z26420n9kj3bjr5c1wawi9mzj"))))
     (build-system go-build-system)
     (arguments
      (list
