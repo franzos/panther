@@ -26,7 +26,7 @@
 (define-public keycloak
   (package
     (name "keycloak")
-    (version "26.8.0")
+    (version "26.8.1")
     (source
      (origin
        (method url-fetch)
@@ -34,7 +34,7 @@
              "https://github.com/keycloak/keycloak/releases/download/"
              version "/keycloak-" version ".tar.gz"))
        (sha256
-        (base32 "02lqlfick810r8mf90snxmd73p6ayza8xj8ga76mi2l3ky4xlhcy"))))
+        (base32 "1s6b4knlfnk1azwf4ik0ahg32darhl0cybhw79ifm8psh6ql09sf"))))
     (build-system copy-build-system)
     (arguments
      (list
