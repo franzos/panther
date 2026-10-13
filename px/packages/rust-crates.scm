@@ -843,9 +843,17 @@
   (crate-source "arrow-array" "58.4.0"
                 "0sbsgwpiaa7nmjiv38gf1n5gckc7y877nfjn2yi01pxpjbadlcxf"))
 
+(define rust-arrow-array-59.1.0
+  (crate-source "arrow-array" "59.1.0"
+                "14j17k9sxsijxa3qgrb2ar2rai6bkz4wakx0dzybm1875wdib1ll"))
+
 (define rust-arrow-buffer-58.4.0
   (crate-source "arrow-buffer" "58.4.0"
                 "1dgmcchrp1q83f5jpcc94h37wplk40a99yj9nim5w00w76b2ymdr"))
+
+(define rust-arrow-buffer-59.1.0
+  (crate-source "arrow-buffer" "59.1.0"
+                "0d5llwfqbldrwm5kr0m2irrsfks52bmf542f1ggvz53pm1vnaxy4"))
 
 (define rust-arrow-cast-58.4.0
   (crate-source "arrow-cast" "58.4.0"
@@ -854,6 +862,14 @@
 (define rust-arrow-data-58.4.0
   (crate-source "arrow-data" "58.4.0"
                 "0swpnx7pa3hdvhi30l9l5abdlzzy88gackn00rz90f27n0nqa91b"))
+
+(define rust-arrow-data-59.1.0
+  (crate-source "arrow-data" "59.1.0"
+                "0rjw26hamwcdz8m1kc2grh1fz0f39z6firk42h7kc1475qzf93xk"))
+
+(define rust-arrow-ipc-59.1.0
+  (crate-source "arrow-ipc" "59.1.0"
+                "136r0sm49yyzv5mrd8r6hnj2j69q3n15fh1jw17afsxwzjcw9ni9"))
 
 (define rust-arrow-ord-58.4.0
   (crate-source "arrow-ord" "58.4.0"
@@ -867,9 +883,17 @@
   (crate-source "arrow-schema" "58.4.0"
                 "17pfxw0jkmkxvqkn38dizf07ivpib7vf8a3vxfvfqp22srm3bji1"))
 
+(define rust-arrow-schema-59.1.0
+  (crate-source "arrow-schema" "59.1.0"
+                "1rb9gka31ilb81q0jsfksfax11sidarkl527c9v73mahqffrdr6r"))
+
 (define rust-arrow-select-58.4.0
   (crate-source "arrow-select" "58.4.0"
                 "1b8a3drz2l0364lriihn81asqk9896yc5ra9lpa0ldfqnfga73f5"))
+
+(define rust-arrow-select-59.1.0
+  (crate-source "arrow-select" "59.1.0"
+                "1y9vfjvnhm50r20cihm9rk07agg22vpr5vyik2fkar88m7dp09s0"))
 
 (define rust-arrow-string-58.4.0
   (crate-source "arrow-string" "58.4.0"
@@ -6263,6 +6287,10 @@
   (crate-source "embed-resource" "3.0.11"
                 "1ggvcpk8zr2jnpd1pnjsvfbpfr678csrgf36927b5hxyrv6amzgv"))
 
+(define rust-embed-resource-3.0.12
+  (crate-source "embed-resource" "3.0.12"
+                "17r4794rvg84pwqq02yalqvf85l0hjqh04pydqz6gckybrxlhs31"))
+
 (define rust-embed-resource-3.0.6
   (crate-source "embed-resource" "3.0.6"
                 "0bm02623nhwb5k2yp0rgk5imhqwhg6y9mvnp70052r1wazy7b82m"))
@@ -7358,6 +7386,10 @@
 (define rust-fjall-3.1.6
   (crate-source "fjall" "3.1.6"
                 "0qnkl7bbbl1b72764vykalh0h5c5mw7f6d5mz7gm2qch16bcdkcz"))
+
+(define rust-flatbuffers-25.12.19
+  (crate-source "flatbuffers" "25.12.19"
+                "1wvfm49ybn098zknzlim8xpxrfn2y0sazzqyaggav61vgffq7xim"))
 
 (define rust-flate2-1.0.27
   (crate-source "flate2" "1.0.27"
@@ -24059,6 +24091,10 @@
   (crate-source "serde_spanned" "1.1.1"
                 "09jzk7i6wihn3d8i3wi4j4n98ghi93c3b8m8k64nxq0ijn3vaqk6"))
 
+(define rust-serde-spanned-1.1.2
+  (crate-source "serde_spanned" "1.1.2"
+                "0b0crd16vvp0n81pgh0ldi3apld0ph5ywsrml80y5v2ynnz26xaf"))
+
 (define rust-serde-test-1.0.177
   (crate-source "serde_test" "1.0.177"
                 "1vgisk4dgwdmz4prc2iwq8lddrp4pbqdbljk0h3b7dnafgjix43z"))
@@ -26916,6 +26952,10 @@
   (crate-source "toml" "1.1.6+spec-1.1.0"
                 "0sj0g89pyrkm9g5zaaqsdlclr98xf1chvi8jv9qsn4897xa041lj"))
 
+(define rust-toml-1.1.8+spec-1.1.0
+  (crate-source "toml" "1.1.8+spec-1.1.0"
+                "13b7kqvw7aa4x08i03d2fpima1i75v0lqxl0wrmisx6qwh09wj10"))
+
 (define rust-toml-datetime-0.6.9
   (crate-source "toml_datetime" "0.6.9"
                 "18q9ix4isxw2n4mij3v6x0pb4jw1hbxbc5wbprlbq91yjrddp99x"))
@@ -26967,6 +27007,10 @@
 (define rust-toml-datetime-1.1.1+spec-1.1.0
   (crate-source "toml_datetime" "1.1.1+spec-1.1.0"
                 "1mws2mkkf46l7inn77azhm0vdwxngv9vsbhbl0ah33p2c9gzcr9i"))
+
+(define rust-toml-datetime-1.1.2+spec-1.1.0
+  (crate-source "toml_datetime" "1.1.2+spec-1.1.0"
+                "0lrhcmqvhjr259w4f2kijya7fgi0kpmhg9fb3m144v3cj1kxg1ib"))
 
 (define rust-toml-edit-0.19.14
   (crate-source "toml_edit" "0.19.14"
@@ -27116,6 +27160,10 @@
   (crate-source "toml_parser" "1.1.3+spec-1.1.0"
                 "0mjdvihdkmjd4ykh574xgii71hpxw7ns7h4n4bisqpxrz4faqf0x"))
 
+(define rust-toml-parser-1.1.5+spec-1.1.0
+  (crate-source "toml_parser" "1.1.5+spec-1.1.0"
+                "0k3lljyi4zxchdklaqghkwbl7wkd2ab1w16hlyniqzid0fl979ms"))
+
 (define rust-toml-span-0.7.1
   (crate-source "toml-span" "0.7.1"
                 "1dsici17lfypzs4lswjv652qiwqldjypvhm6rdfzmd9pshbs8azj"))
@@ -27159,6 +27207,10 @@
 (define rust-toml-writer-1.1.2+spec-1.1.0
   (crate-source "toml_writer" "1.1.2+spec-1.1.0"
                 "1lk6pqf9mac3v1x6282n6a66qx5b18c8f4a23bsd0nk658x3amkx"))
+
+(define rust-toml-writer-1.1.3+spec-1.1.0
+  (crate-source "toml_writer" "1.1.3+spec-1.1.0"
+                "0w17cps8mfg7wcwyp0gggi9cpgmxldb9pwl55qp8ssq5zj6bvg86"))
 
 (define rust-tonic-0.12.3
   (crate-source "tonic" "0.12.3"
@@ -37938,6 +37990,12 @@
                                    rust-approx-0.5.1
                                    rust-arrayref-0.3.9
                                    rust-arrayvec-0.7.6
+                                   rust-arrow-array-59.1.0
+                                   rust-arrow-buffer-59.1.0
+                                   rust-arrow-data-59.1.0
+                                   rust-arrow-ipc-59.1.0
+                                   rust-arrow-schema-59.1.0
+                                   rust-arrow-select-59.1.0
                                    rust-as-raw-xcb-connection-1.0.1
                                    rust-ash-0.38.0+1.3.281
                                    rust-async-compression-0.4.42
@@ -37984,6 +38042,8 @@
                                    rust-compression-codecs-0.4.38
                                    rust-compression-core-0.4.32
                                    rust-concurrent-queue-2.5.0
+                                   rust-const-random-0.1.18
+                                   rust-const-random-macro-0.1.16
                                    rust-core-foundation-0.9.4
                                    rust-core-foundation-0.10.1
                                    rust-core-foundation-sys-0.8.7
@@ -38018,6 +38078,7 @@
                                    rust-dpi-0.1.2
                                    rust-dtor-0.8.1
                                    rust-either-1.15.0
+                                   rust-embed-resource-3.0.12
                                    rust-encoding-rs-0.8.35
                                    rust-enum-map-2.7.3
                                    rust-enum-map-derive-0.17.0
@@ -38033,6 +38094,7 @@
                                    rust-fastwebsockets-0.10.0
                                    rust-fern-0.7.1
                                    rust-find-msvc-tools-0.1.9
+                                   rust-flatbuffers-25.12.19
                                    rust-flate2-1.1.9
                                    rust-float-next-after-1.0.0
                                    rust-foldhash-0.1.5
@@ -38165,6 +38227,7 @@
                                    rust-ndk-context-0.1.1
                                    rust-ndk-sys-0.6.0+11769913
                                    rust-num-bigint-0.4.6
+                                   rust-num-complex-0.4.6
                                    rust-num-derive-0.4.2
                                    rust-num-integer-0.1.46
                                    rust-num-rational-0.4.2
@@ -38299,6 +38362,7 @@
                                    rust-serde-core-1.0.228
                                    rust-serde-derive-1.0.228
                                    rust-serde-json-1.0.149
+                                   rust-serde-spanned-1.1.2
                                    rust-serde-urlencoded-0.7.1
                                    rust-sha1-0.10.6
                                    rust-shlex-1.3.0
@@ -38345,6 +38409,7 @@
                                    rust-thiserror-2.0.18
                                    rust-thiserror-impl-1.0.69
                                    rust-thiserror-impl-2.0.18
+                                   rust-tiny-keccak-2.0.2
                                    rust-tiny-skia-0.11.4
                                    rust-tiny-skia-path-0.11.4
                                    rust-tiny-xlib-0.2.5
@@ -38357,9 +38422,11 @@
                                    rust-tokio-rustls-0.26.4
                                    rust-tokio-socks-0.5.2
                                    rust-tokio-util-0.7.18
-                                   rust-toml-datetime-1.1.1+spec-1.1.0
+                                   rust-toml-1.1.8+spec-1.1.0
+                                   rust-toml-datetime-1.1.2+spec-1.1.0
                                    rust-toml-edit-0.25.11+spec-1.1.0
-                                   rust-toml-parser-1.1.2+spec-1.1.0
+                                   rust-toml-parser-1.1.5+spec-1.1.0
+                                   rust-toml-writer-1.1.3+spec-1.1.0
                                    rust-tower-0.5.3
                                    rust-tower-http-0.6.11
                                    rust-tower-layer-0.3.3
@@ -38387,6 +38454,8 @@
                                    rust-uuid-1.23.1
                                    rust-version-check-0.9.5
                                    rust-virtue-0.0.18
+                                   rust-vswhom-0.1.0
+                                   rust-vswhom-sys-0.1.3
                                    rust-walkdir-2.5.0
                                    rust-want-0.3.1
                                    rust-wasi-0.11.1+wasi-snapshot-preview1
@@ -38478,6 +38547,7 @@
                                    rust-windows-x86-64-msvc-0.53.1
                                    rust-winit-0.30.13
                                    rust-winnow-1.0.3
+                                   rust-winreg-0.56.0
                                    rust-wit-bindgen-0.51.0
                                    rust-wit-bindgen-0.57.1
                                    rust-wit-bindgen-core-0.51.0
