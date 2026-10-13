@@ -372,7 +372,7 @@ the VPN connection."))))
 (define-public ivpn
   (package
     (name "ivpn")
-    (version "3.15.15")
+    (version "3.16.1")
     (source
      (origin
        (method git-fetch)
@@ -381,7 +381,7 @@ the VPN connection."))))
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0735mbjv2gd38x7dgrchj1sa25z8lhkwvik8q5ayd06yaiasc0q9"))))
+        (base32 "1algk0n668rck0h9vhm5kc3n64v5xfrwa4x8nalhikhdv03vif5i"))))
     (build-system go-build-system)
     (arguments
      (list
