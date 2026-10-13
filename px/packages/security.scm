@@ -327,17 +327,17 @@ and OS packages on Linux systems.")
 (define-public scorecard
   (package
     (name "scorecard")
-    (version "5.5.0")
+    (version "5.6.0")
     (source (origin
               (method go-fetch-vendored)
               (uri (go-git-reference
                     (url "https://github.com/ossf/scorecard")
                     (commit (string-append "v" version))
                     (sha (base32
-                          "0k93zgh32jcrhag98dy5v43akfdi3fccaxmpghjgliib0qc08vvn"))))
+                          "0sq5i67k4lwmfn4makjpszxw2knxw8a452gfgw2938rz3lc8h90n"))))
               (sha256
                (base32
-                "0hn439587mdwjnlndw2ay5k95y6cy9lgql42jh5fqvqxv3dn3y9a"))))
+                "0404dxii4lksyrf6lmqmw67zj97yd18p4gwnk3iv82b07q45ff7f"))))
     (build-system go-build-system)
     (arguments
      (list
