@@ -35,12 +35,15 @@
   #:use-module (gnu packages python-build)
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages rust)
+  #:use-module (gnu packages sqlite)
   #:use-module (gnu packages tls)
+  #:use-module (gnu packages video)
   #:use-module (gnu packages vulkan)
   #:use-module (gnu packages webkit)
   #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages xml)
   #:use-module (gnu packages xorg)
+  #:use-module (px packages ai)
   #:use-module (px self))
 
 (define-public rapidraw
@@ -566,3 +569,63 @@ JPEG), and import of PDF, bitmap images, and Xournal++ files.")
 WebP and SVG file types.  Both lossy and lossless compression are available,
 and metadata can be preserved.")
     (license license:gpl3+)))
+
+(define-public vitrine
+  (package
+    (name "vitrine")
+    (version "0.1.1")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/franzos/vitrine")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1nhcalrikw06bl3bjaai093qjqk8x69vmr5fjn0zvjbv1j7kkx33"))))
+    (build-system cargo-build-system)
+    (arguments
+     (list
+      #:install-source? #f
+      #:rust rust-1.95
+      #:cargo-test-flags
+      ;; Writes a /bin/sh script, which the build environment lacks.
+      ''("--" "--skip=index::tests::cancel_stops_a_running_tool_call")
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'install 'wrap-program
+            (lambda* (#:key inputs #:allow-other-keys)
+              ;; eframe dlopens GL, Wayland and X11; ort dlopens onnxruntime.
+              (wrap-program (string-append #$output "/bin/vitrine")
+                `("LD_LIBRARY_PATH" ":" prefix
+                  ,(map (lambda (lib)
+                          (dirname (search-input-file inputs
+                                                      (string-append "lib/" lib))))
+                        '("libEGL.so" "libwayland-client.so" "libxkbcommon.so"
+                          "libX11.so" "libXcursor.so" "libXi.so" "libXrandr.so")))
+                `("ORT_DYLIB_PATH" =
+                  (,(search-input-file inputs "lib/libonnxruntime.so")))
+                `("PATH" ":" suffix
+                  (,(dirname (search-input-file inputs "bin/ffmpeg"))))))))))
+    (native-inputs (list pkg-config))
+    (inputs
+     (cons* ffmpeg
+            libheif
+            libjpeg-turbo-3
+            libx11
+            libxcursor
+            libxi
+            libxkbcommon
+            libxrandr
+            mesa
+            onnxruntime-next
+            sqlite-next
+            wayland
+            (px-cargo-inputs 'vitrine)))
+    (home-page "https://github.com/franzos/vitrine")
+    (synopsis "Read-only image catalog and viewer with face recognition")
+    (description
+     "Vitrine is a local viewer for a dated photo folder tree.  It indexes
+images and videos, offers place filters and a world map, and can optionally
+group photos by face using ONNX Runtime.  It never modifies image files.")
+    (license license:gpl3)))
