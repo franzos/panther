@@ -178,7 +178,7 @@ Linux support is currently in beta.")
 (define-public chatgpt
   (package
     (name "chatgpt")
-    (version "26.1007.21434")
+    (version "26.1013.40934")
     (source
      (origin
        (method url-fetch)
@@ -192,8 +192,8 @@ Linux support is currently in beta.")
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "1vgkn6cl1d8clki7yxp485lf1pbyzbvhc8fm78fjcjypqd0m6sr7")
-           ("aarch64-linux" "0jdg3f579iic51z1akb0alibzy6w6w3ygs900slnjq0xzgiy3yjm"))))))
+           ("x86_64-linux" "1mx1ydfvw3ia47xihx7z4s0apdc46xl81mlszgibjhb6k9zrx99w")
+           ("aarch64-linux" "16v23kryb506wh0bz5qdga96z4r8h6vwmdbfw2hymsrwyfxcpcls"))))))
     (build-system chromium-binary-build-system)
     (arguments
      (list
@@ -241,9 +241,9 @@ Linux support is currently in beta.")
                      (string-append "resources/cua_node/lib/node_modules/@oai/sky/bin/linux/sky_linux_"
                                     arch)
                      (string-append "resources/cua_node/lib/node_modules/@img/sharp-libvips-linux-"
-                                    arch "/lib/libvips-cpp.so.8.18.6")
+                                    arch "/lib/libvips-cpp.so.8.18.7")
                      (string-append "resources/cua_node/lib/node_modules/@img/sharp-linux-"
-                                    arch "/lib/sharp-linux-" arch "-0.35.4.node"))))
+                                    arch "/lib/sharp-linux-" arch "-0.35.5.node"))))
       #:install-plan
       #~'(("usr/lib/chatgpt/" "/share/chatgpt")
           ("usr/share/applications/" "/share/applications")
@@ -277,7 +277,7 @@ Linux support is currently in beta.")
                       (string-append
                        #$output "/share/chatgpt/resources/cua_node/lib"
                        "/node_modules/@img/sharp-linux-" #$(chatgpt-arch) "/lib"
-                       "/sharp-linux-" #$(chatgpt-arch) "-0.35.4.node"))))
+                       "/sharp-linux-" #$(chatgpt-arch) "-0.35.5.node"))))
           ;; Chromium picks its password backend from the desktop environment;
           ;; on unrecognized ones (wlroots compositors such as niri) it falls
           ;; back to the plaintext store and won't persist logins.  Force
