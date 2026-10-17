@@ -55,10 +55,10 @@
   #:use-module (gnu packages xorg))
 
 ;; Thunderbird 157 configures against nss >= 3.129; guix's nss-rapid is 3.126.
-(define nss-rapid-3.129
+(define nss-rapid-3.130
   (package
     (inherit nss-rapid)
-    (version "3.129")
+    (version "3.130")
     (source
      (origin
        (inherit (package-source nss-rapid))
@@ -67,10 +67,10 @@
                            (string-join (string-split version #\.) "_")
                            "_RTM/src/nss-" version ".tar.gz"))
        (sha256
-        (base32 "11877m4y0k11kdx1xg8s2nh1jr69afbm8fs78d46fgwal6qa7fiq"))))))
+        (base32 "1ifmkgzgfkbila2z6zzn0f1cax96j8qsqqaaidz3xylbqy19zaxg"))))))
 
-(define %thunderbird-version "157.0.1")
-(define %thunderbird-build-id "20261001000000") ;must be YYYYMMDDhhmmss
+(define %thunderbird-version "158.0")
+(define %thunderbird-build-id "20261017000000") ;must be YYYYMMDDhhmmss
 
 (define-public thunderbird
   (package
@@ -83,7 +83,7 @@
                            "releases/" version "/source/"
                            "thunderbird-" version ".source.tar.xz"))
        (sha256
-        (base32 "1s51a40xqlw9qdbvcv9j1wzy2dpimzyf0y2qi9qvfjnl47k6vx7l"))))
+        (base32 "1in0dv00x2nsqn8sin7vajjgv3fzqv8yjk6ffpl01bfbxlc6nn3g"))))
     (properties
      `((cpe-name . "thunderbird")))
     (build-system gnu-build-system)
@@ -207,8 +207,8 @@ ca495991b7852b855"))
             (lambda _
               (substitute* "build/RunCbindgen.py"
                 (("args.append\\(\"--frozen\"\\)") "pass"))
-              (substitute* "config/makefiles/rust.mk"
-                (("cargo_build_flags \\+= --frozen") ""))))
+              (substitute* "build/moz.configure/rust.configure"
+                (("\\[\"--frozen\"\\]") "[]"))))
           (add-after 'patch-source-shebangs 'fix-profile-setting
             ;; Avoid per-installation-directory profiles.
             (lambda _
@@ -398,7 +398,7 @@ ca495991b7852b855"))
            mesa
            mit-krb5
            nspr
-           nss-rapid-3.129
+           nss-rapid-3.130
            pango
            pciutils
            pixman
