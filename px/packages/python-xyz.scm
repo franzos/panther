@@ -475,17 +475,24 @@ the CSS counterpart to jsbeautifier.")
 (define-public djlint
   (package
     (name "djlint")
-    (version "1.46.4")
+    (version "1.46.6")
     (source
      (origin
        (method url-fetch)
        (uri (pypi-uri "djlint" version))
        (sha256
-        (base32 "084am7rn1h01wy4fyh4nl7xxly77218pp1l5v39yr9qlpxbg61ay"))))
+        (base32 "102lnd5znbwczh8k43is42zk8v2207nmkizphcfi1k1m21s2v412"))))
     (build-system pyproject-build-system)
     (arguments
      (list
-      #:tests? #f))
+      #:tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'drop-unknown-classifiers
+            (lambda _
+              ;; hatchling's bundled trove-classifiers predates Python 3.16.
+              (substitute* "pyproject.toml"
+                (("^.*Programming Language :: Python :: 3\\.16.*\n") "")))))))
     (native-inputs (list python-hatchling))
     (propagated-inputs (list python-click
                              python-cssbeautifier
