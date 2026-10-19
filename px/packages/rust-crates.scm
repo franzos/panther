@@ -45379,8 +45379,6 @@
                                   rust-autocfg-1.5.0
                                   rust-base64-0.22.1
                                   rust-bincode-1.3.3
-                                  rust-bit-set-0.8.0
-                                  rust-bit-vec-0.8.0
                                   rust-bitflags-2.10.0
                                   rust-bumpalo-3.19.1
                                   rust-cassowary-0.3.0
@@ -45408,7 +45406,6 @@
                                   rust-either-1.15.0
                                   rust-equivalent-1.0.2
                                   rust-errno-0.3.14
-                                  rust-fancy-regex-0.16.2
                                   rust-fastrand-2.3.0
                                   rust-find-msvc-tools-0.1.5
                                   rust-flate2-1.1.9
@@ -45464,6 +45461,8 @@
                                   rust-num-traits-0.2.19
                                   rust-once-cell-1.21.3
                                   rust-once-cell-polyfill-1.70.2
+                                  rust-onig-6.5.3
+                                  rust-onig-sys-69.9.3
                                   rust-openssl-probe-0.1.6
                                   rust-openssl-src-300.5.4+3.5.4
                                   rust-openssl-sys-0.9.111

@@ -32,6 +32,7 @@
   #:use-module (gnu packages python-build)
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages qt)
+  #:use-module (gnu packages regex)
   #:use-module (gnu packages tls)
   #:use-module (gnu packages perl)
   #:use-module (gnu packages rust)
@@ -503,19 +504,19 @@ rebasing of descendant commits, and comprehensive history rewriting tools.")
 (define-public keifu
   (package
     (name "keifu")
-    (version "0.6.0")
+    (version "0.7.0")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "keifu" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "1hi1w4vpkb2a11c7cpy7pppgj1n2klzm5cwng2dyg1rvy2hag8hc"))))
+        (base32 "1ay7wz4plnhld5ryfgd3v5bz1xyn2y3pxvwyd78jf0y33mj5pr2s"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f))
-    (native-inputs (list perl))
-    (inputs (px-cargo-inputs 'keifu))
+    (native-inputs (list perl pkg-config))
+    (inputs (cons oniguruma (px-cargo-inputs 'keifu)))
     (home-page "https://github.com/trasta298/keifu")
     (synopsis "TUI tool to visualize Git commit graphs")
     (description
