@@ -21414,6 +21414,10 @@
   (crate-source "quinn-proto" "0.11.17"
                 "10xskd9f8qynnkmg8vw3058fynd6jhi22a3f2c4kgs9vah894x84"))
 
+(define rust-quinn-proto-0.11.19
+  (crate-source "quinn-proto" "0.11.19"
+                "1gpg5d36v8wrm1hjrrz8jfcyflcnv8lva2sxl4wh8kzyap50qx8f"))
+
 (define rust-quinn-proto-0.11.9
   (crate-source "quinn-proto" "0.11.9"
                 "0p8k3iqd0rcxc7b6m2yyijhw4bpfwa61lyzigwvjwzax97rmxzm2"))
@@ -23283,6 +23287,10 @@
 (define rust-rustls-0.23.45
   (crate-source "rustls" "0.23.45"
                 "0d6n90q52x5cjyxb6bwcnf9hwg6yb31cwr63rk8n5yfjqwqxfh8d"))
+
+(define rust-rustls-0.23.46
+  (crate-source "rustls" "0.23.46"
+                "1pwg7i8drr70374amj96952cils9mpwyijd5rx1mqdp9q3c3pqa8"))
 
 (define rust-rustls-0.23.7
   (crate-source "rustls" "0.23.7"
@@ -39570,7 +39578,7 @@
                                     rust-potential-utf-0.1.5
                                     rust-proc-macro2-1.0.107
                                     rust-quinn-0.11.11
-                                    rust-quinn-proto-0.11.16
+                                    rust-quinn-proto-0.11.19
                                     rust-quinn-udp-0.5.15
                                     rust-quote-1.0.47
                                     rust-r-efi-6.0.0
@@ -39588,7 +39596,7 @@
                                     rust-rustc-hash-2.1.3
                                     rust-rustc-version-0.4.1
                                     rust-rustix-1.1.4
-                                    rust-rustls-0.23.45
+                                    rust-rustls-0.23.46
                                     rust-rustls-native-certs-0.8.4
                                     rust-rustls-pki-types-1.15.1
                                     rust-rustls-platform-verifier-0.7.0
