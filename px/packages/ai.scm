@@ -88,6 +88,56 @@ It can understand your codebase, edit files, run terminal commands, and
 handle entire workflows.  This package disables auto-updates.")
     (license (nonfree "https://code.claude.com/docs/en/legal-and-compliance"))))
 
+(define-public opencode
+  (package
+    (name "opencode")
+    (version "1.19.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/anomalyco/opencode/releases/download/v"
+             version "/opencode-linux-x64.tar.gz"))
+       (sha256
+        (base32 "16vcacrm6snw7ff3fy39hk6zk5c8kkd00zlxdyw7281hg0lzpa0k"))))
+    (build-system binary-build-system)
+    (arguments
+     (list
+      #:strip-binaries? #f
+      #:validate-runpath? #f
+      #:patchelf-plan
+      #~'(("opencode" ()))
+      #:install-plan
+      #~'(("opencode" "bin/opencode-unwrapped"))
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'install 'create-wrapper
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (let* ((out (assoc-ref outputs "out"))
+                     (bin (string-append out "/bin"))
+                     (unwrapped (string-append bin "/opencode-unwrapped"))
+                     (wrapper (string-append bin "/opencode")))
+                (call-with-output-file wrapper
+                  (lambda (port)
+                    (format port "#!~a
+export OPENCODE_DISABLE_AUTOUPDATE=1
+exec ~a \"$@\"
+"
+                            (search-input-file inputs "bin/bash")
+                            unwrapped)))
+                (chmod wrapper #o755)))))))
+    (inputs
+     (list bash-minimal))
+    (supported-systems '("x86_64-linux"))
+    (home-page "https://opencode.ai")
+    (synopsis "AI coding agent for the terminal")
+    (description
+     "OpenCode is an open source AI coding agent with a terminal user
+interface.  It works with many model providers and can edit files, run
+commands, and use language servers.  This package installs the upstream
+prebuilt binary and disables auto-updates.")
+    (license license:expat)))
+
 (define-public claude-desktop
   (package
     (name "claude-desktop")
