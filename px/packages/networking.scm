@@ -12,6 +12,7 @@
   #:use-module (guix build-system cargo)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system go)
+  #:use-module (guix build-system pyproject)
   #:use-module (guix download)
   #:use-module (guix git-download)
   #:use-module (guix packages)
@@ -27,6 +28,8 @@
   #:use-module (gnu packages tls)
   #:use-module (gnu packages admin)
   #:use-module (gnu packages base)
+  #:use-module (gnu packages build-tools)
+  #:use-module (gnu packages check)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages curl)
   #:use-module (gnu packages fontutils)
@@ -40,7 +43,14 @@
   #:use-module (gnu packages networking)
   #:use-module (gnu packages nss)
   #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages python)
+  #:use-module (gnu packages python-build)
+  #:use-module (gnu packages python-compression)
+  #:use-module (gnu packages python-crypto)
+  #:use-module (gnu packages python-web)
+  #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages rust)
+  #:use-module (gnu packages serialization)
   #:use-module (gnu packages sqlite)
   #:use-module (gnu packages vpn)
   #:use-module (gnu packages web)
@@ -812,3 +822,166 @@ mullvad.net (Also accessible via Tor on this onion service).")
                   ;; Drop the entry from the test list; leaves the
                   ;; `if tname == 'test-slow-resolving'` branch untouched.
                   (("'test-slow-resolving',") ""))))))))))
+
+(define-public python-kaitaistruct
+  (package
+    (name "python-kaitaistruct")
+    (version "0.11")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "kaitaistruct" version))
+       (sha256
+        (base32 "0jyp4lv4a18qgd12mn5qg7awp2i66fbqwx6g7bjvhy4f51jffgh5"))))
+    (build-system pyproject-build-system)
+    (arguments
+     (list #:tests? #f))                ;no tests in the sdist
+    (native-inputs (list python-setuptools))
+    (home-page "https://kaitai.io")
+    (synopsis "Kaitai Struct runtime library for Python")
+    (description
+     "This package provides the Python runtime library for parsers generated
+by the Kaitai Struct compiler, a declarative binary format parsing language.")
+    (license license:expat)))
+
+;; mitmproxy's HTTP/3 layer relies on aioquic 1.2 internals.
+(define-public python-aioquic-1.2
+  (package
+    (inherit python-aioquic)
+    (version "1.2.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/aiortc/aioquic")
+             (commit version)))
+       (file-name (git-file-name "python-aioquic" version))
+       (sha256
+        (base32 "12zj7wn64dhpdy8dj17gy9h5kwpbxni4pnhp0ddfpliikvz08228"))))))
+
+(define-public python-mitmproxy-rs
+  (package
+    (name "python-mitmproxy-rs")
+    (version "0.12.11")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "mitmproxy_rs" version))
+       (sha256
+        (base32 "11dpxhch2sl19jmyvgk0qsaxrlf49lv91z443ccmc7n2scywypkg"))
+       (modules '((guix build utils)))
+       (snippet
+        ;; mitmproxy_linux provides the eBPF redirector for local capture
+        ;; mode, which needs a nightly toolchain and bpf-linker.
+        #~(begin
+            (delete-file "benches/openvpnserv.exe")
+            (substitute* "pyproject.toml"
+              (("^ *\"mitmproxy_(windows|linux|macos)==.*\n") ""))
+            (substitute* "mitmproxy-rs/src/lib.rs"
+              (("m\\.py\\(\\)\\.import\\(\"mitmproxy_linux\"\\)\\?;")
+               "{}"))))))
+    (build-system cargo-build-system)
+    (arguments
+     (list
+      #:rust rust-1.95
+      #:install-source? #f
+      #:tests? #f                       ;Rust tests need a Python runtime
+      #:imported-modules `(,@%cargo-build-system-modules
+                           ,@%pyproject-build-system-modules)
+      #:modules '((guix build cargo-build-system)
+                  ((guix build pyproject-build-system) #:prefix py:)
+                  (guix build utils))
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'build)
+          (replace 'install
+            (assoc-ref py:%standard-phases 'install))
+          (add-before 'install 'build-python-module
+            (assoc-ref py:%standard-phases 'build)))))
+    (native-inputs (list maturin python-wrapper))
+    (inputs (px-cargo-inputs 'python-mitmproxy-rs))
+    (home-page "https://github.com/mitmproxy/mitmproxy_rs")
+    (synopsis "Rust components of mitmproxy")
+    (description
+     "This package provides the Rust parts of mitmproxy as a Python extension
+module: WireGuard and TUN interface modes, DNS resolution, certificate
+handling, content views and syntax highlighting.  The Linux local capture
+redirector is not included.")
+    (license license:expat)))
+
+(define-public mitmproxy
+  (package
+    (name "mitmproxy")
+    (version "12.2.3")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/mitmproxy/mitmproxy")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "15nz1dmgz9qjhg6wmgxxzg4rgvawpmzlg8f6cm7aqn566ld3q0v2"))))
+    (build-system pyproject-build-system)
+    (arguments
+     (list
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'relax-requirements
+            (lambda _
+              (substitute* "pyproject.toml"
+                (("^( *\"[A-Za-z0-9_.-]+)[<>=][^\";]*" _ name)
+                 name)
+                ;; pytest 9 rejects [tool.pytest] next to ini_options.
+                (("\\[tool\\.pytest\\.individual_coverage\\]")
+                 "[tool.individual_coverage]"))))
+          (add-before 'check 'set-home
+            (lambda _
+              (setenv "HOME" "/tmp"))))
+      #:test-flags
+      ;; Need system DNS, a TUN device or a prebuilt WireGuard client.
+      #~(list "--deselect=test/mitmproxy/addons/test_dns_resolver.py::test_name_servers"
+              "--deselect=test/mitmproxy/addons/test_proxyserver.py::test_dns"
+              "--deselect=test/mitmproxy/proxy/test_mode_servers.py::test_tun_mode"
+              "--deselect=test/mitmproxy/proxy/test_mode_servers.py::test_wireguard")))
+    (native-inputs
+     (list nss-certs-for-test
+           python-hypothesis
+           python-pytest
+           python-pytest-asyncio
+           python-pytest-timeout
+           python-setuptools))
+    (propagated-inputs
+     (list python-aioquic-1.2
+           python-argon2-cffi
+           python-asgiref
+           python-bcrypt
+           python-brotli
+           python-certifi
+           python-cryptography
+           python-flask
+           python-h11
+           python-h2
+           python-hyperframe
+           python-kaitaistruct
+           python-ldap3
+           python-mitmproxy-rs
+           python-msgpack
+           python-publicsuffix2
+           python-pyopenssl
+           python-pyparsing
+           python-pyperclip
+           python-ruamel.yaml
+           python-sortedcontainers
+           python-tornado
+           python-urwid
+           python-wsproto
+           python-zstandard))
+    (home-page "https://mitmproxy.org")
+    (synopsis "Interactive TLS-capable intercepting HTTP proxy")
+    (description
+     "mitmproxy is an interactive, TLS-capable intercepting proxy for HTTP/1,
+HTTP/2, HTTP/3 and WebSockets.  It provides a console interface
+(@command{mitmproxy}), a command-line tool (@command{mitmdump}) and a web
+interface (@command{mitmweb}).")
+    (license license:expat)))
