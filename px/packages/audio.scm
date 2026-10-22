@@ -162,7 +162,7 @@ minimize its security impact.")
 (define-public voxtype
   (package
     (name "voxtype")
-    (version "1.1.0")
+    (version "1.1.1")
     (source
      (origin
        (method git-fetch)
@@ -171,7 +171,7 @@ minimize its security impact.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "09szb7fnidmh0x62l74qr7z85q0fq5cys7n0lzxdnx08rskx83ng"))))
+        (base32 "02gh63z9nd90w9cgh1npi33ngm2sryln117hd7vs48nlp6mxnf7c"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
