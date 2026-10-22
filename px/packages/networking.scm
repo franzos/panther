@@ -146,7 +146,7 @@ but is also able to connect tens of thousands of computers.")
 (define-public ngrok
   (package
     (name "ngrok")
-    (version "3.39.11")
+    (version "3.39.12")
     (source
      ;; The equinox.io download serves whatever release is current, ignoring
      ;; the version in the path, so its hash changes without the version
@@ -170,9 +170,9 @@ but is also able to connect tens of thousands of computers.")
         (base32
          (match (or (%current-system) (%current-target-system))
            ("x86_64-linux"
-            "1583wgdi2qqhb7ngm8fmndcb009m595n46p2fykj1krv50sa46p5")
+            "0jfdi0pf6j6ys82gmf6rx32yhpihmydbpqlw1wvncsax7j00snmg")
            ("aarch64-linux"
-            "1k4bg4bg4kr0cbmwwn8x44nnw5lqzs1j539ckdraa4ywplixw1xk"))))))
+            "0p0kqkj2p2j90nw24vi82vga6c134wmcamd338sbrpr7802fbd24"))))))
     (build-system binary-build-system)
     (arguments
      (list
