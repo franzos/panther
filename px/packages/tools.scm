@@ -712,7 +712,7 @@ over @command{ssh}, and copies results back, cutting local compile times.")
 (define-public bruno
   (package
     (name "bruno")
-    (version "4.2.1")
+    (version "4.3.0")
     (source
      (origin
        (method url-fetch)
@@ -727,8 +727,8 @@ over @command{ssh}, and copies results back, cutting local compile times.")
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "123ssjpi5vlnvl9sybvh5hwxq7kll8nkd399md4bp6aqy7bz0dkw")
-           ("aarch64-linux" "14s81i8n8azaiq691n6i8brcdqdnscgg1ig7r8h8vr6lijf3amga"))))))
+           ("x86_64-linux" "00is7hyn0xp96ldsbqr8dpqvs4bgg674r66820fq08f2qcy7w4a5")
+           ("aarch64-linux" "1b8cpa378gbcg8r4f02ycrx0fj4zazasnnyj69w0vzr4vj8dsxn9"))))))
     (build-system chromium-binary-build-system)
     (arguments
      (list
