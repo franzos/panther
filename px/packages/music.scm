@@ -16,6 +16,7 @@
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages linux)
+  #:use-module (gnu packages llvm)
   #:use-module (gnu packages music)
   #:use-module (gnu packages nss)
   #:use-module (gnu packages pkg-config)
@@ -222,7 +223,7 @@ Discord integration, and media key support.")
 (define-public spotifast
   (package
     (name "spotifast")
-    (version "0.13.3")
+    (version "0.14.1")
     (source
      (origin
        (method git-fetch)
@@ -231,7 +232,7 @@ Discord integration, and media key support.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0392w8pbjd14fmyj9pf8s29cajj1wqnc5z9802zbb6rsj8axr2dm"))))
+        (base32 "07g742sx2slwv57g025nicpqs8lprk3pdyvp2zj4grfw7ml8g1s5"))))
     (build-system cargo-build-system)
     (arguments
      (list
@@ -256,15 +257,19 @@ Discord integration, and media key support.")
                                  (map cdr inputs))))
                       (dst (string-append "guix-git/" repo)))
                   (copy-recursively src dst #:keep-permissions? #f)))
-              (checkout "egui" "rust-egui-0.36.1")
-              (checkout "fastframe" "rust-fastframe-text-0.6.0")
+              (checkout "egui" "rust-egui-0.36.2")
+              (checkout "fastframe" "rust-fastframe-text-0.14.0")
               (checkout "winit" "rust-winit-0.30.13")
               (checkout "librespot" "rust-librespot-core-0.8.0")
               (checkout "hyper-proxy2" "rust-hyper-proxy2-0.1.0")
               (checkout "projectm-rs" "rust-projectm-sys-1.2.3")
+              (checkout "cpal" "rust-cpal-0.18.2")
               (substitute* "guix-git/egui/Cargo.toml"
                 (("^winit = \\{ git = \"[^\"]+\", rev = \"[^\"]+\"")
                  "winit = { path = \"../winit\""))
+              (substitute* "guix-git/fastframe/crates/fastframe-audio/Cargo.toml"
+                (("^cpal = \\{ git = \"[^\"]+\", rev = \"[^\"]+\"")
+                 "cpal = { path = \"../../../cpal\""))
               (substitute* "Cargo.toml"
                 (("^(fastframe-[a-z0-9-]+) = \\{ git = \"[^\"]+\", tag = \"[^\"]+\""
                   _ name)
@@ -281,6 +286,8 @@ Discord integration, and media key support.")
                  "winit = { path = \"guix-git/winit\" }")
                 (("^hyper-proxy2 = \\{ git = [^}]+\\}")
                  "hyper-proxy2 = { path = \"guix-git/hyper-proxy2\" }")
+                (("^cpal = \\{ git = [^}]+\\}")
+                 "cpal = { path = \"guix-git/cpal\" }")
                 (("^projectm-sys = \\{ git = [^}]+\\}")
                  "projectm-sys = { path = \"guix-git/projectm-rs/projectm-sys\" }"))))
           (replace 'install
@@ -300,7 +307,7 @@ Discord integration, and media key support.")
                           (string-append (assoc-ref inputs lib) "/lib"))
                         '("mesa" "libxkbcommon" "wayland"
                           "libx11" "libxcursor" "libxi" "libxrandr")))))))))
-    (native-inputs (list pkg-config))
+    (native-inputs (list clang pkg-config))
     (inputs
      (cons* alsa-lib
             dbus
@@ -310,6 +317,7 @@ Discord integration, and media key support.")
             libxkbcommon
             libxrandr
             mesa
+            pipewire
             pulseaudio
             wayland
             (px-cargo-inputs 'spotifast)))
