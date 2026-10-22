@@ -190,7 +190,7 @@ follows the Trusted Computing Groups (TCG) TPM Software Stack (TSS 2.0).")
 (define-public tpm2-abrmd
   (package
     (name "tpm2-abrmd")
-    (version "3.0.0")
+    (version "3.1.0")
     (source
      (origin
        (method url-fetch)
@@ -198,7 +198,7 @@ follows the Trusted Computing Groups (TCG) TPM Software Stack (TSS 2.0).")
              "https://github.com/tpm2-software/tpm2-abrmd/releases/download/"
              version "/tpm2-abrmd-" version ".tar.gz"))
        (sha256
-        (base32 "0rglv5nj2xng7x57akqh6fj1hsdnyq3ndf2ma6q0b9sa2qsgz6nm"))))
+        (base32 "18wnp7ikp9c9yy7q2641nr9kxmc22p2mwda3s5nbr58hhx3xz1k4"))))
     (build-system gnu-build-system)
     (arguments
      `(#:tests? #f))                    ;tests need a swtpm and dbus session
