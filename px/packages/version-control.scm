@@ -48,17 +48,17 @@
 (define-public bitbucket-cli
   (package
     (name "bitbucket-cli")
-    (version "0.35.0")
+    (version "0.35.2")
     (source (origin
               (method go-fetch-vendored)
               (uri (go-git-reference
                     (url "https://github.com/avivsinai/bitbucket-cli")
                     (commit (string-append "v" version))
                     (sha (base32
-                          "19h6jsmpa2srdjk3gxw35pzzmj5wc3q9hcmvdapy4zcw3bxf5h1l"))))
+                          "1s9xrbs4bhadgkksj7ks0lxbr6a8hddcbjq6sz7pmnajp7a0n3rs"))))
               (sha256
                (base32
-                "1lfqj4krx85361x42ddbjsxg8g7k5kjwqhp7nlxcf98p4nbqjznm"))))
+                "0gkp5gh9b9as8b4ycas1372c460g3hr73cjklinvgjpmj2ncg5fv"))))
     (build-system go-build-system)
     (arguments
      (list
