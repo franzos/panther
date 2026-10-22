@@ -93,7 +93,7 @@ automated coding assistance.")
 (define-public biome
   (package
     (name "biome")
-    (version "2.5.15")
+    (version "2.6.2")
     (source
      (origin
        (method git-fetch)
@@ -102,7 +102,7 @@ automated coding assistance.")
              (commit (string-append "@biomejs/biome@" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1kp54dlcfj3nbbw7dyq5fk3qhn153257zppp689ll2rasxvkbcnv"))))
+        (base32 "1gwp4sdb50wq4aafgb09nsaic8yqizfrwhgkk4bp86n1acaz4m9g"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
