@@ -135,7 +135,7 @@ audio simultaneously, and can save recordings in WebM, MP4, GIF, and
 Matroska formats.")
     (license license:gpl3+)))
 
-(define %sunshine-version "2026.914.233613")
+(define %sunshine-version "2026.1018.5342")
 
 (define (sunshine-submodule name url commit hash)
   (origin
@@ -154,10 +154,10 @@ Matroska formats.")
     (method git-fetch)
     (uri (git-reference
           (url "https://github.com/LizardByte/build-deps")
-          (commit "a1fe2841cbc0d8c4501a1006d2d1cb88f219cc8c")))
+          (commit "d0ac5ef4b7673a8d8d2b03981ab5226cbf25810c")))
     (file-name (git-file-name "sunshine-build-deps" %sunshine-version))
     (sha256
-     (base32 "0dadr019lzm51xlwdmj4c6dzqzgjpw12y9awkr8ml3jf0nm1svnb"))))
+     (base32 "1a0aw1c9bq8w999dw4mgi964bwxggxrp773niwnn5b1mvhjfvypn"))))
 
 (define sunshine-simple-web-server
   (sunshine-submodule "Simple-Web-Server"
@@ -174,14 +174,14 @@ Matroska formats.")
 (define sunshine-libdisplaydevice
   (sunshine-submodule "libdisplaydevice"
                       "https://github.com/LizardByte/libdisplaydevice"
-                      "6e9722f89103320c948dc1199066c9e17a69e88a"
-                      "07325w0xlzm95ds5pxr9y6qsz5r7cnz5szpf04vfk0qa1zb8vd5m"))
+                      "a2afc0430d44223c25a2ebc598000f78b338aa52"
+                      "01d817g76chyilnbi12rzdfa64z2zzi5sxab0gx8wv54fjfcs5v0"))
 
 (define sunshine-libvirtualhid
   (sunshine-submodule "libvirtualhid"
                       "https://github.com/LizardByte/libvirtualhid"
-                      "53e1a949fc0784af716b782ddfa6c647cafd1f05"
-                      "1iqkdk4m0i0r14mpq68b73wqp23cf7s3v770fbhgxf34ax6z3yv9"))
+                      "dfff3ea8c34022c915799740806c17c0ed5c2492"
+                      "13a7sdvyqy88227m4cl027kg5nn1pzliqbkkkxc6kw3scwrqvqcj"))
 
 (define sunshine-lizardbyte-common
   (sunshine-submodule "lizardbyte-common"
@@ -192,20 +192,20 @@ Matroska formats.")
 (define sunshine-moonlight-common-c
   (sunshine-submodule "moonlight-common-c"
                       "https://github.com/moonlight-stream/moonlight-common-c"
-                      "62e066388f1a1b133e0bee947b9a374311a3354b"
-                      "0dg2jcxxn2jrqlqi7pg160jdljv748yjp3jbmmcqb4wvg7j9fg1k"))
+                      "aeba988e0a302145eff2e70fa3e11cd98ec01f5d"
+                      "1v31whwqyb33f7yyx7c1fgnjj148cxpxvbhw43vhqw594d305cm8"))
 
 (define sunshine-plasma-wayland-protocols
   (sunshine-submodule "plasma-wayland-protocols"
                       "https://github.com/KDE/plasma-wayland-protocols"
-                      "382dfabda886d3f2f5c067b22e5a22376685ba78"
-                      "1yak16fy3vd7nrymn3qhqjxq276rj6mhl0iqqjz6yalwb0026pa8"))
+                      "c5ac4db818f4a575a6ccfe0065b73ecfaba6e93e"
+                      "0g456mwvva4algzjwal4rrkld51pckxbci3rjd94cd5qxp9ssjnq"))
 
 (define sunshine-tray
   (sunshine-submodule "tray"
                       "https://github.com/LizardByte/tray"
-                      "c329d9fd0d39dfb47f0f2fb5467e1db2e8a1d623"
-                      "1n3pjqjpy5f086wv4ac3735yq9bpadd2kbscg3xyvkdk9q34bvd0"))
+                      "c1f2a8ab56dd399b881fb7aeab4fe4fc9c58188d"
+                      "1fxg7d728bkavsnfx4bh9bac81jfjzyrv6affm5mvi4mzwblf6hq"))
 
 (define sunshine-wayland-protocols
   (sunshine-submodule "wayland-protocols"
@@ -227,7 +227,7 @@ Matroska formats.")
           (commit (string-append "v" %sunshine-version))))
     (file-name (git-file-name "sunshine" %sunshine-version))
     (sha256
-     (base32 "07fvq2cmgsn0wxf947hvi5fa5kn9n9inbrlrgk46wndibn9wijvq"))))
+     (base32 "1sc9ch1r67igjlp1khs3vhnsg095hfqsklrvgfs7abmy3w9hi7k9"))))
 
 ;; Sunshine calls FFmpeg's private codec bitstream API (ff_cbs_*), so it cannot
 ;; link against a normal shared FFmpeg.  Upstream downloads a purpose-built
@@ -237,14 +237,14 @@ Matroska formats.")
 (define sunshine-ffmpeg
   (package
     (name "sunshine-ffmpeg")
-    (version "2026.910.121303")
+    (version "2026.1017.131201")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "https://github.com/LizardByte/build-deps/releases/download/v"
                            version "/Linux-x86_64-ffmpeg.tar.gz"))
        (sha256
-        (base32 "0p1qbgvh67mbyq2laal89r4w37dwbk0xzf9i7q1yc0adcyxjnva9"))))
+        (base32 "05c83x8kkmmdd1q5ad4xqyh9fgr1kclpbjwa0fv9rf0arccm3pmj"))))
     (build-system copy-build-system)
     (arguments
      (list #:strip-binaries? #f
@@ -289,7 +289,7 @@ bitstream API.  Sunshine links against these.")
            (invoke "node" "node_modules/vite/bin/vite.js" "build"))
          (copy-recursively "/tmp/sunshine/build" #$output)))
    #:options `(#:hash-algo sha256
-               #:hash ,(base32 "0yvfkp30ay722qv3s4ypmc0r4dmk9nvs54sklfhp0lwpdmzkz3yy")
+               #:hash ,(base32 "1sshr0l269m127sskbpqp1f9v2fmi45z67bs65ikgmzr2i80fa7n")
                #:recursive? #t)))
 
 (define-public sunshine
