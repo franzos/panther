@@ -187,6 +187,11 @@ root group will be used.")
 configured @code{user} will be added.  The @code{netdev} and @code{users}
 are always appended to this fields value.  This field is ignored when the
 user is root.")
+  (management-socket-group
+   (maybe-string)
+   "Group allowed to use the management socket, passed to the daemon as
+@env{MULLVAD_MANAGEMENT_SOCKET_GROUP}.  The group is created as a system
+group.  When unset the socket is world-accessible.")
   (configdir
    (string "/etc/mullvad-vpn")
    "The directory where mullvad-daemon will write its configs.")
@@ -214,12 +219,21 @@ user is root.")
       group
       "root"))
 
+(define (mullvad-daemon-socket-group config)
+  (let ((group (mullvad-daemon-configuration-management-socket-group config)))
+    (and (maybe-value-set? group) group)))
+
 (define (mullvad-daemon-accounts config)
   (let ((user (mullvad-daemon-user config))
         (group (mullvad-daemon-group config))
+        (socket-group (mullvad-daemon-socket-group config))
         (supplementary-groups
          (mullvad-daemon-configuration-supplementary-groups config)))
-    (if (string=? user "root")
+    (append
+     (if socket-group
+         (list (user-group (name socket-group) (system? #t)))
+         '())
+     (if (string=? user "root")
         '()
         (append
          (map (lambda (name)
@@ -235,7 +249,7 @@ user is root.")
                 (shell "/run/current-system/profile/sbin/nologin")
                 (supplementary-groups
                  (append supplementary-groups
-                         %default-mullvad-daemon-supplementary-groups))))))))
+                         %default-mullvad-daemon-supplementary-groups)))))))))
 
 (define (mullvad-daemon-activation config)
   (let ((user (mullvad-daemon-user config))
@@ -259,7 +273,13 @@ user is root.")
          (group (mullvad-daemon-group config))
          (package
           (mullvad-daemon-configuration-mullvad-vpn-desktop config))
-         (command (file-append package "/bin/mullvad-daemon")))
+         (command (file-append package "/bin/mullvad-daemon"))
+         (socket-group (mullvad-daemon-socket-group config))
+         (environment
+          (if socket-group
+              (list (string-append "MULLVAD_MANAGEMENT_SOCKET_GROUP="
+                                   socket-group))
+              '())))
     (list
      (shepherd-service (provision '(mullvad-early-boot-blocking))
                        (respawn? #f)
@@ -281,7 +301,10 @@ user is root.")
                         #~(make-forkexec-constructor
                            (list #$command "-v" "--disable-stdout-timestamps")
                            #:user #$user
-                           #:group #$group))
+                           #:group #$group
+                           #:environment-variables
+                           (append '#$environment
+                                   (default-environment-variables))))
                        (stop
                         #~(make-kill-destructor))))))
 
