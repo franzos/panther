@@ -573,7 +573,7 @@ and metadata can be preserved.")
 (define-public vitrine
   (package
     (name "vitrine")
-    (version "0.1.1")
+    (version "0.1.2")
     (source
      (origin
        (method git-fetch)
@@ -582,7 +582,7 @@ and metadata can be preserved.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1nhcalrikw06bl3bjaai093qjqk8x69vmr5fjn0zvjbv1j7kkx33"))))
+        (base32 "1f6hqwfmz46pq4g26i20haripblk1222baik1irc490y2ypld2ai"))))
     (build-system cargo-build-system)
     (arguments
      (list
@@ -606,7 +606,16 @@ and metadata can be preserved.")
                 `("ORT_DYLIB_PATH" =
                   (,(search-input-file inputs "lib/libonnxruntime.so")))
                 `("PATH" ":" suffix
-                  (,(dirname (search-input-file inputs "bin/ffmpeg"))))))))))
+                  (,(dirname (search-input-file inputs "bin/ffmpeg")))))))
+          (add-after 'install 'install-desktop-entry
+            (lambda _
+              (let ((share (string-append #$output "/share")))
+                (install-file "assets/com.gofranz.vitrine.desktop"
+                              (string-append share "/applications"))
+                (install-file "assets/com.gofranz.vitrine.svg"
+                              (string-append share "/icons/hicolor/scalable/apps"))
+                (install-file "assets/com.gofranz.vitrine.png"
+                              (string-append share "/icons/hicolor/256x256/apps"))))))))
     (native-inputs (list pkg-config))
     (inputs
      (cons* ffmpeg
