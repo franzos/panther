@@ -11,6 +11,8 @@
   #:use-module (gnu packages compression)
   #:use-module (gnu packages cpp)
   #:use-module (gnu packages gcc)
+  #:use-module (gnu packages glib)
+  #:use-module (gnu packages gnome)
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages libusb)
   #:use-module (gnu packages machine-learning)
@@ -20,6 +22,7 @@
   #:use-module (gnu packages python)
   #:use-module (gnu packages regex)
   #:use-module (gnu packages serialization)
+  #:use-module (gnu packages webkit)
   #:use-module (guix build-system cargo)
   #:use-module (guix build-system cmake)
   #:use-module (guix download)
@@ -350,6 +353,69 @@ This package repackages the official Debian build from OpenAI's apt
 repository, patching the bundled Chromium runtime for the Guix store.
 Linux support is currently a preview; Computer Use is not available on it.")
     (license (nonfree "https://openai.com/policies/terms-of-use/"))))
+
+(define-public maple
+  (package
+    (name "maple")
+    (version "3.4.5")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append
+             "https://github.com/MaplePrivacyLabs/Maple/releases/download/v"
+             version "/Maple_" version "_amd64.deb"))
+       (sha256
+        (base32 "1qdaz681sxa5jrjvw84l6g4cfdy21f567hz8f86b4pdm9ghhvh4m"))))
+    (supported-systems '("x86_64-linux"))
+    (build-system binary-build-system)
+    (arguments
+     (list
+      #:install-plan
+      #~'(("usr/bin/maple" "bin/")
+          ("usr/lib/maple/" "lib/maple/")
+          ("usr/share/" "share/"))
+      #:patchelf-plan
+      #~'(("usr/bin/maple" ("glibc" "gcc" "gtk+" "webkitgtk-for-gtk3" "glib"
+                            "dbus" "cairo" "gdk-pixbuf" "libsoup"))
+          ("usr/lib/maple/libonnxruntime.so" ("glibc" "gcc")))
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'unpack
+            (lambda* (#:key source #:allow-other-keys)
+              (invoke "ar" "x" source)
+              (invoke "tar" "-xzf" "data.tar.gz")))
+          (add-after 'unpack 'patch-desktop
+            (lambda _
+              (substitute* "usr/share/applications/Maple.desktop"
+                (("Exec=maple")
+                 (string-append "Exec=" #$output "/bin/maple")))))
+          (add-after 'install 'wrap-binary
+            (lambda _
+              (wrap-program (string-append #$output "/bin/maple")
+                `("ORT_DYLIB_PATH" =
+                  (,(string-append #$output "/lib/maple/libonnxruntime.so")))
+                `("GIO_EXTRA_MODULES" prefix
+                  (,#$(file-append glib-networking "/lib/gio/modules")))))))))
+    (native-inputs (list binutils tar gzip))
+    (inputs (list cairo
+                  dbus
+                  `(,gcc "lib")
+                  gdk-pixbuf
+                  glib
+                  glib-networking
+                  glibc
+                  gtk+
+                  libsoup
+                  webkitgtk-for-gtk3))
+    (home-page "https://trymaple.ai")
+    (synopsis "End-to-end encrypted AI chat client")
+    (description
+     "Maple is a private AI chat client.  Conversations are encrypted on the
+device and processed inside secure enclaves, so the service operator cannot
+read them.
+
+This package repackages the official Debian build of the Tauri desktop app.")
+    (license license:expat)))
 
 (define-public ollama
   (package
