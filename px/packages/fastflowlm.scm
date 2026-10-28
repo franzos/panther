@@ -17,6 +17,9 @@
   #:use-module (gnu packages algebra)       ;; fftw
   #:use-module (gnu packages video)         ;; ffmpeg
   #:use-module (gnu packages readline)
+  #:use-module (gnu packages libedit)
+  #:use-module (gnu packages image)         ;; libjpeg-turbo
+  #:use-module (gnu packages xiph)          ;; libogg, libvorbis, opus
   #:use-module (gnu packages ncurses)
   #:use-module (gnu packages build-tools)
   #:use-module (gnu packages pkg-config)
@@ -305,7 +308,7 @@ submodule in FastFlowLM.")
 (define-public fastflowlm
   (package
     (name "fastflowlm")
-    (version "1.0.9")
+    (version "1.0.10")
     (source
      (origin
        (method git-fetch)
@@ -315,7 +318,7 @@ submodule in FastFlowLM.")
              (recursive? #t)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1r3ny5iaf654xp7pfx83pzlhlb9vl8c2zlx73gn661s7sv0m6di3"))))
+        (base32 "1ikyfmaxnh30nd0ckc69cbcm9k06yqjd2hpfifx2xmwa654sz14m"))))
     (build-system cmake-build-system)
     (arguments
      (list
@@ -355,6 +358,31 @@ submodule in FastFlowLM.")
               (invoke "sed" "-i"
                       "/if(NOT WIN32 AND NOT FLM_PORTABLE_BUILD/,/endif()/d"
                       "CMakeLists.txt")))
+
+          (add-after 'chdir-to-src 'use-system-codecs
+            (lambda _
+              ;; Upstream downloads and builds opus, ogg, vorbis and
+              ;; libjpeg-turbo through ExternalProject.
+              (with-output-to-file "cmake/FlmAudioCodecs.cmake"
+                (lambda ()
+                  (display "include_guard(GLOBAL)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(FLM_AUDIO REQUIRED IMPORTED_TARGET opus ogg vorbis vorbisfile)
+add_library(flm_audio_codecs INTERFACE)
+target_link_libraries(flm_audio_codecs INTERFACE PkgConfig::FLM_AUDIO)
+set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/../common/audio/audio_decoder.cpp
+    PROPERTIES COMPILE_OPTIONS -fwrapv)
+")))
+              (with-output-to-file "cmake/FlmImageCodecs.cmake"
+                (lambda ()
+                  (display "include_guard(GLOBAL)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(FLM_JPEG REQUIRED IMPORTED_TARGET libjpeg)
+add_library(flm_image_codecs INTERFACE)
+target_sources(flm_image_codecs INTERFACE
+    ${CMAKE_CURRENT_LIST_DIR}/../include/lodepng/lodepng.cpp)
+target_link_libraries(flm_image_codecs INTERFACE PkgConfig::FLM_JPEG)
+")))))
 
           (add-after 'chdir-to-src 'patch-tokenizers-skip-cargo
             (lambda* (#:key inputs #:allow-other-keys)
@@ -459,8 +487,9 @@ submodule in FastFlowLM.")
     (native-inputs
      (list cmake ninja pkg-config patchelf))
     (inputs
-     (list boost curl fftw fftwf fftwl ffmpeg readline ncurses
-           (list util-linux "lib") libdrm oniguruma
+     (list boost curl fftw fftwf fftwl ffmpeg libedit readline ncurses
+           (list util-linux "lib") libdrm libjpeg-turbo libogg libvorbis
+           oniguruma opus
            rust-tokenizers-c xrt xrt-plugin-amdxdna))
     (supported-systems '("x86_64-linux"))
     (home-page "https://github.com/FastFlowLM/FastFlowLM")
