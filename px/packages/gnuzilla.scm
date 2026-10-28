@@ -54,11 +54,11 @@
   #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages xorg))
 
-;; Thunderbird 157 configures against nss >= 3.129; guix's nss-rapid is 3.126.
-(define nss-rapid-3.130
+;; Thunderbird 159 configures against nss >= 3.131; guix's nss-rapid is 3.126.
+(define nss-rapid-3.131
   (package
     (inherit nss-rapid)
-    (version "3.130")
+    (version "3.131")
     (source
      (origin
        (inherit (package-source nss-rapid))
@@ -67,10 +67,10 @@
                            (string-join (string-split version #\.) "_")
                            "_RTM/src/nss-" version ".tar.gz"))
        (sha256
-        (base32 "1ifmkgzgfkbila2z6zzn0f1cax96j8qsqqaaidz3xylbqy19zaxg"))))))
+        (base32 "0ry1ndp3i7khc2cakbvjvyii3qygasbnyghh8acms9g9fyy0a06a"))))))
 
-(define %thunderbird-version "158.0")
-(define %thunderbird-build-id "20261017000000") ;must be YYYYMMDDhhmmss
+(define %thunderbird-version "159.0")
+(define %thunderbird-build-id "20261027000000") ;must be YYYYMMDDhhmmss
 
 (define-public thunderbird
   (package
@@ -83,7 +83,7 @@
                            "releases/" version "/source/"
                            "thunderbird-" version ".source.tar.xz"))
        (sha256
-        (base32 "1in0dv00x2nsqn8sin7vajjgv3fzqv8yjk6ffpl01bfbxlc6nn3g"))))
+        (base32 "0zljng4gflw2ma5zwmb12ff5fhfwr237ar2w3ajndany23hc9jxl"))))
     (properties
      `((cpe-name . "thunderbird")))
     (build-system gnu-build-system)
@@ -398,7 +398,7 @@ ca495991b7852b855"))
            mesa
            mit-krb5
            nspr
-           nss-rapid-3.130
+           nss-rapid-3.131
            pango
            pciutils
            pixman
