@@ -39632,7 +39632,7 @@
                                    rust-ptr-meta-derive-0.3.1
                                    rust-quick-xml-0.39.4
                                    rust-quinn-0.11.9
-                                   rust-quinn-proto-0.11.14
+                                   rust-quinn-proto-0.11.15
                                    rust-quinn-udp-0.5.14
                                    rust-quote-1.0.45
                                    rust-r-efi-5.3.0
@@ -39663,7 +39663,6 @@
                                    rust-rend-0.5.3
                                    rust-renderdoc-sys-1.1.0
                                    rust-reqwest-0.12.28
-                                   rust-ring-0.16.20
                                    rust-ring-0.17.14
                                    rust-rkyv-0.8.16
                                    rust-rkyv-derive-0.8.16
@@ -39674,18 +39673,14 @@
                                    rust-rustc-version-0.4.1
                                    rust-rustix-0.38.44
                                    rust-rustix-1.1.4
-                                   rust-rustls-0.21.12
-                                   rust-rustls-0.23.40
+                                   rust-rustls-0.23.45
                                    rust-rustls-pki-types-1.14.1
-                                   rust-rustls-webpki-0.100.3
-                                   rust-rustls-webpki-0.101.7
-                                   rust-rustls-webpki-0.103.13
+                                   rust-rustls-webpki-0.103.16
                                    rust-rustversion-1.0.22
                                    rust-ryu-1.0.23
                                    rust-same-file-1.0.6
                                    rust-scoped-tls-1.0.1
                                    rust-scopeguard-1.2.0
-                                   rust-sct-0.7.1
                                    rust-sctk-adwaita-0.10.1
                                    rust-security-framework-2.11.1
                                    rust-security-framework-3.7.0
@@ -39719,7 +39714,6 @@
                                    rust-sonic-number-0.1.2
                                    rust-sonic-rs-0.5.8
                                    rust-sonic-simd-0.1.4
-                                   rust-spin-0.5.2
                                    rust-spirv-0.3.0+sdk-1.3.268.0
                                    rust-stable-deref-trait-1.2.1
                                    rust-static-assertions-1.1.0
@@ -39752,7 +39746,6 @@
                                    rust-tinyvec-macros-0.1.1
                                    rust-tokio-1.52.3
                                    rust-tokio-macros-2.7.0
-                                   rust-tokio-rustls-0.24.1
                                    rust-tokio-rustls-0.26.4
                                    rust-tokio-socks-0.5.2
                                    rust-tokio-util-0.7.18
@@ -39779,7 +39772,6 @@
                                    rust-unicode-segmentation-1.13.2
                                    rust-unicode-width-0.2.2
                                    rust-unicode-xid-0.2.6
-                                   rust-untrusted-0.7.1
                                    rust-untrusted-0.9.0
                                    rust-unty-0.0.4
                                    rust-url-2.5.8
@@ -39817,8 +39809,7 @@
                                    rust-wayland-sys-0.31.11
                                    rust-web-sys-0.3.98
                                    rust-web-time-1.1.0
-                                   rust-webpki-roots-0.23.1
-                                   rust-webpki-roots-1.0.7
+                                   rust-webpki-roots-1.0.10
                                    rust-wgpu-27.0.1
                                    rust-wgpu-core-27.0.3
                                    rust-wgpu-core-deps-apple-27.0.0

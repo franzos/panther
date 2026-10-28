@@ -59,7 +59,7 @@
 (define-public flowsurface
   (package
     (name "flowsurface")
-    (version "0.8.10")
+    (version "0.9.0")
     (source
      (origin
        (method git-fetch)
@@ -68,45 +68,15 @@
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1bzxicscm3nk7lrjzxfqc25gjm4rv94q28hypjqvh9immamz8cll"))))
+        (base32 "0767ly82jvqsz08hkkwwg6w4dcv6hqyyfna4llccrpj8kjz2niqi"))))
     (build-system cargo-build-system)
     (arguments
      (list
       #:install-source? #f
       #:tests? #f
-      #:rust rust-1.89
+      #:rust rust-1.95
       #:phases
       #~(modify-phases %standard-phases
-          (add-after 'configure 'patch-git-deps-to-paths
-            (lambda _
-              (define (find-vendor-dir pattern)
-                (let ((dirs (find-files "guix-vendor" pattern
-                                        #:directories? #t
-                                        #:fail-on-error? #f)))
-                  (if (pair? dirs) (car dirs) #f)))
-              (let ((iced-dir (find-vendor-dir "^rust-iced-0\\.14"))
-                    (winit-dir (find-vendor-dir "^rust-winit-0\\.30"))
-                    (cryoglyph-dir (find-vendor-dir "^rust-cryoglyph"))
-                    (cargo-hot-dir (find-vendor-dir "^rust-cargo-hot")))
-                (substitute* "Cargo.toml"
-                  (("iced = \\{ git = [^}]+\\}")
-                   (string-append "iced = { path = \"" iced-dir "\" }"))
-                  (("iced_futures = \\{ git = [^}]+\\}")
-                   (string-append "iced_futures = { path = \"" iced-dir "/futures\" }"))
-                  (("iced_core = \\{ git = [^}]+\\}")
-                   (string-append "iced_core = { path = \"" iced-dir "/core\" }")))
-                (let ((iced-cargo (string-append iced-dir "/Cargo.toml")))
-                  (when (file-exists? iced-cargo)
-                    (substitute* iced-cargo
-                      (("cargo-hot = \\{ package = \"cargo-hot-protocol\", git = [^}]+\\}")
-                       (string-append "cargo-hot = { package = \"cargo-hot-protocol\", path = \"../../"
-                                      cargo-hot-dir "/protocol\" }"))
-                      (("cryoglyph = \\{ git = [^}]+\\}")
-                       (string-append "cryoglyph = { path = \"../../" cryoglyph-dir "\" }"))
-                      (("winit = \\{ git = [^}]+\\}")
-                       (string-append "winit = { path = \"../../" winit-dir "\" }")))))
-                (when (file-exists? "Cargo.lock")
-                  (delete-file "Cargo.lock")))))
           (replace 'install
             (lambda* (#:key inputs outputs #:allow-other-keys)
               (let ((bin (string-append (assoc-ref outputs "out") "/bin")))
