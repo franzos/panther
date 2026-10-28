@@ -87,7 +87,7 @@ OAuth and app-password authentication and secure credential storage.")
 (define-public gh
   (package
     (name "gh")
-    (version "2.103.2")
+    (version "2.103.3")
     (source
      (origin
        (method url-fetch)
@@ -99,8 +99,8 @@ OAuth and app-password authentication and secure credential storage.")
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "1j2rkjsqj440f17wcga396i0pxy8ldkdxzgzgqin3p2x253zgk32")
-           ("aarch64-linux" "0hx4c7px3d660waz124d2ilcgfkqv5fv4scxzsiq3cfq1fjrjgjc"))))))
+           ("x86_64-linux" "07fr7mih1ax8w6jdqymfkgqs8vdcf1nsa0ikhmqfq76fzxw6k02c")
+           ("aarch64-linux" "0qyf0qrpn7q2fzv253ws6bljhn57kjvb9dkcmigpz1684cixycpf"))))))
     (build-system copy-build-system)
     (arguments
      '(#:install-plan
