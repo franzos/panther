@@ -138,13 +138,13 @@ with git and your code.")
 (define-public gitbutler
   (package
     (name "gitbutler")
-    (version "0.22.3")
+    (version "0.23.1")
     (source
      (origin
        (method url-fetch)
        (uri (string-append
              "https://releases.gitbutler.com/releases/release/"
-             version "-3234/linux/"
+             version "-3317/linux/"
              (match (or (%current-system) (%current-target-system))
                ("x86_64-linux" "x86_64")
                ("aarch64-linux" "aarch64"))
@@ -155,14 +155,14 @@ with git and your code.")
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "0g4pqkl3wmhv9jwx1kpmr89sg57b4xv6prsvdny276xxailzm0s5")
-           ("aarch64-linux" "1b1ha8qnzdkk4wmypg816wa9rk16ijmwvg71hkn6cb6p0ysm9x34"))))))
+           ("x86_64-linux" "1b6xskfc87llm17rl5jiygzxwz8qniinch58pxzg2l5g5i4plqrf")
+           ("aarch64-linux" "0d9x84n7apjgil892l1bbn3gbvbiqmp6mhx0xfisqw1i1kspshbm"))))))
     (build-system binary-build-system)
     (arguments
      `(#:patchelf-plan `(("usr/bin/gitbutler-tauri"
                           ("glib" "gtk+" "gdk-pixbuf" "cairo"
                            "webkitgtk-for-gtk3" "libsoup" "dbus" "zlib"
-                           "gcc:lib"))
+                           "libxcb" "libxkbcommon" "gcc:lib"))
                          ("usr/bin/gitbutler-git-askpass"
                           ("gcc:lib" "glibc")))
        #:phases
@@ -230,6 +230,8 @@ with git and your code.")
               ("gcc:lib" ,gcc "lib")
               ("gtk+" ,gtk+)
               ("libsoup" ,libsoup)
+              ("libxcb" ,libxcb)
+              ("libxkbcommon" ,libxkbcommon)
               ("webkitgtk-for-gtk3" ,webkitgtk-for-gtk3)
               ("zlib" ,zlib)))
     (supported-systems '("x86_64-linux" "aarch64-linux"))
