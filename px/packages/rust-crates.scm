@@ -16914,6 +16914,16 @@
     (file-name (git-file-name "rust-librespot-audio" "0.8.0.23fc42c"))
     (sha256 (base32 "0pvgdvl7kyxz8zgbrfwjc1cadhggw2jcms7757j3q15sqymcij4k"))))
 
+(define rust-librespot-audio-0.8.0.3ba977f
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/librespot")
+          (commit "3ba977f1f918582edce566cfc16617f8eccdfb1e")))
+    (file-name (git-file-name "rust-librespot-audio" "0.8.0.3ba977f"))
+    (sha256 (base32 "0v5499c9ha0czhsgk0ysldcrvq1yczvzcxbybbqy9bas081k01sr"))))
+
 (define rust-librespot-audio-0.8.0.8471251
   ;; TODO REVIEW: Define standalone package if this is a workspace.
   (origin
@@ -16943,6 +16953,16 @@
           (commit "23fc42cff37848e51f0d8eaefad1a93941b71e59")))
     (file-name (git-file-name "rust-librespot-connect" "0.8.0.23fc42c"))
     (sha256 (base32 "0pvgdvl7kyxz8zgbrfwjc1cadhggw2jcms7757j3q15sqymcij4k"))))
+
+(define rust-librespot-connect-0.8.0.3ba977f
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/librespot")
+          (commit "3ba977f1f918582edce566cfc16617f8eccdfb1e")))
+    (file-name (git-file-name "rust-librespot-connect" "0.8.0.3ba977f"))
+    (sha256 (base32 "0v5499c9ha0czhsgk0ysldcrvq1yczvzcxbybbqy9bas081k01sr"))))
 
 (define rust-librespot-connect-0.8.0.8471251
   ;; TODO REVIEW: Define standalone package if this is a workspace.
@@ -16974,6 +16994,16 @@
     (file-name (git-file-name "rust-librespot-core" "0.8.0.23fc42c"))
     (sha256 (base32 "0pvgdvl7kyxz8zgbrfwjc1cadhggw2jcms7757j3q15sqymcij4k"))))
 
+(define rust-librespot-core-0.8.0.3ba977f
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/librespot")
+          (commit "3ba977f1f918582edce566cfc16617f8eccdfb1e")))
+    (file-name (git-file-name "rust-librespot-core" "0.8.0.3ba977f"))
+    (sha256 (base32 "0v5499c9ha0czhsgk0ysldcrvq1yczvzcxbybbqy9bas081k01sr"))))
+
 (define rust-librespot-core-0.8.0.8471251
   ;; TODO REVIEW: Define standalone package if this is a workspace.
   (origin
@@ -17003,6 +17033,16 @@
           (commit "23fc42cff37848e51f0d8eaefad1a93941b71e59")))
     (file-name (git-file-name "rust-librespot-metadata" "0.8.0.23fc42c"))
     (sha256 (base32 "0pvgdvl7kyxz8zgbrfwjc1cadhggw2jcms7757j3q15sqymcij4k"))))
+
+(define rust-librespot-metadata-0.8.0.3ba977f
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/librespot")
+          (commit "3ba977f1f918582edce566cfc16617f8eccdfb1e")))
+    (file-name (git-file-name "rust-librespot-metadata" "0.8.0.3ba977f"))
+    (sha256 (base32 "0v5499c9ha0czhsgk0ysldcrvq1yczvzcxbybbqy9bas081k01sr"))))
 
 (define rust-librespot-metadata-0.8.0.8471251
   ;; TODO REVIEW: Define standalone package if this is a workspace.
@@ -17034,6 +17074,16 @@
     (file-name (git-file-name "rust-librespot-oauth" "0.8.0.23fc42c"))
     (sha256 (base32 "0pvgdvl7kyxz8zgbrfwjc1cadhggw2jcms7757j3q15sqymcij4k"))))
 
+(define rust-librespot-oauth-0.8.0.3ba977f
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/librespot")
+          (commit "3ba977f1f918582edce566cfc16617f8eccdfb1e")))
+    (file-name (git-file-name "rust-librespot-oauth" "0.8.0.3ba977f"))
+    (sha256 (base32 "0v5499c9ha0czhsgk0ysldcrvq1yczvzcxbybbqy9bas081k01sr"))))
+
 (define rust-librespot-oauth-0.8.0.8471251
   ;; TODO REVIEW: Define standalone package if this is a workspace.
   (origin
@@ -17064,6 +17114,16 @@
     (file-name (git-file-name "rust-librespot-playback" "0.8.0.23fc42c"))
     (sha256 (base32 "0pvgdvl7kyxz8zgbrfwjc1cadhggw2jcms7757j3q15sqymcij4k"))))
 
+(define rust-librespot-playback-0.8.0.3ba977f
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/librespot")
+          (commit "3ba977f1f918582edce566cfc16617f8eccdfb1e")))
+    (file-name (git-file-name "rust-librespot-playback" "0.8.0.3ba977f"))
+    (sha256 (base32 "0v5499c9ha0czhsgk0ysldcrvq1yczvzcxbybbqy9bas081k01sr"))))
+
 (define rust-librespot-playback-0.8.0.8471251
   ;; TODO REVIEW: Define standalone package if this is a workspace.
   (origin
@@ -17093,6 +17153,16 @@
           (commit "23fc42cff37848e51f0d8eaefad1a93941b71e59")))
     (file-name (git-file-name "rust-librespot-protocol" "0.8.0.23fc42c"))
     (sha256 (base32 "0pvgdvl7kyxz8zgbrfwjc1cadhggw2jcms7757j3q15sqymcij4k"))))
+
+(define rust-librespot-protocol-0.8.0.3ba977f
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/librespot")
+          (commit "3ba977f1f918582edce566cfc16617f8eccdfb1e")))
+    (file-name (git-file-name "rust-librespot-protocol" "0.8.0.3ba977f"))
+    (sha256 (base32 "0v5499c9ha0czhsgk0ysldcrvq1yczvzcxbybbqy9bas081k01sr"))))
 
 (define rust-librespot-protocol-0.8.0.8471251
   ;; TODO REVIEW: Define standalone package if this is a workspace.
@@ -54456,13 +54526,13 @@
                                  rust-libloading-0.8.9
                                  rust-libm-0.2.16
                                  rust-libredox-0.1.20
-                                 rust-librespot-audio-0.8.0.d047290
-                                 rust-librespot-connect-0.8.0.d047290
-                                 rust-librespot-core-0.8.0.d047290
-                                 rust-librespot-metadata-0.8.0.d047290
-                                 rust-librespot-oauth-0.8.0.d047290
-                                 rust-librespot-playback-0.8.0.d047290
-                                 rust-librespot-protocol-0.8.0.d047290
+                                 rust-librespot-audio-0.8.0.3ba977f
+                                 rust-librespot-connect-0.8.0.3ba977f
+                                 rust-librespot-core-0.8.0.3ba977f
+                                 rust-librespot-metadata-0.8.0.3ba977f
+                                 rust-librespot-oauth-0.8.0.3ba977f
+                                 rust-librespot-playback-0.8.0.3ba977f
+                                 rust-librespot-protocol-0.8.0.3ba977f
                                  rust-libspa-0.10.1
                                  rust-libspa-sys-0.10.1
                                  rust-linebender-resource-handle-0.1.1

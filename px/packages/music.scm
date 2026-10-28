@@ -223,7 +223,7 @@ Discord integration, and media key support.")
 (define-public spotifast
   (package
     (name "spotifast")
-    (version "0.14.1")
+    (version "0.14.2")
     (source
      (origin
        (method git-fetch)
@@ -232,7 +232,7 @@ Discord integration, and media key support.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "07g742sx2slwv57g025nicpqs8lprk3pdyvp2zj4grfw7ml8g1s5"))))
+        (base32 "0974r1skpiwnnmzkdffxgv6bp68zk0xgqk0app67bbfr7qz43n1d"))))
     (build-system cargo-build-system)
     (arguments
      (list
