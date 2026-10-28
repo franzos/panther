@@ -49,7 +49,7 @@
 (define-public rapidraw
   (package
     (name "rapidraw")
-    (version "1.6.6")
+    (version "1.6.7")
     (source
      (origin
        (method url-fetch)
@@ -57,13 +57,13 @@
              "https://github.com/CyberTimon/RapidRAW/releases/download/v"
              version "/03_RapidRAW_v" version "_ubuntu-24.04_amd64.deb"))
        (sha256
-        (base32 "0ghgy8jxifv63n8l5b2z3d7cz11mv4hbbbyy3hgg82adh214adc9"))))
+        (base32 "0dckyz2n9p0ydm3s87ha9k3pxaypcfbgkagh0b85i1fjigd07gv0"))))
     (build-system binary-build-system)
     (arguments
      `(#:patchelf-plan `(("usr/bin/RapidRAW"
                           ("glib" "gtk+" "gdk-pixbuf" "cairo"
                            "webkitgtk-for-gtk3" "libsoup" "openssl" "gcc:lib"
-                           "vulkan-loader" "mesa"))
+                           "vulkan-loader" "mesa" "dbus"))
                          ("usr/lib/RapidRAW/resources/libonnxruntime.so"
                           ("gcc:lib" "glibc")))
        #:phases
@@ -131,6 +131,7 @@
     (native-inputs `(("binutils" ,binutils)))
     (inputs `(("bash-minimal" ,bash-minimal)
               ("cairo" ,cairo)
+              ("dbus" ,dbus)
               ("gdk-pixbuf" ,gdk-pixbuf)
               ("glib" ,glib)
               ("glibc" ,glibc)
