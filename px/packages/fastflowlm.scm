@@ -17,6 +17,7 @@
   #:use-module (gnu packages algebra)       ;; fftw
   #:use-module (gnu packages video)         ;; ffmpeg
   #:use-module (gnu packages readline)
+  #:use-module (gnu packages gcc)
   #:use-module (gnu packages libedit)
   #:use-module (gnu packages image)         ;; libjpeg-turbo
   #:use-module (gnu packages xiph)          ;; libogg, libvorbis, opus
@@ -436,14 +437,17 @@ target_link_libraries(flm_image_codecs INTERFACE PkgConfig::FLM_JPEG)
                      (lib (string-append out "/lib"))
                      (xrt-lib (string-append (assoc-ref inputs "xrt")
                                              "/lib"))
+                     (gomp-lib (dirname (search-input-file
+                                         inputs "lib/libgomp.so.1")))
                      (rpath (string-append lib ":" xrt-lib)))
                 ;; Patch the main binary.
                 (when (file-exists? bin)
                   (invoke "patchelf" "--add-rpath" rpath bin))
                 ;; Patch bundled NPU .so files so they find
-                ;; libxrt_coreutil.so.2 at runtime.
+                ;; libxrt_coreutil.so.2 and libgomp.so.1 at runtime.
                 (for-each (lambda (so)
-                            (invoke "patchelf" "--add-rpath" xrt-lib so))
+                            (invoke "patchelf" "--add-rpath"
+                                    (string-append xrt-lib ":" gomp-lib) so))
                           (find-files lib "\\.so$")))))
 
           ;; XRT discovers driver plugins by scanning the same directory
@@ -488,8 +492,8 @@ target_link_libraries(flm_image_codecs INTERFACE PkgConfig::FLM_JPEG)
      (list cmake ninja pkg-config patchelf))
     (inputs
      (list boost curl fftw fftwf fftwl ffmpeg libedit readline ncurses
-           (list util-linux "lib") libdrm libjpeg-turbo libogg libvorbis
-           oniguruma opus
+           (list gcc "lib") (list util-linux "lib") libdrm libjpeg-turbo
+           libogg libvorbis oniguruma opus
            rust-tokenizers-c xrt xrt-plugin-amdxdna))
     (supported-systems '("x86_64-linux"))
     (home-page "https://github.com/FastFlowLM/FastFlowLM")
