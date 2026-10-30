@@ -19,7 +19,7 @@
   #:use-module (gnu packages readline)
   #:use-module (gnu packages gcc)
   #:use-module (gnu packages libedit)
-  #:use-module (gnu packages image)         ;; libjpeg-turbo
+  #:use-module (gnu packages image)         ;; libjpeg-turbo, libwebp
   #:use-module (gnu packages xiph)          ;; libogg, libvorbis, opus
   #:use-module (gnu packages ncurses)
   #:use-module (gnu packages build-tools)
@@ -309,7 +309,7 @@ submodule in FastFlowLM.")
 (define-public fastflowlm
   (package
     (name "fastflowlm")
-    (version "1.0.10")
+    (version "1.0.11")
     (source
      (origin
        (method git-fetch)
@@ -319,7 +319,7 @@ submodule in FastFlowLM.")
              (recursive? #t)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1ikyfmaxnh30nd0ckc69cbcm9k06yqjd2hpfifx2xmwa654sz14m"))))
+        (base32 "16vg6p4mmca1rrg79ns8qzfycq8fzb581l5wl5yk6dmz4fcbsaax"))))
     (build-system cmake-build-system)
     (arguments
      (list
@@ -363,7 +363,7 @@ submodule in FastFlowLM.")
           (add-after 'chdir-to-src 'use-system-codecs
             (lambda _
               ;; Upstream downloads and builds opus, ogg, vorbis and
-              ;; libjpeg-turbo through ExternalProject.
+              ;; libjpeg-turbo and libwebp through ExternalProject.
               (with-output-to-file "cmake/FlmAudioCodecs.cmake"
                 (lambda ()
                   (display "include_guard(GLOBAL)
@@ -378,7 +378,7 @@ set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/../common/audio/audio_deco
                 (lambda ()
                   (display "include_guard(GLOBAL)
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(FLM_JPEG REQUIRED IMPORTED_TARGET libjpeg)
+pkg_check_modules(FLM_JPEG REQUIRED IMPORTED_TARGET libjpeg libwebpdecoder)
 add_library(flm_image_codecs INTERFACE)
 target_sources(flm_image_codecs INTERFACE
     ${CMAKE_CURRENT_LIST_DIR}/../include/lodepng/lodepng.cpp)
@@ -493,7 +493,7 @@ target_link_libraries(flm_image_codecs INTERFACE PkgConfig::FLM_JPEG)
     (inputs
      (list boost curl fftw fftwf fftwl ffmpeg libedit readline ncurses
            (list gcc "lib") (list util-linux "lib") libdrm libjpeg-turbo
-           libogg libvorbis oniguruma opus
+           libogg libvorbis libwebp oniguruma opus
            rust-tokenizers-c xrt xrt-plugin-amdxdna))
     (supported-systems '("x86_64-linux"))
     (home-page "https://github.com/FastFlowLM/FastFlowLM")
