@@ -354,7 +354,7 @@ endif ()\n"
 (define-public slack-desktop
   (package
     (name "slack-desktop")
-    (version "4.52.182")
+    (version "4.53.276")
     (source
      (origin
        (method url-fetch)
@@ -363,7 +363,7 @@ endif ()\n"
          "https://downloads.slack-edge.com/desktop-releases/linux/x64/"
          version "/slack-desktop-" version "-amd64.deb"))
        (sha256
-        (base32 "007pr2mgsdkzi60pspb4yxdgi5qq2cw2w6a5jvbfm9a3l5v9x3sn"))))
+        (base32 "0ip78sz0bi0xb96m11d12g8l7ms4lk53lh6lrq4yzm7znflwcx49"))))
     (supported-systems '("x86_64-linux"))
     (build-system chromium-binary-build-system)
     (arguments
