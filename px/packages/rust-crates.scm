@@ -4670,6 +4670,10 @@
   (crate-source "crc32fast" "1.5.2"
                 "0y0f955n2hr5a8rd9nw9sr23nhjc42ddx3bjc47dnlmqssgpk9q1"))
 
+(define rust-crc32fast-1.5.3
+  (crate-source "crc32fast" "1.5.3"
+                "0m907hccpnpmr4x87ggcq8n5zd3w1d5sqs07q81dqp848kl0d88b"))
+
 (define rust-crevice-notan-0.13.0
   (crate-source "crevice_notan" "0.13.0"
                 "144v5lgh8wxlcf1ldhp443qf8arz26wayzvqvmwplxyflnyb5c0b"))
@@ -7284,6 +7288,16 @@
     (file-name (git-file-name "rust-fastframe-audio" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
 
+(define rust-fastframe-audio-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-audio" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
+
 (define rust-fastframe-audio-0.4.1.23d87e0
   ;; TODO REVIEW: Define standalone package if this is a workspace.
   (origin
@@ -7314,6 +7328,16 @@
     (file-name (git-file-name "rust-fastframe-autostart" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
 
+(define rust-fastframe-autostart-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-autostart" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
+
 (define rust-fastframe-desktop-0.14.0.dfd2db7
   ;; TODO REVIEW: Define standalone package if this is a workspace.
   (origin
@@ -7323,6 +7347,16 @@
           (commit "dfd2db7bc6a5ae0c62a98383c84235f64da2cace")))
     (file-name (git-file-name "rust-fastframe-desktop" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
+
+(define rust-fastframe-desktop-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-desktop" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
 
 (define rust-fastframe-desktop-0.6.0.0d65ca9
   ;; TODO REVIEW: Define standalone package if this is a workspace.
@@ -7344,6 +7378,16 @@
     (file-name (git-file-name "rust-fastframe-dirs" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
 
+(define rust-fastframe-dirs-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-dirs" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
+
 (define rust-fastframe-dock-0.14.0.dfd2db7
   ;; TODO REVIEW: Define standalone package if this is a workspace.
   (origin
@@ -7354,6 +7398,16 @@
     (file-name (git-file-name "rust-fastframe-dock" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
 
+(define rust-fastframe-dock-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-dock" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
+
 (define rust-fastframe-emoji-0.14.0.dfd2db7
   ;; TODO REVIEW: Define standalone package if this is a workspace.
   (origin
@@ -7363,6 +7417,16 @@
           (commit "dfd2db7bc6a5ae0c62a98383c84235f64da2cace")))
     (file-name (git-file-name "rust-fastframe-emoji" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
+
+(define rust-fastframe-emoji-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-emoji" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
 
 (define rust-fastframe-emoji-0.4.1.23d87e0
   ;; TODO REVIEW: Define standalone package if this is a workspace.
@@ -7394,6 +7458,16 @@
     (file-name (git-file-name "rust-fastframe-file" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
 
+(define rust-fastframe-file-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-file" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
+
 (define rust-fastframe-file-0.6.0.0d65ca9
   ;; TODO REVIEW: Define standalone package if this is a workspace.
   (origin
@@ -7413,6 +7487,16 @@
           (commit "dfd2db7bc6a5ae0c62a98383c84235f64da2cace")))
     (file-name (git-file-name "rust-fastframe-fonts" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
+
+(define rust-fastframe-fonts-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-fonts" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
 
 (define rust-fastframe-fonts-0.4.1.23d87e0
   ;; TODO REVIEW: Define standalone package if this is a workspace.
@@ -7434,6 +7518,16 @@
     (file-name (git-file-name "rust-fastframe-fonts" "0.6.0.0d65ca9"))
     (sha256 (base32 "0g4swanqmhwv4yfc8bdmzmkinm1m50wcssdarkn95imnnz26wrn0"))))
 
+(define rust-fastframe-graphics-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-graphics" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
+
 (define rust-fastframe-i18n-0.14.0.dfd2db7
   ;; TODO REVIEW: Define standalone package if this is a workspace.
   (origin
@@ -7443,6 +7537,16 @@
           (commit "dfd2db7bc6a5ae0c62a98383c84235f64da2cace")))
     (file-name (git-file-name "rust-fastframe-i18n" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
+
+(define rust-fastframe-i18n-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-i18n" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
 
 (define rust-fastframe-i18n-0.4.1.23d87e0
   ;; TODO REVIEW: Define standalone package if this is a workspace.
@@ -7474,6 +7578,16 @@
     (file-name (git-file-name "rust-fastframe-icons" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
 
+(define rust-fastframe-icons-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-icons" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
+
 (define rust-fastframe-icons-0.4.1.23d87e0
   ;; TODO REVIEW: Define standalone package if this is a workspace.
   (origin
@@ -7504,6 +7618,16 @@
     (file-name (git-file-name "rust-fastframe-instance" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
 
+(define rust-fastframe-instance-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-instance" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
+
 (define rust-fastframe-instance-0.4.1.23d87e0
   ;; TODO REVIEW: Define standalone package if this is a workspace.
   (origin
@@ -7533,6 +7657,16 @@
           (commit "dfd2db7bc6a5ae0c62a98383c84235f64da2cace")))
     (file-name (git-file-name "rust-fastframe-log" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
+
+(define rust-fastframe-log-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-log" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
 
 (define rust-fastframe-log-0.4.1.23d87e0
   ;; TODO REVIEW: Define standalone package if this is a workspace.
@@ -7574,6 +7708,16 @@
     (file-name (git-file-name "rust-fastframe-now-playing" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
 
+(define rust-fastframe-now-playing-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-now-playing" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
+
 (define rust-fastframe-now-playing-0.4.1.23d87e0
   ;; TODO REVIEW: Define standalone package if this is a workspace.
   (origin
@@ -7604,6 +7748,16 @@
     (file-name (git-file-name "rust-fastframe-power" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
 
+(define rust-fastframe-power-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-power" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
+
 (define rust-fastframe-power-0.6.0.0d65ca9
   ;; TODO REVIEW: Define standalone package if this is a workspace.
   (origin
@@ -7623,6 +7777,16 @@
           (commit "dfd2db7bc6a5ae0c62a98383c84235f64da2cace")))
     (file-name (git-file-name "rust-fastframe-scroll" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
+
+(define rust-fastframe-scroll-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-scroll" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
 
 (define rust-fastframe-scroll-0.4.1.23d87e0
   ;; TODO REVIEW: Define standalone package if this is a workspace.
@@ -7654,6 +7818,16 @@
     (file-name (git-file-name "rust-fastframe-shell" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
 
+(define rust-fastframe-shell-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-shell" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
+
 (define rust-fastframe-shell-0.4.1.23d87e0
   ;; TODO REVIEW: Define standalone package if this is a workspace.
   (origin
@@ -7683,6 +7857,16 @@
           (commit "dfd2db7bc6a5ae0c62a98383c84235f64da2cace")))
     (file-name (git-file-name "rust-fastframe-text" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
+
+(define rust-fastframe-text-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-text" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
 
 (define rust-fastframe-text-0.4.1.23d87e0
   ;; TODO REVIEW: Define standalone package if this is a workspace.
@@ -7714,6 +7898,16 @@
     (file-name (git-file-name "rust-fastframe-theme" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
 
+(define rust-fastframe-theme-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-theme" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
+
 (define rust-fastframe-theme-0.4.1.23d87e0
   ;; TODO REVIEW: Define standalone package if this is a workspace.
   (origin
@@ -7744,6 +7938,16 @@
     (file-name (git-file-name "rust-fastframe-titlebar" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
 
+(define rust-fastframe-titlebar-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-titlebar" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
+
 (define rust-fastframe-titlebar-0.6.0.0d65ca9
   ;; TODO REVIEW: Define standalone package if this is a workspace.
   (origin
@@ -7763,6 +7967,16 @@
           (commit "dfd2db7bc6a5ae0c62a98383c84235f64da2cace")))
     (file-name (git-file-name "rust-fastframe-tray" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
+
+(define rust-fastframe-tray-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-tray" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
 
 (define rust-fastframe-tray-0.4.1.23d87e0
   ;; TODO REVIEW: Define standalone package if this is a workspace.
@@ -7793,6 +8007,16 @@
           (commit "dfd2db7bc6a5ae0c62a98383c84235f64da2cace")))
     (file-name (git-file-name "rust-fastframe-update" "0.14.0.dfd2db7"))
     (sha256 (base32 "0fz41csd2byg6nb80586vdn5rhv12knkkhyrkblbbb7h1pyym9kc"))))
+
+(define rust-fastframe-update-0.15.2.4d115b5
+  ;; TODO REVIEW: Define standalone package if this is a workspace.
+  (origin
+    (method git-fetch)
+    (uri (git-reference
+          (url "https://github.com/crmne/fastframe")
+          (commit "4d115b5e5838c207c0879205e6b1bc16fc1e9a9c")))
+    (file-name (git-file-name "rust-fastframe-update" "0.15.2.4d115b5"))
+    (sha256 (base32 "1vpw81gz2dg11gdnwzi6hq4i5wy65nnbqry6xmgz0j14abj7ds5i"))))
 
 (define rust-fastframe-update-0.4.1.23d87e0
   ;; TODO REVIEW: Define standalone package if this is a workspace.
@@ -15933,6 +16157,10 @@
   (crate-source "keyring-core" "1.0.0"
                 "17gwl3fn198sxqx2bwbbaywmd82i8yfk7l0b26m5376ab0a647pv"))
 
+(define rust-keyring-core-1.0.1
+  (crate-source "keyring-core" "1.0.1"
+                "0ngvdsy2x3pww65dyyw3y5splyfs38d39krqby96g319a6sz9yr9"))
+
 (define rust-keyring-lib-1.0.2
   (crate-source "keyring-lib" "1.0.2"
                 "062jjqr9l7xs8cxnb6cvns32mkb4cyvqcyq4qr8kvwv5qic1b4jn"))
@@ -18230,6 +18458,10 @@
   (crate-source "mdns-sd" "0.21.0"
                 "19al59jb3r50011gr7wicv41l09w0s90s4l86f1c58zfhv4b95xs"))
 
+(define rust-mdns-sd-0.21.6
+  (crate-source "mdns-sd" "0.21.6"
+                "0qdi6wnylcp92l7p9qqwp8q47yd2cv1vgmdhwjy9qapp213naql5"))
+
 (define rust-measure-time-0.9.0
   (crate-source "measure_time" "0.9.0"
                 "03pw6ni975lmm16fkr4ajwvxp161yhbgmicn8dqaphrgwxhmviai"))
@@ -18305,6 +18537,10 @@
 (define rust-memmap2-0.9.11
   (crate-source "memmap2" "0.9.11"
                 "1h4qnzgarnn488ljjpg9ns5y4bw0sq0xv0fj0iqywagjnz8rw8fi"))
+
+(define rust-memmap2-0.9.12
+  (crate-source "memmap2" "0.9.12"
+                "0my158ms3h2akj1l8bzabwjz1v9jkw8klcg82am2bk4yb8as233b"))
 
 (define rust-memmap2-0.9.5
   (crate-source "memmap2" "0.9.5"
@@ -20036,6 +20272,10 @@
 (define rust-open-5.4.4
   (crate-source "open" "5.4.4"
                 "1g7ffnbgl46s9nkwl8lxxwrpii1nfgk63066xj780yrb61v6qmxa"))
+
+(define rust-open-5.4.5
+  (crate-source "open" "5.4.5"
+                "15faqj24cm451lhj148x9xxhlji9ckqb4vl9sq269ljsfa78p34d"))
 
 (define rust-opener-0.8.3
   (crate-source "opener" "0.8.3"
@@ -29775,6 +30015,10 @@
   (crate-source "typed-path" "0.12.3"
                 "03k051dafrnyg3lbm4c85zg0mpfhbn6l9aq4ryq8yyy8h2dzha4f"))
 
+(define rust-typed-path-0.13.0
+  (crate-source "typed-path" "0.13.0"
+                "07jy8i3k23d02g9g30xyr5f0mbxijjb38brdcqlg1l4c7n19is4w"))
+
 (define rust-typeid-1.0.2
   (crate-source "typeid" "1.0.2"
                 "0vi32jv3s3nbybbl4r317wi2bk8j4fx4d8p88jji8pnd1hpdn4qf"))
@@ -34252,6 +34496,10 @@
 (define rust-zip-9.0.1
   (crate-source "zip" "9.0.1"
                 "14h6arg4p36406y3qxwbjkdph1cfyc2zwdhxcpfmak23qilxx6p4"))
+
+(define rust-zip-9.1.3
+  (crate-source "zip" "9.1.3"
+                "1jvcwaz17n4nywi03bggyw5pdcqcbr2m02iiqacvjd1a2jfv6mhi"))
 
 (define rust-zlib-rs-0.5.2
   (crate-source "zlib-rs" "0.5.2"
@@ -54289,6 +54537,7 @@
                                  rust-atspi-proxies-0.13.0
                                  rust-autocfg-1.5.1
                                  rust-base64-0.22.1
+                                 rust-base64-0.23.1
                                  rust-base64ct-1.8.3
                                  rust-bindgen-0.70.1
                                  rust-bindgen-0.72.1
@@ -54325,9 +54574,9 @@
                                  rust-cipher-0.4.4
                                  rust-cipher-0.5.2
                                  rust-clang-sys-1.9.1
-                                 rust-clap-4.6.6
-                                 rust-clap-builder-4.6.6
-                                 rust-clap-derive-4.6.4
+                                 rust-clap-4.6.7
+                                 rust-clap-builder-4.6.7
+                                 rust-clap-derive-4.6.7
                                  rust-clap-lex-1.1.0
                                  rust-clipboard-win-5.4.1
                                  rust-cmake-0.1.58
@@ -54356,7 +54605,7 @@
                                  rust-cpubits-0.1.1
                                  rust-cpufeatures-0.2.17
                                  rust-cpufeatures-0.3.0
-                                 rust-crc32fast-1.5.1
+                                 rust-crc32fast-1.5.3
                                  rust-crossbeam-channel-0.5.16
                                  rust-crossbeam-utils-0.8.22
                                  rust-crunchy-0.2.4
@@ -54418,33 +54667,35 @@
                                  rust-euclid-0.22.14
                                  rust-event-listener-5.4.2
                                  rust-event-listener-strategy-0.5.4
-                                 rust-fastframe-audio-0.14.0.dfd2db7
-                                 rust-fastframe-autostart-0.14.0.dfd2db7
-                                 rust-fastframe-desktop-0.14.0.dfd2db7
-                                 rust-fastframe-dirs-0.14.0.dfd2db7
-                                 rust-fastframe-dock-0.14.0.dfd2db7
-                                 rust-fastframe-emoji-0.14.0.dfd2db7
-                                 rust-fastframe-file-0.14.0.dfd2db7
-                                 rust-fastframe-fonts-0.14.0.dfd2db7
-                                 rust-fastframe-i18n-0.14.0.dfd2db7
-                                 rust-fastframe-icons-0.14.0.dfd2db7
-                                 rust-fastframe-instance-0.14.0.dfd2db7
-                                 rust-fastframe-log-0.14.0.dfd2db7
-                                 rust-fastframe-now-playing-0.14.0.dfd2db7
-                                 rust-fastframe-power-0.14.0.dfd2db7
-                                 rust-fastframe-scroll-0.14.0.dfd2db7
-                                 rust-fastframe-shell-0.14.0.dfd2db7
-                                 rust-fastframe-text-0.14.0.dfd2db7
-                                 rust-fastframe-theme-0.14.0.dfd2db7
-                                 rust-fastframe-titlebar-0.14.0.dfd2db7
-                                 rust-fastframe-tray-0.14.0.dfd2db7
-                                 rust-fastframe-update-0.14.0.dfd2db7
+                                 rust-fastframe-audio-0.15.2.4d115b5
+                                 rust-fastframe-autostart-0.15.2.4d115b5
+                                 rust-fastframe-desktop-0.15.2.4d115b5
+                                 rust-fastframe-dirs-0.15.2.4d115b5
+                                 rust-fastframe-dock-0.15.2.4d115b5
+                                 rust-fastframe-emoji-0.15.2.4d115b5
+                                 rust-fastframe-file-0.15.2.4d115b5
+                                 rust-fastframe-fonts-0.15.2.4d115b5
+                                 rust-fastframe-graphics-0.15.2.4d115b5
+                                 rust-fastframe-i18n-0.15.2.4d115b5
+                                 rust-fastframe-icons-0.15.2.4d115b5
+                                 rust-fastframe-instance-0.15.2.4d115b5
+                                 rust-fastframe-log-0.15.2.4d115b5
+                                 rust-fastframe-now-playing-0.15.2.4d115b5
+                                 rust-fastframe-power-0.15.2.4d115b5
+                                 rust-fastframe-scroll-0.15.2.4d115b5
+                                 rust-fastframe-shell-0.15.2.4d115b5
+                                 rust-fastframe-text-0.15.2.4d115b5
+                                 rust-fastframe-theme-0.15.2.4d115b5
+                                 rust-fastframe-titlebar-0.15.2.4d115b5
+                                 rust-fastframe-tray-0.15.2.4d115b5
+                                 rust-fastframe-update-0.15.2.4d115b5
                                  rust-fastrand-2.5.0
                                  rust-fax-0.2.7
                                  rust-fdeflate-0.3.7
                                  rust-fearless-simd-0.4.1
+                                 rust-filetime-0.2.29
                                  rust-find-msvc-tools-0.1.11
-                                 rust-flate2-1.1.9
+                                 rust-flate2-1.1.10
                                  rust-float-cmp-0.9.0
                                  rust-flume-0.12.0
                                  rust-fnv-1.0.7
@@ -54507,7 +54758,7 @@
                                  rust-hyper-1.11.0
                                  rust-hyper-proxy2-0.1.0.efca481
                                  rust-hyper-rustls-0.27.9
-                                 rust-hyper-util-0.1.20
+                                 rust-hyper-util-0.1.21
                                  rust-iana-time-zone-0.1.65
                                  rust-iana-time-zone-haiku-0.1.2
                                  rust-icu-collections-2.3.0
@@ -54537,9 +54788,9 @@
                                  rust-itertools-0.13.0
                                  rust-itertools-0.15.0
                                  rust-itoa-1.0.18
-                                 rust-jiff-0.2.35
+                                 rust-jiff-0.2.38
                                  rust-jiff-core-0.1.0
-                                 rust-jiff-static-0.2.35
+                                 rust-jiff-static-0.2.38
                                  rust-jiff-tzdb-0.1.8
                                  rust-jiff-tzdb-platform-0.1.3
                                  rust-jni-0.22.4
@@ -54550,7 +54801,7 @@
                                  rust-jobserver-0.1.35
                                  rust-js-sys-0.3.104
                                  rust-keyboard-types-0.8.3
-                                 rust-keyring-core-1.0.0
+                                 rust-keyring-core-1.0.1
                                  rust-khronos-api-3.1.0
                                  rust-kqueue-1.2.1
                                  rust-kqueue-sys-1.1.2
@@ -54584,14 +54835,15 @@
                                  rust-mach2-0.6.0
                                  rust-malloc-buf-0.0.6
                                  rust-md-5-0.10.6
-                                 rust-mdns-sd-0.21.0
+                                 rust-mdns-sd-0.21.6
                                  rust-memchr-2.8.3
-                                 rust-memmap2-0.9.11
+                                 rust-memmap2-0.9.12
                                  rust-memoffset-0.9.1
                                  rust-mime-0.3.17
                                  rust-mime-guess2-2.3.1
                                  rust-minimal-lexical-0.2.1
                                  rust-miniz-oxide-0.8.9
+                                 rust-miniz-oxide-0.9.1
                                  rust-mio-1.2.2
                                  rust-moxcms-0.8.1
                                  rust-mpris-server-0.10.0
@@ -54601,6 +54853,7 @@
                                  rust-ndk-0.9.0
                                  rust-ndk-context-0.1.1
                                  rust-ndk-sys-0.6.0+11769913
+                                 rust-nix-0.31.3
                                  rust-nohash-hasher-0.2.0
                                  rust-nom-7.1.3
                                  rust-nom-8.0.0
@@ -54626,7 +54879,7 @@
                                  rust-objc-0.2.7
                                  rust-objc-sys-0.3.5
                                  rust-objc2-0.5.2
-                                 rust-objc2-0.6.4
+                                 rust-objc2-0.6.5
                                  rust-objc2-app-kit-0.2.2
                                  rust-objc2-app-kit-0.3.2
                                  rust-objc2-audio-toolbox-0.3.2
@@ -54660,7 +54913,7 @@
                                  rust-objc2-user-notifications-0.3.2
                                  rust-once-cell-1.21.4
                                  rust-once-cell-polyfill-1.70.2
-                                 rust-open-5.4.2
+                                 rust-open-5.4.5
                                  rust-openssl-probe-0.2.1
                                  rust-option-ext-0.2.0
                                  rust-orbclient-0.3.55
@@ -54760,10 +55013,10 @@
                                  rust-rustc-version-0.4.1
                                  rust-rustix-0.38.44
                                  rust-rustix-1.1.4
-                                 rust-rustls-0.23.45
+                                 rust-rustls-0.23.46
                                  rust-rustls-native-certs-0.8.4
                                  rust-rustls-pki-types-1.15.1
-                                 rust-rustls-webpki-0.103.15
+                                 rust-rustls-webpki-0.103.16
                                  rust-rustversion-1.0.23
                                  rust-ryu-1.0.23
                                  rust-same-file-1.0.6
@@ -54835,6 +55088,7 @@
                                  rust-system-configuration-0.7.0
                                  rust-system-configuration-sys-0.6.0
                                  rust-system-deps-7.0.8
+                                 rust-tar-0.4.46
                                  rust-target-lexicon-0.13.5
                                  rust-tempfile-3.27.0
                                  rust-thiserror-1.0.69
@@ -54850,7 +55104,7 @@
                                  rust-tinystr-0.8.4
                                  rust-tinyvec-1.12.0
                                  rust-tinyvec-macros-0.1.1
-                                 rust-tokio-1.53.1
+                                 rust-tokio-1.53.3
                                  rust-tokio-macros-2.7.2
                                  rust-tokio-rustls-0.26.4
                                  rust-tokio-stream-0.1.19
@@ -54875,6 +55129,7 @@
                                  rust-ttf-parser-0.25.1
                                  rust-tungstenite-0.28.0
                                  rust-type-map-0.5.1
+                                 rust-typed-path-0.13.0
                                  rust-typeid-1.0.3
                                  rust-typenum-1.20.1
                                  rust-uds-windows-1.2.1
@@ -54957,7 +55212,6 @@
                                  rust-windows-strings-0.4.2
                                  rust-windows-strings-0.5.1
                                  rust-windows-sys-0.52.0
-                                 rust-windows-sys-0.59.0
                                  rust-windows-sys-0.60.2
                                  rust-windows-sys-0.61.2
                                  rust-windows-targets-0.42.2
@@ -55019,6 +55273,8 @@
                                  rust-zerotrie-0.2.5
                                  rust-zerovec-0.11.8
                                  rust-zerovec-derive-0.11.6
+                                 rust-zip-9.1.3
+                                 rust-zlib-rs-0.6.8
                                  rust-zmij-1.0.23
                                  rust-zune-core-0.5.3
                                  rust-zune-jpeg-0.5.15
