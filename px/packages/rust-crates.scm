@@ -19250,6 +19250,10 @@
   (crate-source "notify" "8.2.0"
                 "1hrb83451vm5cpjw83nz5skgwjg5ara28zq8nxsqbzsif690fgad"))
 
+(define rust-notify-8.2.1
+  (crate-source "notify" "8.2.1"
+                "0x2651clb8sbwaifxv7lk2a7xgi597h89y6k2rad6xdw5xq15y42"))
+
 (define rust-notify-debouncer-full-0.6.0
   (crate-source "notify-debouncer-full" "0.6.0"
                 "0y50dx3bl46qbh2pqqfzg5dvbgscvwisdr406kzzwyxy72hx6nrp"))
@@ -19696,6 +19700,10 @@
 (define rust-objc2-core-location-0.3.2
   (crate-source "objc2-core-location" "0.3.2"
                 "02908pp1knq64wjq07zd6q2z77qppdpd7l2z0by77jabw8a74d6a"))
+
+(define rust-objc2-core-services-0.3.2
+  (crate-source "objc2-core-services" "0.3.2"
+                "02vaw24fbddp4767999rdg5gfw60xi8ygbljabzj9fjcjfnh0csq"))
 
 (define rust-objc2-core-text-0.3.2
   (crate-source "objc2-core-text" "0.3.2"
@@ -21992,6 +22000,10 @@
 (define rust-pulldown-cmark-0.13.4
   (crate-source "pulldown-cmark" "0.13.4"
                 "0kii5zdm7nvdjh7rjkjpvxd0sx1cyd21p0qijmgiq1z7m3mniw79"))
+
+(define rust-pulldown-cmark-0.13.5
+  (crate-source "pulldown-cmark" "0.13.5"
+                "1srnmdrvqd4g7539c04rxdak4fm91gck8v545n54k7ivr5l953i7"))
 
 (define rust-pulldown-cmark-0.9.6
   (crate-source "pulldown-cmark" "0.9.6"
@@ -25868,6 +25880,10 @@
 (define rust-smallvec-1.16.3
   (crate-source "smallvec" "1.16.3"
                 "06z0akmcq2zc9qg22dxda298p50gg3di5ggl3y2nllag8ypwhgav"))
+
+(define rust-smallvec-1.16.4
+  (crate-source "smallvec" "1.16.4"
+                "1j772prjisi2872lxry7d9fkss3dfbjwl16jmsvvp2qvk2qx9mfh"))
 
 (define rust-smartstring-1.0.1
   (crate-source "smartstring" "1.0.1"
@@ -37386,7 +37402,6 @@
                                  rust-foldhash-0.2.0
                                  rust-form-urlencoded-1.2.2
                                  rust-fs-extra-1.3.0
-                                 rust-fsevent-sys-4.1.0
                                  rust-funty-2.0.0
                                  rust-futures-0.3.32
                                  rust-futures-channel-0.3.32
@@ -37500,7 +37515,7 @@
                                  rust-multiversion-no-op-1.0.0
                                  rust-newtype-uuid-1.3.2
                                  rust-nix-0.31.2
-                                 rust-notify-8.2.0
+                                 rust-notify-8.2.1
                                  rust-notify-types-2.0.0
                                  rust-nu-ansi-term-0.50.0
                                  rust-num-bigint-0.5.1
@@ -37510,6 +37525,8 @@
                                  rust-num-enum-0.7.6
                                  rust-num-enum-derive-0.7.6
                                  rust-num-threads-0.1.7
+                                 rust-objc2-core-foundation-0.3.2
+                                 rust-objc2-core-services-0.3.2
                                  rust-object-0.37.3
                                  rust-once-cell-1.21.4
                                  rust-oneshot-0.2.1
@@ -37558,7 +37575,7 @@
                                  rust-proc-macro-error-attr3-3.1.1
                                  rust-proc-macro-error3-3.1.1
                                  rust-proc-macro2-1.0.107
-                                 rust-pulldown-cmark-0.13.3
+                                 rust-pulldown-cmark-0.13.5
                                  rust-pulldown-cmark-escape-0.11.0
                                  rust-quick-junit-0.6.0
                                  rust-quick-xml-0.38.4
@@ -37623,12 +37640,10 @@
                                  rust-salsa-macro-rules-0.28.5
                                  rust-salsa-macros-0.28.5
                                  rust-same-file-1.0.6
-                                 rust-scc-2.4.0
                                  rust-schannel-0.1.30
                                  rust-schemars-1.2.2
                                  rust-schemars-derive-1.2.2
                                  rust-scopeguard-1.1.0
-                                 rust-sdd-3.0.10
                                  rust-security-framework-3.7.0
                                  rust-security-framework-sys-2.17.0
                                  rust-seize-0.5.0
@@ -37641,12 +37656,12 @@
                                  rust-serde-core-1.0.229
                                  rust-serde-derive-1.0.229
                                  rust-serde-derive-internals-0.30.0
-                                 rust-serde-json-1.0.151
+                                 rust-serde-json-1.0.154
                                  rust-serde-spanned-1.1.1
                                  rust-serde-test-1.0.177
                                  rust-serde-yaml-0.9.34+deprecated
-                                 rust-serial-test-3.3.1
-                                 rust-serial-test-derive-3.3.1
+                                 rust-serial-test-3.5.0
+                                 rust-serial-test-derive-3.5.0
                                  rust-sharded-slab-0.1.4
                                  rust-shlex-2.0.1
                                  rust-signal-hook-registry-1.4.1
@@ -37657,7 +37672,7 @@
                                  rust-siphasher-1.0.1
                                  rust-slab-0.4.11
                                  rust-small-btree-0.1.0
-                                 rust-smallvec-1.16.2
+                                 rust-smallvec-1.16.4
                                  rust-socket2-0.6.3
                                  rust-socks-0.3.4
                                  rust-spin-0.9.9
