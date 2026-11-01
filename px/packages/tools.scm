@@ -255,7 +255,7 @@ and hexdump generation through an interactive command-line environment.")
 (define-public broot
   (package
     (name "broot")
-    (version "1.61.0")
+    (version "1.62.0")
     (source
      (origin
        (method url-fetch)
@@ -263,11 +263,18 @@ and hexdump generation through an interactive command-line environment.")
                            version ".tar.gz"))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "0r62agknbbnz68zrnxm01hdiflyg6ay1v6wfc5ib1qwgszjip3s5"))))
+        (base32 "1fhn2z69hxxh65g620v3glird9ywz7hy1x71w9zycpzlxsk4ad3w"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
-       #:tests? #t))
+       #:tests? #t
+       #:cargo-test-flags
+       ;; Expects ~ to resolve to an existing $HOME.
+       '("--" "--skip=verb::execution_builder_tests::tilde_tokens")
+       #:phases
+       (modify-phases %standard-phases
+         ;; The winapi *-windows-gnu crates ship prebuilt .a files.
+         (delete 'check-for-pregenerated-files))))
     (inputs
      (px-cargo-inputs 'broot))
     (home-page "https://dystroy.org/broot")

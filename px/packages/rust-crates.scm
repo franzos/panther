@@ -5930,6 +5930,10 @@
   (crate-source "doc-comment" "0.3.4"
                 "1j8jbrw8335hciwn3h2idkfc3kmx3pfn0sxcwjw1m8lmn6w5a2bq"))
 
+(define rust-doctest-file-1.1.1
+  (crate-source "doctest-file" "1.1.1"
+                "0nfkscv8gf3ixhradrmwm3f2p6sc0ab0psah7c8976ha9zkh9ny2"))
+
 (define rust-document-features-0.2.10
   (crate-source "document-features" "0.2.10"
                 "182h528pjyv4ppil2pd2nir46qrb393x5kvm4y51yhnjmgm6jsfb"))
@@ -14714,6 +14718,10 @@
   (crate-source "interprocess" "1.2.1"
                 "1yrq3xmyf8c506z2fkiyqcxiqv21rap72fz6npizybz47czm7wl1"))
 
+(define rust-interprocess-2.4.4
+  (crate-source "interprocess" "2.4.4"
+                "12j7jwcv4qxa5k7p954i2szx3xkmxx70bzsvm7sg13jyybxjzc3c"))
+
 (define rust-interval-heap-0.0.5
   (crate-source "interval-heap" "0.0.5"
                 "1ikap3f0lkb0qx8r20caniwqg6bfcav10afwzry61f49irg4w9qi"))
@@ -23036,6 +23044,10 @@
 (define rust-reborrow-0.5.5
   (crate-source "reborrow" "0.5.5"
                 "0c14ccj3fdf47a1ya21bkxqv7s2hxrcfhaw98aqd6jqg029i2983"))
+
+(define rust-recvmsg-1.0.0
+  (crate-source "recvmsg" "1.0.0"
+                "0xa173gbg1cx8q7wyzi6c4kmcsz5rka68r4jb6kg14icskax9vfk"))
 
 (define rust-redb-1.5.1
   (crate-source "redb" "1.5.1"
@@ -37903,7 +37915,6 @@
                                   rust-crossterm-winapi-0.9.1
                                   rust-crunchy-0.2.4
                                   rust-crypto-common-0.1.7
-                                  rust-custom-error-1.9.2
                                   rust-dashmap-6.2.1
                                   rust-data-url-0.3.2
                                   rust-defmt-0.3.100
@@ -37917,6 +37928,7 @@
                                   rust-digest-0.10.7
                                   rust-directories-4.0.1
                                   rust-dirs-sys-0.3.7
+                                  rust-doctest-file-1.1.1
                                   rust-document-features-0.2.12
                                   rust-dunce-1.0.5
                                   rust-either-1.18.0
@@ -38031,6 +38043,7 @@
                                   rust-inotify-0.11.5
                                   rust-inotify-sys-0.1.8
                                   rust-interpolate-name-0.2.4
+                                  rust-interprocess-2.4.4
                                   rust-io-kit-sys-0.5.0
                                   rust-is-executable-1.0.6
                                   rust-is-terminal-polyfill-1.70.2
@@ -38155,6 +38168,7 @@
                                   rust-rayon-core-1.13.0
                                   rust-read-fonts-0.41.0
                                   rust-reborrow-0.5.5
+                                  rust-recvmsg-1.0.0
                                   rust-redox-syscall-0.5.18
                                   rust-redox-users-0.4.6
                                   rust-ref-cast-1.0.27
@@ -38259,6 +38273,7 @@
                                   rust-weezl-0.1.12
                                   rust-which-4.4.2
                                   rust-wide-1.7.1
+                                  rust-widestring-1.2.1
                                   rust-winapi-0.3.9
                                   rust-winapi-i686-pc-windows-gnu-0.4.0
                                   rust-winapi-util-0.1.11
