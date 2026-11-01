@@ -520,7 +520,7 @@ pricing, and shows aggregated reports by day, month, session, or model.")
   (package
     (inherit onnxruntime)
     (name "onnxruntime")
-    (version "1.31.0")
+    (version "1.31.1")
     (source
      (origin
        (method git-fetch)
@@ -529,7 +529,7 @@ pricing, and shows aggregated reports by day, month, session, or model.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1k13wf6s2rqmx2510pwddyc8ap3r1264pa5hc6ilj07ixkp2zahk"))))
+        (base32 "0ncmqrpj1sscmwva9hpyii7p87b1q5xglxq3938lz795zgbysff1"))))
     (build-system cmake-build-system)
     (arguments
      (list
