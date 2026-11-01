@@ -40787,8 +40787,8 @@
                                      rust-assert-json-diff-2.0.2
                                      rust-async-trait-0.1.91
                                      rust-atomic-waker-1.1.2
-                                     rust-aws-lc-rs-1.17.3
-                                     rust-aws-lc-sys-0.43.0
+                                     rust-aws-lc-rs-1.18.1
+                                     rust-aws-lc-sys-0.45.0
                                      rust-base64-0.22.1
                                      rust-base64-0.23.0
                                      rust-base64ct-1.8.3
@@ -40897,7 +40897,7 @@
                                      rust-potential-utf-0.1.5
                                      rust-proc-macro2-1.0.107
                                      rust-quinn-0.11.11
-                                     rust-quinn-proto-0.11.16
+                                     rust-quinn-proto-0.11.19
                                      rust-quinn-udp-0.5.15
                                      rust-quote-1.0.47
                                      rust-r-efi-6.0.0
@@ -40915,12 +40915,12 @@
                                      rust-rustc-hash-2.1.3
                                      rust-rustc-version-0.4.1
                                      rust-rustix-1.1.4
-                                     rust-rustls-0.23.43
+                                     rust-rustls-0.23.46
                                      rust-rustls-native-certs-0.8.4
                                      rust-rustls-pki-types-1.15.1
                                      rust-rustls-platform-verifier-0.7.0
                                      rust-rustls-platform-verifier-android-0.1.1
-                                     rust-rustls-webpki-0.103.13
+                                     rust-rustls-webpki-0.103.15
                                      rust-rustversion-1.0.23
                                      rust-same-file-1.0.6
                                      rust-schannel-0.1.29
