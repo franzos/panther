@@ -316,7 +316,7 @@ Python and uses Qt for its interface.")
 (define-public gitkraken
   (package
     (name "gitkraken")
-    (version "12.6.0")
+    (version "12.6.1")
     (source
      (origin
        (method url-fetch)
@@ -325,7 +325,7 @@ Python and uses Qt for its interface.")
              version "/gitkraken-amd64.deb"))
        (file-name (string-append name "-" version ".deb"))
        (sha256
-        (base32 "0w5kqqgzcpskw2wkwgjbanjq1dd6kassfxml08avg75rqgzpiqp2"))))
+        (base32 "1fhgy6h9f9ffly46382xlkridwamiwgwgkfggv10maik3adx7hl3"))))
     (supported-systems '("x86_64-linux"))
     (build-system chromium-binary-build-system)
     (arguments
