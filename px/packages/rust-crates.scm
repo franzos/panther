@@ -21857,6 +21857,10 @@
     (file-name (git-file-name "rust-projectm-sys" "1.2.3.93852ff"))
     (sha256 (base32 "1xfsjxk3hfqg2mm2a6m6f40abv8v5bs9vln188fxsiabyb0a5ap6"))))
 
+(define rust-prometheus-0.14.0
+  (crate-source "prometheus" "0.14.0"
+                "0fpl98whrg5j4bpb3qfswii4yfa58zws7rl7rnd0m58bimnk599w"))
+
 (define rust-proptest-1.10.0
   (crate-source "proptest" "1.10.0"
                 "0ch5r381al5z7089j47gkyybzbgygkgld5bzfg019vxcznrnqmip"))
@@ -36619,6 +36623,9 @@
                               rust-prettyplease-0.3.0
                               rust-proc-macro-crate-3.5.0
                               rust-proc-macro2-1.0.107
+                              rust-prometheus-0.14.0
+                              rust-protobuf-3.7.2
+                              rust-protobuf-support-3.7.2
                               rust-pulldown-cmark-0.9.6
                               rust-quanta-0.12.6
                               rust-quick-xml-0.36.2
@@ -36821,7 +36828,6 @@
                               rust-web-atoms-0.3.0
                               rust-webpki-root-certs-1.0.9
                               rust-webpki-roots-1.0.9
-                              rust-whichlang-0.1.1
                               rust-widestring-1.2.1
                               rust-wildmatch-2.6.1
                               rust-winapi-0.3.9
