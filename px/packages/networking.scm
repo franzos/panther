@@ -912,7 +912,7 @@ redirector is not included.")
 (define-public mitmproxy
   (package
     (name "mitmproxy")
-    (version "12.2.3")
+    (version "12.3.1")
     (source
      (origin
        (method git-fetch)
@@ -921,7 +921,7 @@ redirector is not included.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "15nz1dmgz9qjhg6wmgxxzg4rgvawpmzlg8f6cm7aqn566ld3q0v2"))))
+        (base32 "0lsvp2d5a70vnwhhg23fjyp80ra4ikr8h7bsbhdbwxwwvj9hvpqx"))))
     (build-system pyproject-build-system)
     (arguments
      (list
@@ -955,6 +955,7 @@ redirector is not included.")
      (list python-aioquic-1.2
            python-argon2-cffi
            python-asgiref
+           python-backports-zstd
            python-bcrypt
            python-brotli
            python-certifi
@@ -966,7 +967,6 @@ redirector is not included.")
            python-kaitaistruct
            python-ldap3
            python-mitmproxy-rs
-           python-msgpack
            python-publicsuffix2
            python-pyopenssl
            python-pyparsing
@@ -975,8 +975,7 @@ redirector is not included.")
            python-sortedcontainers
            python-tornado
            python-urwid
-           python-wsproto
-           python-zstandard))
+           python-wsproto))
     (home-page "https://mitmproxy.org")
     (synopsis "Interactive TLS-capable intercepting HTTP proxy")
     (description
