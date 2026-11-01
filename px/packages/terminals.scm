@@ -10,6 +10,7 @@
   #:use-module (gnu packages fontutils)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages gcc)
+  #:use-module (gnu packages gl)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gtk)
@@ -19,16 +20,16 @@
 (define-public ghostty
   (package
     (name "ghostty")
-    (version "1.3.1-6")
+    (version "1.4.0-1")
     (source
      (origin
        (method url-fetch)
        (uri (string-append
              "https://github.com/dariogriffo/ghostty-debian/releases/download/"
-             "1.3.1%2B6/ghostty_1.3.1-6.trixie_amd64.deb"))
+             "1.4.0%2B1/ghostty_1.4.0-1.griffo_amd64.deb"))
        (file-name (string-append name "-" version ".deb"))
        (sha256
-        (base32 "09c94rv3py0kinydn8iqp2jzbviy15mmgc7xq2x6lxa06q8yf4nh"))))
+        (base32 "04fv7ivp8jn14k2m9y7m3lrkl69sdmapajk6y1dzykpqfzymjpib"))))
     (supported-systems '("x86_64-linux"))
     (build-system binary-build-system)
     (arguments
@@ -36,13 +37,9 @@
        #:patchelf-plan
        '(("usr/bin/ghostty"
           ("gtk" "glib" "libadwaita" "gtk4-layer-shell" "wayland" "libx11"
-           "fontconfig" "freetype" "harfbuzz" "oniguruma" "gcc:lib"))
-         ("usr/lib/libghostty-vt.so.0.1.0"
-          ("gcc:lib")))
+           "fontconfig" "freetype" "harfbuzz" "oniguruma" "gcc:lib" "mesa")))
        #:install-plan
        '(("usr/bin" "bin")
-         ("usr/lib" "lib")
-         ("usr/include" "include")
          ("usr/share/applications" "share/applications")
          ("usr/share/bash-completion" "share/bash-completion")
          ("usr/share/fish" "share/fish")
@@ -51,7 +48,6 @@
          ("usr/share/locale" "share/locale")
          ("usr/share/man" "share/man")
          ("usr/share/metainfo" "share/metainfo")
-         ("usr/share/pkgconfig" "share/pkgconfig")
          ("usr/share/terminfo" "share/terminfo")
          ("usr/share/nvim" "share/nvim")
          ("usr/share/vim" "share/vim")
@@ -81,6 +77,7 @@
        ("harfbuzz" ,harfbuzz)
        ("libadwaita" ,libadwaita)
        ("libx11" ,libx11)
+       ("mesa" ,mesa)
        ("oniguruma" ,oniguruma)
        ("wayland" ,wayland)))
     (home-page "https://ghostty.org/")
