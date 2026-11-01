@@ -110,17 +110,17 @@ software that targets AMD FPGAs and NPUs.")
 (define-public xrt
   (package
     (name "xrt")
-    (version "2.20.197")
+    (version "2.23.244")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
              (url "https://github.com/Xilinx/XRT")
-             (commit (string-append "202520." version))
+             (commit (string-append "202610." version))
              (recursive? #t)))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0kjc4b1svmykfmbbj666l3098v5l0byqxan0d8jqm550vvhr2ivh"))))
+        (base32 "1bk5ks557akj5s3fc0q4kddbps3xfh2s6w5aqd5lmnssz72fv4y4"))))
     (build-system cmake-build-system)
     (arguments
      (list
