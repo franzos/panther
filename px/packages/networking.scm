@@ -862,13 +862,13 @@ by the Kaitai Struct compiler, a declarative binary format parsing language.")
 (define-public python-mitmproxy-rs
   (package
     (name "python-mitmproxy-rs")
-    (version "0.12.11")
+    (version "0.12.15")
     (source
      (origin
        (method url-fetch)
        (uri (pypi-uri "mitmproxy_rs" version))
        (sha256
-        (base32 "11dpxhch2sl19jmyvgk0qsaxrlf49lv91z443ccmc7n2scywypkg"))
+        (base32 "09w3x0w7kgllr9hhnpx2b76x05na5dxjq3h6m24m58jb78ky7rzi"))
        (modules '((guix build utils)))
        (snippet
         ;; mitmproxy_linux provides the eBPF redirector for local capture

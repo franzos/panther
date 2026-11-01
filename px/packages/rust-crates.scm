@@ -19189,6 +19189,10 @@
   (crate-source "netlink-packet-core" "0.8.2"
                 "15d3dklhbnp4wf6hjjppvnbrqzz96z7l80qdsil2xy0a9yyxg5xq"))
 
+(define rust-netlink-packet-core-0.9.0
+  (crate-source "netlink-packet-core" "0.9.0"
+                "1par81yylm5kcv64wa8p7ph05gp6l1h6hw0l4wq22blckapjsvid"))
+
 (define rust-netlink-packet-route-0.30.0
   (crate-source "netlink-packet-route" "0.30.0"
                 "14jhj28nj1hrymzmx4g0qqi3fgm4m4s15zmvmi7ana305xhik2dy"))
@@ -19197,14 +19201,27 @@
   (crate-source "netlink-packet-route" "0.31.0"
                 "01x0v4j1rlg18c7p7b1f37g7gx6mc10lqvxibzyxxcsfg35qya72"))
 
+(define rust-netlink-packet-route-0.33.0
+  (crate-source "netlink-packet-route" "0.33.0"
+                "0xjm1mfvx5hai6zbcxfqqgxjp3v6fa654y08zzhhd9bkigy8zm2r"))
+
 (define rust-netlink-proto-0.12.0
   (crate-source "netlink-proto" "0.12.0"
                 "0a11h4jvzbzzdcvrgpcpy23w74x67jj6x2fpxr3hwhqiw4716pdn"))
+
+(define rust-netlink-proto-0.13.0
+  (crate-source "netlink-proto" "0.13.0"
+                "0awg8c5ia89sdq2qgdi2b3c58fdqfa6fj54gkr4xnv3w4kk3mq4p"))
 
 (define rust-netlink-sys-0.8.8
   ;; TODO REVIEW: Check bundled sources.
   (crate-source "netlink-sys" "0.8.8"
                 "1bizb26qgk765vg7qyrnwywdwsqzjz68a6s93m4wqsgs23nk0v6d"))
+
+(define rust-netlink-sys-0.9.0
+  ;; TODO REVIEW: Check bundled sources.
+  (crate-source "netlink-sys" "0.9.0"
+                "041sm0a1qk3mpwmlrsv8mj1asgbwcrp85q0gjjgg83a21gh3i7f9"))
 
 (define rust-new-debug-unreachable-1.0.6
   (crate-source "new_debug_unreachable" "1.0.6"
@@ -22313,6 +22330,10 @@
   (crate-source "pyo3" "0.29.0"
                 "0707cvmc6h6hbhsj8wr8d5gl5nqy5jb8fxd4l0kgqjqxn984c9yd"))
 
+(define rust-pyo3-0.29.2
+  (crate-source "pyo3" "0.29.2"
+                "12qy2y44mfk21p3q451miv0vibx8540nfrxhp5i2dqvkyknxv226"))
+
 (define rust-pyo3-async-runtimes-0.29.0
   (crate-source "pyo3-async-runtimes" "0.29.0"
                 "0imh79kj89hsh5b39if1w5nk847h0ci8pqg5cnn3ysiilzd6ivxk"))
@@ -22329,6 +22350,10 @@
   (crate-source "pyo3-build-config" "0.29.0"
                 "0y4h23a97v60ajicbcam98axbb9pjb8ql12w54pk84yhy39agqn5"))
 
+(define rust-pyo3-build-config-0.29.2
+  (crate-source "pyo3-build-config" "0.29.2"
+                "1s9hx992m7vhdwmxdva4nxmild564kz1gx7rc1p3zl2b3gj2f47l"))
+
 (define rust-pyo3-ffi-0.19.2
   (crate-source "pyo3-ffi" "0.19.2"
                 "1nc4696k03ydyiy1f69l3ywknavjzxzag2mscrh2bgkywx1fwg75"))
@@ -22336,6 +22361,10 @@
 (define rust-pyo3-ffi-0.29.0
   (crate-source "pyo3-ffi" "0.29.0"
                 "0nw40nfdlnz66vd1fjh5hmvmzsi9rzwyypgads38vg0vv9kw91fa"))
+
+(define rust-pyo3-ffi-0.29.2
+  (crate-source "pyo3-ffi" "0.29.2"
+                "09xkl9aj170d15qkdrq43rxvhw27qwzs7cy369s0dbgy4rask4g5"))
 
 (define rust-pyo3-log-0.13.4
   (crate-source "pyo3-log" "0.13.4"
@@ -22349,6 +22378,10 @@
   (crate-source "pyo3-macros" "0.29.0"
                 "0w8pj0nk3ay40j9imz80h4c3lydx71x362fxjhqslp86zmi3gics"))
 
+(define rust-pyo3-macros-0.29.2
+  (crate-source "pyo3-macros" "0.29.2"
+                "072ajah34vd7ilja9f5f8vgg2fr7j7dhs8rw5kplxn0wzil5h8kk"))
+
 (define rust-pyo3-macros-backend-0.19.2
   (crate-source "pyo3-macros-backend" "0.19.2"
                 "0dlm4pg29hjmlqx15gcy9cmnabvc8ycy60hcvjg8hm62flhw2zcl"))
@@ -22356,6 +22389,10 @@
 (define rust-pyo3-macros-backend-0.29.0
   (crate-source "pyo3-macros-backend" "0.29.0"
                 "0qmkacg1d4i23nvmdficacr7f59mm3y9rwsvvir32y4rfdas38sc"))
+
+(define rust-pyo3-macros-backend-0.29.2
+  (crate-source "pyo3-macros-backend" "0.29.2"
+                "0lj90a4lilgvm5k0c3x457rn1wvy7qm7vm3xflb65yj96ym7a5ap"))
 
 (define rust-qoi-0.4.1
   (crate-source "qoi" "0.4.1"
@@ -24058,6 +24095,10 @@
 (define rust-rtnetlink-0.21.0
   (crate-source "rtnetlink" "0.21.0"
                 "112pr9qkg7w7v27y5fp7plj45ab0090c16vzc4vz78hgf57zh6fw"))
+
+(define rust-rtnetlink-0.23.0
+  (crate-source "rtnetlink" "0.23.0"
+                "1ik3mqnfl6zy5i1cic2jig0hnisap9rksgp035c5q029w4z0mxlh"))
 
 (define rust-rtoolbox-0.0.2
   (crate-source "rtoolbox" "0.0.2"
@@ -26204,6 +26245,10 @@
 (define rust-smoltcp-0.13.1
   (crate-source "smoltcp" "0.13.1"
                 "0pjknypv8lc3lnxq493fqhy5cvgpdnsp0qywkby5x9mvcc2d8wsz"))
+
+(define rust-smoltcp-0.14.0
+  (crate-source "smoltcp" "0.14.0"
+                "03wq05ghg77q2b6pbld4w4qpx96iylm4kp9p9993avkcsn5b5y5n"))
 
 (define rust-smtp-proto-0.1.5
   (crate-source "smtp-proto" "0.1.5"
@@ -29832,6 +29877,10 @@
   (crate-source "tree-sitter" "0.26.11"
                 "1pw6qnaa67x3cw8cgbigd9xd0b38wxr6a3vb1nr202fcqk0p275g"))
 
+(define rust-tree-sitter-0.26.12
+  (crate-source "tree-sitter" "0.26.12"
+                "1v0g78jsnmv9p5960bzmx8x0497x2q5kg41ck0h3zscaw6l6gic3"))
+
 (define rust-tree-sitter-css-0.25.0
   (crate-source "tree-sitter-css" "0.25.0"
                 "0vv8g3hwvas734pirq536magjp2jd4jz94aq8gbcd8i9izhwbjx5"))
@@ -29839,6 +29888,10 @@
 (define rust-tree-sitter-highlight-0.26.11
   (crate-source "tree-sitter-highlight" "0.26.11"
                 "1j2wkq60sbz5g4skxwb9895wwbzgx8j38id2aw54xkq3sm40qynd"))
+
+(define rust-tree-sitter-highlight-0.26.12
+  (crate-source "tree-sitter-highlight" "0.26.12"
+                "1ybl7ai04fmfgc043x939l33clc7frlwijf1wximx249hwlprgqj"))
 
 (define rust-tree-sitter-javascript-0.25.0
   (crate-source "tree-sitter-javascript" "0.25.0"
@@ -29923,6 +29976,10 @@
 (define rust-tun-0.8.13
   (crate-source "tun" "0.8.13"
                 "1kczhqkhp3mj8av511i83z0cqx6bq76faxch48sk89pvnlsmanrg"))
+
+(define rust-tun-0.8.14
+  (crate-source "tun" "0.8.14"
+                "1glq3bvb0rhi9nnlfif6vx1cj6l792c1lymsi7ph4pjqii35xdcb"))
 
 (define rust-tungstenite-0.24.0
   (crate-source "tungstenite" "0.24.0"
@@ -51247,7 +51304,7 @@
                                            rust-anstyle-parse-1.0.0
                                            rust-anstyle-query-1.1.5
                                            rust-anstyle-wincon-3.0.11
-                                           rust-anyhow-1.0.103
+                                           rust-anyhow-1.0.104
                                            rust-arc-swap-1.9.2
                                            rust-arrayvec-0.7.8
                                            rust-assert-matches-1.5.0
@@ -51326,7 +51383,7 @@
                                            rust-crypto-common-0.1.7
                                            rust-curve25519-dalek-4.1.3
                                            rust-curve25519-dalek-derive-0.1.1
-                                           rust-data-encoding-2.11.0
+                                           rust-data-encoding-2.11.1
                                            rust-defmt-0.3.100
                                            rust-defmt-1.1.1
                                            rust-defmt-macros-1.1.1
@@ -51356,16 +51413,16 @@
                                            rust-foreign-types-macros-0.2.3
                                            rust-foreign-types-shared-0.3.1
                                            rust-form-urlencoded-1.2.2
-                                           rust-futures-0.3.32
-                                           rust-futures-channel-0.3.32
-                                           rust-futures-core-0.3.32
-                                           rust-futures-executor-0.3.32
-                                           rust-futures-io-0.3.32
+                                           rust-futures-0.3.34
+                                           rust-futures-channel-0.3.34
+                                           rust-futures-core-0.3.34
+                                           rust-futures-executor-0.3.34
+                                           rust-futures-io-0.3.34
                                            rust-futures-lite-2.6.1
-                                           rust-futures-macro-0.3.32
-                                           rust-futures-sink-0.3.32
-                                           rust-futures-task-0.3.32
-                                           rust-futures-util-0.3.32
+                                           rust-futures-macro-0.3.34
+                                           rust-futures-sink-0.3.34
+                                           rust-futures-task-0.3.34
+                                           rust-futures-util-0.3.34
                                            rust-generic-array-0.14.7
                                            rust-getrandom-0.2.17
                                            rust-getrandom-0.4.3
@@ -51423,7 +51480,7 @@
                                            rust-jni-sys-macros-0.4.1
                                            rust-js-sys-0.3.103
                                            rust-lazy-static-1.5.0
-                                           rust-libc-0.2.186
+                                           rust-libc-0.2.189
                                            rust-libloading-0.9.0
                                            rust-linux-raw-sys-0.4.15
                                            rust-linux-raw-sys-0.12.1
@@ -51442,10 +51499,10 @@
                                            rust-moka-0.12.15
                                            rust-moxcms-0.8.1
                                            rust-ndk-context-0.1.1
-                                           rust-netlink-packet-core-0.8.1
-                                           rust-netlink-packet-route-0.30.0
-                                           rust-netlink-proto-0.12.0
-                                           rust-netlink-sys-0.8.8
+                                           rust-netlink-packet-core-0.9.0
+                                           rust-netlink-packet-route-0.33.0
+                                           rust-netlink-proto-0.13.0
+                                           rust-netlink-sys-0.9.0
                                            rust-nix-0.30.1
                                            rust-nix-0.31.3
                                            rust-nom-7.1.3
@@ -51478,7 +51535,6 @@
                                            rust-parking-2.2.1
                                            rust-parking-lot-0.12.5
                                            rust-parking-lot-core-0.9.12
-                                           rust-paste-1.0.15
                                            rust-percent-encoding-2.3.2
                                            rust-pin-project-1.1.13
                                            rust-pin-project-internal-1.1.13
@@ -51504,14 +51560,14 @@
                                            rust-protobuf-parse-3.7.2
                                            rust-protobuf-support-3.7.2
                                            rust-pxfm-0.1.30
-                                           rust-pyo3-0.29.0
+                                           rust-pyo3-0.29.2
                                            rust-pyo3-async-runtimes-0.29.0
                                            rust-pyo3-async-runtimes-macros-0.29.0
-                                           rust-pyo3-build-config-0.29.0
-                                           rust-pyo3-ffi-0.29.0
+                                           rust-pyo3-build-config-0.29.2
+                                           rust-pyo3-ffi-0.29.2
                                            rust-pyo3-log-0.13.4
-                                           rust-pyo3-macros-0.29.0
-                                           rust-pyo3-macros-backend-0.29.0
+                                           rust-pyo3-macros-0.29.2
+                                           rust-pyo3-macros-backend-0.29.2
                                            rust-quick-error-2.0.1
                                            rust-quote-1.0.46
                                            rust-r-efi-6.0.0
@@ -51528,7 +51584,7 @@
                                            rust-ring-0.17.14
                                            rust-rmp-0.8.15
                                            rust-rmp-serde-1.3.1
-                                           rust-rtnetlink-0.21.0
+                                           rust-rtnetlink-0.23.0
                                            rust-rustc-version-0.4.1
                                            rust-rustix-0.38.44
                                            rust-rustix-1.1.4
@@ -51539,10 +51595,10 @@
                                            rust-security-framework-3.7.0
                                            rust-security-framework-sys-2.17.0
                                            rust-semver-1.0.28
-                                           rust-serde-1.0.228
-                                           rust-serde-core-1.0.228
-                                           rust-serde-derive-1.0.228
-                                           rust-serde-json-1.0.150
+                                           rust-serde-1.0.229
+                                           rust-serde-core-1.0.229
+                                           rust-serde-derive-1.0.229
+                                           rust-serde-json-1.0.151
                                            rust-serde-yaml-0.9.34+deprecated
                                            rust-sharded-slab-0.1.7
                                            rust-shlex-2.0.1
@@ -51553,12 +51609,14 @@
                                            rust-slab-0.4.12
                                            rust-smallvec-1.15.2
                                            rust-smoltcp-0.13.1
+                                           rust-smoltcp-0.14.0
                                            rust-socket2-0.6.5
                                            rust-stable-deref-trait-1.2.1
                                            rust-streaming-iterator-0.1.9
                                            rust-strsim-0.11.1
                                            rust-subtle-2.6.1
                                            rust-syn-2.0.119
+                                           rust-syn-3.0.4
                                            rust-sync-wrapper-1.0.2
                                            rust-synstructure-0.13.2
                                            rust-sysinfo-0.39.6
@@ -51569,9 +51627,9 @@
                                            rust-target-lexicon-0.13.5
                                            rust-tempfile-3.27.0
                                            rust-thiserror-1.0.69
-                                           rust-thiserror-2.0.18
+                                           rust-thiserror-2.0.21
                                            rust-thiserror-impl-1.0.69
-                                           rust-thiserror-impl-2.0.18
+                                           rust-thiserror-impl-2.0.21
                                            rust-thread-local-1.1.10
                                            rust-tiff-0.11.3
                                            rust-time-0.3.53
@@ -51580,10 +51638,10 @@
                                            rust-tinytemplate-1.2.1
                                            rust-tinyvec-1.12.0
                                            rust-tinyvec-macros-0.1.1
-                                           rust-tokio-1.52.3
+                                           rust-tokio-1.53.1
                                            rust-tokio-macros-2.7.0
                                            rust-tokio-stream-0.1.18
-                                           rust-tokio-util-0.7.18
+                                           rust-tokio-util-0.7.19
                                            rust-toml-0.5.11
                                            rust-tonic-0.14.6
                                            rust-tonic-prost-0.14.6
@@ -51594,15 +51652,15 @@
                                            rust-tracing-attributes-0.1.31
                                            rust-tracing-core-0.1.36
                                            rust-tracing-subscriber-0.3.23
-                                           rust-tree-sitter-0.26.11
+                                           rust-tree-sitter-0.26.12
                                            rust-tree-sitter-css-0.25.0
-                                           rust-tree-sitter-highlight-0.26.11
+                                           rust-tree-sitter-highlight-0.26.12
                                            rust-tree-sitter-javascript-0.25.0
                                            rust-tree-sitter-language-0.1.7
                                            rust-tree-sitter-xml-0.7.0
                                            rust-tree-sitter-yaml-0.7.2
                                            rust-try-lock-0.2.5
-                                           rust-tun-0.8.13
+                                           rust-tun-0.8.14
                                            rust-typenum-1.20.1
                                            rust-unicode-ident-1.0.24
                                            rust-universal-hash-0.5.1
