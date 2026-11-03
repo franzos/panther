@@ -530,7 +530,7 @@ information, file change statistics, and basic Git operations.")
 (define-public radicle-desktop
   (package
     (name "radicle-desktop")
-    (version "0.16.0")
+    (version "0.17.0")
     (source
      (origin
        (method url-fetch)
@@ -538,7 +538,7 @@ information, file change statistics, and basic Git operations.")
              "https://files.radicle.dev/apt/pool/main/r/radicle-desktop/"
              "radicle-desktop_" version "_amd64.deb"))
        (sha256
-        (base32 "082qaqwxpbwba8igilqjv71jrlww8nfjsn45rmmaw70rpgd9yzsf"))))
+        (base32 "1pidc343a68n10crq14j5cw3jxz5kjh1zjpgkvap3kk7z1h2xah4"))))
     (build-system binary-build-system)
     (arguments
      `(#:patchelf-plan `(("usr/bin/radicle-desktop"
