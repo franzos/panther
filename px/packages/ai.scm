@@ -420,7 +420,7 @@ This package repackages the official Debian build of the Tauri desktop app.")
 (define-public ollama
   (package
     (name "ollama")
-    (version "0.40.13")
+    (version "0.40.14")
     (source
      (origin
        (method url-fetch)
@@ -433,8 +433,8 @@ This package repackages the official Debian build of the Tauri desktop app.")
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "1djvlzvzwnsfhmcdsw4bkz9v2s1204zp1rk9v5qi5qhba87hwjf9")
-           ("aarch64-linux" "0rl6ka5kp6rym5f1vg0wa56v2yvnawa57jp43ianva3dv8l9lgci"))))))
+           ("x86_64-linux" "0zg6pimbnnpgifkc7bj4wr2m98n8chk3x6h0amyd24rxik886glr")
+           ("aarch64-linux" "1l4lkjif6xj3vqqwgwm0ir8z9ap93ammxlzssz6sy2scgcxk7frr"))))))
     (build-system binary-build-system)
     (arguments
      (list
