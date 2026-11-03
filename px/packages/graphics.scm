@@ -254,11 +254,11 @@ images.")
 (define-public oculante-next
   ;; Development branch tracking the egui 0.36 / Rust 2024 rewrite.
   (let ((revision "0")
-        (commit "34a1cf91374eedbece40af5e9cd1561a5820102d"))
+        (commit "fb8f07949081a7c5357f9f285497607364c9fad1"))
     (package
       (inherit oculante)
       (name "oculante-next")
-      (version (git-version "0.9.6" revision commit))
+      (version (git-version "1.0.0-rc.3" revision commit))
       (source
        (origin
          (method git-fetch)
@@ -267,24 +267,34 @@ images.")
                (commit commit)))
          (file-name (git-file-name name version))
          (sha256
-          (base32 "0dkqsgxx3yqq07jydcpdgdv8b7sm4xz6dh6cqiwpks6v2rrly57i"))))
+          (base32 "0qlxfkxq5i94z65zpxb57v68fsy7q3wln8j709xnjag0bgl6k2gs"))))
       (arguments
        `(#:install-source? #f
          #:tests? #f
          #:rust ,rust-1.95
+         #:cargo-build-flags '("--release" "--ignore-rust-version")
          #:phases
          (modify-phases %standard-phases
-           (add-after 'configure 'patch-heic-rs-to-path
+           (add-after 'configure 'patch-git-deps-to-path
              (lambda _
-               (let ((dir (car (find-files "guix-vendor" "^rust-heic-rs-"
-                                           #:directories? #t))))
-                 (substitute* "Cargo.toml"
-                   (("^heic-rs = \\{ git = [^}]+\\}")
-                    (string-append "heic-rs = { path = \"" dir "\" }"))))))
+               (for-each
+                (lambda (crate)
+                  (let ((dir (car (find-files "guix-vendor"
+                                              (string-append "^rust-" crate "-")
+                                              #:directories? #t))))
+                    (substitute* "Cargo.toml"
+                      (((string-append "^" crate " = \\{ git = [^}]+\\}"))
+                       (string-append crate " = { path = \"" dir "\" }")))))
+                '("heic-rs" "avif-parse"))))
            (add-before 'build 'set-cmake-policy
              (lambda _
                ;; Workaround for bundled glslang having old cmake_minimum_required
                (setenv "CMAKE_POLICY_VERSION_MINIMUM" "3.5")))
+           ;; cargo install has no --ignore-rust-version.
+           (replace 'install
+             (lambda* (#:key outputs #:allow-other-keys)
+               (install-file "target/release/oculante"
+                             (string-append (assoc-ref outputs "out") "/bin"))))
            (add-after 'install 'wrap-program
              (lambda* (#:key inputs outputs #:allow-other-keys)
                (let ((out (assoc-ref outputs "out"))
