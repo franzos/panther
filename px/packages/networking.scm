@@ -572,7 +572,7 @@ captured data.")
 (define-public halloy
   (package
     (name "halloy")
-    (version "2026.9")
+    (version "2026.10")
     (source
      (origin
        (method url-fetch)
@@ -581,13 +581,15 @@ captured data.")
              version ".tar.gz"))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "1kflgk5ac5lc2i200v568y0hh7glscij9dk7a9dj40i9rgvg2dax"))))
+        (base32 "02x055vk4gh91d8313a6sxrk6w877j5iwnzsid8yyrng15z7mdqr"))))
     (build-system cargo-build-system)
     (arguments
      (list
       #:install-source? #f
       #:tests? #f
       #:rust rust-1.95
+      ;; cargo metadata lists the data library first, hiding the binary.
+      #:cargo-install-paths ''(".")
       #:phases
       #~(modify-phases %standard-phases
           (add-after 'configure 'patch-git-deps-to-paths
@@ -599,7 +601,7 @@ captured data.")
                   (if (pair? dirs) (car dirs) #f)))
               (let ((iced-dir (find-vendor-dir "^rust-iced-0\\.15"))
                     (cryoglyph-dir (find-vendor-dir "^rust-cryoglyph-0\\.1\\.0\\.b457678"))
-                    (cosmic-text-dir (find-vendor-dir "^rust-cosmic-text-0\\.19\\.0\\.1cdc3e0"))
+                    (cosmic-text-dir (find-vendor-dir "^rust-cosmic-text-0\\.19\\.0\\.f959ab5"))
                     (winit-dir (find-vendor-dir "^rust-winit-0\\.30.*05b8ff")))
                 ;; Patch halloy's [patch.crates-io] git refs to local paths
                 (substitute* "Cargo.toml"
@@ -608,7 +610,10 @@ captured data.")
                   (("iced_core = \\{ git = [^}]+\\}")
                    (string-append "iced_core = { path = \"" iced-dir "/core\" }"))
                   (("iced_wgpu = \\{ git = [^}]+\\}")
-                   (string-append "iced_wgpu = { path = \"" iced-dir "/wgpu\" }")))
+                   (string-append "iced_wgpu = { path = \"" iced-dir "/wgpu\" }"))
+                  ;; iced's cosmic-text is replaced by path below
+                  (("^\\[patch\\.\"https://github.com/hecrj/cosmic-text.git\"\\]\n") "")
+                  (("^cosmic-text = \\{ git = [^}]+\\}\n") ""))
                 ;; Patch iced workspace's own git deps (cosmic-text, cryoglyph, winit)
                 (let ((iced-cargo (string-append iced-dir "/Cargo.toml")))
                   (when (file-exists? iced-cargo)
@@ -646,6 +651,7 @@ captured data.")
             libxkbcommon
             mesa
             openssl
+            sqlite
             wayland
             (px-cargo-inputs 'halloy)))
     (home-page "https://halloy.chat")
