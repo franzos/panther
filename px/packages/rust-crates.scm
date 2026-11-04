@@ -11913,9 +11913,17 @@
   (crate-source "grit-pattern-matcher" "0.5.1"
                 "194gln70bj3468aqncqxh894wyr0vq1i3vyzqb8rlyxqnacbd526"))
 
+(define rust-grit-pattern-matcher-0.5.2
+  (crate-source "grit-pattern-matcher" "0.5.2"
+                "0slxd465h3avhad9mlkmfig1jnz0lssr547cs4dyi0bpc6k6bgyv"))
+
 (define rust-grit-util-0.5.1
   (crate-source "grit-util" "0.5.1"
                 "00kgzy1zdzvddkzhh2gjb8dniqjbnf8bqyg9cl5jdrr7hhf71phc"))
+
+(define rust-grit-util-0.5.2
+  (crate-source "grit-util" "0.5.2"
+                "097bjly9jdgf6q3zqxr1inycpniy3gznrjf6q1df976pm110vpd6"))
 
 (define rust-group-0.13.0
   (crate-source "group" "0.13.0"
@@ -17871,6 +17879,11 @@
   ;; TODO REVIEW: Check bundled sources.
   (crate-source "libz-sys" "1.1.29"
                 "1n98kqya7a7a0cxf5n5z3g13rj7a1vqxynk2xc7bja1qfxbrdg45"))
+
+(define rust-libz-sys-1.1.31
+  ;; TODO REVIEW: Check bundled sources.
+  (crate-source "libz-sys" "1.1.31"
+                "1cjw8nisxy5iv8yms7dsxwhclb26djl38n6xq4nmlqxxra73087z"))
 
 (define rust-libz-sys-1.1.8
   ;; TODO REVIEW: Check bundled sources.
@@ -38055,7 +38068,6 @@
                                  rust-futures-sink-0.3.32
                                  rust-futures-task-0.3.32
                                  rust-futures-util-0.3.32
-                                 rust-getopts-0.2.21
                                  rust-getrandom-0.2.15
                                  rust-getrandom-0.3.4
                                  rust-getrandom-0.4.3
@@ -38064,8 +38076,8 @@
                                  rust-glob-0.3.2
                                  rust-globset-0.4.20
                                  rust-globwalk-0.9.1
-                                 rust-grit-pattern-matcher-0.5.1
-                                 rust-grit-util-0.5.1
+                                 rust-grit-pattern-matcher-0.5.2
+                                 rust-grit-util-0.5.2
                                  rust-h2-0.4.16
                                  rust-half-1.8.2
                                  rust-hashbrown-0.14.5
@@ -38137,9 +38149,9 @@
                                  rust-lazy-static-1.5.0
                                  rust-libc-0.2.190
                                  rust-libgit2-sys-0.18.5+1.9.4
-                                 rust-libmimalloc-sys-0.1.47
+                                 rust-libmimalloc-sys-0.1.44
                                  rust-libredox-0.1.3
-                                 rust-libz-sys-1.1.8
+                                 rust-libz-sys-1.1.31
                                  rust-linux-raw-sys-0.9.2
                                  rust-litemap-0.7.3
                                  rust-litemap-0.8.0
@@ -38216,8 +38228,6 @@
                                  rust-proc-macro-error-attr3-3.1.1
                                  rust-proc-macro-error3-3.1.1
                                  rust-proc-macro2-1.0.107
-                                 rust-pulldown-cmark-0.13.5
-                                 rust-pulldown-cmark-escape-0.11.0
                                  rust-quick-junit-0.6.0
                                  rust-quick-xml-0.38.4
                                  rust-quickcheck-1.1.0
@@ -38379,12 +38389,10 @@
                                  rust-try-lock-0.2.5
                                  rust-trybuild-1.0.116
                                  rust-typeid-1.0.3
-                                 rust-unicase-2.6.0
                                  rust-unicode-bom-2.0.3
                                  rust-unicode-ident-1.0.8
                                  rust-unicode-normalization-0.1.25
                                  rust-unicode-segmentation-1.13.2
-                                 rust-unicode-width-0.1.12
                                  rust-unicode-width-0.2.2
                                  rust-unit-prefix-0.5.1
                                  rust-unsafe-libyaml-0.2.11
