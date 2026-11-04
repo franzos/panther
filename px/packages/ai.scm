@@ -231,7 +231,7 @@ Linux support is currently in beta.")
 (define-public chatgpt
   (package
     (name "chatgpt")
-    (version "26.1027.51404")
+    (version "26.1029.61003")
     (source
      (origin
        (method url-fetch)
@@ -245,8 +245,8 @@ Linux support is currently in beta.")
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "08i8q7c1j1r20khhjdqdlc4laz70xix89mggvaggx64608ny5wa6")
-           ("aarch64-linux" "1slggzqp199ifigiwmsn6m5ylqdv7xif39ckbmgxw4sw5z6saarc"))))))
+           ("x86_64-linux" "0b8vs1rx5pm18l0zyamlwjjprshgvv7xknzlns724p6jqpz8mbzk")
+           ("aarch64-linux" "0axw89998akwvrk9kap3nzmrg8j5b7m9q5mqrnzffs7y6gxss6a7"))))))
     (build-system chromium-binary-build-system)
     (arguments
      (list
