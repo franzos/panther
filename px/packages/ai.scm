@@ -467,7 +467,7 @@ as well as a library of pre-built models that can be easily used.")
 (define-public tku
   (package
     (name "tku")
-    (version "0.1.29")
+    (version "0.2.0")
     (source
      (origin
        (method git-fetch)
@@ -476,7 +476,7 @@ as well as a library of pre-built models that can be easily used.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0sgnw50c5d34j9l91vgs36xb1rncdav6fqgd08vvhsfxpdqc1v24"))))
+        (base32 "144kwyp6yxzvsibnhnhdsgz6nppwwl8vhl21jzbnly4pmbbfzy81"))))
     (build-system cargo-build-system)
     (arguments
      (list
