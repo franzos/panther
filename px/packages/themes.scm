@@ -236,3 +236,29 @@
                       "OpenMoji-black-glyf/*.ttf"
                       "OpenMoji-color-glyf_colr_0/*.ttf"))))))
     (native-inputs (list unzip))))
+
+(define (unicode-emoji-file name version hash)
+  (origin
+    (method url-fetch)
+    (uri (string-append "https://www.unicode.org/Public/" version
+                        ".0/emoji/emoji-" name ".txt"))
+    (file-name (string-append "emoji-" name "-" version ".txt"))
+    (sha256 (base32 hash))))
+
+(define-public unicode-emoji
+  (package
+    (inherit (@ (gnu packages unicode) unicode-emoji))
+    (version "18.0")
+    (inputs
+     `(("unicode-emoji-sequences"
+        ,(unicode-emoji-file
+          "sequences" version
+          "192351rpzig4ijpl6vvm14cxrysgxsx9frwps45cpn9x3zkxq8qq"))
+       ("unicode-emoji-test"
+        ,(unicode-emoji-file
+          "test" version
+          "06mjgb2rnk9r56ng48nw8dqz1cbb0s3cyrxgg2fpfaprl76kadwg"))
+       ("unicode-emoji-zwj-sequences"
+        ,(unicode-emoji-file
+          "zwj-sequences" version
+          "14cika2px19r7g54mzz67g8s6f8ginrkr44z39s5fnpqpl9m46zn"))))))
