@@ -1046,3 +1046,15 @@ interface (@command{mitmweb}).")
        (sha256
         (base32 "0s8db1pxkfccw0r3zfdplzvm4fbm6d8vvjn3a7x9ps21a9d46qmj"))))
     (native-inputs (list gettext-minimal))))
+
+(define-public iw
+  (package
+    (inherit (@ (gnu packages linux) iw))
+    (version "6.17")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "mirror://kernel.org/software/network/iw/iw-"
+                           version ".tar.xz"))
+       (sha256
+        (base32 "0cqy1gjczf2mbgp5h0zm0xqkf5g4cbaq0rysayr3kaw9h94jw63x"))))))
