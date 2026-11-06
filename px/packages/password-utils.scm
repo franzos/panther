@@ -2,13 +2,19 @@
 ;;; Copyright © 2026 Franz Geffke <mail@gofranz.com>
 
 (define-module (px packages password-utils)
+  #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix packages)
+  #:use-module (guix build-system pyproject)
   #:use-module (guix git-download)
   #:use-module (guix gexp)
   #:use-module (guix utils)
+  #:use-module (gnu packages check)
   #:use-module (gnu packages crypto)
+  #:use-module (gnu packages linux)
   #:use-module (gnu packages password-utils)
   #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages python-build)
+  #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages qt)
   #:use-module (gnu packages ruby-xyz)
   #:use-module (gnu packages xdisorg))
@@ -66,3 +72,41 @@
        (prepend keyutils libxkbcommon)
        (replace "qtsvg" qtsvg)
        (replace "qtwayland" qtwayland)))))
+
+(define-public keychain
+  (package
+    (name "keychain")
+    (version "3.0.10")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/danielrobbins/keychain")
+             (commit version)))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0raggqwy8iq3njdl31pic3qv7jsdmqa5wm4lzvg55yzfay8x7b9h"))))
+    (build-system pyproject-build-system)
+    (arguments
+     (list
+      ;; The e2e suites drive real agents, which the build sandbox can't host.
+      #:test-flags
+      #~(list "--ignore-glob=tests/*e2e*.py"
+              "--ignore=tests/test_distributions.py")
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'install 'install-man-page
+            (lambda _
+              (invoke "make" "install-man" "PYTHON=python3"
+                      (string-append "PREFIX=" #$output)))))))
+    (native-inputs
+     (list python-pytest python-setuptools python-wheel))
+    (propagated-inputs (list procps))
+    (home-page "https://github.com/danielrobbins/keychain")
+    (synopsis "Manager for ssh-agent and gpg-agent with key caching")
+    (description
+     "Keychain starts @command{ssh-agent} and @command{gpg-agent} once per
+system and lets shells and scripts reuse them, so private keys only need to be
+unlocked once per login.  It is usually run from shell profiles like
+@file{~/.bash_profile}, but also works with non-interactive shells.")
+    (license license:gpl3)))
