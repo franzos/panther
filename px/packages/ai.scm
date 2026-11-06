@@ -357,7 +357,7 @@ Linux support is currently a preview; Computer Use is not available on it.")
 (define-public maple
   (package
     (name "maple")
-    (version "3.4.7")
+    (version "3.4.8")
     (source
      (origin
        (method url-fetch)
@@ -365,7 +365,7 @@ Linux support is currently a preview; Computer Use is not available on it.")
              "https://github.com/MaplePrivacyLabs/Maple/releases/download/v"
              version "/Maple_" version "_amd64.deb"))
        (sha256
-        (base32 "0dbcs2y3ff8i6g0har6l5q2k7fpn6x1qhmwrg1c7anvsas5z8vmw"))))
+        (base32 "0p1cpx62c5ay2d9fs9glyxnw1f3ky7vv6ivrdk8z8sypj77jcjgp"))))
     (supported-systems '("x86_64-linux"))
     (build-system binary-build-system)
     (arguments
