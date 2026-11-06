@@ -571,3 +571,18 @@ the hold window.  libinput debounces buttons too, but only over a 12 to 25
 millisecond window that it does not expose for configuration, which is why this
 sits below it on the raw evdev stream.")
     (license license:gpl3+)))
+
+;; Guix builds its out-of-tree modules against linux-libre, and a module only
+;; loads into the kernel it was built for.
+(define-public (linux-module->nongnu module)
+  "Return MODULE, a package using @code{linux-module-build-system}, built
+against nonguix's @code{linux} instead of linux-libre."
+  (package
+    (inherit module)
+    (name (string-append (package-name module) "-nongnu"))
+    (arguments
+     (substitute-keyword-arguments (package-arguments module)
+       ((#:linux _ #f) linux)))))
+
+(define-public v4l2loopback-linux-module-nongnu
+  (linux-module->nongnu v4l2loopback-linux-module))

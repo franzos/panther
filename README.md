@@ -1212,6 +1212,8 @@ This channel provides pre-configured building blocks for Guix system definitions
 |----------|-------------|
 | `%os-base-packages` | Extends `%base-packages` with wpa-supplicant, libimobiledevice, neovim |
 | `%os-desktop-packages` | Extends `%os-base-packages` with guix-gui (graphical Guix frontend) |
+| `linux-module->nongnu` | `(px packages linux)`: rebuilds a Guix out-of-tree kernel module package against nonguix's `linux`, since a module only loads into the kernel it was built for |
+| `v4l2loopback-linux-module-nongnu` | `v4l2loopback-linux-module` for the nongnu kernel, for `kernel-loadable-modules` |
 
 ### Services
 
