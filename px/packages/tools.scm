@@ -800,3 +800,15 @@ versioned with Git alongside the code they exercise.
 This package repackages the upstream Debian build, patching the bundled
 Electron runtime for the Guix store.")
     (license license:expat)))
+
+(define-public usbutils
+  (package
+    (inherit (@ (gnu packages linux) usbutils))
+    (version "020")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "mirror://kernel.org/linux/utils/usb/usbutils/"
+                           "usbutils-" version ".tar.xz"))
+       (sha256
+        (base32 "18bs0mnvrr11l5dj21vkzj6vv0vmmyj4a1ms0l5bbsyrzil7sa10"))))))
