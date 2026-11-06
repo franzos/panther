@@ -990,3 +990,45 @@ HTTP/2, HTTP/3 and WebSockets.  It provides a console interface
 (@command{mitmproxy}), a command-line tool (@command{mitmdump}) and a web
 interface (@command{mitmweb}).")
     (license license:expat)))
+
+(define-public strongswan-6
+  (package
+    (inherit strongswan)
+    (name "strongswan")
+    (version "6.1.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "https://download.strongswan.org/strongswan-"
+                           version ".tar.bz2"))
+       (sha256
+        (base32 "1m109xjrjc18y2fcpx0z926h3n7x57da3sf2rw9p4xlq2949fv7y"))
+       (snippet
+        #~(begin
+            (use-modules (guix build utils))
+            (with-directory-excursion "src"
+              (for-each delete-file
+                        '("starter/parser/lexer.c"
+                          "libstrongswan/settings/settings_lexer.c"
+                          "starter/parser/parser.c"
+                          "starter/parser/parser.h"
+                          "libstrongswan/settings/settings_parser.c"
+                          "libstrongswan/settings/settings_parser.h"
+                          "libstrongswan/asn1/oid.c"
+                          "libstrongswan/asn1/oid.h")))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments strongswan)
+       ((#:configure-flags flags)
+        ;; The blowfish, led and soup plugins no longer exist in 6.x.  Stroke
+        ;; is off by default there, but strongswan-service-type runs the
+        ;; ipsec starter it provides.
+        `(cons "--enable-stroke"
+               (filter (lambda (flag)
+                         (not (member flag '("--disable-blowfish"
+                                             "--enable-led"
+                                             "--enable-soup"))))
+                       ,flags)))))
+    (inputs
+     (modify-inputs (package-inputs strongswan)
+       (delete "libsoup-minimal")
+       (append sqlite)))))
