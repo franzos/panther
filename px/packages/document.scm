@@ -6,6 +6,7 @@
   #:use-module ((guix licenses)
                 #:prefix license:)
   #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix gexp)
   #:use-module (guix packages)
   #:use-module (guix utils)
@@ -13,6 +14,7 @@
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system meson)
   #:use-module (guix build-system qt)
+  #:use-module (gnu packages aspell)
   #:use-module (gnu packages backup)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages djvu)
@@ -31,6 +33,10 @@
   #:use-module (gnu packages rust)
   #:use-module (gnu packages xml)
   #:use-module (gnu packages base)
+  #:use-module (gnu packages perl)
+  #:use-module (gnu packages python)
+  #:use-module (gnu packages sqlite)
+  #:use-module (gnu packages textutils)
   #:use-module (px packages rust-crates))
 
 (define-public poppler-next
@@ -250,3 +256,39 @@ PDF, DjVu, TIFF, XPS, and comic book archive formats.  It features a modern
 GTK4 interface with libadwaita, annotations, printing support, and integration
 with the GNOME desktop environment.")
     (license license:gpl2+)))
+
+;; SCOWL now builds its word lists from an SQLite database, generated at build
+;; time by combine.py, before speller/ derives the Hunspell dictionaries.
+(define (scowl-hunspell-dictionary base)
+  (package
+    (inherit base)
+    (version "2026.02.25")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/en-wl/wordlist")
+             (commit (string-append "rel-" version))))
+       (file-name (git-file-name "scowl" version))
+       (sha256
+        (base32 "1wgrvjvg8n181cv49asmwma826gi7j7m36j44psbdszifya3fd30"))))
+    (native-inputs (list aspell dos2unix hunspell perl python sqlite zip))
+    (arguments
+     (substitute-keyword-arguments (package-arguments base)
+       ((#:phases phases)
+        `(modify-phases ,phases
+           (replace 'make-reproducible
+             (lambda _
+               (substitute* '("speller/HEADER.sh" "speller/README_en.txt.sh")
+                 (("`date`") ""))))
+           (replace 'build
+             (lambda _
+               (invoke "make" "SHELL=bash")
+               (invoke "make" "-C" "speller" "SHELL=bash" "hunspell")))))))
+    (home-page "http://wordlist.aspell.net/")))
+
+(define-public hunspell-dict-en
+  (scowl-hunspell-dictionary (@ (gnu packages hunspell) hunspell-dict-en)))
+
+(define-public hunspell-dict-en-us
+  (scowl-hunspell-dictionary (@ (gnu packages hunspell) hunspell-dict-en-us)))
