@@ -968,6 +968,92 @@ sudo tail -f /var/log/lynis.log
 
 Lynis needs `awk`, `find`, `ps` and `sed` and silently skips tests when `sysctl` or `nft` are missing, so the service runs it with an explicit PATH rather than whatever root happens to have.
 
+### pam-u2f
+
+Puts `pam_u2f` in front of the existing auth stack of chosen PAM services, `sudo` by default, so a touch on a FIDO2/U2F key (YubiKey, Nitrokey, SoloKey) authenticates and anything else falls through to the password. The user-to-credential mappings are copied out of the store to `/etc/u2f_mappings`, root-owned 0400: pam_u2f rejects an authfile owned by anyone but root or the authenticating user, and with an unprivileged `guix-daemon` store files belong to the build user. That rejection is silent under `sufficient`, sudo just asks for the password, which is the failure this service exists to avoid.
+
+**Register a key:**
+
+```bash
+pamu2fcfg -u alice -o pam://alice > u2f_mappings
+# a second key: append its line
+pamu2fcfg -u alice -o pam://alice -n >> u2f_mappings
+```
+
+The file holds public key material only and can live in your configuration repository. `-o` sets the origin; pass the same value to the service so the mapping keeps working if the host is renamed or the config is shared between hosts.
+
+**Usage:**
+
+```scheme
+(use-modules (px services authentication))
+
+(service pam-u2f-service-type
+         (pam-u2f-configuration
+          (mappings (local-file "u2f_mappings"))
+          (relying-party "pam://alice")))
+
+;; Also for login and the screen locker, and require the touch instead of
+;; accepting it as sufficient
+(service pam-u2f-service-type
+         (pam-u2f-configuration
+          (mappings (local-file "u2f_mappings"))
+          (relying-party "pam://alice")
+          (pam-services '("sudo" "login" "greetd" "swaylock"))
+          (control "required")))
+```
+
+**Configuration options:**
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `pam-u2f` | `pam-u2f` | The pam-u2f package, also provides `pamu2fcfg` |
+| `mappings` | (required) | File-like with the `pamu2fcfg` output |
+| `mappings-file` | `"/etc/u2f_mappings"` | Where it is installed; passed as `authfile`, must be absolute |
+| `pam-services` | `'("sudo")` | PAM services that get the entry |
+| `control` | `"sufficient"` | PAM control flag |
+| `relying-party` | unset | Passed as `origin=`; unset means pam_u2f's `pam://<hostname>` |
+| `user-presence?` | `#t` | Require a touch (`userpresence=1`) |
+| `cue?` | `#t` | Prompt for the touch (`cue`) |
+| `extra-options` | `'()` | Further pam_u2f options, verbatim |
+
+Verify after reconfiguring, since a misread authfile looks exactly like a missing key:
+
+```bash
+sudo -k && sudo true   # should ask for a touch, not a password
+```
+
+`authfile` must stay absolute. A relative path resolves against the user's home directory, which would put sudo's authorization data in a user-writable file, and it makes pam_u2f drop privileges to read it; under linux-pam 1.7.2 that privilege drop is never undone when the real uid isn't 0, leaving sudo itself unprivileged.
+
+### pam-fprintd
+
+Puts `pam_fprintd` in front of the auth stack of `login` and `greetd`, so an enrolled fingerprint authenticates and the password remains the fallback. Pair it with Guix's `fprintd-service-type`, which runs the daemon; this service only wires PAM and puts `fprintd-enroll` on PATH.
+
+**Usage:**
+
+```scheme
+(use-modules (gnu services authentication)
+             (px services authentication))
+
+(service fprintd-service-type)
+(service pam-fprintd-service-type)
+
+;; Unlock swaylock by fingerprint too
+(service pam-fprintd-service-type
+         (pam-fprintd-configuration
+          (pam-services '("login" "greetd" "swaylock"))))
+```
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `fprintd` | `fprintd` | The fprintd package, also provides `fprintd-enroll` |
+| `pam-services` | `'("login" "greetd")` | PAM services that get the entry |
+| `control` | `"sufficient"` | PAM control flag |
+
+```bash
+fprintd-enroll    # once per finger
+fprintd-verify
+```
+
 ### wayvnc PAM
 
 Installs `/etc/pam.d/wayvnc`, the policy [the wayvnc home service](#wayvnc) authenticates against when `enable-pam?` is on. wayvnc calls `pam_start` with that service name but ships no policy file, so without this the login falls through to Guix's deny-all `other` - closed, but useless.
