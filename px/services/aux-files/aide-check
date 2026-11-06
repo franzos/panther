@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+# aide-check - daily AIDE run against $AIDE_CONF.
+#
+# Keeps the baseline in a git repo under $AIDE_STATE for tamper-evidence and
+# appends any diff to $AIDE_LOG. The baseline is never updated here: review
+# the diff, then run `aide-accept`, or every run repeats it.
+
+set -euo pipefail
+umask 077
+
+CONF="$AIDE_CONF"
+STATE="${AIDE_STATE:-/var/lib/aide}"
+DB="$STATE/aide.db"
+NEWDB="$STATE/aide.db.new"
+LOG="${AIDE_LOG:-/var/log/aide.log}"
+
+mkdir -p "$STATE"
+chmod 700 "$STATE"
+touch "$LOG"; chmod 600 "$LOG"
+
+log() {
+    printf '[%s] %s\n' "$(date -Iseconds)" "$*" >> "$LOG"
+}
+
+host=$(uname -n)
+
+if [[ ! -f "$CONF" ]]; then
+    log "ERROR: config $CONF not found"
+    exit 1
+fi
+
+if [[ ! -d "$STATE/.git" ]]; then
+    git -C "$STATE" init -q -b main
+    git -C "$STATE" config user.name  "aide-check"
+    git -C "$STATE" config user.email "root@$host"
+    log "initialized git repo at $STATE"
+fi
+
+if [[ ! -f "$DB" ]]; then
+    log "no baseline found, initializing"
+    aide --init --config="$CONF" < /dev/null >> "$LOG" 2>&1
+    if [[ ! -f "$NEWDB" ]]; then
+        log "ERROR: aide --init did not produce $NEWDB"
+        exit 1
+    fi
+    mv "$NEWDB" "$DB"
+    git -C "$STATE" add -A
+    git -C "$STATE" commit -q -m "init: baseline $(date -Iseconds) on $host"
+    log "baseline committed"
+    exit 0
+fi
+
+log "starting aide check"
+TMPOUT=$(mktemp)
+trap 'rm -f "$TMPOUT"' EXIT
+
+set +e
+aide --check --config="$CONF" < /dev/null > "$TMPOUT" 2>&1
+rc=$?
+set -e
+
+# Exit codes 1-7 are a bitmask of what changed (1 new, 2 removed, 4 changed);
+# 8 and above are errors.
+if [[ $rc -eq 0 ]]; then
+    log "clean"
+    exit 0
+fi
+
+if [[ $rc -ge 8 ]]; then
+    log "ERROR: aide --check returned $rc"
+    {
+        printf '=== %s ERROR rc=%s ===\n' "$(date -Iseconds)" "$rc"
+        cat "$TMPOUT"
+        printf '\n'
+    } >> "$LOG"
+    exit 1
+fi
+
+parts=()
+if (( rc & 1 )); then parts+=("added"); fi
+if (( rc & 2 )); then parts+=("removed"); fi
+if (( rc & 4 )); then parts+=("changed"); fi
+desc=$(IFS='/'; echo "${parts[*]}")
+
+{
+    printf '=== %s rc=%s kinds=%s ===\n' "$(date -Iseconds)" "$rc" "$desc"
+    printf 'AIDE detected filesystem changes on %s.\n' "$host"
+    printf 'baseline NOT updated; run aide-accept once reviewed.\n\n'
+    cat "$TMPOUT"
+    printf '\n'
+} >> "$LOG"
+
+log "logged diff ($desc)"
+exit 0

@@ -891,6 +891,83 @@ herd restart usbguard   # Reload after editing rules.conf by hand
 
 **Hardening:** The daemon is launched with `-C` (drop capabilities after startup) and `-W` (seccomp syscall allowlist). The D-Bus configuration and Polkit action from the `usbguard` package are registered automatically, so `usbguard-dbus` and desktop front-ends work without extra wiring.
 
+### AIDE
+
+Runs an [AIDE](https://aide.github.io/) file integrity check on a schedule. The baseline database lives in a git repository under `/var/lib/aide`, so every accepted baseline stays on record, and each run appends its result to `/var/log/aide.log`. The baseline is never updated by the timer: review the diff, then run `aide-accept`, which the service puts on PATH.
+
+The default rules watch `/etc`, `/boot` and every user's `~/.ssh` and `~/.gnupg`, and skip the store symlinks under `/etc` that change on every reconfigure. They are tuned for Guix System: AIDE 0.19 rejects rules that don't start with `/`, and a negative rule beats any overlapping positive one, so the exceptions live inside the negative as a lookahead.
+
+**Usage:**
+
+```scheme
+(use-modules (px services security))
+
+;; Daily at 03:00 with the default rules
+(service aide-service-type)
+
+;; Your own rules, weekly
+(service aide-service-type
+         (aide-configuration
+          (rules (local-file "aide.rules"))
+          (schedule "0 3 * * 0")))
+```
+
+The `rules` file holds rule groups and rules only. The service generates the `aide.conf` around it, with `database_in`, `database_out` and `report_url` pointing at `state-directory`, and includes the rules file from there.
+
+**Configuration options:**
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `aide` | `aide` | The AIDE package |
+| `rules` | `%default-aide-rules` | File-like with the rule groups and rules |
+| `schedule` | `"0 3 * * *"` | Cron expression for the check |
+| `state-directory` | `"/var/lib/aide"` | Baseline database, as a git repository |
+| `log-file` | `"/var/log/aide.log"` | Results and diffs, rotated by the system log rotation |
+
+**Day to day:**
+
+```bash
+sudo herd trigger aide        # run a check now
+sudo tail -f /var/log/aide.log
+sudo aide-accept              # adopt the current state as the new baseline
+sudo git -C /var/lib/aide log # every baseline ever accepted
+```
+
+The first run initialises the baseline instead of checking. AIDE's exit codes 1 to 7 mean changes were found and are logged as a diff; 8 and above are errors.
+
+### Lynis
+
+Runs a [Lynis](https://cisofy.com/lynis/) system audit on a schedule and appends the hardening index, the number of warnings and suggestions, and the delta against the previous run to `/var/log/lynis.log`. The machine-readable reports and Lynis's own log stay under `/var/lib/lynis`.
+
+**Usage:**
+
+```scheme
+(use-modules (px services security))
+
+;; Mondays at 03:30
+(service lynis-service-type)
+
+(service lynis-service-type
+         (lynis-configuration
+          (schedule "0 4 1 * *")))
+```
+
+**Configuration options:**
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `lynis` | `lynis` | The Lynis package |
+| `schedule` | `"30 3 * * 1"` | Cron expression for the audit |
+| `state-directory` | `"/var/lib/lynis"` | Current and previous report, Lynis log |
+| `log-file` | `"/var/log/lynis.log"` | Summary and delta, rotated by the system log rotation |
+
+```bash
+sudo herd trigger lynis       # audit now
+sudo tail -f /var/log/lynis.log
+```
+
+Lynis needs `awk`, `find`, `ps` and `sed` and silently skips tests when `sysctl` or `nft` are missing, so the service runs it with an explicit PATH rather than whatever root happens to have.
+
 ### wayvnc PAM
 
 Installs `/etc/pam.d/wayvnc`, the policy [the wayvnc home service](#wayvnc) authenticates against when `enable-pam?` is on. wayvnc calls `pam_start` with that service name but ships no policy file, so without this the login falls through to Guix's deny-all `other` - closed, but useless.

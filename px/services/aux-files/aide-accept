@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+# aide-accept - accept the current filesystem state as the new AIDE baseline.
+# Run as root.
+
+set -euo pipefail
+umask 077
+
+if [[ $EUID -ne 0 ]]; then
+    echo "must run as root (try: sudo aide-accept)" >&2
+    exit 1
+fi
+
+CONF="$AIDE_CONF"
+STATE="${AIDE_STATE:-/var/lib/aide}"
+DB="$STATE/aide.db"
+NEWDB="$STATE/aide.db.new"
+LOG="${AIDE_LOG:-/var/log/aide.log}"
+
+mkdir -p "$STATE"
+chmod 700 "$STATE"
+touch "$LOG"; chmod 600 "$LOG"
+
+log() { printf '[%s] %s\n' "$(date -Iseconds)" "$*" >> "$LOG"; }
+
+host=$(uname -n)
+
+if [[ ! -f "$CONF" ]]; then
+    echo "config not found: $CONF" >&2
+    exit 1
+fi
+
+echo "Building new AIDE baseline (this can take a minute)..."
+# --update needs a baseline to read; without one, build it from scratch.
+# --update exits with the change bitmask (1-7) whenever the system differs
+# from the baseline, which is the whole point of accepting, so it must not
+# trip set -e. Only 8 and above is an error.
+mode=--update
+[[ -f "$DB" ]] || mode=--init
+set +e
+aide "$mode" --config="$CONF" < /dev/null > /dev/null 2>&1
+aide_rc=$?
+set -e
+if [[ $aide_rc -ge 8 ]]; then
+    echo "ERROR: aide $mode returned $aide_rc" >&2
+    exit 1
+fi
+
+if [[ ! -f "$NEWDB" ]]; then
+    echo "ERROR: aide $mode did not produce $NEWDB" >&2
+    exit 1
+fi
+
+mv "$NEWDB" "$DB"
+
+if [[ ! -d "$STATE/.git" ]]; then
+    git -C "$STATE" init -q -b main
+    git -C "$STATE" config user.name  "aide-check"
+    git -C "$STATE" config user.email "root@$host"
+fi
+
+git -C "$STATE" add -A
+if git -C "$STATE" diff --cached --quiet; then
+    echo "No baseline changes to commit."
+    log "accept: nothing to commit"
+    exit 0
+fi
+
+msg="accept: baseline updated $(date -Iseconds) on $host"
+git -C "$STATE" commit -q -m "$msg"
+log "$msg"
+echo "New baseline committed."

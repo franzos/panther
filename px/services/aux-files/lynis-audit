@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+# lynis-audit - periodic system audit. Run as root.
+#
+# Appends the report summary and the delta against the previous run to
+# $LYNIS_LOG; state lives in $LYNIS_STATE.
+
+set -euo pipefail
+umask 077
+
+STATE="${LYNIS_STATE:-/var/lib/lynis}"
+CUR="$STATE/report.dat"
+PREV="$STATE/report-prev.dat"
+LYNIS_LOGFILE="$STATE/lynis.log"
+LOG="${LYNIS_LOG:-/var/log/lynis.log}"
+
+mkdir -p "$STATE"
+chmod 700 "$STATE"
+touch "$LOG"; chmod 600 "$LOG"
+
+log() { printf '[%s] %s\n' "$(date -Iseconds)" "$*" >> "$LOG"; }
+
+host=$(uname -n)
+
+log "starting lynis audit"
+
+if [[ -f "$CUR" ]]; then
+    mv "$CUR" "$PREV"
+fi
+
+# --cronjob: non-interactive, no pauses, no colors. --quick: skip slow checks.
+# --report-file is the key=value dump we diff against.
+set +e
+lynis audit system \
+    --cronjob \
+    --quick \
+    --log-file "$LYNIS_LOGFILE" \
+    --report-file "$CUR" \
+    < /dev/null > /dev/null 2>&1
+lynis_rc=$?
+set -e
+
+if [[ ! -f "$CUR" ]]; then
+    log "ERROR: lynis produced no report (rc=$lynis_rc); see $LYNIS_LOGFILE"
+    exit 1
+fi
+
+extract() {
+    grep -E '^(warning|suggestion)\[\]=' "$1" 2>/dev/null | sort -u || true
+}
+
+index=$(grep -E '^hardening_index=' "$CUR" | cut -d= -f2 || true)
+prev_index=""
+if [[ -f "$PREV" ]]; then
+    prev_index=$(grep -E '^hardening_index=' "$PREV" | cut -d= -f2 || true)
+fi
+
+nwarn=$(grep -c -E '^warning\[\]=' "$CUR" 2>/dev/null || true)
+nsugg=$(grep -c -E '^suggestion\[\]=' "$CUR" 2>/dev/null || true)
+
+if [[ -f "$PREV" ]]; then
+    diff_body=$(diff -u <(extract "$PREV") <(extract "$CUR") || true)
+    if [[ -z "$diff_body" ]]; then
+        diff_body="(no delta vs previous run)"
+    fi
+else
+    diff_body="(first run, no previous report to diff)"
+fi
+
+{
+    printf '=== %s audit ===\n' "$(date -Iseconds)"
+    printf 'Host:             %s\n' "$host"
+    printf 'Hardening index:  %s (previous: %s)\n' "${index:-?}" "${prev_index:-first}"
+    printf 'Warnings:         %s\n' "$nwarn"
+    printf 'Suggestions:      %s\n' "$nsugg"
+    printf '\nDelta vs previous run (warnings + suggestions):\n'
+    printf '%s\n\n' "$diff_body"
+} >> "$LOG"
+
+log "logged report (index=${index:-?})"
+exit 0

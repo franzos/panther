@@ -1,0 +1,60 @@
+# AIDE rules for system-scope file integrity monitoring on Guix System.
+# Read through the aide.conf that aide-service-type generates, which supplies
+# database_in, database_out and report_url.
+#
+# NB1: AIDE 0.19 requires each rule line to start with a literal '/' — a
+#      leading regex like `.*` is not allowed. A regex *after* the leading
+#      slash is fine, so `/(root|home/[^/]+)/...` covers root plus any single
+#      user home directory in one rule.
+#
+# NB2: Guix populates /etc mostly with symlinks into /gnu/store/... whose
+#      targets churn on every reconfigure, producing constant noise. Symlinks
+#      are dropped except for a short list where a repoint would be an auth
+#      bypass; those do show a diff when a reconfigure changes them.
+#
+# NB3: a negative rule beats an overlapping positive one whatever the order or
+#      specificity (checked against 0.19.3), so the exceptions have to live
+#      inside the negative as a lookahead. Needs a PCRE-capable AIDE.
+
+# Rule groups
+# p     = permissions      u = user    g = group
+# ftype = file type        l = link target (symlinks only)
+# sha512 = content hash (regular files only)
+#
+# No mtime/ctime/size — dir/symlink churn produces noise; sha512 covers
+# content for regular files.
+NORMAL = p+u+g+ftype+sha512+l
+
+# ---------------------------------------------------------------------------
+# Credentials and keys — root's plus every user's ~/.ssh and ~/.gnupg. Watch
+# EVERYTHING including symlinks, since a symlink appearing in a credential dir
+# would itself be a red flag. /home/[^/]+ matches any single user home.
+# ---------------------------------------------------------------------------
+/(root|home/[^/]+)/\.ssh($|/) NORMAL
+/(root|home/[^/]+)/\.gnupg($|/) NORMAL
+# Exclude gnupg runtime/ephemeral noise
+!/(root|home/[^/]+)/\.gnupg/random_seed$
+!/(root|home/[^/]+)/\.gnupg/\.#.*
+!/(root|home/[^/]+)/\.gnupg/S\..*
+!/(root|home/[^/]+)/\.gnupg/log-.*
+!/(root|home/[^/]+)/\.gnupg/crls\.d($|/)
+!/(root|home/[^/]+)/\.gnupg/openpgp-revocs\.d($|/)
+
+# ---------------------------------------------------------------------------
+# /etc — real files (passwd/shadow/group/machine-id etc.), plus the few
+# symlinks below whose target is worth watching.
+# ---------------------------------------------------------------------------
+/etc($|/) NORMAL
+# Auth stack, identity resolution, login-time code execution, authorization
+# rules, trust stores, root code-execution paths. $-anchored: only the
+# top-level entry, so /etc/ssl/certs below stays excluded.
+!/etc/(?!(pam\.d|security|nsswitch\.conf|profile|bashrc|bashrc\.d|environment|login\.defs|shells|polkit-1|dbus-1|ssl|containers|modprobe\.d|udev)$).* l
+!/etc/resolv\.conf$
+!/etc/mtab$
+!/etc/blkid\.tab.*
+!/etc/ssl/certs($|/)
+
+# ---------------------------------------------------------------------------
+# /boot — kernel, initrd, bootloader.
+# ---------------------------------------------------------------------------
+/boot($|/) NORMAL
