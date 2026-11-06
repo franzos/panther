@@ -11,6 +11,7 @@
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system cmake)
+  #:use-module (guix build-system font)
   #:use-module (guix build-system meson)
   #:use-module (guix build-system trivial)
   #:use-module (gnu packages base)
@@ -211,3 +212,27 @@
     (description "Paper is an open source FreeDesktop icon project")
     (license license:expat)))
 
+
+(define-public font-openmoji
+  (package
+    (inherit (@ (gnu packages fonts) font-openmoji))
+    (version "17.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "https://github.com/hfg-gmuend/openmoji/releases"
+                           "/download/" version "/openmoji-font.zip"))
+       (file-name (string-append "openmoji-font-" version ".zip"))
+       (sha256
+        (base32 "1fmd7iplxy1msqdvdr3csgm5gngmcmx0biqkvnxvxl1qrf6ivrhx"))))
+    (arguments
+     (list
+      #:phases
+      ;; The zip holds one directory per variant; keep only the two Guix ships.
+      #~(modify-phases %standard-phases
+          (replace 'unpack
+            (lambda* (#:key source #:allow-other-keys)
+              (invoke "unzip" "-q" source
+                      "OpenMoji-black-glyf/*.ttf"
+                      "OpenMoji-color-glyf_colr_0/*.ttf"))))))
+    (native-inputs (list unzip))))
