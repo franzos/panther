@@ -46158,6 +46158,8 @@
                    rust-zvariant-5.9.2
                    rust-zvariant-derive-5.9.2
                    rust-zvariant-utils-3.3.0))
+ (inotify-tools =>
+                (list rust-libc-0.2.183))
  (ironbar =>
           (list rust-addr2line-0.21.0
                 rust-adler-1.0.2

@@ -812,3 +812,41 @@ Electron runtime for the Guix store.")
                            "usbutils-" version ".tar.xz"))
        (sha256
         (base32 "18bs0mnvrr11l5dj21vkzj6vv0vmmyj4a1ms0l5bbsyrzil7sa10"))))))
+
+(define-public inotify-tools
+  (package
+    (name "inotify-tools")
+    (version "4.26.270")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "https://github.com/inotify-tools/inotify-tools"
+                           "/releases/download/" version "/inotify-tools-"
+                           version ".tar.gz"))
+       (sha256
+        (base32 "19b20sf4pi8nvfr9lvvp6g7y22hqn6wwrqw6wmw434gxv671dvng"))))
+    (build-system cargo-build-system)
+    (arguments
+     (list
+      #:install-source? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'build
+            (lambda _
+              (invoke "make" "build" "headers" "man" "CC=gcc")))
+          (replace 'check
+            (lambda* (#:key tests? #:allow-other-keys)
+              (when tests?
+                (invoke "make" "check" "CC=gcc" "CXX=g++"
+                        (string-append "SHELL_PATH=" (which "bash"))))))
+          (replace 'install
+            (lambda _
+              (invoke "make" "install" "ENABLE_STATIC=0"
+                      (string-append "prefix=" #$output)))))))
+    (inputs (px-cargo-inputs 'inotify-tools))
+    (home-page "https://github.com/inotify-tools/inotify-tools")
+    (synopsis "Monitor file accesses")
+    (description
+     "The inotify-tools packages provides a C library and command-line tools
+to use Linux' inotify mechanism, which allows file accesses to be monitored.")
+    (license license:gpl2+)))
