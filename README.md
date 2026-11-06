@@ -793,6 +793,40 @@ vpnmux set                    # Neither (empty set)
 herd status vpnmux            # Daemon status
 ```
 
+### Chrome policies
+
+Writes a managed policy file for Google Chrome or Chromium. Both browsers read every `*.json` under their managed policy directory at launch and apply the union as enterprise policy, which is the only way to set these knobs system-wide without touching a profile. The default set turns off metrics, URL-keyed collection, geolocation, network prediction, the Privacy Sandbox trio and the various promotional and feedback surfaces, and keeps standard Safe Browsing and the security-only variations seed. It also sets `DefaultWebBluetoothGuardSetting` to 2: Chrome opens a BLE discovery scan at launch and never closes it, which stops the host from initiating LE connections, so bonded LE peripherals that idle out can no longer reconnect.
+
+**Usage:**
+
+```scheme
+(use-modules (px services browser))
+
+;; The defaults, for Google Chrome
+(service chrome-policies-service-type)
+
+;; Chromium instead
+(service chrome-policies-service-type
+         (chrome-policies-configuration
+          (directory "/etc/chromium/policies/managed")))
+
+;; Defaults plus a few of your own
+(service chrome-policies-service-type
+         (chrome-policies-configuration
+          (policies (append %default-chrome-policies
+                            '(("SyncDisabled" . #t)
+                              ("URLBlocklist" . #("example.com")))))))
+```
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `directory` | `"/etc/opt/chrome/policies/managed"` | Managed policy directory, must be under `/etc` |
+| `policies` | `%default-chrome-policies` | Alist of policy name to value; vectors for list-valued policies |
+
+Policy names and values are documented at https://chromeenterprise.google/policies/. `chrome://policy` in the browser shows what was applied and flags anything it didn't understand.
+
+The file lands through `etc-service-type`, so `/etc/opt` becomes a store symlink. A host that already has a real `/etc/opt` directory has to remove it first, or activation fails trying to symlink over it.
+
 ### AppArmor
 
 Mounts `securityfs` and loads AppArmor profiles into the kernel with `apparmor_parser`, at boot and again on every reconfigure. Profiles are file-like objects and load straight from the store, so a profile change is a reconfigure away and never needs a copy under `/etc`. The service has no opinion about what the profiles confine.
