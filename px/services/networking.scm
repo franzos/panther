@@ -65,7 +65,9 @@
             dnclient-configuration-server
             dnclient-configuration-name
             dnclient-shepherd-service
-            dnclient-service-type))
+            dnclient-service-type
+
+            network-manager-dispatcher-service-type))
 
 ;;
 ;; Nebula SERVICE
@@ -540,3 +542,41 @@ then provisioned as @code{dnclient-@var{name}} instead of @code{dnclient}."))
 Nebula service, under the Shepherd.  The host still has to be enrolled once by
 hand with @command{dnclient enroll -code CODE}; the daemon has nothing to do
 until that has happened.")))
+
+;;
+;; NetworkManager dispatcher scripts
+;;
+
+;; Copied, not symlinked: nm-dispatcher refuses a script that is not owned by
+;; root, and store files belong to the build user when guix-daemon runs
+;; unprivileged. /etc/NetworkManager is NetworkManager's own writable
+;; directory, so etc-service-type cannot place files there either.
+(define (network-manager-dispatcher-activation scripts)
+  #~(begin
+      (use-modules (guix build utils))
+      (for-each
+       (lambda (entry)
+         (let ((target (string-append "/etc/NetworkManager/dispatcher.d/"
+                                      (car entry)))
+               (script (cadr entry)))
+           (mkdir-p (dirname target))
+           (false-if-exception (delete-file target))
+           (copy-file script target)
+           (chown target 0 0)
+           (chmod target #o755)))
+       '#$scripts)))
+
+(define network-manager-dispatcher-service-type
+  (service-type
+   (name 'network-manager-dispatcher)
+   (extensions
+    (list (service-extension activation-service-type
+                             network-manager-dispatcher-activation)))
+   (compose concatenate)
+   (extend append)
+   (default-value '())
+   (description
+    "Install scripts into @file{/etc/NetworkManager/dispatcher.d}, where
+NetworkManager runs them as root on every connection change.  The value is a
+list of @code{(\"name\" file-like)} entries; a name may carry one of the
+dispatcher's subdirectories, such as @code{\"pre-up.d/10-vpn\"}.")))

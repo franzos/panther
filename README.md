@@ -710,6 +710,41 @@ tailscale up         # Authenticate and connect
 tailscale status     # Check connection status
 ```
 
+### NetworkManager dispatcher
+
+Installs scripts into `/etc/NetworkManager/dispatcher.d`, which NetworkManager runs as root with `<interface> <action>` on every connection change (`up`, `down`, `dhcp4-change`, `connectivity-change`, ...). There is no declarative way to do this in Guix: `etc-service-type` can't write into `/etc/NetworkManager`, which NetworkManager owns, and a store symlink wouldn't work anyway because nm-dispatcher refuses scripts not owned by root, and with an unprivileged `guix-daemon` store files belong to the build user. The activation copies each script into place, root-owned 0755.
+
+**Usage:**
+
+```scheme
+(use-modules (px services networking))
+
+(service network-manager-dispatcher-service-type
+         (list `("50-syncthing" ,(local-file "nm-dispatcher-syncthing"))
+               `("pre-up.d/10-vpn" ,(program-file "vpn-up" #~(...)))))
+```
+
+Each entry is a name and a file-like. The name may carry one of the dispatcher's subdirectories (`pre-up.d`, `pre-down.d`, `no-wait.d`). The service is extensible, so other services can add scripts with `simple-service`:
+
+```scheme
+(simple-service 'my-hook network-manager-dispatcher-service-type
+                (list `("60-my-hook" ,my-script)))
+```
+
+A script written in shell needs its interpreter on PATH or absolute. Wrapping it in a `program-file` that sets PATH from store packages and `execl`s bash keeps it independent of the system profile:
+
+```scheme
+(program-file "nm-dispatcher-syncthing"
+  #~(begin
+      (setenv "PATH" (string-append #$(file-append iptables "/sbin") ":"
+                                    #$(file-append network-manager "/bin")))
+      (apply execl #$(file-append bash "/bin/bash") "bash"
+             #$(local-file "nm-dispatcher-syncthing")
+             (cdr (command-line)))))
+```
+
+Removing an entry from the list does not delete the file on the next reconfigure; remove it by hand.
+
 ### vpnmux
 
 Runs the [vpnmux](https://github.com/franzos/vpnmux) daemon, a control loop that keeps Mullvad and Tailscale from conflicting at the netfilter and DNS layer. It continuously reconciles the system to a desired provider state by driving `nft`, `mullvad`, and `tailscale`. The service wires those binaries via `VPNMUX_NFT`/`VPNMUX_MULLVAD`/`VPNMUX_TAILSCALE`, creates `/run/vpnmux` and `/var/lib/vpnmux`, and installs the `vpnmux` CLI into the system profile.
