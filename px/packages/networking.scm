@@ -34,6 +34,7 @@
   #:use-module (gnu packages curl)
   #:use-module (gnu packages fontutils)
   #:use-module (gnu packages freedesktop)
+  #:use-module (gnu packages gettext)
   #:use-module (gnu packages gl)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
@@ -1032,3 +1033,16 @@ interface (@command{mitmweb}).")
      (modify-inputs (package-inputs strongswan)
        (delete "libsoup-minimal")
        (append sqlite)))))
+
+(define-public net-tools
+  (package
+    (inherit (@ (gnu packages linux) net-tools))
+    (version "2.10")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "mirror://sourceforge/net-tools/net-tools-"
+                           version ".tar.xz"))
+       (sha256
+        (base32 "0s8db1pxkfccw0r3zfdplzvm4fbm6d8vvjn3a7x9ps21a9d46qmj"))))
+    (native-inputs (list gettext-minimal))))
