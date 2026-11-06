@@ -479,19 +479,19 @@ assignment, transitions, comments, and search via JQL.")
 (define-public jj-vcs
   (package
     (name "jj-vcs")
-    (version "0.45.1")
+    (version "0.47.1")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "jj-cli" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "0vq7zysy57slnnb3gqnw9wxfyziw684zbswqbcmn67vkrq260cp7"))))
+        (base32 "0pkipp9kv9qpdn8g3girjl9q7prrqiq36kfb7wc755qi25jz1whh"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
        #:tests? #f  ; Tests require testutils module
-       #:rust ,rust-1.89))
+       #:rust ,rust-1.98))
     (native-inputs (list pkg-config))
     (inputs (cons* openssl (px-cargo-inputs 'jj-cli)))
     (home-page "https://github.com/jj-vcs/jj")
