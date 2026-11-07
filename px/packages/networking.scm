@@ -1034,6 +1034,18 @@ interface (@command{mitmweb}).")
        (delete "libsoup-minimal")
        (append sqlite)))))
 
+;; IKEv1 is off by default since 6.1; FortiGate aggressive-mode/XAuth dial-up
+;; tunnels still need it.
+(define-public strongswan-ikev1
+  (package
+    (inherit strongswan-6)
+    (name "strongswan-ikev1")
+    (arguments
+     (substitute-keyword-arguments (package-arguments strongswan-6)
+       ((#:configure-flags flags)
+        `(cons "--enable-ikev1" ,flags))))
+    (synopsis "IPsec-based VPN tool, with IKEv1 support")))
+
 (define-public net-tools
   (package
     (inherit (@ (gnu packages linux) net-tools))
