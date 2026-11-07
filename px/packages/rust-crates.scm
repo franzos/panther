@@ -11897,6 +11897,10 @@
   (crate-source "globset" "0.4.20"
                 "1249r63326pzaz6z1c04mmdp6dqg6z3kni47jyylans622a4mhq7"))
 
+(define rust-globset-0.4.21
+  (crate-source "globset" "0.4.21"
+                "0bfxrhhdzywx65q07slbasf2i6sazya9bg7brwjaih1daa2hv2zr"))
+
 (define rust-globwalk-0.9.1
   (crate-source "globwalk" "0.9.1"
                 "0mz7bsa66p2rrgnz3l94ac4kbklh7mq8j30iizyxjy4qyvmn1xqb"))
@@ -16205,6 +16209,10 @@
   (crate-source "jiff" "0.2.38"
                 "10x38b9qb1b47mq54d9j4ljkpk7i5ygvknn0lf4h1sybbmqhbc5j"))
 
+(define rust-jiff-0.2.39
+  (crate-source "jiff" "0.2.39"
+                "0g7ghdl0minhwgkwf036ld5lmcdnwbf7kf5h75f9xj5si82h7irs"))
+
 (define rust-jiff-0.2.5
   (crate-source "jiff" "0.2.5"
                 "0q3jpq3scznmviiajldyf5xby38zgyvkxbrmgb9hf78r6416f0n1"))
@@ -16216,6 +16224,10 @@
 (define rust-jiff-core-0.1.1
   (crate-source "jiff-core" "0.1.1"
                 "130jqxlbrmll1ahvm9lwr06grmzpmnx5wc6j0n8crkiw0ivgwljy"))
+
+(define rust-jiff-core-0.1.2
+  (crate-source "jiff-core" "0.1.2"
+                "14qf99yrvnzm8rsvz7va43kgij398x26wpfk6s6gpfjkxc4k7r5f"))
 
 (define rust-jiff-static-0.2.15
   (crate-source "jiff-static" "0.2.15"
@@ -16264,6 +16276,10 @@
 (define rust-jiff-static-0.2.38
   (crate-source "jiff-static" "0.2.38"
                 "0p39a035j9c634llmr8lh1jz7ml8gqrbsla4d3j7wz6gadr83j9c"))
+
+(define rust-jiff-static-0.2.39
+  (crate-source "jiff-static" "0.2.39"
+                "0gd96qg3jvxapr4a06nbrq2dq4skjbx06hxprklx1dvyqrq29hvd"))
 
 (define rust-jiff-static-0.2.5
   (crate-source "jiff-static" "0.2.5"
@@ -25909,6 +25925,10 @@
   (crate-source "schemars" "1.2.2"
                 "0jng632s64njf9vghr3i1l4m15h4y85m5vhg7vkwdkdnjg978wk8"))
 
+(define rust-schemars-1.2.3
+  (crate-source "schemars" "1.2.3"
+                "0vnzz8smh3ixzy297898mwzfx0r5aadz2vxsbafwlxsaywk8hl5b"))
+
 (define rust-schemars-derive-0.8.21
   (crate-source "schemars_derive" "0.8.21"
                 "03ncmrkldfmdc9skmlyysx2vqdlyyz91r5mbavw77zwaay4fbvmi"))
@@ -25928,6 +25948,10 @@
 (define rust-schemars-derive-1.2.2
   (crate-source "schemars_derive" "1.2.2"
                 "1fp2wkdk32nv66swy7k7pz7sxygn634snlppih5jzbs6ddqng36r"))
+
+(define rust-schemars-derive-1.2.3
+  (crate-source "schemars_derive" "1.2.3"
+                "0sgwpzi91y6ibw7ns4wpqzgm9ddnmi7q8ia62am62zgsjhhakhz1"))
 
 (define rust-scm-record-0.10.1
   (crate-source "scm-record" "0.10.1"
@@ -38924,7 +38948,7 @@
              rust-gimli-0.32.3
              rust-git2-0.21.0
              rust-glob-0.3.2
-             rust-globset-0.4.20
+             rust-globset-0.4.21
              rust-globwalk-0.9.1
              rust-grit-pattern-matcher-0.5.2
              rust-grit-util-0.5.2
@@ -38982,9 +39006,9 @@
              rust-itertools-0.14.0
              rust-itertools-0.15.0
              rust-itoa-1.0.18
-             rust-jiff-0.2.37
-             rust-jiff-core-0.1.0
-             rust-jiff-static-0.2.37
+             rust-jiff-0.2.39
+             rust-jiff-core-0.1.2
+             rust-jiff-static-0.2.39
              rust-jiff-tzdb-0.1.4
              rust-jiff-tzdb-platform-0.1.3
              rust-jni-0.22.4
@@ -38997,7 +39021,7 @@
              rust-kqueue-1.1.1
              rust-kqueue-sys-1.0.4
              rust-lazy-static-1.5.0
-             rust-libc-0.2.190
+             rust-libc-0.2.191
              rust-libgit2-sys-0.18.5+1.9.4
              rust-libmimalloc-sys-0.1.44
              rust-libredox-0.1.3
@@ -39142,8 +39166,8 @@
              rust-salsa-macros-0.28.5
              rust-same-file-1.0.6
              rust-schannel-0.1.30
-             rust-schemars-1.2.2
-             rust-schemars-derive-1.2.2
+             rust-schemars-1.2.3
+             rust-schemars-derive-1.2.3
              rust-scopeguard-1.1.0
              rust-security-framework-3.7.0
              rust-security-framework-sys-2.17.0
