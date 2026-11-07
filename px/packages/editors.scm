@@ -611,7 +611,7 @@ editors that support the Language Server Protocol.")
 (define-public antigravity
   (package
     (name "antigravity")
-    (version "2.0.6-5413878570549248")
+    (version "2.29.0-5723181030440960")
     (source
      (origin
        (method url-fetch)
@@ -621,7 +621,7 @@ editors that support the Language Server Protocol.")
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
         (base32
-         "1iacwi4zpkdcp75hn0irrf4a7zaf1zafmc8f0ckprc29a59h87md"))))
+         "0r4n32zw5kg9jiacc5fd452zafh46cshvmf00q70g8xkp425frrs"))))
     (build-system chromium-binary-build-system)
     (arguments
      (list
@@ -630,8 +630,6 @@ editors that support the Language Server Protocol.")
       #~'("antigravity"
           "chrome-sandbox"
           "chrome_crashpad_handler"
-          "libEGL.so"
-          "libGLESv2.so"
           "libffmpeg.so"
           "libvk_swiftshader.so"
           "libvulkan.so.1"
@@ -660,7 +658,7 @@ editors that support the Language Server Protocol.")
                          (len (bytevector-u32-ref head 12 'little))
                          (index (utf8->string (get-bytevector-n port len)))
                          (m (string-match
-                             "\"icon.png\":\\{\"size\":([0-9]+),[^}]*\\},\"offset\":\"([0-9]+)\""
+                             "\"icon.png\":\\{\"size\":([0-9]+),\"offset\":\"([0-9]+)\""
                              index)))
                     (seek port (+ 8 size (string->number (match:substring m 2)))
                           SEEK_SET)
