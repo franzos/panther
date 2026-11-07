@@ -666,7 +666,7 @@ transfers, auto-completion, desktop notifications, and custom themes.")
 (define-public hatsu
   (package
     (name "hatsu")
-    (version "0.3.5")
+    (version "0.3.6")
     (source
      (origin
        (method git-fetch)
@@ -675,7 +675,7 @@ transfers, auto-completion, desktop notifications, and custom themes.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "069yd8xhignd3bcqb58xh4zf71hbcpx3wqdkizrz9lcmyf9ibcvr"))))
+        (base32 "1zsmjbw3g7nxl859f88bki8wnhd56dxvl447w5a143fd96rf4hgr"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
