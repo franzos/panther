@@ -816,7 +816,7 @@ Electron runtime for the Guix store.")
 (define-public inotify-tools
   (package
     (name "inotify-tools")
-    (version "4.26.270")
+    (version "4.26.272")
     (source
      (origin
        (method url-fetch)
@@ -824,7 +824,7 @@ Electron runtime for the Guix store.")
                            "/releases/download/" version "/inotify-tools-"
                            version ".tar.gz"))
        (sha256
-        (base32 "19b20sf4pi8nvfr9lvvp6g7y22hqn6wwrqw6wmw434gxv671dvng"))))
+        (base32 "19285dbsahs35h7iyfzdjl3f8alaah1pza0kw4g386l66nca90b9"))))
     (build-system cargo-build-system)
     (arguments
      (list
