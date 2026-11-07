@@ -253,8 +253,8 @@ images.")
 
 (define-public oculante-next
   ;; Development branch tracking the egui 0.36 / Rust 2024 rewrite.
-  (let ((revision "0")
-        (commit "fb8f07949081a7c5357f9f285497607364c9fad1"))
+  (let ((revision "1")
+        (commit "be5f790fc2de9a7eeb52928c412a515c0f0cd4f7"))
     (package
       (inherit oculante)
       (name "oculante-next")
@@ -267,7 +267,7 @@ images.")
                (commit commit)))
          (file-name (git-file-name name version))
          (sha256
-          (base32 "0qlxfkxq5i94z65zpxb57v68fsy7q3wln8j709xnjag0bgl6k2gs"))))
+          (base32 "1n0q3s1aw9j9gz3mqjqmzy6yxiq70hlf213xhb03382inmilbq6q"))))
       (arguments
        `(#:install-source? #f
          #:tests? #f
