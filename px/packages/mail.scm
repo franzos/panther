@@ -51,7 +51,7 @@ Maildir, mbox and pimdir stores.  IMAP and SMTP authentication includes XOAUTH2
 and OAUTHBEARER.")
     (license (list license:expat license:asl2.0))))
 
-(define bichon-version "2.3.0")
+(define bichon-version "2.3.2")
 
 (define bichon-source
   (origin
@@ -61,7 +61,7 @@ and OAUTHBEARER.")
           (commit bichon-version)))
     (file-name (git-file-name "bichon" bichon-version))
     (sha256
-     (base32 "0rn8xi1h4jfjx3yn2cmlq642lvb4swmx3ipz5cmsgmabj12iryx9"))
+     (base32 "1fvzrxzrlfqfd4564al1a6qb7jpczhkkdizi1b8f02w7c5g9a3vn"))
     (snippet
         #~(begin
             (use-modules (guix build utils)
@@ -89,12 +89,6 @@ and OAUTHBEARER.")
                               #f pattern content
                               'pre replacement 'post)
                              port)))))
-            (rewrite-file "crates/core/Cargo.toml"
-                          "async-imap = \\{ git[^}]+\\}"
-                          (string-append
-                           "async-imap = { path = \"../../vendored-git/async-imap\""
-                           ", default-features = false"
-                           ", features = [\"runtime-tokio\", \"compress\"] }"))
             (rewrite-file "crates/core/Cargo.toml"
                           "outlook-pst = \\{ git[^}]+\\}"
                           "outlook-pst = { path = \"../../vendored-git/outlook-pst\" }")
@@ -126,7 +120,7 @@ and OAUTHBEARER.")
            (invoke "node" "node_modules/vite/bin/vite.js" "build"))
          (copy-recursively "/tmp/web/dist" #$output)))
    #:options `(#:hash-algo sha256
-               #:hash ,(base32 "0gnfgic3vq88zm1lk72b1sibbkyc898x1m1v6qzjdqgmahdaay64")
+               #:hash ,(base32 "1hb8vyrb199fizxx604w167r29fd5mxs4x8p7czps833kkb4qqvp")
                #:recursive? #t)))
 
 (define-public bichon
@@ -138,11 +132,13 @@ and OAUTHBEARER.")
     (arguments
      `(#:install-source? #f
        #:tests? #f
-       #:rust ,rust-1.95
+       #:rust ,rust-1.98
        #:cargo-install-paths
        '("crates/server" "crates/cli" "crates/admin")
        #:phases
        (modify-phases %standard-phases
+         ;; The winapi *-windows-gnu crates ship prebuilt .a files.
+         (delete 'check-for-pregenerated-files)
          (add-after 'unpack 'install-web-dist
            (lambda* (#:key native-inputs inputs #:allow-other-keys)
              ;; Prebuilt frontend for RustEmbed in the server crate
@@ -150,48 +146,17 @@ and OAUTHBEARER.")
              (copy-recursively
               (assoc-ref (or native-inputs inputs) "bichon-web-dist")
               "web/dist")))
-         ;; Place the two git-fetched deps under ./vendored-git/ so member
-         ;; crates can reference them via path.  outlook-pst's crates/pst is
-         ;; extracted as a standalone package — cargo walks up to bichon's
-         ;; workspace, not outlook-pst's, so `.workspace = true` inheritances
-         ;; can't resolve.  For async-imap, also strip [dev-dependencies] and
-         ;; the optional async-std dep: cargo pulls dev-deps for path deps
-         ;; even when not building tests.
+         ;; Place the git-fetched outlook-pst under ./vendored-git/ so member
+         ;; crates can reference it via path.  Its crates/pst is extracted as
+         ;; a standalone package — cargo walks up to bichon's workspace, not
+         ;; outlook-pst's, so `.workspace = true` inheritances can't resolve.
          (add-after 'unpack-rust-crates 'vendor-git-deps
            (lambda* (#:key inputs #:allow-other-keys)
-             (use-modules (ice-9 rdelim))
              (mkdir-p "vendored-git")
              (define (handle-input pair)
                (let ((name (car pair))
                      (path (cdr pair)))
                  (cond
-                  ((and (string? path)
-                        (string-prefix? "rust-async-imap-" name))
-                   (let ((dest "vendored-git/async-imap"))
-                     (unless (file-exists? dest)
-                       (copy-recursively path dest))
-                     ;; Drop [dev-dependencies] (cargo pulls those for path deps)
-                     ;; and the optional async-std dep (not activated, but cargo
-                     ;; still requires it to be resolvable in the vendor dir).
-                     (let* ((toml-path (string-append dest "/Cargo.toml"))
-                            (content (call-with-input-file toml-path
-                                       (lambda (p)
-                                         (let loop ((acc ""))
-                                           (let ((line (read-line p 'concat)))
-                                             (if (eof-object? line)
-                                                 acc
-                                                 (loop (string-append acc line))))))))
-                            (idx (string-contains content "[dev-dependencies]"))
-                            (trimmed (if idx (substring content 0 idx) content)))
-                       (chmod toml-path #o644)
-                       (call-with-output-file toml-path
-                         (lambda (port) (display trimmed port))))
-                     (substitute* (string-append dest "/Cargo.toml")
-                       (("^async-std = .*$") "")
-                       (("\"async-std\",") "")
-                       (("^default = \\[\"runtime-async-std\"\\]")
-                        "default = []")
-                       (("^runtime-async-std = .*$") ""))))
                   ((and (string? path)
                         (string-prefix? "rust-outlook-pst-" name))
                    (let ((dest "vendored-git/outlook-pst"))
