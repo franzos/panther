@@ -354,6 +354,107 @@ repository, patching the bundled Chromium runtime for the Guix store.
 Linux support is currently a preview; Computer Use is not available on it.")
     (license (nonfree "https://openai.com/policies/terms-of-use/"))))
 
+(define-public orca-ide
+  (package
+    (name "orca-ide")
+    (version "1.4.253")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "https://github.com/stablyai/orca/releases/download/v"
+                           version "/orca-ide_" version "_amd64.deb"))
+       (file-name (string-append name "-" version ".deb"))
+       (sha256
+        (base32 "0wnmcdr7j6b9c3pcddb677n5xdghrbms3fcnc3k8pp0531dw4bwq"))))
+    (build-system chromium-binary-build-system)
+    (arguments
+     (list
+      ;; ~190MB deb, faster to fetch from GitHub than a substitute.
+      #:substitutable? #f
+      ;; orcad-template ships unpatched runtimes that get copied to remote hosts.
+      #:validate-runpath? #f
+      #:wrapper-plan
+      #~(map (lambda (file)
+               (string-append "opt/Orca/" file))
+             '("orca-ide"
+               "chrome-sandbox"
+               "chrome_crashpad_handler"
+               "libEGL.so"
+               "libGLESv2.so"
+               "libffmpeg.so"
+               "libvk_swiftshader.so"
+               "libvulkan.so.1"
+               "resources/agent-browser-linux-x64"
+               "resources/bin/orca-wayland-clipboard"
+               "resources/node_modules/@parcel/watcher-linux-x64-glibc/watcher.node"
+               "resources/node_modules/node-pty/build/Release/pty.node"
+               "resources/node_modules/node-pty/bin/linux-x64-148/node-pty.node"
+               "resources/node_modules/sherpa-onnx-linux-x64/sherpa-onnx.node"
+               "resources/node_modules/sherpa-onnx-linux-x64/libonnxruntime.so"
+               "resources/node_modules/sherpa-onnx-linux-x64/libsherpa-onnx-c-api.so"
+               "resources/node_modules/sherpa-onnx-linux-x64/libsherpa-onnx-cxx-api.so"))
+      #:install-plan
+      #~'(("opt/Orca/" "/share/orca-ide")
+          ("usr/share/applications/" "/share/applications")
+          ("usr/share/icons/" "/share/icons"))
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'install 'patch-sources
+            (lambda* (#:key inputs #:allow-other-keys)
+              (substitute* "usr/share/applications/orca-ide.desktop"
+                (("Exec=/opt/Orca/orca-ide")
+                 (string-append "Exec=" #$output "/bin/orca-ide-desktop")))
+              (substitute* "opt/Orca/resources/bin/orca-ide"
+                (("#!/usr/bin/env bash")
+                 (string-append "#!" (search-input-file inputs "bin/bash"))))))
+          ;; orca-ide is the upstream CLI (`orca-ide open` starts the app);
+          ;; the desktop entry launches Electron directly so it gets %U.
+          (add-before 'install-wrapper 'install-exe
+            (lambda _
+              (let ((bin (string-append #$output "/bin"))
+                    (app (string-append #$output "/share/orca-ide")))
+                (mkdir-p bin)
+                (symlink (string-append app "/resources/bin/orca-ide")
+                         (string-append bin "/orca-ide"))
+                (symlink (string-append app "/orca-ide")
+                         (string-append bin "/orca-ide-desktop")))))
+          ;; patchelf drops $ORIGIN, which the main binary needs for
+          ;; libffmpeg.so and sherpa-onnx for its sibling libraries.
+          (add-after 'install-exe 'set-bundled-rpath
+            (lambda* (#:key inputs #:allow-other-keys)
+              (let ((app (string-append #$output "/share/orca-ide")))
+                (invoke "patchelf" "--add-rpath"
+                        (string-append app ":" (assoc-ref inputs "nss")
+                                       "/lib/nss")
+                        (string-append app "/orca-ide"))
+                (for-each
+                 (lambda (file)
+                   (invoke "patchelf" "--add-rpath" "$ORIGIN" file))
+                 (find-files
+                  (string-append app "/resources/node_modules/sherpa-onnx-linux-x64")
+                  "\\.(so|node)$")))))
+          ;; Chromium picks its password backend from the desktop environment;
+          ;; on unrecognized ones (wlroots compositors such as niri) it falls
+          ;; back to the plaintext store and won't persist logins.  Force
+          ;; libsecret so it reaches whatever Secret Service is running.
+          (add-after 'install-wrapper 'force-libsecret
+            (lambda _
+              (substitute* (string-append #$output "/bin/orca-ide-desktop")
+                (("share/orca-ide/orca-ide\" ")
+                 "share/orca-ide/orca-ide\" --password-store=gnome-libsecret ")))))))
+    (supported-systems '("x86_64-linux"))
+    (home-page "https://orca.dev")
+    (synopsis "Desktop IDE for running parallel coding agents")
+    (description
+     "Orca runs a fleet of coding agents such as Claude Code and Codex side by
+side, each in its own git worktree, using your own subscriptions.  It bundles
+terminals, a diff and review view, a built-in browser for agents, and a remote
+runtime for running agents on SSH hosts.
+
+This package repackages the official Debian build, patching the bundled
+Chromium runtime for the Guix store.")
+    (license license:expat)))
+
 (define-public maple
   (package
     (name "maple")
