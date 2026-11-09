@@ -31,14 +31,16 @@
   (sha go-git-reference-sha256)
   ;; Bumping this changes the vendored tarball, so it is set per reference
   ;; rather than globally.
-  (go go-git-reference-go (default go-1.26)))
+  (go go-git-reference-go (default go-1.26))
+  ;; Directory holding go.mod, for repos where it isn't at the root.
+  (subdir go-git-reference-subdir (default #f)))
 
 (define* (go-fetch-vendored uri hash-algorithm hash-value name #:key system)
-  (let* ((go (match uri
-               (($ <go-git-reference> _ _ _ go) go)))
+  (let* ((go (go-git-reference-go uri))
+         (subdir (go-git-reference-subdir uri))
          (src
           (match uri
-            (($ <go-git-reference> url commit sha)
+            (($ <go-git-reference> url commit sha _ _)
              (origin
                (method git-fetch)
                (uri (git-reference
@@ -70,7 +72,10 @@
            ;; in go.mod -- the build sandbox has no writable HOME for sumdb.
            (setenv "GOTOOLCHAIN" "local")
            (setenv "SSL_CERT_DIR" #+(file-append nss-certs "/etc/ssl/certs/"))
-           (invoke "go" "mod" "vendor")
+           #$(if subdir
+                 #~(with-directory-excursion #$subdir
+                     (invoke "go" "mod" "vendor"))
+                 #~(invoke "go" "mod" "vendor"))
            (invoke "tar" "czvf" #$output
                    "--mtime=@0"
                    "--owner=root:0"

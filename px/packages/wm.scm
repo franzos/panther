@@ -8,6 +8,7 @@
   #:use-module (guix gexp)
   #:use-module (guix utils)
   #:use-module (guix build-system copy)
+  #:use-module (guix build-system go)
   #:use-module (guix build-system meson)
   #:use-module (gnu packages bash)
   #:use-module (gnu packages calendar)
@@ -18,6 +19,7 @@
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages gl)
   #:use-module (gnu packages glib)
+  #:use-module (gnu packages golang)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages hardware)
@@ -37,7 +39,8 @@
   #:use-module (gnu packages wget)
   #:use-module (gnu packages window-management)
   #:use-module (gnu packages xdisorg)
-  #:use-module (gnu packages xml))
+  #:use-module (gnu packages xml)
+  #:use-module (px packages go))
 
 ;; Niri with SHM screencast support (PR #1791)
 ;; Fixes black screen in Chrome/WebRTC screen sharing
@@ -240,4 +243,112 @@ C++ rewrite.")
 dock, application launcher, notifications, lock screen, wallpaper management
 and settings.  This is the version 5 rewrite, built directly on Wayland and
 OpenGL ES with no Qt or GTK toolkit dependency.")
+    (license license:expat)))
+
+(define dux-qml-common
+  (let ((commit "0877466a25b8e191a865bf75d0e500de6351ae04"))
+    (origin
+      (method git-fetch)
+      (uri (git-reference
+            (url "https://github.com/duxlabs-dev/dux-qml-common")
+            (commit commit)))
+      (file-name (git-file-name "dux-qml-common" (string-take commit 7)))
+      (sha256
+       (base32 "1nhxclsv86mvqbpayizw6ixgws58hcm41j6gvxxlb2h5k56zv2yk")))))
+
+(define-public dux-shell
+  (package
+    (name "dux-shell")
+    (version "2.1.2")
+    (source
+     (origin
+       (method go-fetch-vendored)
+       (uri (go-git-reference
+             (url "https://github.com/duxlabs-dev/dux-shell")
+             (commit (string-append "v" version))
+             (sha (base32 "0fh4hv1880pcwxbx6fh4cmpxwh76wwwq7shh5128xpv9vkmyrhqg"))
+             (go go-1.27)
+             (subdir "core")))
+       (sha256
+        (base32 "19vv8by17da9hhndzriqwf5cz4jhhnm3d4gr0ckhxrzq2d5v5ilg"))))
+    (build-system go-build-system)
+    (arguments
+     (list
+      #:go go-1.27
+      #:import-path "github.com/duxlabs-dev/dux-shell/core"
+      #:unpack-path "github.com/duxlabs-dev/dux-shell"
+      #:install-source? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'unpack-dux-qml-common
+            (lambda* (#:key unpack-path #:allow-other-keys)
+              (copy-recursively
+               #$dux-qml-common
+               (string-append "src/" unpack-path "/dux-qml-common"))))
+          (replace 'build
+            (lambda* (#:key import-path #:allow-other-keys)
+              (with-directory-excursion (string-append "src/" import-path)
+                (setenv "GO111MODULE" "on")
+                (setenv "CGO_ENABLED" "0")
+                (invoke "make" "sync-shell")
+                (invoke "go" "build" "-mod=vendor" "-trimpath"
+                        "-tags" "distro_binary withshell"
+                        (string-append "-ldflags=-s -w -X main.Version="
+                                       #$version)
+                        "-o" "bin/dms" "./cmd/dms"))))
+          (replace 'check
+            (lambda* (#:key tests? import-path #:allow-other-keys)
+              (when tests?
+                (with-directory-excursion (string-append "src/" import-path)
+                  (substitute* (find-files "internal" "_test\\.go$")
+                    (("/bin/sh") (which "sh")))
+                  ;; These need qtpaths, a Wayland data device or an
+                  ;; sd_notify socket.
+                  (invoke "go" "test" "-mod=vendor" "./..."
+                          "-skip" (string-append
+                                   "TestCheckQtPlatformThemePlugin"
+                                   "|TestApplyConfigChange_DisableReleasesDataDevice"
+                                   "|TestReadinessCancellationDoesNotNotify"))))))
+          (replace 'install
+            (lambda* (#:key import-path #:allow-other-keys)
+              (let* ((src (string-append "src/" import-path "/.."))
+                     (dms (string-append #$output "/bin/dms"))
+                     (share (string-append #$output "/share")))
+                (install-file (string-append src "/core/bin/dms")
+                              (dirname dms))
+                (for-each
+                 (lambda (f)
+                   (install-file (string-append src "/assets/" f)
+                                 (string-append share "/applications")))
+                 '("dms-open.desktop"
+                   "dev.duxlabs.shell.desktop"
+                   "dev.duxlabs.shell.notepad.desktop"))
+                (install-file (string-append src "/assets/dev.duxlabs.shell.svg")
+                              (string-append share "/icons/hicolor/scalable/apps"))
+                (for-each
+                 (lambda (shell file)
+                   (mkdir-p (dirname (string-append share file)))
+                   (with-output-to-file (string-append share file)
+                     (lambda ()
+                       (invoke dms "completion" shell))))
+                 '("bash" "zsh" "fish")
+                 '("/bash-completion/completions/dms"
+                   "/zsh/site-functions/_dms"
+                   "/fish/vendor_completions.d/dms.fish")))))
+          (add-after 'install 'wrap-program
+            (lambda _
+              (wrap-program (string-append #$output "/bin/dms")
+                `("PATH" prefix
+                  (,(string-append #$(this-package-input "quickshell")
+                                   "/bin")))))))))
+    (inputs (list bash-minimal quickshell))
+    (home-page "https://duxlabs.dev")
+    (synopsis "Desktop shell for Wayland built on Quickshell")
+    (description
+     "Dux Modular Shell (DMS) is a desktop shell for Wayland compositors such
+as Niri, Hyprland, Sway, labwc and MangoWC, built on Quickshell (Qt/QML) with
+a Go backend.  It provides a bar, application launcher, notifications, lock
+screen, idle management, polkit agent, clipboard history, OSD and theming.
+The @command{dms} command embeds the QML shell and starts it with
+@command{dms run}.")
     (license license:expat)))
