@@ -5253,6 +5253,10 @@
   (crate-source "ctutils" "0.4.5"
                 "182gbkq9y4j8rpwyf2iwlvdpn5sw257fd8yizyrq1mkxmav8zliq"))
 
+(define rust-ctutils-0.4.8
+  (crate-source "ctutils" "0.4.8"
+                "0ks7pq37idp67pdiwkm1dq6m65rlpb5xh5w7g998msh6gbfg86i6"))
+
 (define rust-cty-0.2.2
   (crate-source "cty" "0.2.2"
                 "0d8z0pbr87wgzqqb2jk5pvj0afzc6d3rb772ach6fijhg6yglrdk"))
@@ -42623,7 +42627,7 @@
                       rust-cpufeatures-0.3.0
                       rust-crypto-common-0.1.7
                       rust-crypto-common-0.2.2
-                      rust-ctutils-0.4.2
+                      rust-ctutils-0.4.8
                       rust-deadpool-0.12.3
                       rust-deadpool-runtime-0.1.4
                       rust-digest-0.10.7
@@ -42731,7 +42735,7 @@
                       rust-rustls-pki-types-1.15.1
                       rust-rustls-platform-verifier-0.7.0
                       rust-rustls-platform-verifier-android-0.1.1
-                      rust-rustls-webpki-0.103.15
+                      rust-rustls-webpki-0.103.16
                       rust-rustversion-1.0.23
                       rust-same-file-1.0.6
                       rust-schannel-0.1.29
@@ -42766,7 +42770,7 @@
                       rust-tinystr-0.8.3
                       rust-tinyvec-1.12.0
                       rust-tinyvec-macros-0.1.1
-                      rust-tokio-1.53.1
+                      rust-tokio-1.54.1
                       rust-tokio-macros-2.7.2
                       rust-tokio-rustls-0.26.4
                       rust-tokio-util-0.7.19
@@ -42802,7 +42806,7 @@
                       rust-wasm-bindgen-shared-0.2.126
                       rust-web-sys-0.3.103
                       rust-web-time-1.1.0
-                      rust-webpki-root-certs-1.0.9
+                      rust-webpki-root-certs-1.0.11
                       rust-winapi-util-0.1.11
                       rust-windows-link-0.2.1
                       rust-windows-sys-0.52.0
