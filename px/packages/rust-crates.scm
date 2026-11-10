@@ -25072,6 +25072,10 @@
   (crate-source "rlimit" "0.11.0"
                 "1hwcp4z2snw1xkigmprv6yvjixrmh7vnnhxsdl7n3fsnkirf4ppk"))
 
+(define rust-roaring-0.10.12
+  (crate-source "roaring" "0.10.12"
+                "0yqy3h6c13c73519bnwzmiv9nzxyl7sajl6n4q3lvnc4l77x5s0r"))
+
 (define rust-roaring-0.11.3
   (crate-source "roaring" "0.11.3"
                 "11f84sgrmmj1j4791m600isri31fm2qhnhaqcg47ypglm1jcxacb"))
@@ -36111,6 +36115,10 @@
   (crate-source "zopfli" "0.8.3"
                 "0jaj5dyh3mks0805h4ldrsh5pwq4i2jc9dc9zwjm91k3gmwxhp7h"))
 
+(define rust-zopfli-0.8.4
+  (crate-source "zopfli" "0.8.4"
+                "04gv076p88smppwcarzs0wjbbfq55ghsbi0573cq716261fzrxxa"))
+
 (define rust-zstd-0.13.2
   (crate-source "zstd" "0.13.2"
                 "1ygkr6wspm9clbp7ykyl0rv69cfsf9q4lic9wcqiwn34lrwbgwpw"))
@@ -38173,6 +38181,7 @@
                rust-bstr-1.13.1
                rust-bumpalo-3.20.3
                rust-bytecount-0.6.9
+               rust-bytemuck-1.25.2
                rust-byteorder-1.5.0
                rust-byteorder-lite-0.1.0
                rust-bytes-1.12.1
@@ -38510,6 +38519,7 @@
                rust-resolv-conf-0.7.6
                rust-rfc7239-0.1.3
                rust-ring-0.17.14
+               rust-roaring-0.10.12
                rust-rust-embed-8.13.0
                rust-rust-embed-impl-8.13.0
                rust-rust-embed-utils-8.13.0
@@ -38726,6 +38736,7 @@
                rust-zip-8.6.0
                rust-zlib-rs-0.6.8
                rust-zmij-1.0.23
+               rust-zopfli-0.8.4
                rust-zstd-0.13.4
                rust-zstd-0.14.3
                rust-zstd-safe-7.4.0
