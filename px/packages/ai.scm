@@ -44,11 +44,11 @@
      (origin
        (method url-fetch)
        (uri (string-append
-             "https://storage.googleapis.com/claude-code-dist-"
-             "86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/"
-             version "/linux-x64/claude"))
+             "https://github.com/anthropics/claude-code/releases/download/v"
+             version "/claude-linux-x64.tar.gz"))
+       (file-name (string-append name "-" version "-linux-x64.tar.gz"))
        (sha256
-        (base32 "0y64fj4f004wvgm1wvkwlmxsxs5xljnn5g2rhhr440iqslx71cxz"))))
+        (base32 "1a6wqn3a86k9iy6dy237h0c2p3flnsjwr7qfa5iwvm6lajpcaarx"))))
     (build-system binary-build-system)
     (arguments
      (list
@@ -60,10 +60,6 @@
       #~'(("claude" "bin/claude-unwrapped"))
       #:phases
       #~(modify-phases %standard-phases
-          (replace 'unpack
-            (lambda* (#:key inputs #:allow-other-keys)
-              (copy-file (assoc-ref inputs "source") "claude")
-              (chmod "claude" #o755)))
           (add-after 'install 'create-wrapper
             (lambda* (#:key inputs outputs #:allow-other-keys)
               (let* ((out (assoc-ref outputs "out"))
