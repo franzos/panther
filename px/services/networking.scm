@@ -285,15 +285,13 @@ group.  When unset the socket is world-accessible.")
     (list
      (shepherd-service (provision '(mullvad-early-boot-blocking))
                        (respawn? #f)
-                       (one-shot? #t)
                        (documentation "Mullvad early boot network blocker")
                        (start
-                        #~(make-forkexec-constructor
-                           (list #$command "--initialize-early-boot-firewall")
-                           #:user #$user
-                           #:group #$group))
-                       (stop
-                        #~(make-kill-destructor)))
+                        #~(lambda _
+                            (zero? (spawn-command
+                                    (list #$command "--initialize-early-boot-firewall")
+                                    #:user #$user
+                                    #:group #$group)))))
      (shepherd-service (provision '(mullvad-daemon))
                        (requirement '(mullvad-early-boot-blocking
                                       networking))
