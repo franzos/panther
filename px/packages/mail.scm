@@ -51,7 +51,7 @@ Maildir, mbox and pimdir stores.  IMAP and SMTP authentication includes XOAUTH2
 and OAUTHBEARER.")
     (license (list license:expat license:asl2.0))))
 
-(define bichon-version "2.4.0")
+(define bichon-version "2.4.1")
 
 (define bichon-source
   (origin
@@ -61,7 +61,7 @@ and OAUTHBEARER.")
           (commit bichon-version)))
     (file-name (git-file-name "bichon" bichon-version))
     (sha256
-     (base32 "0kx66h7xryfj5d05962hazrvy9cgb7c4pmshhzin43z2fvh27y3s"))
+     (base32 "1vp7pd7cf31d9ym2gcwzf9xyvz77fk2s95pn72qja02ww6qgpws9"))
     (snippet
         #~(begin
             (use-modules (guix build utils)
@@ -120,7 +120,7 @@ and OAUTHBEARER.")
            (invoke "node" "node_modules/vite/bin/vite.js" "build"))
          (copy-recursively "/tmp/web/dist" #$output)))
    #:options `(#:hash-algo sha256
-               #:hash ,(base32 "02qbvrkaicrf9f87nwcdvh4bgs2digrf4y39p58p6k7f5wn3n5wc")
+               #:hash ,(base32 "0hjrfp7nwnymbdc06snq8x74nw0fqbcwrbqagy1ii19dv7lzq548")
                #:recursive? #t)))
 
 (define-public bichon

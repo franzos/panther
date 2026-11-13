@@ -1955,6 +1955,10 @@
   (crate-source "bincode_reloaded" "3.1.29"
                 "1brb4knhqx95kjm63z571rxc6fhp8n3xh1ikbcvwxcbbdjs2y2qb"))
 
+(define rust-bincode-reloaded-3.1.30
+  (crate-source "bincode_reloaded" "3.1.30"
+                "1gpydkqrxppv9k0dr5ykkc7ks4i73y1gmj0bbpf1wc42872jwmqw"))
+
 (define rust-bindgen-0.63.0
   (crate-source "bindgen" "0.63.0"
                 "119qkny3swlx8zm0jxp19hizpkym6arh8mlv9ylskch030961n1n"))
@@ -2499,6 +2503,10 @@
 (define rust-brotli-decompressor-6.3.0
   (crate-source "brotli-decompressor" "6.3.0"
                 "019cd5lhijajg2b1ah10ik4a5zv5g8xg3fh6kid4r525bcg0gncp"))
+
+(define rust-brotli-decompressor-6.3.1
+  (crate-source "brotli-decompressor" "6.3.1"
+                "0zvlfiw5bn2rnwf33j4plkbk9hwlpj4gpdcnw5ihc55ra6f4rivm"))
 
 (define rust-bs58-0.5.1
   (crate-source "bs58" "0.5.1"
@@ -4427,6 +4435,10 @@
 (define rust-const-oid-0.10.2
   (crate-source "const-oid" "0.10.2"
                 "0p7m286mp8aai4sa72g7ji6qm0d4ns8wg4i4b2hj9p9615zm3vx6"))
+
+(define rust-const-oid-0.10.3
+  (crate-source "const-oid" "0.10.3"
+                "16is3l224m0m7lc2zqhmnfhv8mljkv1274v8k6hj32imhjld95dy"))
 
 (define rust-const-oid-0.9.6
   (crate-source "const-oid" "0.9.6"
@@ -6704,6 +6716,10 @@
 (define rust-email-encoding-0.4.2
   (crate-source "email-encoding" "0.4.2"
                 "1zck4r4j87fr0b1blgwkvgvj5idknmrr1qq3fmcyllphjnh9s2s2"))
+
+(define rust-email-encoding-0.4.3
+  (crate-source "email-encoding" "0.4.3"
+                "010hyzsjb52bfx38b0f8ypr3js51iz6nz2xj8lzynb4z2vi0lscz"))
 
 (define rust-email-lib-0.26.4
   (crate-source "email-lib" "0.26.4"
@@ -25420,6 +25436,10 @@
   (crate-source "rust-embed" "8.13.0"
                 "08yc6prrqinqa8zrqrzhk69lq21rdypfdnhvpl0dw4d6nssabbqr"))
 
+(define rust-rust-embed-8.14.0
+  (crate-source "rust-embed" "8.14.0"
+                "1bdqvhb3r41zg11ihz5vyfrnzgicyn1h5017d3mkm1m2yw65i3z9"))
+
 (define rust-rust-embed-impl-8.11.0
   (crate-source "rust-embed-impl" "8.11.0"
                 "1ancyg87vx07w5m39538bwvj3hlizk8fd15kk8argsf8qzj042fs"))
@@ -25427,6 +25447,10 @@
 (define rust-rust-embed-impl-8.13.0
   (crate-source "rust-embed-impl" "8.13.0"
                 "0ls0wdb877l7w9wghv00yfxfnisj4rny1gka0sgcbsklcgdazn70"))
+
+(define rust-rust-embed-impl-8.14.0
+  (crate-source "rust-embed-impl" "8.14.0"
+                "19wvxdqj6xn85bll1c21xql6ix939axab6jhyxynqji2rxljygm9"))
 
 (define rust-rust-embed-impl-8.9.0
   (crate-source "rust-embed-impl" "8.9.0"
@@ -25439,6 +25463,10 @@
 (define rust-rust-embed-utils-8.13.0
   (crate-source "rust-embed-utils" "8.13.0"
                 "12lnp9wvi5xhiyfdbbb9gqxiq20vpr60hbwjwmil4f5xg2xfi10d"))
+
+(define rust-rust-embed-utils-8.14.0
+  (crate-source "rust-embed-utils" "8.14.0"
+                "16xd7m4j00pvli0axnqd4gh8bzh3fm8lrp22lfwb5pp7rgf36pli"))
 
 (define rust-rust-embed-utils-8.9.0
   (crate-source "rust-embed-utils" "8.9.0"
@@ -25787,6 +25815,10 @@
 (define rust-rustls-pki-types-1.15.1
   (crate-source "rustls-pki-types" "1.15.1"
                 "15hakk4pcvr5278cazgw9qf2r7gdg09rg5pivbyd3dbyih12aj9g"))
+
+(define rust-rustls-pki-types-1.16.0
+  (crate-source "rustls-pki-types" "1.16.0"
+                "1yv38vs71zaxmmx8cx0w8gm0sgi5yn96bzqw3z3dh1kvvvvkabqh"))
 
 (define rust-rustls-pki-types-1.4.1
   (crate-source "rustls-pki-types" "1.4.1"
@@ -32281,6 +32313,10 @@
   (crate-source "uuid" "1.29.0"
                 "0525458ww4jwa0nw513jdrhgwxrldglzvfrbw5gnjl0cc88js3ja"))
 
+(define rust-uuid-1.29.2
+  (crate-source "uuid" "1.29.2"
+                "0z161qj1jw91fz64pmz1vqs9l1y7dpbf8yziwp7vbjfsywwr3ndy"))
+
 (define rust-uuid-1.4.1
   (crate-source "uuid" "1.4.1"
                 "17c68cmn8mgn3ll3zlyc7zsnvj5r281ybic9nd05r0j0aznsbnkr"))
@@ -33809,6 +33845,10 @@
   (crate-source "webpki-root-certs" "1.0.11"
                 "0apn96djpc8yj1cp9scvqd8a5wd93ncxla4liwp18360mdjhx7g4"))
 
+(define rust-webpki-root-certs-1.0.12
+  (crate-source "webpki-root-certs" "1.0.12"
+                "11d5s7zs8rkfppris96pvl71izw2b95vjah9nmai30pvxgf9hc99"))
+
 (define rust-webpki-root-certs-1.0.5
   (crate-source "webpki-root-certs" "1.0.5"
                 "1p05rj22vamgs9n34326vypxy3klmdbphqrjrxl3y4cb8309z8in"))
@@ -33852,6 +33892,10 @@
 (define rust-webpki-roots-1.0.11
   (crate-source "webpki-roots" "1.0.11"
                 "0wgidma8qmksdhmx8pnbpg8m1zx08llqbqz7gn7br1xjnaxq1wpm"))
+
+(define rust-webpki-roots-1.0.12
+  (crate-source "webpki-roots" "1.0.12"
+                "15qjddsxq07bvzb8456m3r5zazp71slqsb9ck4f73a0n3hqcjrbj"))
 
 (define rust-webpki-roots-1.0.3
   (crate-source "webpki-roots" "1.0.3"
@@ -36316,6 +36360,10 @@
   (crate-source "zstd" "0.13.4"
                 "0myijz21sbh8vxgg2g96rh4fvim6glx93z790qbanlfj68qjrc6d"))
 
+(define rust-zstd-0.13.5
+  (crate-source "zstd" "0.13.5"
+                "0y2ja8n53753h3y33qq1syzp9zl01klxvj85k45lp4gcyd6g1bah"))
+
 (define rust-zstd-0.14.2
   (crate-source "zstd" "0.14.2"
                 "14vgv67df41q8g1h9xdy20pgzjdl4hk5jjd8mnh67hzs1j8zsz05"))
@@ -36323,6 +36371,10 @@
 (define rust-zstd-0.14.3
   (crate-source "zstd" "0.14.3"
                 "0w1wzfxmypnq1f1p7s0g8abn7ba6zkp7wxpggccl0vmgj2zyjfnv"))
+
+(define rust-zstd-0.14.4
+  (crate-source "zstd" "0.14.4"
+                "1cxhbv4d1zflprpnhygl11ia28phdgnpm86h981c1gr7iymj0l5d"))
 
 (define rust-zstd-safe-7.2.1
   (crate-source "zstd-safe" "7.2.1"
@@ -36340,6 +36392,10 @@
   (crate-source "zstd-safe" "7.4.0"
                 "00wv2nny4kxskf1bikddki8kd58casx185q5a66qvppmd13a13hw"))
 
+(define rust-zstd-safe-7.4.1
+  (crate-source "zstd-safe" "7.4.1"
+                "069qcna3mzzvgz7114nxna6fcl86hn8906z4zfs8j33jd2nr93a9"))
+
 (define rust-zstd-safe-8.1.0
   (crate-source "zstd-safe" "8.1.0"
                 "1b5girg7cgds7hy7a7x0af8xsbihb8qj8nvm2wvizsc4f9m4rm5x"))
@@ -36347,6 +36403,10 @@
 (define rust-zstd-safe-8.2.0
   (crate-source "zstd-safe" "8.2.0"
                 "0js3swa592j55g2b76vd6719h0qa5cdj48n7f6vskq99dgqj1mfy"))
+
+(define rust-zstd-safe-8.3.0
+  (crate-source "zstd-safe" "8.3.0"
+                "038llicyixsf3s1hdhpvyijfbvg38r7w1kp90k0zrhkn4p6ak7js"))
 
 (define rust-zstd-sys-2.0.13+zstd.1.5.6
   ;; TODO: Check bundled sources.
@@ -36372,6 +36432,11 @@
   ;; TODO REVIEW: Check bundled sources.
   (crate-source "zstd-sys" "2.1.2+zstd.1.5.7"
                 "1lsfr0hj9cp42lnfsnfriqcg1yvpj4jbbnxvnz5j68rvajfdl6j8"))
+
+(define rust-zstd-sys-2.1.3+zstd.1.5.7
+  ;; TODO REVIEW: Check bundled sources.
+  (crate-source "zstd-sys" "2.1.3+zstd.1.5.7"
+                "0b85q1bjkibbnf2v05mh58kd0ys0w6vqvb4pv7cqyhjp09ns0agp"))
 
 (define rust-zune-bmp-0.4.0
   (crate-source "zune-bmp" "0.4.0"
@@ -38331,7 +38396,7 @@
                rust-anstyle-query-1.1.5
                rust-anstyle-wincon-3.0.11
                rust-anyhow-1.0.104
-               rust-arc-swap-1.9.3
+               rust-arc-swap-1.9.5
                rust-argon2-0.5.3
                rust-arrayvec-0.7.8
                rust-asn1-rs-0.7.2
@@ -38351,7 +38416,7 @@
                rust-base64-0.23.1
                rust-base64ct-1.8.3
                rust-bincode-1.3.3
-               rust-bincode-reloaded-3.1.29
+               rust-bincode-reloaded-3.1.30
                rust-bit-vec-0.9.1
                rust-bitflags-2.13.2
                rust-bitpacking-0.9.3
@@ -38362,7 +38427,7 @@
                rust-bon-3.10.3
                rust-bon-macros-3.10.3
                rust-brotli-9.1.1
-               rust-brotli-decompressor-6.3.0
+               rust-brotli-decompressor-6.3.1
                rust-bstr-1.13.1
                rust-bumpalo-3.20.3
                rust-bytecount-0.6.9
@@ -38399,7 +38464,7 @@
                rust-compression-core-0.4.34
                rust-concurrent-queue-2.5.0
                rust-console-0.16.6
-               rust-const-oid-0.10.2
+               rust-const-oid-0.10.3
                rust-constant-time-eq-0.4.2
                rust-convert-case-0.10.0
                rust-core-foundation-0.9.4
@@ -38409,7 +38474,7 @@
                rust-cpufeatures-0.2.17
                rust-cpufeatures-0.3.1
                rust-crc-fast-1.10.0
-               rust-crc32fast-1.5.4
+               rust-crc32fast-1.5.5
                rust-criterion-0.6.0
                rust-criterion-plot-0.5.0
                rust-critical-section-1.2.0
@@ -38444,7 +38509,7 @@
                rust-downcast-rs-2.0.2
                rust-dunce-1.0.5
                rust-either-1.19.0
-               rust-email-encoding-0.4.2
+               rust-email-encoding-0.4.3
                rust-email-address-0.2.9
                rust-encode-unicode-1.0.0
                rust-encodify-1.0.2
@@ -38452,7 +38517,7 @@
                rust-enum-dispatch-0.3.13
                rust-equivalent-1.0.3
                rust-erased-serde-0.4.11
-               rust-errno-0.3.14
+               rust-errno-0.3.15
                rust-error-chain-0.12.4
                rust-event-listener-2.5.3
                rust-event-listener-5.4.2
@@ -38543,7 +38608,7 @@
                rust-itertools-0.13.0
                rust-itertools-0.14.0
                rust-itertools-0.15.0
-               rust-itoa-1.0.18
+               rust-itoa-1.0.19
                rust-jni-0.22.4
                rust-jni-macros-0.22.4
                rust-jni-sys-0.4.1
@@ -38705,9 +38770,9 @@
                rust-rfc7239-0.1.3
                rust-ring-0.17.14
                rust-roaring-0.10.12
-               rust-rust-embed-8.13.0
-               rust-rust-embed-impl-8.13.0
-               rust-rust-embed-utils-8.13.0
+               rust-rust-embed-8.14.0
+               rust-rust-embed-impl-8.14.0
+               rust-rust-embed-utils-8.14.0
                rust-rust-stemmers-1.2.0
                rust-rustc-hash-2.1.3
                rust-rustc-version-0.4.1
@@ -38716,7 +38781,7 @@
                rust-rustls-0.23.46
                rust-rustls-native-certs-0.8.5
                rust-rustls-pemfile-2.2.0
-               rust-rustls-pki-types-1.15.1
+               rust-rustls-pki-types-1.16.0
                rust-rustls-platform-verifier-0.7.1
                rust-rustls-platform-verifier-android-0.2.0
                rust-rustls-webpki-0.103.16
@@ -38734,7 +38799,7 @@
                rust-serde-derive-1.0.229
                rust-serde-json-1.0.154
                rust-serde-path-to-error-0.1.20
-               rust-serde-spanned-1.1.2
+               rust-serde-spanned-1.1.3
                rust-serde-urlencoded-0.7.1
                rust-serde-yaml-0.9.34+deprecated
                rust-sfa-1.0.0
@@ -38753,7 +38818,7 @@
                rust-skeptic-0.13.7
                rust-sketches-ddsketch-0.4.2
                rust-slab-0.4.12
-               rust-smallvec-1.16.4
+               rust-smallvec-1.16.5
                rust-smtp-proto-0.2.5
                rust-snafu-0.9.2
                rust-snafu-derive-0.9.2
@@ -38770,7 +38835,7 @@
                rust-subtle-2.6.1
                rust-symlink-0.1.0
                rust-syn-2.0.119
-               rust-syn-3.0.9
+               rust-syn-3.0.10
                rust-sync-wrapper-1.0.2
                rust-synstructure-0.13.2
                rust-synstructure-0.14.0
@@ -38810,8 +38875,8 @@
                rust-tokio-util-0.7.20
                rust-toml-0.9.12+spec-1.1.0
                rust-toml-datetime-0.7.5+spec-1.1.0
-               rust-toml-datetime-1.1.2+spec-1.1.0
-               rust-toml-edit-0.25.18+spec-1.1.0
+               rust-toml-datetime-1.1.3+spec-1.1.0
+               rust-toml-edit-0.25.19+spec-1.1.0
                rust-toml-parser-1.1.5+spec-1.1.0
                rust-toml-writer-1.2.0+spec-1.1.0
                rust-tower-0.5.3
@@ -38850,7 +38915,7 @@
                rust-utf8-iter-1.1.0
                rust-utf8parse-0.2.2
                rust-utf-types-1.0.0
-               rust-uuid-1.29.0
+               rust-uuid-1.29.2
                rust-valuable-0.1.1
                rust-varint-rs-2.2.1
                rust-vcpkg-0.2.15
@@ -38869,8 +38934,8 @@
                rust-web-sys-0.3.107
                rust-web-time-1.1.0
                rust-web-atoms-0.3.0
-               rust-webpki-root-certs-1.0.11
-               rust-webpki-roots-1.0.11
+               rust-webpki-root-certs-1.0.12
+               rust-webpki-roots-1.0.12
                rust-widestring-1.2.1
                rust-wildmatch-2.7.0
                rust-winapi-0.3.9
@@ -38922,11 +38987,11 @@
                rust-zlib-rs-0.6.8
                rust-zmij-1.0.23
                rust-zopfli-0.8.4
-               rust-zstd-0.13.4
-               rust-zstd-0.14.3
-               rust-zstd-safe-7.4.0
-               rust-zstd-safe-8.2.0
-               rust-zstd-sys-2.1.2+zstd.1.5.7))
+               rust-zstd-0.13.5
+               rust-zstd-0.14.4
+               rust-zstd-safe-7.4.1
+               rust-zstd-safe-8.3.0
+               rust-zstd-sys-2.1.3+zstd.1.5.7))
  (binsider =>
            (list rust-addr2line-0.25.1
                  rust-adler2-2.0.1
