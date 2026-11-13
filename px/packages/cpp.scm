@@ -330,8 +330,8 @@ backends.")
                    (delete-file-recursively "src/gumbo"))))))))
 
 (define-public litebrowser
-  (let ((commit "924f9860bbc911a01722dd813403d3efd96380cf")
-        (revision "0"))
+  (let ((commit "af87f9b7616b5c4f4340b56486071a127360605f")
+        (revision "1"))
     (package
       (name "litebrowser")
       (version (git-version "0.0.0" revision commit))
@@ -344,7 +344,7 @@ backends.")
                (recursive? #t)))
          (file-name (git-file-name name version))
          (sha256
-          (base32 "07s5z39kxali0y6wi0l2mzmj682w8abjbmz54zz0brkv7ml94fzm"))))
+          (base32 "0a94j3gqvp3yrg1wli5s1jnwirx3grfqxp786l8vvpp6gbz6gswv"))))
       (build-system cmake-build-system)
       (arguments
        (list
