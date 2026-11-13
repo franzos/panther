@@ -611,7 +611,7 @@ editors that support the Language Server Protocol.")
 (define-public antigravity
   (package
     (name "antigravity")
-    (version "2.31.0-6379060755038208")
+    (version "2.31.2-6470801290035200")
     (source
      (origin
        (method url-fetch)
@@ -621,7 +621,7 @@ editors that support the Language Server Protocol.")
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
         (base32
-         "171n6cn3mk56qa4lzkvahqfyq4qd4j9s8ykfgwxn9gzhzyhxxk1h"))))
+         "04rlws7g3v8diflsid1gn8scy2035whrmviyrafvmbm246mkrgi0"))))
     (build-system chromium-binary-build-system)
     (arguments
      (list
