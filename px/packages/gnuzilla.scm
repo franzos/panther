@@ -54,11 +54,11 @@
   #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages xorg))
 
-;; Thunderbird 159 configures against nss >= 3.131; guix's nss-rapid is 3.126.
-(define nss-rapid-3.131
+;; Thunderbird 160 configures against nss >= 3.132; guix's nss-rapid is 3.131.1.
+(define nss-rapid-3.132
   (package
     (inherit nss-rapid)
-    (version "3.131")
+    (version "3.132")
     (source
      (origin
        (inherit (package-source nss-rapid))
@@ -67,10 +67,23 @@
                            (string-join (string-split version #\.) "_")
                            "_RTM/src/nss-" version ".tar.gz"))
        (sha256
-        (base32 "0ry1ndp3i7khc2cakbvjvyii3qygasbnyghh8acms9g9fyy0a06a"))))))
+        (base32 "1zr7y9db19h8a5nmq9ql8gzm5x6q593c88a3h0d180d8gf1z977f"))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments nss-rapid)
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            ;; The 3.132 build no longer writes dist/latest, which all.sh reads.
+            (add-before 'check 'write-dist-latest
+              (lambda _
+                (call-with-output-file "dist/latest"
+                  (lambda (port)
+                    (display (car (scandir "dist"
+                                           (lambda (f)
+                                             (string-suffix? "OBJ" f))))
+                             port)))))))))))
 
-(define %thunderbird-version "159.0")
-(define %thunderbird-build-id "20261027000000") ;must be YYYYMMDDhhmmss
+(define %thunderbird-version "160.0")
+(define %thunderbird-build-id "20261112000000") ;must be YYYYMMDDhhmmss
 
 (define-public thunderbird
   (package
@@ -83,7 +96,7 @@
                            "releases/" version "/source/"
                            "thunderbird-" version ".source.tar.xz"))
        (sha256
-        (base32 "0zljng4gflw2ma5zwmb12ff5fhfwr237ar2w3ajndany23hc9jxl"))))
+        (base32 "1lx4xwcrbymjv4p28zk9sgfg0wn6v28c93a9ap9ijar1mp9mzvhf"))))
     (properties
      `((cpe-name . "thunderbird")))
     (build-system gnu-build-system)
@@ -398,7 +411,7 @@ ca495991b7852b855"))
            mesa
            mit-krb5
            nspr
-           nss-rapid-3.131
+           nss-rapid-3.132
            pango
            pciutils
            pixman
