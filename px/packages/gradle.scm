@@ -10,7 +10,7 @@
 (define-public gradle-8
   (package
     (inherit gradle)
-    (version "8.14.6")
+    (version "8.14.7")
     (source
      (origin
        (method url-fetch)
@@ -18,7 +18,7 @@
              "https://services.gradle.org/distributions/gradle-"
              version "-bin.zip"))
        (sha256
-        (base32 "095x0ya7xym73wqaycxldp72pdvabjhzq5f75q7901ra3c3yv23r"))))))
+        (base32 "0mp86n3wm71pdkrdm2wl08cjl8a6j980zhal809268v2qx5zqfwh"))))))
 
 (define-public gradle-7
   (package
