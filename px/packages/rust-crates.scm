@@ -16398,6 +16398,10 @@
   (crate-source "jiff" "0.2.39"
                 "0g7ghdl0minhwgkwf036ld5lmcdnwbf7kf5h75f9xj5si82h7irs"))
 
+(define rust-jiff-0.2.41
+  (crate-source "jiff" "0.2.41"
+                "0fk2f7bx4qmckg1jarhyqhglh42nslkk8bl50628zb2rmkpxrvzw"))
+
 (define rust-jiff-0.2.5
   (crate-source "jiff" "0.2.5"
                 "0q3jpq3scznmviiajldyf5xby38zgyvkxbrmgb9hf78r6416f0n1"))
@@ -16413,6 +16417,10 @@
 (define rust-jiff-core-0.1.2
   (crate-source "jiff-core" "0.1.2"
                 "14qf99yrvnzm8rsvz7va43kgij398x26wpfk6s6gpfjkxc4k7r5f"))
+
+(define rust-jiff-core-0.1.4
+  (crate-source "jiff-core" "0.1.4"
+                "1ah82m7wwlix48jm8ics33mg9y9ipn0pcrqxd0f8vs0fvch418kp"))
 
 (define rust-jiff-static-0.2.15
   (crate-source "jiff-static" "0.2.15"
@@ -16465,6 +16473,10 @@
 (define rust-jiff-static-0.2.39
   (crate-source "jiff-static" "0.2.39"
                 "0gd96qg3jvxapr4a06nbrq2dq4skjbx06hxprklx1dvyqrq29hvd"))
+
+(define rust-jiff-static-0.2.41
+  (crate-source "jiff-static" "0.2.41"
+                "1p9l684906xb1py56jabk7m6i5y8x8iwibglzg43w2741jdxygi0"))
 
 (define rust-jiff-static-0.2.5
   (crate-source "jiff-static" "0.2.5"
@@ -39438,9 +39450,6 @@
              rust-darling-macro-0.14.4
              rust-dashmap-5.5.3
              rust-dashmap-6.2.1
-             rust-defmt-1.1.1
-             rust-defmt-macros-1.1.1
-             rust-defmt-parser-1.0.0
              rust-deranged-0.5.8
              rust-derive-builder-0.13.1
              rust-derive-builder-core-0.13.1
@@ -39559,9 +39568,9 @@
              rust-itertools-0.14.0
              rust-itertools-0.15.0
              rust-itoa-1.0.18
-             rust-jiff-0.2.39
-             rust-jiff-core-0.1.2
-             rust-jiff-static-0.2.39
+             rust-jiff-0.2.41
+             rust-jiff-core-0.1.4
+             rust-jiff-static-0.2.41
              rust-jiff-tzdb-0.1.4
              rust-jiff-tzdb-platform-0.1.3
              rust-jni-0.22.4
@@ -39579,7 +39588,7 @@
              rust-libmimalloc-sys-0.1.44
              rust-libredox-0.1.3
              rust-libz-sys-1.1.31
-             rust-linux-raw-sys-0.9.2
+             rust-linux-raw-sys-0.12.1
              rust-litemap-0.7.3
              rust-litemap-0.8.0
              rust-litrs-0.4.1
@@ -39595,7 +39604,7 @@
              rust-multiversion-no-op-1.0.0
              rust-newtype-uuid-1.3.2
              rust-nix-0.31.2
-             rust-notify-8.2.1
+             rust-notify-8.2.2
              rust-notify-types-2.0.0
              rust-nu-ansi-term-0.50.0
              rust-num-bigint-0.5.1
@@ -39704,7 +39713,7 @@
              rust-rustc-hash-1.1.0
              rust-rustc-hash-2.1.3
              rust-rustc-version-0.4.1
-             rust-rustix-1.0.1
+             rust-rustix-1.1.6
              rust-rustls-0.23.46
              rust-rustls-native-certs-0.8.5
              rust-rustls-pki-types-1.14.0
@@ -39750,7 +39759,7 @@
              rust-siphasher-1.0.1
              rust-slab-0.4.11
              rust-small-btree-0.1.0
-             rust-smallvec-1.16.4
+             rust-smallvec-1.16.5
              rust-socket2-0.6.3
              rust-socks-0.3.4
              rust-spin-0.9.9
