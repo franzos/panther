@@ -564,7 +564,7 @@ and under your control.")
 (define-public rustdesk
   (package
     (name "rustdesk")
-    (version "1.5.1")
+    (version "1.5.3")
     (source
      (origin
        (method url-fetch)
@@ -582,8 +582,8 @@ and under your control.")
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "1n8bxwab3w73ik8gckm74vki8i9wipsyw9mzppn72xfbj2nq5mmm")
-           ("aarch64-linux" "0rc406b6cj338v61ylkdb9iz5qa4372kdyb576pf68fw2vciwiyi"))))))
+           ("x86_64-linux" "109vgfwmrwpzx6alrylydwm2lwdhbfhvqlf380jkahzxclpns2c1")
+           ("aarch64-linux" "06dfhayzljxhr53vlf8fi0ysj6n5bnpmj4rd7hq2wpnlrk9yi1gs"))))))
     (supported-systems '("x86_64-linux" "aarch64-linux"))
     (build-system binary-build-system)
     (arguments
