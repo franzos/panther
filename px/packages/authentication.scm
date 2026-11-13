@@ -82,7 +82,7 @@ on OpenJDK 21.")
 (define-public forseti-unix
   (package
     (name "forseti-unix")
-    (version "0.2.26")
+    (version "0.2.27")
     (source
      (origin
        (method git-fetch)
@@ -91,7 +91,7 @@ on OpenJDK 21.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0cgkrrhshfy5xnkdq6f8vsra48ffmxp7m7lm2x3wpvsj21qdgdca"))))
+        (base32 "1zzr0j17q8zzb39hfcnf3p72bszgc0b3mqxvbyklfp49x2majw0c"))))
     (build-system cargo-build-system)
     (arguments
      (list
@@ -202,7 +202,7 @@ on OpenJDK 21.")
                    ;; falls back to a dynamic -lsqlite3 link; satisfy it with the
                    ;; packaged sqlite (cleaner than the bundled C copy anyway).  Only
                    ;; the daemon links it; the NSS .so and helper stay thin.
-                   sqlite
+                   sqlite-next
                    ;; The forseti-unixd entry holds the full workspace crate closure
                    ;; (the importer keys each member to the whole lockfile graph, so
                    ;; all three lookup entries are identical); it already includes

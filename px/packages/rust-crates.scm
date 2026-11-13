@@ -18568,6 +18568,11 @@
   (crate-source "libsqlite3-sys" "0.38.2"
                 "1s01ckmldqx09m71z5whsxrd173nhwqj6cj502rvj4zm2zphplpi"))
 
+(define rust-libsqlite3-sys-0.39.1
+  ;; TODO REVIEW: Check bundled sources.
+  (crate-source "libsqlite3-sys" "0.39.1"
+                "1cx2z7q7rqacffszy2qsv0vlcxmwdkwhcg23gg80a9xrhwdz198l"))
+
 (define rust-libssh2-sys-0.3.0
   ;; TODO: Check bundled sources.
   (crate-source "libssh2-sys" "0.3.0"
@@ -25415,6 +25420,10 @@
 (define rust-rusqlite-0.40.2
   (crate-source "rusqlite" "0.40.2"
                 "1cxmqcl6k6j9v1r8vypfn7h9bzs0bjrp2biardrkr1z3ldyskwi3"))
+
+(define rust-rusqlite-0.41.1
+  (crate-source "rusqlite" "0.41.1"
+                "1555j4yrk3zc9dm68036i4c8vd0qpq2xz1k51895w4q66mpvm6ys"))
 
 (define rust-rusqlite-migration-1.3.1
   (crate-source "rusqlite_migration" "1.3.1"
@@ -42929,7 +42938,7 @@
                       rust-h2-0.4.19
                       rust-hashbrown-0.16.1
                       rust-hashbrown-0.17.1
-                      rust-hashlink-0.11.1
+                      rust-hashlink-0.12.2
                       rust-hermit-abi-0.5.2
                       rust-hmac-0.13.0
                       rust-http-1.5.0
@@ -42962,7 +42971,7 @@
                       rust-lazy-static-1.5.0
                       rust-libc-0.2.189
                       rust-libnss-0.9.0.34ceb19
-                      rust-libsqlite3-sys-0.37.0
+                      rust-libsqlite3-sys-0.39.1
                       rust-linux-raw-sys-0.12.1
                       rust-litemap-0.8.2
                       rust-log-0.4.33
@@ -42996,7 +43005,7 @@
                       rust-reqwest-0.13.4
                       rust-ring-0.17.14
                       rust-rsqlite-vfs-0.1.1
-                      rust-rusqlite-0.39.0
+                      rust-rusqlite-0.41.1
                       rust-rustc-hash-2.1.3
                       rust-rustc-version-0.4.1
                       rust-rustix-1.1.4
