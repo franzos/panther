@@ -83,7 +83,7 @@ and libtss2-tcti-mssim.")
 (define-public tpm2-tss
   (package
     (name "tpm2-tss")
-    (version "4.2.1")
+    (version "4.2.2")
     (source
      (origin
        (method url-fetch)
@@ -94,7 +94,7 @@ and libtss2-tcti-mssim.")
                            version
                            ".tar.gz"))
        (sha256
-        (base32 "0w8lzfz36ngakv80rxnz8vs5chwrgpyvp5046xd3hxh8c70xpanl"))))
+        (base32 "0grw27qmkf0kpd8fxbylqaa7afrkhj6jdbhwfzzsib01xs4zqkmx"))))
     (build-system gnu-build-system)
     ;; shadow provides groupadd, which configure requires for the tss user.
     (native-inputs (list pkg-config shadow))
