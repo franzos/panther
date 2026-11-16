@@ -140,7 +140,7 @@ prebuilt binary and disables auto-updates.")
 (define-public claude-desktop
   (package
     (name "claude-desktop")
-    (version "4.23118.0")
+    (version "4.23118.1")
     (source
      (origin
        (method url-fetch)
@@ -149,7 +149,7 @@ prebuilt binary and disables auto-updates.")
              "main/c/claude-desktop/claude-desktop_" version "_amd64.deb"))
        (file-name (string-append name "-" version ".deb"))
        (sha256
-        (base32 "15ssa6bqhwnkp0anyxbiyf29vfxn1k252q34fjrwj1dbrbl9dn8s"))))
+        (base32 "0yi8kpzx42al8rkv96z0n9g44z77f3dli1fl6yb6r49q5gbwv75h"))))
     (build-system chromium-binary-build-system)
     (arguments
      (list
