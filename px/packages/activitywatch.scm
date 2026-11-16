@@ -49,7 +49,7 @@
 (define-public activitywatch
   (package
     (name "activitywatch")
-    (version "0.14.2")
+    (version "0.14.3")
     (source
      #f)
     (build-system binary-build-system)
@@ -171,7 +171,7 @@
                                                  out) ":"))))) #t)))))
     (native-inputs `(("unzip" ,unzip)))
     (inputs `(("activitywatch" ,(make-aw-release-asset version "activitywatch"
-                                 "17mnr6ms5r0qqy2fsdfbbbs2vr1d67z1nn0ynncrdh1fx94vdvkv"))
+                                 "0lf3s9nmvw2i8d00agyc9vx97l8lfgswagkbajpihjyvld561rmv"))
               ("gcc:lib" ,gcc "lib")
               ("gcc" ,gcc "lib")
               ("glibc" ,glibc)
