@@ -2,6 +2,8 @@
 #
 # Check for newer versions of packages in px/packages/
 # Requires: curl, jq
+# --tsv prints outdated and manual-check rows to stdout as
+# package, current, latest, kind (outdated|manual), url; the report goes to stderr.
 # Optional: GITHUB_TOKEN env var for higher API rate limits
 
 set -euo pipefail
@@ -17,6 +19,12 @@ PKG_DIR="$SCRIPT_DIR/../px/packages"
 outdated=0
 checked=0
 errors=0
+
+TSV=0
+if [ "${1:-}" = "--tsv" ]; then
+    TSV=1
+    exec 3>&1 1>&2
+fi
 
 if [ -z "${GITHUB_TOKEN:-}" ] && command -v gh &>/dev/null; then
     GITHUB_TOKEN=$(gh auth token 2>/dev/null || true)
@@ -259,6 +267,7 @@ compare() {
     else
         printf "  ${RED}%-30s %s -> %s${NC}\n" "$name" "$current" "$latest"
         outdated=$((outdated + 1))
+        [ "$TSV" = 1 ] && printf '%s\t%s\t%s\toutdated\t\n' "$name" "$current" "$latest" >&3
     fi
 }
 
@@ -612,6 +621,7 @@ manual() {
     [ -z "$current" ] && return
     checked=$((checked + 1))
     printf "  ${YELLOW}%-30s %-14s %s${NC}\n" "$pkg" "$current" "$url"
+    [ "$TSV" = 1 ] && printf '%s\t%s\t\tmanual\t%s\n' "$pkg" "$current" "$url" >&3
 }
 
 manual "claude-desktop"  "https://claude.ai/download (apt index returns 403; only the pool debs are public)"
