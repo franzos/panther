@@ -102,16 +102,6 @@ npm_latest() {
         | jq -r '.version // empty' 2>/dev/null || return 1
 }
 
-# Fetch the latest Node.js release within a major line (e.g. 24 -> 24.18.0).
-# index.json is newest-first, so the first match is the latest in that line.
-node_latest_major() {
-    local major="$1"
-    curl -sfL "https://nodejs.org/dist/index.json" \
-        | jq -r --arg m "v$major." \
-            '[.[] | select(.version | startswith($m)) | .version][0] // empty' 2>/dev/null \
-        | sed 's/^v//'
-}
-
 # Fetch latest Forgejo (Codeberg) release tag; falls back to latest tag if no release
 forgejo_latest() {
     local repo="$1"
@@ -142,6 +132,51 @@ gcloud_latest() {
         | jq -r '.version // empty' 2>/dev/null
 }
 
+# Fetch the current version of a Mozilla product from product-details
+mozilla_latest() {
+    local key="$1" product="$2"
+    curl -sfL "https://product-details.mozilla.org/1.0/${product}_versions.json" \
+        | jq -r --arg k "$key" '.[$k] // empty' 2>/dev/null
+}
+
+# ngrok has no version API, but its APT repository indexes every release and
+# is the source the package fetches from, so read the versions from there.
+ngrok_latest() {
+    curl -sfL "https://ngrok-agent.s3.amazonaws.com/dists/bookworm/main/binary-amd64/Packages" \
+        | awk '/^Version: /{ print $2 }' \
+        | sort -V | tail -1
+}
+
+# Defined Networking publishes neither an index nor a changelog, but every
+# release stays at a predictable URL, so walk upward from the packaged version.
+dnclient_url() {
+    echo "https://dl.defined.net/stable/binaries/dnclient/v$1/linux/amd64/dnclient"
+}
+
+dnclient_latest() {
+    local current="$1"
+    local major minor patch latest
+    IFS=. read -r major minor patch <<<"$current"
+    latest="$current"
+    while curl -sfI -o /dev/null "$(dnclient_url "$major.$minor.$((patch + 1))")"; do
+        patch=$((patch + 1))
+        latest="$major.$minor.$patch"
+    done
+    while curl -sfI -o /dev/null "$(dnclient_url "$major.$((minor + 1)).0")"; do
+        minor=$((minor + 1))
+        patch=0
+        latest="$major.$minor.0"
+        while curl -sfI -o /dev/null "$(dnclient_url "$major.$minor.$((patch + 1))")"; do
+            patch=$((patch + 1))
+            latest="$major.$minor.$patch"
+        done
+    done
+    if curl -sfI -o /dev/null "$(dnclient_url "$((major + 1)).0.0")"; then
+        latest="$((major + 1)).0.0"
+    fi
+    echo "$latest"
+}
+
 # The Autofirma Linux builds sit behind unversioned URLs that are replaced in
 # place, so the download page is the only place their version is published.
 # Windows, Linux and macOS each move on their own schedule; take the number
@@ -169,6 +204,19 @@ gitlab_latest() {
     strip_tag "$tag"
 }
 
+# Latest stable GitLab tag by version sort, skipping pre-releases (GNOME tags
+# 51.alpha and 51.beta long before 51.0 exists, and those win /releases).
+gitlab_latest_stable() {
+    local project_id="$1"
+    local host="${2:-gitlab.com}"
+    curl -sfL "https://$host/api/v4/projects/$project_id/repository/tags?per_page=100" \
+        | jq -r '.[].name // empty' 2>/dev/null \
+        | while read -r t; do strip_tag "$t"; done \
+        | grep -viE 'alpha|beta|rc' \
+        | grep -E '^[0-9]+\.' \
+        | sort -V | tail -1
+}
+
 # Extract package version from .scm file (match name exactly via the (name "...") field)
 pkg_version() {
     local pkg="$1"
@@ -179,7 +227,7 @@ pkg_version() {
     ver=$( {
         grep -A5 "(name \"$pkg\")" "$PKG_DIR"/*.scm 2>/dev/null
         grep -A10 -hE "^\(define-public ${pkg}(\$|-[0-9])" "$PKG_DIR"/*.scm 2>/dev/null
-    } | grep -oP '\(version "\K[^"]+' | sort -V | tail -1) || true
+    } | grep -oP '\(version (\(git-version )?"\K[^"]+' | sort -V | tail -1) || true
     [ -n "$ver" ] && { echo "$ver"; return; }
 
     # Let-bound version: (let ((version "X.Y.Z")) ... (version version))
@@ -189,8 +237,10 @@ pkg_version() {
 
     # Variable-bound version: (version some-var) with (define some-var "X.Y.Z").
     # Covers both %-prefixed and plain identifiers (e.g. bichon-version).
-    var=$(grep -A5 "(name \"$pkg\")" "$PKG_DIR"/*.scm 2>/dev/null \
-        | grep -oP '\(version \K[^")[:space:]]+' | grep -vx version | head -1) || true
+    var=$( {
+        grep -A5 "(name \"$pkg\")" "$PKG_DIR"/*.scm 2>/dev/null
+        grep -A5 -h "^(define-public $pkg\$" "$PKG_DIR"/*.scm 2>/dev/null
+    } | grep -oP '\(version \K[^")[:space:]]+' | grep -vx version | head -1) || true
     if [ -n "$var" ]; then
         ver=$(grep -hE "^\(define $var " "$PKG_DIR"/*.scm 2>/dev/null \
             | grep -oP "\\(define \\S+ \"\\K[^\"]+" | head -1) || true
@@ -204,7 +254,7 @@ compare() {
     if [ -z "$latest" ]; then
         printf "  ${YELLOW}%-30s %s -> ???${NC}\n" "$name" "$current"
         errors=$((errors + 1))
-    elif [ "$current" = "$latest" ]; then
+    elif [ "${current#v}" = "${latest#v}" ]; then
         printf "  ${GREEN}%-30s %s${NC}\n" "$name" "$current"
     else
         printf "  ${RED}%-30s %s -> %s${NC}\n" "$name" "$current" "$latest"
@@ -246,15 +296,6 @@ npm_release() {
     current=$(pkg_version "$pkg")
     [ -z "$current" ] && return
     latest=$(npm_latest "$npm_pkg" 2>/dev/null || echo "")
-    compare "$pkg" "$current" "$latest"
-}
-
-node_release() {
-    local major="$1" pkg="${2:-node}"
-    local current latest
-    current=$(pkg_version "$pkg")
-    [ -z "$current" ] && return
-    latest=$(node_latest_major "$major" 2>/dev/null || echo "")
     compare "$pkg" "$current" "$latest"
 }
 
@@ -300,6 +341,58 @@ gitlab_release() {
     current=$(pkg_version "$pkg")
     [ -z "$current" ] && return
     latest=$(gitlab_latest "$project_id" "$host" 2>/dev/null || echo "")
+    compare "$pkg" "$current" "$latest"
+}
+
+gitlab_release_stable() {
+    local project_id="$1" pkg="$2" host="${3:-gitlab.com}"
+    local current latest
+    current=$(pkg_version "$pkg")
+    [ -z "$current" ] && return
+    latest=$(gitlab_latest_stable "$project_id" "$host" 2>/dev/null || echo "")
+    compare "$pkg" "$current" "$latest"
+}
+
+mozilla_release() {
+    local key="$1" product="$2" pkg="${3:-$2}"
+    local current latest
+    current=$(pkg_version "$pkg")
+    [ -z "$current" ] && return
+    latest=$(mozilla_latest "$key" "$product" 2>/dev/null || echo "")
+    compare "$pkg" "$current" "$latest"
+}
+
+ngrok_release() {
+    local pkg="${1:-ngrok}"
+    local current latest
+    current=$(pkg_version "$pkg")
+    [ -z "$current" ] && return
+    latest=$(ngrok_latest 2>/dev/null || echo "")
+    compare "$pkg" "$current" "$latest"
+}
+
+# The download links are prerendered on either page, varying between requests.
+antigravity_latest() {
+    curl -sfL "https://antigravity.google/download" "https://antigravity.google/download/linux" \
+        | grep -oE 'antigravity-hub/[0-9][^/"]+/linux-x64' \
+        | sed 's|antigravity-hub/||; s|/linux-x64||' | sort -uV | tail -1
+}
+
+antigravity_release() {
+    local pkg="${1:-antigravity}"
+    local current latest
+    current=$(pkg_version "$pkg")
+    [ -z "$current" ] && return
+    latest=$(antigravity_latest 2>/dev/null || echo "")
+    compare "$pkg" "$current" "$latest"
+}
+
+dnclient_release() {
+    local pkg="${1:-dnclient}"
+    local current latest
+    current=$(pkg_version "$pkg")
+    [ -z "$current" ] && return
+    latest=$(dnclient_latest "$current" 2>/dev/null || echo "")
     compare "$pkg" "$current" "$latest"
 }
 
@@ -351,10 +444,13 @@ gh_release "vicinaehq/vicinae" "vicinae"
 gh_release "googleworkspace/cli" "google-workspace-cli"
 gh_release "stripe/stripe-cli" "stripe-cli"
 gh_release "usebruno/bruno" "bruno"
-apt_release "https://downloads.claude.ai/claude-desktop/apt/stable/dists/stable/main/binary-amd64/Packages" "claude-desktop"
 apt_release "https://persistent.oaistatic.com/codex-app-prod/linux/deb/dists/stable/main/binary-amd64/Packages" "chatgpt"
 apt_release "https://packagecloud.io/slacktechnologies/slack/debian/dists/jessie/main/binary-amd64/Packages" "slack-desktop"
 gh_release "mullvad/mullvadvpn-app" "mullvad-vpn-desktop"
+gh_release "shiftkey/desktop" "github-desktop"
+gh_release "reviu-dev/reviu" "reviu"
+gh_release "MaplePrivacyLabs/Maple" "maple"
+gh_release "anomalyco/opencode" "opencode"
 echo ""
 
 # --- Source Builds (GitHub) ---
@@ -433,10 +529,15 @@ gh_release "Qalculate/qalculate-gtk" "qalculate-gtk"
 # Filter by major-version line instead of trusting "latest".
 gh_release_semver_prefix "noctalia-dev/noctalia" "noctalia-4" "4"
 gh_release_semver_prefix "noctalia-dev/noctalia" "noctalia-5" "5"
+gh_release "franzos/mouse-debounce" "mouse-debounce"
+gh_release "vladest/googlemaps" "qt-location-plugin-googlemap"
+gh_release_semver "tastytea/mastodonpp" "mastodonpp"
 gh_release "franzos/shelf" "shelf"
 gh_release "franzos/guix-install" "guix-install"
 gh_release "rustmailer/bichon" "bichon"
-gh_release "peteonrails/voxtype" "voxtype"
+# Upstream is on a 1.0.0 release-candidate line, so /releases/latest still
+# points at the older 0.7.x stable.
+gh_release_semver "peteonrails/voxtype" "voxtype"
 gh_release "firecat53/networkmanager-dmenu" "networkmanager-dmenu"
 gh_release "opentofu/opentofu" "opentofu"
 gh_release "franzos/guix-rs" "guix-gui"
@@ -453,6 +554,21 @@ gh_release "LizardByte/Sunshine" "sunshine"
 gh_release "any1/wayvnc" "wayvnc"
 gh_release "any1/neatvnc" "neatvnc"
 gh_release "any1/aml" "aml"
+gh_release "crmne/spotifast" "spotifast"
+gh_release "keepassxreboot/keepassxc" "keepassxc"
+gh_release "mitmproxy/mitmproxy" "mitmproxy"
+gh_release "franzos/vitrine" "vitrine"
+gh_release "microsoft/onnxruntime" "onnxruntime"
+gh_release "GrapheneOS/hardened_malloc" "hardened-malloc"
+# strongswan-ikev1 inherits this version.
+gh_release "strongswan/strongswan" "strongswan"
+gh_release "hfg-gmuend/openmoji" "font-openmoji"
+gh_release "danielrobbins/keychain" "keychain"
+gh_release "inotify-tools/inotify-tools" "inotify-tools"
+# hunspell-dict-en and -en-us take their version from scowl-hunspell-dictionary.
+compare "hunspell-dict-en" \
+    "$(grep -A4 '^(define (scowl-hunspell-dictionary' "$PKG_DIR/document.scm" | grep -oP '\(version "\K[^"]+')" \
+    "$(gh_latest "en-wl/wordlist" 2>/dev/null || echo "")"
 echo ""
 
 # --- Crates.io ---
@@ -472,14 +588,17 @@ echo ""
 
 # --- Other APIs (npm, GitLab, Forgejo) ---
 echo "Other APIs:"
-node_release 24 "node"
 gh_release_semver "microsoft/vscode" "vscode"
 npm_release "@anthropic-ai/claude-code" "claude-code"
 gitlab_release "250833" "gitlab-runner"
-gitlab_release "20101" "papers" "gitlab.gnome.org"
-gh_release "spesmilo/electrum" "electrum-cc"
+gitlab_release_stable "20101" "papers" "gitlab.gnome.org"
 gitlab_release "23104371" "darkman"
+gitlab_release_stable "4484878" "apparmor"
 gcloud_release "google-cloud-cli"
+mozilla_release "LATEST_THUNDERBIRD_VERSION" "thunderbird"
+ngrok_release "ngrok"
+dnclient_release "dnclient"
+antigravity_release "antigravity"
 autofirma_release "autofirma"
 echo ""
 
@@ -495,26 +614,30 @@ manual() {
     printf "  ${YELLOW}%-30s %-14s %s${NC}\n" "$pkg" "$current" "$url"
 }
 
+manual "claude-desktop"  "https://claude.ai/download (apt index returns 403; only the pool debs are public)"
 manual "cursor"          "https://www.cursor.com/changelog"
-manual "antigravity"     "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/"
 manual "discord"         "https://discord.com/api/download?platform=linux&format=deb"
 manual "monit"           "https://mmonit.com/monit/changes/"
 manual "gradle-8"        "https://gradle.org/releases/ (pinned to 8.x line)"
 manual "gradle-7"        "https://gradle.org/releases/ (pinned to 7.x line)"
 manual "xrt"             "https://github.com/Xilinx/XRT/releases"
-manual "mastodonpp"      "https://schlomp.space/tastytea/mastodonpp/releases (domain offline)"
 manual "ghostty"         "https://github.com/dariogriffo/ghostty-debian/releases"
 manual "ectool"          "https://gitlab.howett.net/DHowett/ectool/-/commits/master (git-pinned)"
 manual "noctalia-qs"     "https://github.com/noctalia-dev/noctalia-qs/commits/main (git-pinned)"
-manual "thunderbird"     "https://archive.mozilla.org/pub/thunderbird/releases/"
 manual "bitwig-studio"   "https://www.bitwig.com/download/"
-manual "ngrok"           "https://ngrok.com/download"
 manual "arbtt"           "https://hackage.haskell.org/package/arbtt"
 manual "rtkit"           "https://gitlab.freedesktop.org/pipewire/rtkit/-/tags"
 manual "chkrootkit"      "http://www.chkrootkit.org/"
 manual "easyeffects-presets-framework" "https://github.com/FrameworkComputer/linux-docs (git-pinned)"
 manual "litebrowser"     "https://github.com/litehtml/litebrowser-linux (git-pinned)"
 manual "radicle-desktop" "https://radicle.dev/desktop"
+manual "gitkraken"       "https://help.gitkraken.com/gitkraken-desktop/current/"
+manual "metasploit-framework" "https://github.com/rapid7/metasploit-framework/tags (commit-pinned, ahead of latest tag)"
+manual "oculante-next"   "https://github.com/woelper/oculante/commits/master (git-pinned)"
+manual "unicode-emoji"   "https://www.unicode.org/Public/emoji/"
+manual "usbutils"        "https://mirrors.edge.kernel.org/pub/linux/utils/usb/usbutils/"
+manual "iw"              "https://mirrors.edge.kernel.org/pub/software/network/iw/"
+manual "net-tools"       "https://sourceforge.net/projects/net-tools/files/"
 echo ""
 
 # --- Summary ---
