@@ -33,6 +33,7 @@
   #:use-module (gnu packages sqlite)
   #:use-module (gnu packages ssh)
   #:use-module (gnu packages tls)
+  #:use-module (gnu packages version-control)
   #:use-module (px packages golang-xyz)
   #:use-module (px packages go)
   #:use-module (px self))
@@ -678,6 +679,50 @@ selecting them by age, by installed toolchain, or by shrinking the directory
 below a size limit.  It can walk a directory tree and sweep every Cargo
 project it finds.")
     (license license:expat)))
+
+(define-public cargo-deny
+  (package
+    (name "cargo-deny")
+    (version "0.21.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "cargo-deny" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1db9nb8l44a09yrmq03gz3bz6ngzraj5y9cwb93dq0xb1387l58z"))))
+    (build-system cargo-build-system)
+    (arguments
+     (list
+      #:install-source? #f
+      ;; These read fixtures from tests/, which the crate tarball excludes.
+      #:cargo-test-flags
+      ''("--"
+         "--skip=advisories::cfg::test::deserializes_advisories_cfg"
+         "--skip=bans::cfg::test::deserializes_ban_cfg"
+         "--skip=cfg::package_spec::test::deserializes_package_id"
+         "--skip=licenses::cfg::test::deserializes_licenses_cfg"
+         "--skip=licenses::gather::test::normalizes_line_endings"
+         "--skip=sources::cfg::test::deserializes_sources_cfg"
+         "--skip=test::cli_snapshot")
+      #:phases
+      #~(modify-phases %standard-phases
+          ;; The advisory database is cloned and fetched by running `git`.
+          (add-after 'install 'wrap-git
+            (lambda _
+              (wrap-program (string-append #$output "/bin/cargo-deny")
+                `("PATH" ":" suffix (,(string-append #$git-minimal "/bin")))))))))
+    (native-inputs (list pkg-config))
+    (inputs
+     (cons* bash-minimal `(,zstd "lib") (px-cargo-inputs 'cargo-deny)))
+    (home-page "https://github.com/EmbarkStudios/cargo-deny")
+    (synopsis "Lint the dependency graph of Cargo projects")
+    (description
+     "cargo-deny is a @command{cargo} subcommand that checks a project's
+dependency graph against a policy.  It reports crates with security
+advisories from the RustSec database, disallowed licenses, banned or
+duplicate crates, and crates from untrusted sources.")
+    (license (list license:expat license:asl2.0))))
 
 (define-public crunch
   (package
