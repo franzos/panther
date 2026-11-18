@@ -11,7 +11,8 @@
   #:export (sandbox-policy
             sandbox-policy?
             sandboxed
-            %portal-settings-dbus-rules))
+            %portal-settings-dbus-rules
+            %portal-screencast-dbus-rules))
 
 ;;;
 ;;; Bubblewrap launchers for existing packages.
@@ -37,6 +38,9 @@
   ;; The PulseAudio socket; PipeWire serves it through pipewire-pulse.
   (audio? sandbox-policy-audio?
           (default #f))
+  ;; V4L2 devices, found at launch.
+  (camera? sandbox-policy-camera?
+           (default #f))
   ;; Chromium and Electron build their own sandbox from user namespaces.
   (user-namespaces? sandbox-policy-user-namespaces?
                     (default #f))
@@ -62,20 +66,36 @@
          "--call=org.freedesktop.portal.Desktop=org.freedesktop.portal.Settings.*"
          "--broadcast=org.freedesktop.portal.Desktop=org.freedesktop.portal.Settings.*")))
 
+;; Screen and window capture; the portal asks the user, then hands over a
+;; PipeWire remote that only sees what they picked.
+(define %portal-screencast-dbus-rules
+  (let ((portal "org.freedesktop.portal.Desktop=org.freedesktop.")
+        (path "@/org/freedesktop/portal/desktop"))
+    (list (string-append "--call=" portal "DBus.Properties.*" path)
+          (string-append "--call=" portal "portal.ScreenCast.*" path)
+          (string-append "--call=" portal "portal.Request.*" path "/request/*")
+          (string-append "--call=" portal "portal.Session.*" path "/session/*")
+          (string-append "--broadcast=" portal "portal.Request.*" path
+                         "/request/*")
+          (string-append "--broadcast=" portal "portal.Session.*" path
+                         "/session/*"))))
+
 ;; Store items behind symlinks; fonts, icons, locales and themes live here.
 (define %sandbox-profiles
   '("/run/current-system/profile" ".guix-home/profile" ".guix-profile"))
 
 (define (sandbox-launcher base policy)
   (match-record policy <sandbox-policy>
-    (read-only-paths writable-paths network? wayland? gpu? audio?
+    (read-only-paths writable-paths network? wayland? gpu? audio? camera?
      user-namespaces? file-arguments? dbus-rules)
     (program-file
      (string-append (package-name base) "-sandbox-launcher")
      (with-imported-modules '((guix build utils))
        #~(begin
            (use-modules (guix build utils)
+                        (ice-9 ftw)
                         (srfi srfi-1)
+                        (srfi srfi-26)
                         (web uri))
            (let* ((home (getenv "HOME"))
                   (runtime (or (getenv "XDG_RUNTIME_DIR")
@@ -173,6 +193,20 @@
                      (if #$audio?
                          ((bind "--ro-bind-try")
                           (string-append runtime "/pulse/native"))
+                         '())
+                     (if #$camera?
+                         (append
+                          (append-map (lambda (device)
+                                        (let ((path (string-append "/dev/"
+                                                                   device)))
+                                          (list "--dev-bind" path path)))
+                                      (or (scandir "/dev"
+                                                   (cut string-prefix?
+                                                        "video" <>))
+                                          '()))
+                          '("--ro-bind-try" "/sys/class/video4linux"
+                            "/sys/class/video4linux"
+                            "--ro-bind-try" "/sys/devices" "/sys/devices"))
                          '())
                      '#$(if gpu?
                             '("--dev-bind-try" "/dev/dri" "/dev/dri"
