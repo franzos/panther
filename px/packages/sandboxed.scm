@@ -6,6 +6,7 @@
   #:use-module (gnu packages ebook)
   #:use-module (gnu packages gimp)
   #:use-module ((gnu packages gnome) #:select (fractal))
+  #:use-module (gnu packages inkscape)
   #:use-module (gnu packages messaging)
   #:use-module (gnu packages photo)
   #:use-module (gnu packages telegram)
@@ -156,6 +157,18 @@
               (dbus-rules
                (append %portal-settings-dbus-rules
                        '("--own=org.gimp.GIMP.*"))))))
+
+(define-public inkscape-sandboxed
+  (sandboxed inkscape
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/inkscape" ".cache/inkscape" "Pictures"))
+              (file-arguments? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=org.inkscape.Inkscape"))))))
 
 (define-public mpv-sandboxed
   (sandboxed mpv
