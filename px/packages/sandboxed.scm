@@ -2,6 +2,7 @@
 ;;; Copyright © 2026 Franz Geffke <mail@gofranz.com>
 
 (define-module (px packages sandboxed)
+  #:use-module (gnu packages telegram)
   #:use-module (nongnu packages messaging)
   #:use-module (px packages document)
   #:use-module (px packages graphics)
@@ -100,6 +101,25 @@
               (dbus-rules
                (append %portal-settings-dbus-rules
                        '("--own=org.mpris.MediaPlayer2.strawberry"
+                         "--talk=org.freedesktop.Notifications"
+                         "--talk=org.kde.StatusNotifierWatcher"))))))
+
+(define-public telegram-desktop-sandboxed
+  (sandboxed telegram-desktop
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".local/share/TelegramDesktop" "Downloads"))
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (camera? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       %portal-screencast-dbus-rules
+                       '("--own=org.telegram.desktop"
+                         ;; Qt appends its PID, always 2 in the sandbox.
+                         "--own=org.kde.StatusNotifierItem-2-1"
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.kde.StatusNotifierWatcher"))))))
 
