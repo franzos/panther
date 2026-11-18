@@ -1173,6 +1173,7 @@ Inside the sandbox, the program gets:
 
 | Package | Reads | Writes | Also |
 | --- | --- | --- | --- |
+| `element-desktop-sandboxed` | `~/.cache/fontconfig` | `~/.config/Element`, `~/Downloads` | Network, Wayland, GPU, audio, camera, user namespaces, notifications, tray, screen sharing and theme settings from the portal |
 | `papers-sandboxed` | Files named on the command line, `~/.cache/fontconfig` | Nothing | Wayland, GPU, theme settings from the portal |
 | `qalculate-gtk-sandboxed` | `~/.config/gtk-3.0/settings.ini`, `~/.cache/fontconfig` | `~/.config/qalculate`, `~/.local/share/qalculate` | Network for exchange rates, Wayland, theme settings from the portal |
 | `signal-desktop-sandboxed` | `~/.cache/fontconfig` | `~/.config/Signal`, `~/Downloads` | Network, Wayland, GPU, audio, camera, user namespaces, notifications, tray, screen sharing and theme settings from the portal |

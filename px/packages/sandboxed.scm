@@ -9,6 +9,25 @@
   #:use-module (px packages music)
   #:use-module (px sandbox))
 
+(define-public element-desktop-sandboxed
+  (sandboxed element-desktop
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/Element" "Downloads"))
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (camera? #t)
+              (user-namespaces? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       %portal-screencast-dbus-rules
+                       '(;; Chromium appends its PID, always 2 in the sandbox.
+                         "--own=org.freedesktop.StatusNotifierItem-2-1"
+                         "--talk=org.freedesktop.Notifications"
+                         "--talk=org.kde.StatusNotifierWatcher"))))))
+
 (define-public papers-sandboxed
   (sandboxed papers
              (sandbox-policy
