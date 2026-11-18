@@ -267,11 +267,13 @@ ctl.!default { type pulse }~%"
                               "--ro-bind-try" "/etc/ssl" "/etc/ssl")
                             '())
                      (append-map profile '#$%sandbox-profiles)
-                     (append-map (bind "--ro-bind-try") '#$read-only-paths)
-                     (append-map (bind "--bind") '#$writable-paths)
+                     ;; Before the policy paths, which cover them; a file in
+                     ;; a writable directory stays writable.
                      (if #$file-arguments?
                          (append-map file-argument (cdr (command-line)))
                          '())
+                     (append-map (bind "--ro-bind-try") '#$read-only-paths)
+                     (append-map (bind "--bind") '#$writable-paths)
                      (if (null? '#$dbus-rules)
                          '()
                          (session-bus '#$dbus-rules))
