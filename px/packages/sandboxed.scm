@@ -16,6 +16,7 @@
   #:use-module (gnu packages telegram)
   #:use-module (gnu packages video)
   #:use-module (nongnu packages messaging)
+  #:use-module ((nongnu packages mozilla) #:select (firefox))
   #:use-module (nongnu packages password-utils)
   #:use-module (nongnu packages productivity)
   #:use-module (px packages desktop-tools)
@@ -146,6 +147,27 @@
                          "--own=org.freedesktop.StatusNotifierItem-2-1"
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.kde.StatusNotifierWatcher"))))))
+
+(define-public firefox-sandboxed
+  (sandboxed firefox
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              ;; Firefox keeps profiles here whenever the directory exists.
+              (writable-paths '(".mozilla/firefox" ".cache/mozilla" "Downloads"))
+              (file-arguments? #t)
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (camera? #t)
+              (user-namespaces? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       %portal-screencast-dbus-rules
+                       '(;; Remote control by later launches, to open links.
+                         "--own=org.mozilla.firefox.*"
+                         "--own=org.mpris.MediaPlayer2.firefox.*"
+                         "--talk=org.freedesktop.Notifications"))))))
 
 (define-public fractal-sandboxed
   (sandboxed fractal
