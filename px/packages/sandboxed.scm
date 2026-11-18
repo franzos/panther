@@ -203,6 +203,21 @@
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.freedesktop.secrets"))))))
 
+(define-public fragments-sandboxed
+  (sandboxed fragments
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/fragments" ".cache/fragments" "Downloads"))
+              (file-arguments? #t)
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=de.haeckerfelix.Fragments"
+                         "--talk=org.freedesktop.Notifications"
+                         "--talk=org.freedesktop.secrets"))))))
+
 (define-public gimp-sandboxed
   (sandboxed gimp
              (sandbox-policy
