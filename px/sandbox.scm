@@ -12,6 +12,7 @@
             sandbox-policy?
             sandboxed
             %portal-settings-dbus-rules
+            %portal-open-dbus-rules
             %portal-screencast-dbus-rules))
 
 ;;;
@@ -79,6 +80,18 @@
                          "/request/*")
           (string-append "--broadcast=" portal "portal.Session.*" path
                          "/session/*"))))
+
+;; Files the program can read, opened in the user's default app or shown in
+;; the file manager.
+(define %portal-open-dbus-rules
+  (let ((portal "org.freedesktop.portal.Desktop=org.freedesktop.")
+        (path "@/org/freedesktop/portal/desktop"))
+    (list (string-append "--call=" portal "DBus.Properties.*" path)
+          (string-append "--call=" portal "portal.OpenURI.OpenFile" path)
+          (string-append "--call=" portal "portal.OpenURI.OpenDirectory" path)
+          (string-append "--call=" portal "portal.Request.*" path "/request/*")
+          (string-append "--broadcast=" portal "portal.Request.*" path
+                         "/request/*"))))
 
 ;; Store items behind symlinks; fonts, icons, locales and themes live here.
 (define %sandbox-profiles

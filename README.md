@@ -1221,7 +1221,7 @@ Everything is off by default, so `(sandboxed curl)` has no network and sees no f
 | `camera?` | `#f` | Bind the `/dev/video*` devices present at launch, and the `/sys` entries that describe them |
 | `user-namespaces?` | `#f` | Let the program create user namespaces. Chromium and Electron need this for their own renderer sandbox |
 | `file-arguments?` | `#f` | Bind files named on the command line (paths or `file://` URIs) read-only |
-| `dbus-rules` | `'()` | `xdg-dbus-proxy` filter options. `%portal-settings-dbus-rules` allows the portal's settings interface and nothing else; `%portal-screencast-dbus-rules` allows screen and window capture, which the portal confirms with the user |
+| `dbus-rules` | `'()` | `xdg-dbus-proxy` filter options. `%portal-settings-dbus-rules` allows the portal's settings interface and nothing else; `%portal-open-dbus-rules` opens files the program can read in your default app, or shows them in the file manager; `%portal-screencast-dbus-rules` allows screen and window capture, which the portal confirms with the user |
 
 **Verifying:**
 
