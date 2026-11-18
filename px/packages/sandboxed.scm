@@ -7,7 +7,7 @@
   #:use-module (gnu packages ebook)
   #:use-module (gnu packages fediverse)
   #:use-module (gnu packages gimp)
-  #:use-module ((gnu packages gnome) #:select (fractal))
+  #:use-module ((gnu packages gnome) #:select (fractal loupe))
   #:use-module (gnu packages gnome-circle)
   #:use-module (gnu packages inkscape)
   #:use-module ((gnu packages kde-graphics) #:select (okular))
@@ -216,6 +216,19 @@
                        '("--own=info.febvre.Komikku"
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.freedesktop.secrets"))))))
+
+(define-public loupe-sandboxed
+  (sandboxed loupe
+             (sandbox-policy
+              (read-only-paths '("Pictures" ".cache/fontconfig"))
+              (file-arguments? #t)
+              (wayland? #t)
+              (gpu? #t)
+              ;; glycin runs its image loaders in their own sandbox.
+              (user-namespaces? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=org.gnome.Loupe"))))))
 
 (define-public mpv-sandboxed
   (sandboxed mpv
