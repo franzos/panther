@@ -198,7 +198,10 @@ ctl.!default { type pulse }~%"
                      (list "--dir" home
                            "--perms" "0700" "--dir" runtime
                            "--bind" app-runtime app-runtime
-                           "--setenv" "TMPDIR" app-runtime)
+                           "--setenv" "TMPDIR" app-runtime
+                           ;; dconf is out of reach; failed writes crash some
+                           ;; programs.
+                           "--setenv" "GSETTINGS_BACKEND" "memory")
                      (append-map (lambda (variable)
                                    (let ((value (getenv variable)))
                                      (if value
