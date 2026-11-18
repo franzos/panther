@@ -36,6 +36,9 @@
   ;; The PulseAudio socket; PipeWire serves it through pipewire-pulse.
   (audio? sandbox-policy-audio?
           (default #f))
+  ;; Chromium and Electron build their own sandbox from user namespaces.
+  (user-namespaces? sandbox-policy-user-namespaces?
+                    (default #f))
   ;; Files named on the command line, read-only.
   (file-arguments? sandbox-policy-file-arguments?
                    (default #f))
@@ -64,7 +67,7 @@
 (define (sandbox-launcher base policy)
   (match-record policy <sandbox-policy>
     (read-only-paths writable-paths network? wayland? gpu? audio?
-     file-arguments? dbus-rules)
+     user-namespaces? file-arguments? dbus-rules)
     (program-file
      (string-append (package-name base) "-sandbox-launcher")
      (with-imported-modules '((guix build utils))
@@ -133,8 +136,10 @@
              (chmod app-runtime #o700)
              (apply execl #$(file-append bubblewrap "/bin/bwrap") "bwrap"
                     (append
-                     '("--unshare-all" "--unshare-user" "--disable-userns"
-                       "--clearenv"
+                     '#$(if user-namespaces?
+                            '()
+                            '("--disable-userns"))
+                     '("--unshare-all" "--unshare-user" "--clearenv"
                        "--ro-bind" "/gnu/store" "/gnu/store"
                        "--proc" "/proc" "--dev" "/dev" "--tmpfs" "/tmp"
                        "--ro-bind-try" "/etc/localtime" "/etc/localtime")

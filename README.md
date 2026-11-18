@@ -1215,6 +1215,7 @@ Everything is off by default, so `(sandboxed curl)` has no network and sees no f
 | `wayland?` | `#f` | Bind the Wayland socket |
 | `gpu?` | `#f` | Bind `/dev/dri` and the `/sys` entries Mesa needs to find the driver |
 | `audio?` | `#f` | Bind the PulseAudio socket (served by `pipewire-pulse` on PipeWire systems). This allows recording as well as playback |
+| `user-namespaces?` | `#f` | Let the program create user namespaces. Chromium and Electron need this for their own renderer sandbox |
 | `file-arguments?` | `#f` | Bind files named on the command line (paths or `file://` URIs) read-only |
 | `dbus-rules` | `'()` | `xdg-dbus-proxy` filter options. `%portal-settings-dbus-rules` allows the portal's settings interface and nothing else |
 
