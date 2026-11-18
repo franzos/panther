@@ -16,6 +16,24 @@
               (gpu? #t)
               (dbus-rules %portal-settings-dbus-rules))))
 
+(define-public spotifast-sandboxed
+  (sandboxed spotifast
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/spotifast" ".local/state/spotifast"
+                                ".cache/spotifast" "$XDG_RUNTIME_DIR/spotifast"))
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=org.mpris.MediaPlayer2.spotifast"
+                         ;; ksni appends its PID, always 2 in the sandbox.
+                         "--own=org.kde.StatusNotifierItem-2-1"
+                         "--talk=org.kde.StatusNotifierWatcher"
+                         "--talk=org.freedesktop.secrets"))))))
+
 (define-public strawberry-sandboxed
   (sandboxed strawberry
              (sandbox-policy
