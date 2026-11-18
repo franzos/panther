@@ -97,7 +97,7 @@
 (define %sandbox-profiles
   '("/run/current-system/profile" ".guix-home/profile" ".guix-profile"))
 
-(define (sandbox-launcher base policy)
+(define (sandbox-launcher base base-output policy)
   (match-record policy <sandbox-policy>
     (read-only-paths writable-paths network? wayland? gpu? audio? camera?
      user-namespaces? file-arguments? dbus-rules)
@@ -164,7 +164,7 @@
                              "--setenv" "DBUS_SESSION_BUS_ADDRESS"
                              (string-append "unix:path=" bus)))))
                   ;; Every bin/ entry links here; the invoked name picks the program.
-                  (program (string-append #$base "/bin/"
+                  (program (string-append (ungexp base base-output) "/bin/"
                                           (basename (car (command-line)))))
                   ;; Shared by all instances, for single-instance sockets.
                   (app-runtime (string-append runtime "/app/"
@@ -244,9 +244,14 @@
                      (list "--" program)
                      (cdr (command-line))))))))))
 
-(define* (sandboxed base #:optional (policy (sandbox-policy)))
-  "Return a package with the programs and desktop entries of BASE, each
-program running BASE's under bubblewrap as POLICY allows."
+(define* (sandboxed base #:optional (policy (sandbox-policy))
+                    #:key (output "out"))
+  "Return a package with the programs and desktop entries of OUTPUT of BASE,
+each program running BASE's under bubblewrap as POLICY allows."
+  (sandboxed-package base output policy))
+
+;; Not named OUTPUT, which would shadow the builder's #$output.
+(define (sandboxed-package base base-output policy)
   (package
     (name (string-append (package-name base) "-sandboxed"))
     (version (package-version base))
@@ -267,26 +272,26 @@ program running BASE's under bubblewrap as POLICY allows."
                             (not (string-prefix? "." file)))))
             (mkdir-p bin)
             (for-each (lambda (program)
-                        (symlink #$(sandbox-launcher base policy)
+                        (symlink #$(sandbox-launcher base base-output policy)
                                  (string-append bin "/" program)))
-                      (scandir (string-append #$base "/bin") visible?))
-            (when (file-exists? (string-append #$base "/share"))
+                      (scandir (string-append (ungexp base base-output) "/bin") visible?))
+            (when (file-exists? (string-append (ungexp base base-output) "/share"))
               (mkdir-p share)
               (for-each
                (lambda (entry)
-                 (symlink (string-append #$base "/share/" entry)
+                 (symlink (string-append (ungexp base base-output) "/share/" entry)
                           (string-append share "/" entry)))
                ;; D-Bus and systemd units would start the program unsandboxed.
-               (scandir (string-append #$base "/share")
+               (scandir (string-append (ungexp base base-output) "/share")
                         (lambda (entry)
                           (and (visible? entry)
                                (not (member entry '("applications" "dbus-1"
                                                     "systemd"))))))))
-            (when (file-exists? (string-append #$base "/share/applications"))
-              (copy-recursively (string-append #$base "/share/applications")
+            (when (file-exists? (string-append (ungexp base base-output) "/share/applications"))
+              (copy-recursively (string-append (ungexp base base-output) "/share/applications")
                                 applications)
               (substitute* (find-files applications "\\.desktop$")
-                (((regexp-quote (string-append #$base "/bin/")))
+                (((regexp-quote (string-append (ungexp base base-output) "/bin/")))
                  (string-append bin "/"))))))))
     (home-page (package-home-page base))
     (synopsis (string-append (package-synopsis base) " (sandboxed)"))
