@@ -29,6 +29,19 @@
   #:use-module (px packages music)
   #:use-module (px sandbox))
 
+(define-public amberol-sandboxed
+  (sandboxed amberol
+             (sandbox-policy
+              (read-only-paths '("Music" ".cache/fontconfig"))
+              (file-arguments? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=io.bassi.Amberol"
+                         "--own=org.mpris.MediaPlayer2.io.bassi.Amberol"))))))
+
 (define-public anytype-sandboxed
   (sandboxed anytype
              (sandbox-policy
