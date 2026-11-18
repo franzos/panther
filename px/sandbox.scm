@@ -1,0 +1,225 @@
+;;; Package Repository for GNU Guix
+;;; Copyright © 2026 Franz Geffke <mail@gofranz.com>
+
+(define-module (px sandbox)
+  #:use-module (gnu packages glib)
+  #:use-module (gnu packages virtualization)
+  #:use-module (guix build-system trivial)
+  #:use-module (guix gexp)
+  #:use-module (guix packages)
+  #:use-module (guix records)
+  #:export (sandbox-policy
+            sandbox-policy?
+            sandboxed
+            %portal-settings-dbus-rules))
+
+;;;
+;;; Bubblewrap launchers for existing packages.
+;;;
+;;; Paths in a policy are relative to $HOME unless absolute.  Writable paths
+;;; are directories, created on the host before launch.
+;;;
+
+(define-record-type* <sandbox-policy>
+  sandbox-policy make-sandbox-policy
+  sandbox-policy?
+  (read-only-paths sandbox-policy-read-only-paths
+                   (default '()))
+  (writable-paths sandbox-policy-writable-paths
+                  (default '()))
+  (network? sandbox-policy-network?
+            (default #f))
+  (wayland? sandbox-policy-wayland?
+            (default #f))
+  (gpu? sandbox-policy-gpu?
+        (default #f))
+  ;; Files named on the command line, read-only.
+  (file-arguments? sandbox-policy-file-arguments?
+                   (default #f))
+  ;; xdg-dbus-proxy filter options; empty means no session bus.
+  (dbus-rules sandbox-policy-dbus-rules
+              (default '())))
+
+(define %sandbox-environment
+  '("HOME" "USER" "LOGNAME" "LANG" "LC_ALL" "TERM" "TZ" "TZDIR"
+    "XDG_RUNTIME_DIR" "XDG_SESSION_TYPE" "XDG_CURRENT_DESKTOP"
+    "XDG_DATA_DIRS" "XDG_CONFIG_DIRS" "GUIX_LOCPATH"
+    "XCURSOR_PATH" "XCURSOR_THEME" "XCURSOR_SIZE"))
+
+;; Theme and colour-scheme preferences, nothing else of the portal.
+(define %portal-settings-dbus-rules
+  (map (lambda (rule)
+         (string-append rule "@/org/freedesktop/portal/desktop"))
+       '("--call=org.freedesktop.portal.Desktop=org.freedesktop.DBus.Properties.*"
+         "--call=org.freedesktop.portal.Desktop=org.freedesktop.portal.Settings.*"
+         "--broadcast=org.freedesktop.portal.Desktop=org.freedesktop.portal.Settings.*")))
+
+;; Store items behind symlinks; fonts, icons, locales and themes live here.
+(define %sandbox-profiles
+  '("/run/current-system/profile" ".guix-home/profile" ".guix-profile"))
+
+(define (sandbox-launcher base policy)
+  (match-record policy <sandbox-policy>
+    (read-only-paths writable-paths network? wayland? gpu? file-arguments?
+     dbus-rules)
+    (program-file
+     (string-append (package-name base) "-sandbox-launcher")
+     (with-imported-modules '((guix build utils))
+       #~(begin
+           (use-modules (guix build utils)
+                        (srfi srfi-1)
+                        (web uri))
+           (let* ((home (getenv "HOME"))
+                  (runtime (or (getenv "XDG_RUNTIME_DIR")
+                               (format #f "/run/user/~a" (getuid))))
+                  (absolute (lambda (path)
+                              (if (string-prefix? "/" path)
+                                  path
+                                  (string-append home "/" path))))
+                  (bind (lambda (option)
+                          (lambda (path)
+                            (let ((path (absolute path)))
+                              (list option path path)))))
+                  (profile (lambda (path)
+                             (let ((path (absolute path)))
+                               (if (file-exists? path)
+                                   (list "--symlink" (canonicalize-path path)
+                                         path)
+                                   '()))))
+                  (file-argument
+                   (lambda (argument)
+                     (let ((file (if (string-prefix? "file://" argument)
+                                     (uri-decode (string-drop argument 7))
+                                     argument)))
+                       (if (file-exists? file)
+                           (let ((path (string-append
+                                        (canonicalize-path (dirname file))
+                                        "/" (basename file))))
+                             (list "--ro-bind" path path))
+                           '()))))
+                  (session-bus
+                   (lambda (rules)
+                     (let ((socket (format #f "~a/sandbox-bus-~a"
+                                           runtime (getpid)))
+                           (bus (string-append runtime "/bus"))
+                           (sync (pipe)))
+                       ;; The proxy writes to its stdout once it listens, and
+                       ;; exits when bwrap closes the other end.
+                       (spawn #$(file-append xdg-dbus-proxy
+                                             "/bin/xdg-dbus-proxy")
+                              (cons* "xdg-dbus-proxy" "--fd=1"
+                                     (or (getenv "DBUS_SESSION_BUS_ADDRESS")
+                                         (string-append "unix:path=" bus))
+                                     socket "--filter" rules)
+                              #:output (cdr sync))
+                       (close-port (cdr sync))
+                       (read-char (car sync))
+                       (list "--sync-fd"
+                             (number->string (port->fdes (car sync)))
+                             "--ro-bind" socket bus
+                             "--setenv" "DBUS_SESSION_BUS_ADDRESS"
+                             (string-append "unix:path=" bus)))))
+                  ;; Every bin/ entry links here; the invoked name picks the program.
+                  (program (string-append #$base "/bin/"
+                                          (basename (car (command-line))))))
+             (for-each (compose mkdir-p absolute) '#$writable-paths)
+             (apply execl #$(file-append bubblewrap "/bin/bwrap") "bwrap"
+                    (append
+                     '("--unshare-all" "--unshare-user" "--disable-userns"
+                       "--clearenv"
+                       "--ro-bind" "/gnu/store" "/gnu/store"
+                       "--proc" "/proc" "--dev" "/dev" "--tmpfs" "/tmp"
+                       "--ro-bind-try" "/etc/localtime" "/etc/localtime")
+                     (list "--dir" home
+                           "--perms" "0700" "--dir" runtime)
+                     (append-map (lambda (variable)
+                                   (let ((value (getenv variable)))
+                                     (if value
+                                         (list "--setenv" variable value)
+                                         '())))
+                                 '#$(append %sandbox-environment
+                                            (if wayland?
+                                                '("WAYLAND_DISPLAY")
+                                                '())
+                                            (if network?
+                                                '("SSL_CERT_FILE" "SSL_CERT_DIR")
+                                                '())))
+                     (if #$wayland?
+                         ((bind "--ro-bind")
+                          (string-append runtime "/"
+                                         (or (getenv "WAYLAND_DISPLAY")
+                                             "wayland-0")))
+                         '())
+                     '#$(if gpu?
+                            '("--dev-bind-try" "/dev/dri" "/dev/dri"
+                              "--ro-bind-try" "/sys/dev/char" "/sys/dev/char"
+                              "--ro-bind-try" "/sys/devices" "/sys/devices")
+                            '())
+                     '#$(if network?
+                            '("--share-net"
+                              "--ro-bind-try" "/etc/resolv.conf" "/etc/resolv.conf"
+                              "--ro-bind-try" "/etc/hosts" "/etc/hosts"
+                              "--ro-bind-try" "/etc/ssl" "/etc/ssl")
+                            '())
+                     (append-map profile '#$%sandbox-profiles)
+                     (append-map (bind "--ro-bind-try") '#$read-only-paths)
+                     (append-map (bind "--bind") '#$writable-paths)
+                     (if #$file-arguments?
+                         (append-map file-argument (cdr (command-line)))
+                         '())
+                     (if (null? '#$dbus-rules)
+                         '()
+                         (session-bus '#$dbus-rules))
+                     (list "--" program)
+                     (cdr (command-line))))))))))
+
+(define* (sandboxed base #:optional (policy (sandbox-policy)))
+  "Return a package with the programs and desktop entries of BASE, each
+program running BASE's under bubblewrap as POLICY allows."
+  (package
+    (name (string-append (package-name base) "-sandboxed"))
+    (version (package-version base))
+    (source #f)
+    (build-system trivial-build-system)
+    (arguments
+     (list
+      #:modules '((guix build utils))
+      #:builder
+      #~(begin
+          (use-modules (guix build utils)
+                       (ice-9 ftw)
+                       (ice-9 regex))
+          (let ((bin (string-append #$output "/bin"))
+                (share (string-append #$output "/share"))
+                (applications (string-append #$output "/share/applications"))
+                (visible? (lambda (file)
+                            (not (string-prefix? "." file)))))
+            (mkdir-p bin)
+            (for-each (lambda (program)
+                        (symlink #$(sandbox-launcher base policy)
+                                 (string-append bin "/" program)))
+                      (scandir (string-append #$base "/bin") visible?))
+            (when (file-exists? (string-append #$base "/share"))
+              (mkdir-p share)
+              (for-each
+               (lambda (entry)
+                 (symlink (string-append #$base "/share/" entry)
+                          (string-append share "/" entry)))
+               ;; D-Bus and systemd units would start the program unsandboxed.
+               (scandir (string-append #$base "/share")
+                        (lambda (entry)
+                          (and (visible? entry)
+                               (not (member entry '("applications" "dbus-1"
+                                                    "systemd"))))))))
+            (when (file-exists? (string-append #$base "/share/applications"))
+              (copy-recursively (string-append #$base "/share/applications")
+                                applications)
+              (substitute* (find-files applications "\\.desktop$")
+                (((regexp-quote (string-append #$base "/bin/")))
+                 (string-append bin "/"))))))))
+    (home-page (package-home-page base))
+    (synopsis (string-append (package-synopsis base) " (sandboxed)"))
+    (description
+     (string-append (package-description base)
+                    "  This variant runs the program in a bubblewrap sandbox."))
+    (license (package-license base))))
