@@ -400,6 +400,18 @@
                (append %portal-settings-dbus-rules
                        '("--own=io.github.Qalculate"))))))
 
+(define-public rawtherapee-sandboxed
+  (sandboxed rawtherapee
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              ;; Processing profiles are saved next to the pictures.
+              (writable-paths '(".config/RawTherapee" ".cache/RawTherapee"
+                                "Pictures"))
+              (file-arguments? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (dbus-rules %portal-settings-dbus-rules))))
+
 (define-public rhythmbox-sandboxed
   (sandboxed rhythmbox
              (sandbox-policy
