@@ -4,6 +4,7 @@
 (define-module (px packages sandboxed)
   #:use-module (gnu packages bittorrent)
   #:use-module (gnu packages ebook)
+  #:use-module ((gnu packages gnome) #:select (fractal))
   #:use-module (gnu packages messaging)
   #:use-module (gnu packages photo)
   #:use-module (gnu packages telegram)
@@ -126,6 +127,22 @@
                          "--own=org.freedesktop.StatusNotifierItem-2-1"
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.kde.StatusNotifierWatcher"))))))
+
+(define-public fractal-sandboxed
+  (sandboxed fractal
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".local/share/fractal" ".cache/fractal"
+                                "Downloads"))
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=org.gnome.Fractal"
+                         "--talk=org.freedesktop.Notifications"
+                         "--talk=org.freedesktop.secrets"))))))
 
 (define-public mpv-sandboxed
   (sandboxed mpv
