@@ -584,7 +584,7 @@ and metadata can be preserved.")
 (define-public vitrine
   (package
     (name "vitrine")
-    (version "0.1.3")
+    (version "0.1.4")
     (source
      (origin
        (method git-fetch)
@@ -593,7 +593,7 @@ and metadata can be preserved.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "02pvpcg6gb39pvy42icw6dfpr2didm5s2r3iihx0k217n6jwqms2"))))
+        (base32 "16881rd1y30bril20gxs1rp0fpsmv2dhgbks8v31zpwda5rn12vx"))))
     (build-system cargo-build-system)
     (arguments
      (list

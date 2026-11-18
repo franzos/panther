@@ -1007,6 +1007,10 @@
   (crate-source "ashpd" "0.13.9"
                 "1yqc7p4fw1d3s3ma8fkgrkmph0y0vcsyxvjfwvaxqfc2hkyz1g8k"))
 
+(define rust-ashpd-0.14.0
+  (crate-source "ashpd" "0.14.0"
+                "1k6b47cr1yy1fbc83j8515c68ld4q3kziw90fa874f8yzgqpg8wb"))
+
 (define rust-ashpd-0.8.1
   (crate-source "ashpd" "0.8.1"
                 "14yh6v12bgngawzds6i252n4zzq9rnqz659p5h898yl7f9y4v26x"))
@@ -35937,6 +35941,10 @@
   (crate-source "zbus" "5.2.0"
                 "18f8w8cc6v88nrp0cdz57rnnh665iw6vlzl52kxvd11plkdylrzv"))
 
+(define rust-zbus-6.3.0
+  (crate-source "zbus" "6.3.0"
+                "1r40ynds0b86mfxyb1gqyywyzkdjp8d46qnrpvm7r4i31dsawjkb"))
+
 (define rust-zbus-lockstep-0.5.2
   (crate-source "zbus-lockstep" "0.5.2"
                 "0qsqsk67c2vpg26rp0x0ya0cv92fs11r92kjg1sln23s442xx639"))
@@ -35989,6 +35997,10 @@
   (crate-source "zbus_macros" "5.2.0"
                 "0mwcab3fwfabi3bz0akgk3k5v5ys0ichmr5by9hbdkk0r7mlk79c"))
 
+(define rust-zbus-macros-6.3.0
+  (crate-source "zbus_macros" "6.3.0"
+                "0ac5ddzd38b4vy6kdp8kxm5fb1nsa0pqc0i9rdpw2igix95xvj9p"))
+
 (define rust-zbus-names-2.6.0
   (crate-source "zbus_names" "2.6.0"
                 "1adl0acl39flk4jnrv7axg29kpwm7cy15w2wf0yy59mxdmvvp07v"))
@@ -36028,6 +36040,10 @@
 (define rust-zbus-secret-service-keyring-store-1.0.1
   (crate-source "zbus-secret-service-keyring-store" "1.0.1"
                 "16kx2cbh9xxcicyslja78bnmy64qndkmp0pinjnjjxwy3c01v03l"))
+
+(define rust-zbus-utils-6.1.0
+  (crate-source "zbus_utils" "6.1.0"
+                "1ivfwwc94f6ff00kc814gbljh3h23wiaxg25ihv1nccml8nyamdg"))
 
 (define rust-zbus-xml-5.2.1
   (crate-source "zbus_xml" "5.2.1"
@@ -36496,6 +36512,10 @@
 (define rust-zopfli-0.8.4
   (crate-source "zopfli" "0.8.4"
                 "04gv076p88smppwcarzs0wjbbfq55ghsbi0573cq716261fzrxxa"))
+
+(define rust-zruntime-0.2.3
+  (crate-source "zruntime" "0.2.3"
+                "0wmw1rgivpaljiq7hi43vi08rzh8jmvrcyqgldsh8xi1ypa5asnf"))
 
 (define rust-zstd-0.13.2
   (crate-source "zstd" "0.13.2"
@@ -58328,7 +58348,9 @@
                 rust-arboard-3.6.1
                 rust-arrayvec-0.7.8
                 rust-as-raw-xcb-connection-1.0.1
+                rust-ashpd-0.14.0
                 rust-assert-cmd-2.2.2
+                rust-async-trait-0.1.92
                 rust-atomic-waker-1.1.2
                 rust-autocfg-1.5.1
                 rust-base64-0.23.1
@@ -58413,6 +58435,7 @@
                 rust-egui-kittest-0.36.2
                 rust-either-1.19.0
                 rust-emath-0.36.2
+                rust-endi-1.1.1
                 rust-enumn-0.1.14
                 rust-epaint-0.36.2
                 rust-epaint-default-fonts-0.36.2
@@ -58439,6 +58462,8 @@
                 rust-foreign-types-shared-0.3.1
                 rust-four-cc-0.4.0
                 rust-futures-core-0.3.34
+                rust-futures-io-0.3.34
+                rust-futures-macro-0.3.34
                 rust-futures-task-0.3.34
                 rust-futures-util-0.3.34
                 rust-gcd-2.3.0
@@ -58463,6 +58488,7 @@
                 rust-hashlink-0.12.2
                 rust-heck-0.5.0
                 rust-hermit-abi-0.5.3
+                rust-hex-0.4.3
                 rust-http-1.5.0
                 rust-httparse-1.10.1
                 rust-hybrid-array-0.4.15
@@ -58519,6 +58545,7 @@
                 rust-matrixmultiply-0.3.11
                 rust-memchr-2.8.3
                 rust-memmap2-0.9.11
+                rust-memoffset-0.9.1
                 rust-metrics-0.24.6
                 rust-minijinja-3.1.0
                 rust-miniz-oxide-0.8.9
@@ -58570,6 +58597,7 @@
                 rust-once-cell-polyfill-1.70.2
                 rust-option-ext-0.2.0
                 rust-orbclient-0.3.55
+                rust-ordered-stream-0.2.0
                 rust-parking-lot-0.12.5
                 rust-parking-lot-core-0.9.12
                 rust-pastey-0.2.3
@@ -58649,6 +58677,7 @@
                 rust-serde-core-1.0.229
                 rust-serde-derive-1.0.229
                 rust-serde-json-1.0.154
+                rust-serde-repr-0.1.21
                 rust-serde-spanned-1.1.2
                 rust-sha2-0.11.0
                 rust-shlex-2.0.1
@@ -58664,6 +58693,7 @@
                 rust-smithay-client-toolkit-0.20.0
                 rust-smithay-clipboard-0.7.3
                 rust-smol-str-0.2.2
+                rust-socket2-0.6.5
                 rust-sqlite-wasm-rs-0.5.5
                 rust-static-assertions-1.1.0
                 rust-strength-reduce-0.2.4
@@ -58706,6 +58736,7 @@
                 rust-typed-path-0.12.3
                 rust-typeid-1.0.3
                 rust-typenum-1.20.1
+                rust-uds-windows-1.2.1
                 rust-unicode-general-category-1.1.0
                 rust-unicode-ident-1.0.26
                 rust-unicode-segmentation-1.13.3
@@ -58786,12 +58817,17 @@
                 rust-xkbcommon-dl-0.4.2
                 rust-xkeysym-0.2.1
                 rust-xml-rs-0.8.29
+                rust-zbus-6.3.0
+                rust-zbus-macros-6.3.0
+                rust-zbus-utils-6.1.0
+                rust-zcheapstr-1.2.0
                 rust-zerocopy-0.8.62
                 rust-zerocopy-derive-0.8.62
                 rust-zeroize-1.9.1
                 rust-zip-9.0.1
                 rust-zlib-rs-0.6.8
                 rust-zmij-1.0.23
+                rust-zruntime-0.2.3
                 rust-zune-core-0.5.3
                 rust-zune-jpeg-0.5.15))
  (voxtype =>
