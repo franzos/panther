@@ -4,6 +4,7 @@
 (define-module (px packages sandboxed)
   #:use-module (gnu packages bittorrent)
   #:use-module (gnu packages ebook)
+  #:use-module (gnu packages fediverse)
   #:use-module (gnu packages gimp)
   #:use-module ((gnu packages gnome) #:select (fractal))
   #:use-module (gnu packages gnome-circle)
@@ -372,6 +373,21 @@
                          "--own=org.freedesktop.StatusNotifierItem-2-1"
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.kde.StatusNotifierWatcher"))))))
+
+(define-public tuba-sandboxed
+  (sandboxed tuba
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".cache/dev.geopjr.Tuba" "Downloads"))
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=dev.geopjr.Tuba"
+                         "--talk=org.freedesktop.Notifications"
+                         "--talk=org.freedesktop.secrets"))))))
 
 (define-public vitrine-sandboxed
   (sandboxed vitrine
