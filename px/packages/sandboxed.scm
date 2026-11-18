@@ -2,6 +2,7 @@
 ;;; Copyright © 2026 Franz Geffke <mail@gofranz.com>
 
 (define-module (px packages sandboxed)
+  #:use-module (nongnu packages messaging)
   #:use-module (px packages document)
   #:use-module (px packages graphics)
   #:use-module (px packages maths)
@@ -28,6 +29,25 @@
               (dbus-rules
                (append %portal-settings-dbus-rules
                        '("--own=io.github.Qalculate"))))))
+
+(define-public signal-desktop-sandboxed
+  (sandboxed signal-desktop
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/Signal" "Downloads"))
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (camera? #t)
+              (user-namespaces? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       %portal-screencast-dbus-rules
+                       '(;; Chromium appends its PID, always 2 in the sandbox.
+                         "--own=org.freedesktop.StatusNotifierItem-2-1"
+                         "--talk=org.freedesktop.Notifications"
+                         "--talk=org.kde.StatusNotifierWatcher"))))))
 
 (define-public spotifast-sandboxed
   (sandboxed spotifast

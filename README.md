@@ -1175,6 +1175,7 @@ Inside the sandbox, the program gets:
 | --- | --- | --- | --- |
 | `papers-sandboxed` | Files named on the command line, `~/.cache/fontconfig` | Nothing | Wayland, GPU, theme settings from the portal |
 | `qalculate-gtk-sandboxed` | `~/.config/gtk-3.0/settings.ini`, `~/.cache/fontconfig` | `~/.config/qalculate`, `~/.local/share/qalculate` | Network for exchange rates, Wayland, theme settings from the portal |
+| `signal-desktop-sandboxed` | `~/.cache/fontconfig` | `~/.config/Signal`, `~/Downloads` | Network, Wayland, GPU, audio, camera, user namespaces, notifications, tray, screen sharing and theme settings from the portal |
 | `spotifast-sandboxed` | `~/.cache/fontconfig` | `~/.config/spotifast`, `~/.local/state/spotifast`, `~/.cache/spotifast`, `$XDG_RUNTIME_DIR/spotifast` | Network, Wayland, GPU, audio, MPRIS, tray, Secret Service, theme settings from the portal |
 | `strawberry-sandboxed` | `~/Music`, files named on the command line, `~/.cache/fontconfig` | `~/.config/strawberry`, `~/.local/share/strawberry`, `~/.cache/strawberry` | Network, Wayland, GPU, audio, MPRIS, notifications, tray, theme settings from the portal |
 | `tidal-hifi-sandboxed` | `~/.cache/fontconfig` | `~/.config/tidal-hifi` | Network, Wayland, GPU, audio, user namespaces, MPRIS, notifications, tray, theme settings from the portal |
