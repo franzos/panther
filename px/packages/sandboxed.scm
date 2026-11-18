@@ -7,7 +7,7 @@
   #:use-module (gnu packages ebook)
   #:use-module (gnu packages fediverse)
   #:use-module (gnu packages gimp)
-  #:use-module ((gnu packages gnome) #:select (fractal loupe))
+  #:use-module ((gnu packages gnome) #:select (fractal loupe rhythmbox))
   #:use-module (gnu packages gnome-circle)
   #:use-module (gnu packages inkscape)
   #:use-module ((gnu packages kde-graphics) #:select (okular))
@@ -322,6 +322,23 @@
               (dbus-rules
                (append %portal-settings-dbus-rules
                        '("--own=io.github.Qalculate"))))))
+
+(define-public rhythmbox-sandboxed
+  (sandboxed rhythmbox
+             (sandbox-policy
+              (read-only-paths '("Music" ".cache/fontconfig"))
+              (writable-paths '(".local/share/rhythmbox" ".cache/rhythmbox"
+                                "Podcasts"))
+              (file-arguments? #t)
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=org.gnome.Rhythmbox3"
+                         "--own=org.mpris.MediaPlayer2.rhythmbox"
+                         "--talk=org.freedesktop.Notifications"))))))
 
 (define-public signal-desktop-sandboxed
   (sandboxed signal-desktop
