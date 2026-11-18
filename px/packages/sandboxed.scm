@@ -374,6 +374,21 @@
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.kde.StatusNotifierWatcher"))))))
 
+(define-public transmission-sandboxed
+  (sandboxed transmission
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/transmission" "Downloads"))
+              (file-arguments? #t)
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=com.transmissionbt.Transmission"
+                         "--talk=org.freedesktop.Notifications"))))
+             #:output "gui"))
+
 (define-public tuba-sandboxed
   (sandboxed tuba
              (sandbox-policy
