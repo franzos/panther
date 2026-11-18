@@ -12,6 +12,7 @@
   #:use-module (gnu packages gnome-circle)
   #:use-module (gnu packages inkscape)
   #:use-module ((gnu packages kde-graphics) #:select (okular))
+  #:use-module ((gnu packages libreoffice) #:select (libreoffice))
   #:use-module (gnu packages messaging)
   #:use-module (gnu packages photo)
   #:use-module (gnu packages telegram)
@@ -239,6 +240,16 @@
                        '("--own=info.febvre.Komikku"
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.freedesktop.secrets"))))))
+
+(define-public libreoffice-sandboxed
+  (sandboxed libreoffice
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/libreoffice" "Documents"))
+              (file-arguments? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (dbus-rules %portal-settings-dbus-rules))))
 
 (define-public loupe-sandboxed
   (sandboxed loupe
