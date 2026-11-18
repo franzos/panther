@@ -1171,18 +1171,7 @@ Inside the sandbox, the program gets:
 - **A fixed list of environment variables**. Everything else is dropped, tokens included.
 - **No session bus**, unless the policy sets `dbus-rules`; then it gets a filtered one through `xdg-dbus-proxy`.
 
-| Package | Reads | Writes | Also |
-| --- | --- | --- | --- |
-| `element-desktop-sandboxed` | `~/.cache/fontconfig` | `~/.config/Element`, `~/Downloads` | Network, Wayland, GPU, audio, camera, user namespaces, notifications, tray, screen sharing and theme settings from the portal |
-| `mpv-sandboxed` | Files named on the command line, `~/.config/mpv`, `~/.cache/fontconfig` | `~/.cache/mpv`, `~/.local/state/mpv` | Wayland, GPU, audio |
-| `papers-sandboxed` | Files named on the command line, `~/.cache/fontconfig` | Nothing | Wayland, GPU, theme settings from the portal |
-| `qalculate-gtk-sandboxed` | `~/.config/gtk-3.0/settings.ini`, `~/.cache/fontconfig` | `~/.config/qalculate`, `~/.local/share/qalculate` | Network for exchange rates, Wayland, theme settings from the portal |
-| `signal-desktop-sandboxed` | `~/.cache/fontconfig` | `~/.config/Signal`, `~/Downloads` | Network, Wayland, GPU, audio, camera, user namespaces, notifications, tray, screen sharing and theme settings from the portal |
-| `spotifast-sandboxed` | `~/.cache/fontconfig` | `~/.config/spotifast`, `~/.local/state/spotifast`, `~/.cache/spotifast`, `$XDG_RUNTIME_DIR/spotifast` | Network, Wayland, GPU, audio, MPRIS, tray, Secret Service, theme settings from the portal |
-| `strawberry-sandboxed` | `~/Music`, files named on the command line, `~/.cache/fontconfig` | `~/.config/strawberry`, `~/.local/share/strawberry`, `~/.cache/strawberry` | Network, Wayland, GPU, audio, MPRIS, notifications, tray, theme settings from the portal |
-| `telegram-desktop-sandboxed` | `~/.cache/fontconfig` | `~/.local/share/TelegramDesktop`, `~/Downloads` | Network, Wayland, GPU, audio, camera, notifications, tray, screen sharing and theme settings from the portal |
-| `tidal-hifi-sandboxed` | `~/.cache/fontconfig` | `~/.config/tidal-hifi` | Network, Wayland, GPU, audio, user namespaces, MPRIS, notifications, tray, theme settings from the portal |
-| `vitrine-sandboxed` | `~/.config/vitrine`, `~/Pictures` | `~/.local/share/vitrine`, `~/.cache/vitrine` | Wayland, GPU, opening files and folders through the portal |
+`guix search sandboxed` lists the variants; each one's policy is in `px/packages/sandboxed.scm`.
 
 **Usage:**
 
@@ -1237,6 +1226,7 @@ ls -A /proc/$(pgrep -n bwrap)/root/home/$USER   # what the newest sandbox sees o
 
 - The kernel has to allow unprivileged user namespaces.
 - The whole store is readable, not just the program's closure, and there's no seccomp filter.
+- An AppArmor profile that attaches to the original program by store path also confines it in the sandbox, and needs `flags=(attach_disconnected)` there; without it, the program can't reach its sockets.
 - `papers-sandboxed`: the "Open" dialog only sees the sandbox, so pass the file on the command line or open it from your file manager. Links in a document don't open.
 - `vitrine-sandboxed`: `vitrine faces fetch` and `vitrine geo fetch` need the network, so run those with the original. The external viewer and "show in file manager" don't work.
 
