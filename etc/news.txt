@@ -9,6 +9,18 @@
 (channel-news
  (version 0)
 
+ (entry (commit "82c5f74")
+        (title
+         (en "Sandboxed package variants"))
+        (body
+         (en "Some packages now have a @code{-sandboxed} variant that runs the
+same program inside bubblewrap, starting with @code{papers-sandboxed} and
+@code{vitrine-sandboxed}.  They're opt-in: install the variant instead of
+the original.  No action is required.
+
+See \"Sandboxed Packages\" in the README for what each variant can access,
+and for sandboxing other packages with @code{(px sandbox)}.")))
+
  (entry (commit "feb3720")
         (title
          (en "Bichon updated to 2.0.0 - manual data migration required"))
