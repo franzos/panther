@@ -4,6 +4,7 @@
 (define-module (px packages sandboxed)
   #:use-module (gnu packages bittorrent)
   #:use-module (gnu packages ebook)
+  #:use-module (gnu packages photo)
   #:use-module (gnu packages telegram)
   #:use-module (gnu packages video)
   #:use-module (nongnu packages messaging)
@@ -79,6 +80,17 @@
                (append %portal-settings-dbus-rules
                        '("--own=io.github.celluloid_player.Celluloid"
                          "--own=org.mpris.MediaPlayer2.io.github.celluloid_player.Celluloid"))))))
+
+(define-public darktable-sandboxed
+  (sandboxed darktable
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/darktable" ".cache/darktable"
+                                "Pictures"))
+              (file-arguments? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (dbus-rules %portal-settings-dbus-rules))))
 
 (define-public element-desktop-sandboxed
   (sandboxed element-desktop
