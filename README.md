@@ -1167,6 +1167,7 @@ Inside the sandbox, the program gets:
 - **An empty home** on a tmpfs, plus the paths its policy binds. Anything written elsewhere in home is gone when the program exits.
 - **The store, read-only**, and the system, home and user profiles, so fonts, icons and locales resolve.
 - **Its own namespaces** (PID, IPC, network, user). There's no network unless the policy allows it.
+- **A directory shared by all its instances**, `$XDG_RUNTIME_DIR/app/<package>`, as `TMPDIR`. A second launch finds the running instance's socket there instead of starting another one. `/tmp` stays private to each instance.
 - **A fixed list of environment variables**. Everything else is dropped, tokens included.
 - **No session bus**, unless the policy sets `dbus-rules`; then it gets a filtered one through `xdg-dbus-proxy`.
 
@@ -1212,6 +1213,7 @@ Everything is off by default, so `(sandboxed curl)` has no network and sees no f
 | `network?` | `#f` | Share the host network, with `/etc/resolv.conf`, `/etc/hosts` and `/etc/ssl` |
 | `wayland?` | `#f` | Bind the Wayland socket |
 | `gpu?` | `#f` | Bind `/dev/dri` and the `/sys` entries Mesa needs to find the driver |
+| `audio?` | `#f` | Bind the PulseAudio socket (served by `pipewire-pulse` on PipeWire systems). This allows recording as well as playback |
 | `file-arguments?` | `#f` | Bind files named on the command line (paths or `file://` URIs) read-only |
 | `dbus-rules` | `'()` | `xdg-dbus-proxy` filter options. `%portal-settings-dbus-rules` allows the portal's settings interface and nothing else |
 

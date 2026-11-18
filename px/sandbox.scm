@@ -33,6 +33,9 @@
             (default #f))
   (gpu? sandbox-policy-gpu?
         (default #f))
+  ;; The PulseAudio socket; PipeWire serves it through pipewire-pulse.
+  (audio? sandbox-policy-audio?
+          (default #f))
   ;; Files named on the command line, read-only.
   (file-arguments? sandbox-policy-file-arguments?
                    (default #f))
@@ -60,8 +63,8 @@
 
 (define (sandbox-launcher base policy)
   (match-record policy <sandbox-policy>
-    (read-only-paths writable-paths network? wayland? gpu? file-arguments?
-     dbus-rules)
+    (read-only-paths writable-paths network? wayland? gpu? audio?
+     file-arguments? dbus-rules)
     (program-file
      (string-append (package-name base) "-sandbox-launcher")
      (with-imported-modules '((guix build utils))
@@ -121,8 +124,13 @@
                              (string-append "unix:path=" bus)))))
                   ;; Every bin/ entry links here; the invoked name picks the program.
                   (program (string-append #$base "/bin/"
-                                          (basename (car (command-line))))))
+                                          (basename (car (command-line)))))
+                  ;; Shared by all instances, for single-instance sockets.
+                  (app-runtime (string-append runtime "/app/"
+                                              #$(package-name base))))
              (for-each (compose mkdir-p absolute) '#$writable-paths)
+             (mkdir-p app-runtime)
+             (chmod app-runtime #o700)
              (apply execl #$(file-append bubblewrap "/bin/bwrap") "bwrap"
                     (append
                      '("--unshare-all" "--unshare-user" "--disable-userns"
@@ -131,7 +139,9 @@
                        "--proc" "/proc" "--dev" "/dev" "--tmpfs" "/tmp"
                        "--ro-bind-try" "/etc/localtime" "/etc/localtime")
                      (list "--dir" home
-                           "--perms" "0700" "--dir" runtime)
+                           "--perms" "0700" "--dir" runtime
+                           "--bind" app-runtime app-runtime
+                           "--setenv" "TMPDIR" app-runtime)
                      (append-map (lambda (variable)
                                    (let ((value (getenv variable)))
                                      (if value
@@ -149,6 +159,10 @@
                           (string-append runtime "/"
                                          (or (getenv "WAYLAND_DISPLAY")
                                              "wayland-0")))
+                         '())
+                     (if #$audio?
+                         ((bind "--ro-bind-try")
+                          (string-append runtime "/pulse/native"))
                          '())
                      '#$(if gpu?
                             '("--dev-bind-try" "/dev/dri" "/dev/dri"
