@@ -4,6 +4,7 @@
 (define-module (px packages sandboxed)
   #:use-module ((gnu packages audio) #:select (audacity))
   #:use-module (gnu packages bittorrent)
+  #:use-module ((gnu packages chromium) #:select (ungoogled-chromium))
   #:use-module (gnu packages ebook)
   #:use-module (gnu packages fediverse)
   #:use-module (gnu packages gimp)
@@ -517,6 +518,27 @@
                (append %portal-settings-dbus-rules
                        '("--own=dev.geopjr.Tuba"
                          "--talk=org.freedesktop.Notifications"
+                         "--talk=org.freedesktop.secrets"))))))
+
+(define-public ungoogled-chromium-sandboxed
+  (sandboxed ungoogled-chromium
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/chromium" ".cache/chromium" "Downloads"))
+              (file-arguments? #t)
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (camera? #t)
+              (user-namespaces? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       %portal-screencast-dbus-rules
+                       '(;; Chromium appends its PID, always 2 in the sandbox.
+                         "--own=org.mpris.MediaPlayer2.chromium.instance2"
+                         "--talk=org.freedesktop.Notifications"
+                         ;; Passwords and cookies are encrypted with a key kept here.
                          "--talk=org.freedesktop.secrets"))))))
 
 (define-public vitrine-sandboxed
