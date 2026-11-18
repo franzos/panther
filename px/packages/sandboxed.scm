@@ -65,6 +65,21 @@
                (append %portal-settings-dbus-rules
                        '("--talk=org.freedesktop.Notifications"))))))
 
+(define-public celluloid-sandboxed
+  (sandboxed celluloid
+             (sandbox-policy
+              (read-only-paths '(".config/mpv" ".cache/fontconfig"))
+              (writable-paths '(".config/celluloid" ".cache/mpv"
+                                ".local/state/mpv"))
+              (file-arguments? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=io.github.celluloid_player.Celluloid"
+                         "--own=org.mpris.MediaPlayer2.io.github.celluloid_player.Celluloid"))))))
+
 (define-public element-desktop-sandboxed
   (sandboxed element-desktop
              (sandbox-policy
