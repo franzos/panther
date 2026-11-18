@@ -393,48 +393,6 @@ communication and collaboration.  It provides messaging, file sharing, and
 integration with various productivity tools.")
     (license (nonfree:nonfree "https://slack.com/terms-of-service"))))
 
-(define-public discord
-  (package
-    (name "discord")
-    (version "0.0.129")
-    (source
-     (origin
-       (method url-fetch)
-       (uri
-        (string-append
-         "https://stable.dl2.discordapp.net/apps/linux/" version
-         "/discord-" version ".deb"))
-       (sha256
-        (base32 "08dk2h3sqabnsy53izn06k29bg4mz5q1gf6f3xwkh4y8622ns0rd"))))
-    (supported-systems '("x86_64-linux"))
-    (build-system chromium-binary-build-system)
-    (arguments
-     (list #:validate-runpath? #f
-           #:wrapper-plan
-           #~'(("share/discord/Discord" (("out" "/share/discord")))
-               "share/discord/chrome_crashpad_handler")
-           #:phases
-           #~(modify-phases %standard-phases
-               (add-after 'binary-unpack 'setup-cwd
-                 (lambda _
-                   (copy-recursively "usr/" ".")
-                   (delete-file-recursively "usr")
-                   (delete-file-recursively "bin")
-                   (substitute* '("share/discord/discord.desktop")
-                     (("/usr/share/discord/Discord")
-                      (string-append #$output "/bin/discord")))))
-               (add-after 'install 'symlink-binary-file
-                 (lambda _
-                   (mkdir-p (string-append #$output "/bin"))
-                   (symlink (string-append #$output "/share/discord/Discord")
-                            (string-append #$output "/bin/discord")))))))
-    (home-page "https://discord.com/")
-    (synopsis "Voice and text chat for gamers")
-    (description "Discord is an all-in-one voice and text chat application for
-gamers that works on desktop and phone.  It features voice chat, text chat,
-and rich media support for gaming communities.")
-    (license (nonfree:nonfree "https://discord.com/terms"))))
-
 (define-public appflowy
   (package
     (name "appflowy")

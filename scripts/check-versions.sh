@@ -626,7 +626,6 @@ manual() {
 
 manual "claude-desktop"  "https://claude.ai/download (apt index returns 403; only the pool debs are public)"
 manual "cursor"          "https://www.cursor.com/changelog"
-manual "discord"         "https://discord.com/api/download?platform=linux&format=deb"
 manual "monit"           "https://mmonit.com/monit/changes/"
 manual "gradle-8"        "https://gradle.org/releases/ (pinned to 8.x line)"
 manual "gradle-7"        "https://gradle.org/releases/ (pinned to 7.x line)"
