@@ -1158,6 +1158,76 @@ ls -l /usr/lib/nss                       # -> /gnu/store/...-nss-fhs
 autofirmacl listaliases -store mozilla   # lists your Firefox/Chromium certificates
 ```
 
+## Sandboxed Packages
+
+Some packages have a `-sandboxed` variant that runs the same program inside [bubblewrap](https://github.com/containers/bubblewrap). The variant only holds launchers and desktop entries that point at the unmodified package, so nothing is compiled twice and it builds in seconds.
+
+Inside the sandbox, the program gets:
+
+- **An empty home** on a tmpfs, plus the paths its policy binds. Anything written elsewhere in home is gone when the program exits.
+- **The store, read-only**, and the system, home and user profiles, so fonts, icons and locales resolve.
+- **Its own namespaces** (PID, IPC, network, user). There's no network unless the policy allows it.
+- **A fixed list of environment variables**. Everything else is dropped, tokens included.
+- **No session bus**, unless the policy sets `dbus-rules`; then it gets a filtered one through `xdg-dbus-proxy`.
+
+| Package | Reads | Writes | Also |
+| --- | --- | --- | --- |
+| `papers-sandboxed` | Files named on the command line, `~/.cache/fontconfig` | Nothing | Wayland, GPU, theme settings from the portal |
+| `vitrine-sandboxed` | `~/.config/vitrine`, `~/Pictures` | `~/.local/share/vitrine`, `~/.cache/vitrine` | Wayland, GPU |
+
+**Usage:**
+
+```scheme
+(use-modules (px packages sandboxed))
+
+(packages (list papers-sandboxed vitrine-sandboxed))
+```
+
+Or `guix install papers-sandboxed`. Install the variant or the original, not both: they provide the same program names and desktop entries, and Guix builds the profile without an error and lets one of them win.
+
+To run the original once, without changing your profile: `guix shell vitrine -- vitrine geo fetch`.
+
+### Sandboxing another package
+
+`sandboxed` from `(px sandbox)` takes any package and a policy, and returns the `-sandboxed` package. This is `vitrine` with a photo library outside `~/Pictures`:
+
+```scheme
+(use-modules (px sandbox)
+             (px packages graphics))
+
+(sandboxed vitrine
+           (sandbox-policy
+            (read-only-paths '(".config/vitrine" "/mnt/photos"))
+            (writable-paths '(".local/share/vitrine" ".cache/vitrine"))
+            (wayland? #t)
+            (gpu? #t)))
+```
+
+Everything is off by default, so `(sandboxed curl)` has no network and sees no files of yours.
+
+| Field | Default | Meaning |
+| --- | --- | --- |
+| `read-only-paths` | `'()` | Paths bound read-only; relative ones are under `$HOME`. Missing paths are skipped |
+| `writable-paths` | `'()` | Directories bound writable; relative ones are under `$HOME`. Created on the host before launch |
+| `network?` | `#f` | Share the host network, with `/etc/resolv.conf`, `/etc/hosts` and `/etc/ssl` |
+| `wayland?` | `#f` | Bind the Wayland socket |
+| `gpu?` | `#f` | Bind `/dev/dri` and the `/sys` entries Mesa needs to find the driver |
+| `file-arguments?` | `#f` | Bind files named on the command line (paths or `file://` URIs) read-only |
+| `dbus-rules` | `'()` | `xdg-dbus-proxy` filter options. `%portal-settings-dbus-rules` allows the portal's settings interface and nothing else |
+
+**Verifying:**
+
+```bash
+ls -A /proc/$(pgrep -n bwrap)/root/home/$USER   # what the newest sandbox sees of your home
+```
+
+**Limits:**
+
+- The kernel has to allow unprivileged user namespaces.
+- The whole store is readable, not just the program's closure, and there's no seccomp filter.
+- `papers-sandboxed`: the "Open" dialog only sees the sandbox, so pass the file on the command line or open it from your file manager. Links in a document don't open.
+- `vitrine-sandboxed`: `vitrine faces fetch` and `vitrine geo fetch` need the network, so run those with the original. The external viewer and "show in file manager" don't work.
+
 ## System Configuration
 
 This channel provides pre-configured building blocks for Guix system definitions. Import with:
