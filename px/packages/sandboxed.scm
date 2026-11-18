@@ -88,4 +88,5 @@
               (read-only-paths '(".config/vitrine" "Pictures"))
               (writable-paths '(".local/share/vitrine" ".cache/vitrine"))
               (wayland? #t)
-              (gpu? #t))))
+              (gpu? #t)
+              (dbus-rules %portal-open-dbus-rules))))
