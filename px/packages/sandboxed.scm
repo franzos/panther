@@ -10,6 +10,7 @@
   #:use-module ((gnu packages gnome) #:select (fractal))
   #:use-module (gnu packages gnome-circle)
   #:use-module (gnu packages inkscape)
+  #:use-module ((gnu packages kde-graphics) #:select (okular))
   #:use-module (gnu packages messaging)
   #:use-module (gnu packages photo)
   #:use-module (gnu packages telegram)
@@ -257,6 +258,19 @@
               (gpu? #t)
               (user-namespaces? #t)
               (dbus-rules %portal-settings-dbus-rules))))
+
+(define-public okular-sandboxed
+  (sandboxed okular
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".local/share/okular"))
+              (file-arguments? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '(;; KDE appends its PID, always 2 in the sandbox.
+                         "--own=org.kde.okular-2"))))))
 
 (define-public papers-sandboxed
   (sandboxed papers
