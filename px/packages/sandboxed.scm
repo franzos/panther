@@ -33,6 +33,24 @@
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.kde.StatusNotifierWatcher"))))))
 
+(define-public tidal-hifi-sandboxed
+  (sandboxed tidal-hifi
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/tidal-hifi"))
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (user-namespaces? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=org.mpris.MediaPlayer2.tidal-hifi"
+                         ;; Chromium appends its PID, always 2 in the sandbox.
+                         "--own=org.freedesktop.StatusNotifierItem-2-1"
+                         "--talk=org.freedesktop.Notifications"
+                         "--talk=org.kde.StatusNotifierWatcher"))))))
+
 (define-public vitrine-sandboxed
   (sandboxed vitrine
              (sandbox-policy
