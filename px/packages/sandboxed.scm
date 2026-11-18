@@ -6,6 +6,7 @@
   #:use-module (gnu packages ebook)
   #:use-module (gnu packages gimp)
   #:use-module ((gnu packages gnome) #:select (fractal))
+  #:use-module (gnu packages gnome-circle)
   #:use-module (gnu packages inkscape)
   #:use-module (gnu packages messaging)
   #:use-module (gnu packages photo)
@@ -169,6 +170,20 @@
               (dbus-rules
                (append %portal-settings-dbus-rules
                        '("--own=org.inkscape.Inkscape"))))))
+
+(define-public komikku-sandboxed
+  (sandboxed komikku
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".local/share/komikku" ".cache/komikku"))
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=info.febvre.Komikku"
+                         "--talk=org.freedesktop.Notifications"
+                         "--talk=org.freedesktop.secrets"))))))
 
 (define-public mpv-sandboxed
   (sandboxed mpv
