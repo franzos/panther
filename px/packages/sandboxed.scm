@@ -3,6 +3,7 @@
 
 (define-module (px packages sandboxed)
   #:use-module (gnu packages bittorrent)
+  #:use-module (gnu packages ebook)
   #:use-module (gnu packages telegram)
   #:use-module (gnu packages video)
   #:use-module (nongnu packages messaging)
@@ -48,6 +49,21 @@
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.kde.StatusNotifierWatcher"
                          "--talk=org.freedesktop.secrets"))))))
+
+(define-public calibre-sandboxed
+  (sandboxed calibre
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/calibre" ".cache/calibre"
+                                "Calibre Library" "Downloads"))
+              (file-arguments? #t)
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (user-namespaces? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--talk=org.freedesktop.Notifications"))))))
 
 (define-public element-desktop-sandboxed
   (sandboxed element-desktop
