@@ -17,6 +17,7 @@
   #:use-module (nongnu packages productivity)
   #:use-module (px packages desktop-tools)
   #:use-module (px packages document)
+  #:use-module (px packages gnuzilla)
   #:use-module (px packages graphics)
   #:use-module (px packages maths)
   #:use-module (px packages music)
@@ -339,6 +340,20 @@
                          "--own=org.kde.StatusNotifierItem-2-1"
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.kde.StatusNotifierWatcher"))))))
+
+(define-public thunderbird-sandboxed
+  (sandboxed thunderbird
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".thunderbird" ".cache/thunderbird" "Downloads"))
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=org.mozilla.thunderbird.*"
+                         "--talk=org.freedesktop.Notifications"))))))
 
 (define-public tidal-hifi-sandboxed
   (sandboxed tidal-hifi
