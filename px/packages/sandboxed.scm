@@ -226,6 +226,26 @@
               (gpu? #t)
               (audio? #t))))
 
+(define-public nheko-sandboxed
+  (sandboxed nheko
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/nheko" ".local/share/nheko"
+                                ".cache/nheko" "Downloads"))
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (camera? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       %portal-screencast-dbus-rules
+                       '(;; Qt appends its PID, always 2 in the sandbox.
+                         "--own=org.kde.StatusNotifierItem-2-1"
+                         "--talk=org.freedesktop.Notifications"
+                         "--talk=org.kde.StatusNotifierWatcher"
+                         "--talk=org.freedesktop.secrets"))))))
+
 (define-public obsidian-sandboxed
   (sandboxed obsidian
              (sandbox-policy
