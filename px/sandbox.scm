@@ -16,8 +16,9 @@
 ;;;
 ;;; Bubblewrap launchers for existing packages.
 ;;;
-;;; Paths in a policy are relative to $HOME unless absolute.  Writable paths
-;;; are directories, created on the host before launch.
+;;; Paths in a policy are relative to $HOME unless absolute or starting with
+;;; "$XDG_RUNTIME_DIR/".  Writable paths are directories, created on the host
+;;; before launch.
 ;;;
 
 (define-record-type* <sandbox-policy>
@@ -79,9 +80,12 @@
                   (runtime (or (getenv "XDG_RUNTIME_DIR")
                                (format #f "/run/user/~a" (getuid))))
                   (absolute (lambda (path)
-                              (if (string-prefix? "/" path)
-                                  path
-                                  (string-append home "/" path))))
+                              (cond
+                               ((string-prefix? "/" path) path)
+                               ((string-prefix? "$XDG_RUNTIME_DIR/" path)
+                                (string-append runtime
+                                               (string-drop path 16)))
+                               (else (string-append home "/" path)))))
                   (bind (lambda (option)
                           (lambda (path)
                             (let ((path (absolute path)))

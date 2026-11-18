@@ -1210,8 +1210,8 @@ Everything is off by default, so `(sandboxed curl)` has no network and sees no f
 
 | Field | Default | Meaning |
 | --- | --- | --- |
-| `read-only-paths` | `'()` | Paths bound read-only; relative ones are under `$HOME`. Missing paths are skipped |
-| `writable-paths` | `'()` | Directories bound writable; relative ones are under `$HOME`. Created on the host before launch |
+| `read-only-paths` | `'()` | Paths bound read-only; relative ones are under `$HOME`, and a leading `$XDG_RUNTIME_DIR/` is expanded. Missing paths are skipped |
+| `writable-paths` | `'()` | Directories bound writable; relative ones are under `$HOME`, and a leading `$XDG_RUNTIME_DIR/` is expanded. Created on the host before launch |
 | `network?` | `#f` | Share the host network, with `/etc/resolv.conf`, `/etc/hosts` and `/etc/ssl` |
 | `wayland?` | `#f` | Bind the Wayland socket |
 | `gpu?` | `#f` | Bind `/dev/dri` and the `/sys` entries Mesa needs to find the driver |
