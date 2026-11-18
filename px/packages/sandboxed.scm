@@ -6,6 +6,7 @@
   #:use-module (gnu packages video)
   #:use-module (nongnu packages messaging)
   #:use-module (nongnu packages password-utils)
+  #:use-module (nongnu packages productivity)
   #:use-module (px packages desktop-tools)
   #:use-module (px packages document)
   #:use-module (px packages graphics)
@@ -58,6 +59,18 @@
               (wayland? #t)
               (gpu? #t)
               (audio? #t))))
+
+(define-public obsidian-sandboxed
+  (sandboxed obsidian
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              ;; Obsidian's default vault name.
+              (writable-paths '(".config/obsidian" "Obsidian Vault"))
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (user-namespaces? #t)
+              (dbus-rules %portal-settings-dbus-rules))))
 
 (define-public papers-sandboxed
   (sandboxed papers
