@@ -162,6 +162,22 @@
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.freedesktop.secrets"))))))
 
+(define-public gajim-sandboxed
+  (sandboxed gajim
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/gajim" ".local/share/gajim"
+                                ".cache/gajim" "Downloads"))
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=org.gajim.Gajim"
+                         "--talk=org.freedesktop.Notifications"
+                         "--talk=org.freedesktop.secrets"))))))
+
 (define-public gimp-sandboxed
   (sandboxed gimp
              (sandbox-policy
