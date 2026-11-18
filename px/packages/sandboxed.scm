@@ -4,6 +4,7 @@
 (define-module (px packages sandboxed)
   #:use-module (gnu packages bittorrent)
   #:use-module (gnu packages ebook)
+  #:use-module (gnu packages messaging)
   #:use-module (gnu packages photo)
   #:use-module (gnu packages telegram)
   #:use-module (gnu packages video)
@@ -91,6 +92,21 @@
               (wayland? #t)
               (gpu? #t)
               (dbus-rules %portal-settings-dbus-rules))))
+
+(define-public dino-sandboxed
+  (sandboxed dino
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".local/share/dino" "Downloads"))
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (camera? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=im.dino.Dino"
+                         "--talk=org.freedesktop.Notifications"))))))
 
 (define-public element-desktop-sandboxed
   (sandboxed element-desktop
