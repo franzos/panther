@@ -2,6 +2,7 @@
 ;;; Copyright © 2026 Franz Geffke <mail@gofranz.com>
 
 (define-module (px packages sandboxed)
+  #:use-module ((gnu packages audio) #:select (audacity))
   #:use-module (gnu packages bittorrent)
   #:use-module (gnu packages ebook)
   #:use-module (gnu packages fediverse)
@@ -40,6 +41,18 @@
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.kde.StatusNotifierWatcher"
                          "--talk=org.freedesktop.secrets"))))))
+
+(define-public audacity-sandboxed
+  (sandboxed audacity
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/audacity" ".local/share/audacity"
+                                ".local/state/audacity" "Music"))
+              (file-arguments? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (dbus-rules %portal-settings-dbus-rules))))
 
 (define-public bitwarden-desktop-sandboxed
   (sandboxed bitwarden-desktop
