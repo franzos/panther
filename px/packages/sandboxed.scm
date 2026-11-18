@@ -2,6 +2,7 @@
 ;;; Copyright © 2026 Franz Geffke <mail@gofranz.com>
 
 (define-module (px packages sandboxed)
+  #:use-module (gnu packages bittorrent)
   #:use-module (gnu packages telegram)
   #:use-module (gnu packages video)
   #:use-module (nongnu packages messaging)
@@ -80,6 +81,23 @@
               (wayland? #t)
               (gpu? #t)
               (dbus-rules %portal-settings-dbus-rules))))
+
+(define-public qbittorrent-sandboxed
+  (sandboxed qbittorrent
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/qBittorrent" ".local/share/qBittorrent"
+                                ".cache/qBittorrent" "Downloads"))
+              (file-arguments? #t)
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '(;; Qt appends its PID, always 2 in the sandbox.
+                         "--own=org.kde.StatusNotifierItem-2-1"
+                         "--talk=org.freedesktop.Notifications"
+                         "--talk=org.kde.StatusNotifierWatcher"))))))
 
 (define-public qalculate-gtk-sandboxed
   (sandboxed qalculate-gtk
