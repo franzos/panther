@@ -51,6 +51,7 @@
   '("HOME" "USER" "LOGNAME" "LANG" "LC_ALL" "TERM" "TZ" "TZDIR"
     "XDG_RUNTIME_DIR" "XDG_SESSION_TYPE" "XDG_CURRENT_DESKTOP"
     "XDG_DATA_DIRS" "XDG_CONFIG_DIRS" "GUIX_LOCPATH"
+    "GUIX_GDK_PIXBUF_MODULE_FILES"
     "XCURSOR_PATH" "XCURSOR_THEME" "XCURSOR_SIZE"))
 
 ;; Theme and colour-scheme preferences, nothing else of the portal.
