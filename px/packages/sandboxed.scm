@@ -4,6 +4,7 @@
 (define-module (px packages sandboxed)
   #:use-module (px packages document)
   #:use-module (px packages graphics)
+  #:use-module (px packages music)
   #:use-module (px sandbox))
 
 (define-public papers-sandboxed
@@ -14,6 +15,23 @@
               (wayland? #t)
               (gpu? #t)
               (dbus-rules %portal-settings-dbus-rules))))
+
+(define-public strawberry-sandboxed
+  (sandboxed strawberry
+             (sandbox-policy
+              (read-only-paths '("Music" ".cache/fontconfig"))
+              (writable-paths '(".config/strawberry" ".local/share/strawberry"
+                                ".cache/strawberry"))
+              (file-arguments? #t)
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=org.mpris.MediaPlayer2.strawberry"
+                         "--talk=org.freedesktop.Notifications"
+                         "--talk=org.kde.StatusNotifierWatcher"))))))
 
 (define-public vitrine-sandboxed
   (sandboxed vitrine
