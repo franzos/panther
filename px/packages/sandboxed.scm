@@ -5,6 +5,7 @@
   #:use-module (gnu packages telegram)
   #:use-module (gnu packages video)
   #:use-module (nongnu packages messaging)
+  #:use-module (px packages desktop-tools)
   #:use-module (px packages document)
   #:use-module (px packages graphics)
   #:use-module (px packages maths)
@@ -79,6 +80,28 @@
                          "--own=org.freedesktop.StatusNotifierItem-2-1"
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.kde.StatusNotifierWatcher"))))))
+
+(define-public slack-desktop-sandboxed
+  (sandboxed slack-desktop
+             (sandbox-policy
+              ;; Slack won't open its window without an os-release file.
+              (read-only-paths '("/etc/os-release" ".cache/fontconfig"))
+              (writable-paths '(".config/Slack" "Downloads"))
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (camera? #t)
+              (user-namespaces? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       %portal-screencast-dbus-rules
+                       '(;; Chromium appends its PID, always 2 in the sandbox.
+                         "--own=org.freedesktop.StatusNotifierItem-2-1"
+                         "--talk=org.freedesktop.Notifications"
+                         "--talk=org.kde.StatusNotifierWatcher"
+                         ;; Sessions stay readable by the unsandboxed slack.
+                         "--talk=org.freedesktop.secrets"))))))
 
 (define-public spotifast-sandboxed
   (sandboxed spotifast
