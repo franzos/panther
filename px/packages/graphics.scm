@@ -584,7 +584,7 @@ and metadata can be preserved.")
 (define-public vitrine
   (package
     (name "vitrine")
-    (version "0.1.2")
+    (version "0.1.3")
     (source
      (origin
        (method git-fetch)
@@ -593,7 +593,7 @@ and metadata can be preserved.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1f6hqwfmz46pq4g26i20haripblk1222baik1irc490y2ypld2ai"))))
+        (base32 "02pvpcg6gb39pvy42icw6dfpr2didm5s2r3iihx0k217n6jwqms2"))))
     (build-system cargo-build-system)
     (arguments
      (list
@@ -606,7 +606,7 @@ and metadata can be preserved.")
       #~(modify-phases %standard-phases
           (add-after 'install 'wrap-program
             (lambda* (#:key inputs #:allow-other-keys)
-              ;; eframe dlopens GL, Wayland and X11; ort dlopens onnxruntime.
+              ;; eframe dlopens GL, Wayland and X11.
               (wrap-program (string-append #$output "/bin/vitrine")
                 `("LD_LIBRARY_PATH" ":" prefix
                   ,(map (lambda (lib)
@@ -614,8 +614,6 @@ and metadata can be preserved.")
                                                       (string-append "lib/" lib))))
                         '("libEGL.so" "libwayland-client.so" "libxkbcommon.so"
                           "libX11.so" "libXcursor.so" "libXi.so" "libXrandr.so")))
-                `("ORT_DYLIB_PATH" =
-                  (,(search-input-file inputs "lib/libonnxruntime.so")))
                 `("PATH" ":" suffix
                   (,(dirname (search-input-file inputs "bin/ffmpeg")))))))
           (add-after 'install 'install-desktop-entry
@@ -638,7 +636,6 @@ and metadata can be preserved.")
             libxkbcommon
             libxrandr
             mesa
-            onnxruntime-next
             sqlite-next
             wayland
             (px-cargo-inputs 'vitrine)))
@@ -647,5 +644,5 @@ and metadata can be preserved.")
     (description
      "Vitrine is a local viewer for a dated photo folder tree.  It indexes
 images and videos, offers place filters and a world map, and can optionally
-group photos by face using ONNX Runtime.  It never modifies image files.")
+group photos by face.  It never modifies image files.")
     (license license:gpl3)))
