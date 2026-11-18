@@ -209,12 +209,14 @@ install(TARGETS webrtc-cpp-demo
                   cli11
                   sentry-native
                   xz))
+    ;; gst-plugins-rs:net provides rtpgccbwe for congestion control.
     (propagated-inputs (list libnice-0.1.23
                              gstreamer
                              gst-plugins-base
                              gst-plugins-good
                              gst-plugins-bad-with-webrtc
-                             gst-plugins-good-qt))
+                             gst-plugins-good-qt
+                             `(,gst-plugins-rs "net")))
     (native-inputs (list pkg-config))
     (home-page "https://f-a.nz/")
     (synopsis "WebRTC C++ library demo application")
@@ -245,7 +247,8 @@ install(TARGETS webrtc-cpp-demo
                              gst-plugins-base
                              gst-plugins-good
                              gst-plugins-bad-with-webrtc
-                             gst-plugins-good-qmlgl))))
+                             gst-plugins-good-qmlgl
+                             `(,gst-plugins-rs "net")))))
 
 (define-public cpp-socketio-client
   (package
