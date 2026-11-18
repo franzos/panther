@@ -3,6 +3,7 @@
 
 (define-module (px packages sandboxed)
   #:use-module (gnu packages telegram)
+  #:use-module (gnu packages video)
   #:use-module (nongnu packages messaging)
   #:use-module (px packages document)
   #:use-module (px packages graphics)
@@ -28,6 +29,16 @@
                          "--own=org.freedesktop.StatusNotifierItem-2-1"
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.kde.StatusNotifierWatcher"))))))
+
+(define-public mpv-sandboxed
+  (sandboxed mpv
+             (sandbox-policy
+              (read-only-paths '(".config/mpv" ".cache/fontconfig"))
+              (writable-paths '(".cache/mpv" ".local/state/mpv"))
+              (file-arguments? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t))))
 
 (define-public papers-sandboxed
   (sandboxed papers
