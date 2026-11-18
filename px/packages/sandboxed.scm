@@ -17,6 +17,7 @@
   #:use-module (gnu packages photo)
   #:use-module (gnu packages telegram)
   #:use-module (gnu packages video)
+  #:use-module ((gnu packages web) #:select (kiwix-desktop))
   #:use-module (nongnu packages messaging)
   #:use-module ((nongnu packages mozilla) #:select (firefox))
   #:use-module (nongnu packages password-utils)
@@ -254,6 +255,20 @@
               (dbus-rules
                (append %portal-settings-dbus-rules
                        '("--own=org.inkscape.Inkscape"))))))
+
+(define-public kiwix-desktop-sandboxed
+  (sandboxed kiwix-desktop
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              ;; Downloaded archives go to the data directory.
+              (writable-paths '(".config/kiwix-desktop" ".local/share/kiwix-desktop"))
+              (file-arguments? #t)
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (audio? #t)
+              (user-namespaces? #t)
+              (dbus-rules %portal-settings-dbus-rules))))
 
 (define-public komikku-sandboxed
   (sandboxed komikku
