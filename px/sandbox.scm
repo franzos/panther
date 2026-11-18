@@ -3,6 +3,7 @@
 
 (define-module (px sandbox)
   #:use-module (gnu packages glib)
+  #:use-module ((gnu packages linux) #:select (alsa-plugins))
   #:use-module (gnu packages virtualization)
   #:use-module (guix build-system trivial)
   #:use-module (guix gexp)
@@ -92,6 +93,19 @@
           (string-append "--call=" portal "portal.Request.*" path "/request/*")
           (string-append "--broadcast=" portal "portal.Request.*" path
                          "/request/*"))))
+
+;; Sends ALSA clients to the PulseAudio socket.
+(define %sandbox-asound-conf
+  (computed-file
+   "asound.conf"
+   #~(call-with-output-file #$output
+       (lambda (port)
+         (let ((lib (string-append #$alsa-plugins:pulseaudio "/lib/alsa-lib/")))
+           (format port "pcm_type.pulse { lib \"~alibasound_module_pcm_pulse.so\" }
+ctl_type.pulse { lib \"~alibasound_module_ctl_pulse.so\" }
+pcm.!default { type pulse }
+ctl.!default { type pulse }~%"
+                   lib lib))))))
 
 ;; Store items behind symlinks; fonts, icons, locales and themes live here.
 (define %sandbox-profiles
@@ -204,8 +218,10 @@
                                              "wayland-0")))
                          '())
                      (if #$audio?
-                         ((bind "--ro-bind-try")
-                          (string-append runtime "/pulse/native"))
+                         (cons* "--ro-bind" #$%sandbox-asound-conf
+                                "/etc/asound.conf"
+                                ((bind "--ro-bind-try")
+                                 (string-append runtime "/pulse/native")))
                          '())
                      (if #$camera?
                          (append
