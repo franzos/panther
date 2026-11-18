@@ -232,3 +232,13 @@
               (wayland? #t)
               (gpu? #t)
               (dbus-rules %portal-open-dbus-rules))))
+
+(define-public zotero-sandboxed
+  (sandboxed zotero
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".zotero" ".cache/zotero" "Zotero" "Downloads"))
+              (network? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (dbus-rules %portal-settings-dbus-rules))))
