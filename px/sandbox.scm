@@ -186,6 +186,17 @@ ctl.!default { type pulse }~%"
              (for-each (compose mkdir-p absolute) '#$writable-paths)
              (mkdir-p app-runtime)
              (chmod app-runtime #o700)
+             ;; Only the user's own entries; some programs find $HOME with
+             ;; getpwuid.
+             (let ((user (getpwuid (getuid)))
+                   (group (getgrgid (getgid))))
+               (call-with-output-file (string-append app-runtime "/passwd")
+                 (lambda (port)
+                   (format port "~a:x:~a:~a::~a:/bin/sh~%"
+                           (passwd:name user) (getuid) (getgid) home)))
+               (call-with-output-file (string-append app-runtime "/group")
+                 (lambda (port)
+                   (format port "~a:x:~a:~%" (group:name group) (getgid)))))
              (apply execl #$(file-append bubblewrap "/bin/bwrap") "bwrap"
                     (append
                      '#$(if user-namespaces?
@@ -198,6 +209,10 @@ ctl.!default { type pulse }~%"
                      (list "--dir" home
                            "--perms" "0700" "--dir" runtime
                            "--bind" app-runtime app-runtime
+                           "--ro-bind" (string-append app-runtime "/passwd")
+                           "/etc/passwd"
+                           "--ro-bind" (string-append app-runtime "/group")
+                           "/etc/group"
                            "--setenv" "TMPDIR" app-runtime
                            ;; dconf is out of reach; failed writes crash some
                            ;; programs.
