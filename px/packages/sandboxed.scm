@@ -4,6 +4,7 @@
 (define-module (px packages sandboxed)
   #:use-module (gnu packages bittorrent)
   #:use-module (gnu packages ebook)
+  #:use-module (gnu packages gimp)
   #:use-module ((gnu packages gnome) #:select (fractal))
   #:use-module (gnu packages messaging)
   #:use-module (gnu packages photo)
@@ -143,6 +144,18 @@
                        '("--own=org.gnome.Fractal"
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.freedesktop.secrets"))))))
+
+(define-public gimp-sandboxed
+  (sandboxed gimp
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/GIMP" ".cache/gimp" "Pictures"))
+              (file-arguments? #t)
+              (wayland? #t)
+              (gpu? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=org.gimp.GIMP.*"))))))
 
 (define-public mpv-sandboxed
   (sandboxed mpv
