@@ -10,7 +10,7 @@
   #:use-module (guix packages)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system cmake)
-  #:use-module (guix build-system python)
+  #:use-module ((guix build-system python) #:hide (pypi-uri))
   #:use-module (guix build-system pyproject)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-xyz)

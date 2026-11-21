@@ -1,0 +1,22 @@
+GDM starts its greeter with a plain "gnome-session" and marks it through
+GNOME_SHELL_SESSION_MODE=gdm.  Honor that variable instead of always passing an
+explicit "--mode", which starts the greeter as a regular user shell.
+
+--- a/services/gnome-session/services/gnome-shell.scm
++++ b/services/gnome-session/services/gnome-shell.scm
+@@ -17,10 +17,11 @@
+    #:requirement '()
+    #:start
+    (lambda args
+-     (let* ((mode (if (string=? (getenv "GNOME_SESSION_SHEPHERD_SESSION_NAME")
+-                                "gnome-login")
+-                      "gdm"
+-                      "user"))
++     (let* ((mode (or (getenv "GNOME_SHELL_SESSION_MODE")
++                      (if (string=? (getenv "GNOME_SESSION_SHEPHERD_SESSION_NAME")
++                                    "gnome-login")
++                          "gdm"
++                          "user")))
+             (value
+              (apply (make-forkexec-constructor `("gnome-shell" "--mode" ,mode)) args)))
+        (wait-for-notification 'org.gnome.Shell 10)

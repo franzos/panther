@@ -20,6 +20,7 @@
   #:use-module (srfi srfi-1)                         ;; remove
   #:use-module (nongnu packages linux)
   #:use-module (px system common)
+  #:use-module (px packages gnome)                  ;; gdm/greeter-mode
   #:use-module (px packages libguix)                ;; libguix-polkit
   #:use-module ((px packages package-management)
                 #:select (guix-gui))               ;; desktop package-management frontend
@@ -60,7 +61,12 @@
               (substitute-urls
               (append %all-substitute-server-urls
                       %default-substitute-urls))
-              (channels %pantherx-default-channels))))))
+              (channels %pantherx-default-channels)))
+          ;; See KNOWN_ISSUES.md.
+          (gdm-service-type config =>
+            (gdm-configuration
+              (inherit config)
+              (gdm gdm/greeter-mode))))))
 
 ;; Desktop services without login/display managers and audio.
 ;; Use this when bringing your own (greetd, pipewire, etc.).

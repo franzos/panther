@@ -72,14 +72,15 @@ the new substitute URLs and authorized keys.")))
          (en "The @code{(px system panther)} module has been reorganized into
 @code{(px system common)} and @code{(px system os)}.
 
-All @code{%panther-*} variables in @code{(px system panther)} are now
-deprecated aliases.  Update your imports:
+@code{%panther-base-services} and @code{%panther-base-packages} are gone;
+the remaining @code{%panther-*} variables in @code{(px system panther)} are
+deprecated aliases.  Update your configuration:
 
 @itemize
 @item
-@code{%panther-base-services} @result{} @code{%os-base-services}
+@code{%panther-base-services} @result{} @code{%os-base-services} (removed)
 @item
-@code{%panther-base-packages} @result{} @code{%os-base-packages}
+@code{%panther-base-packages} @result{} @code{%os-base-packages} (removed)
 @item
 @code{%panther-desktop-services-minimal} @result{} @code{%os-desktop-services-minimal}
 @item
