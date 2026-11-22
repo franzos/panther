@@ -3,9 +3,15 @@
 
 (define-module (px system common)
   #:use-module (gnu packages package-management)
-  #:use-module (guix gexp)
+  #:use-module (guix build-system)
+  #:use-module (guix build-system channel)
+  #:use-module (guix build-system trivial)
   #:use-module (guix channels)
+  #:use-module ((guix config) #:select (%system))
   #:use-module (guix describe)
+  #:use-module (guix gexp)
+  #:use-module (guix packages)
+  #:use-module (guix store)
   #:use-module (ice-9 match)
 
   #:export (%gofranz-substitute-server-url
@@ -79,12 +85,32 @@
                      "A36A D41E ECC7 A871 1003  5D24 524F EB1A 9D33 C9CB")))))
           %default-channels))
 
-;; Pinning to the running guix's commits avoids a channel fetch and a full
-;; Guix rebuild on every reconfigure; the derivation is the one 'guix pull'
-;; already built. Falls back to the unpinned list when there is no provenance
-;; (e.g. running from a source checkout).
+;; Reusing the running guix's profile skips the channel checkout and the Guix
+;; derivation computation on every reconfigure. The profile only fits its own
+;; architecture, so any other system is built from the channels.
+(define (profile-build-system profile)
+  (build-system
+    (name 'profile)
+    (description "Reuse a guix profile, or build from channels.")
+    (lower (lambda* (name #:key system target #:allow-other-keys #:rest args)
+             (if (string=? system %system)
+                 ((build-system-lower trivial-build-system)
+                  name #:system system #:target target
+                  #:inputs '() #:native-inputs '() #:outputs '("out")
+                  #:builder #~(symlink #$profile #$output))
+                 (apply (build-system-lower channel-build-system)
+                        name args))))))
+
+;; Falls back to building from the channels when there is no profile (e.g.
+;; running from a source checkout).
 (define (pantherx-guix)
-  (guix-for-channels
-   (match (current-channels)
-     (() %pantherx-default-channels)
-     (channels channels))))
+  (let ((from-channels (guix-for-channels
+                        (match (current-channels)
+                          (() %pantherx-default-channels)
+                          (channels channels)))))
+    (match (and=> (current-profile) canonicalize-path)
+      ((? direct-store-path? profile)
+       (package
+         (inherit from-channels)
+         (build-system (profile-build-system profile))))
+      (_ from-channels))))
