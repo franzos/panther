@@ -9091,6 +9091,10 @@
   (crate-source "form_urlencoded" "1.2.2"
                 "1kqzb2qn608rxl3dws04zahcklpplkd5r1vpabwga5l50d2v4k6b"))
 
+(define rust-form-urlencoded-1.2.3
+  (crate-source "form_urlencoded" "1.2.3"
+                "0vph40jb1qvkvl52aigslr0hvbg1dhiwdwaxg48i5yxgkqcqk95g"))
+
 (define rust-formatx-0.2.4
   (crate-source "formatx" "0.2.4"
                 "02m0alndynacid8j6hx7iwpliq13szfhj6xfldzwhgzm72n6z1nq"))
@@ -25993,6 +25997,10 @@
   (crate-source "rustls-webpki" "0.103.16"
                 "10djm2f00xzi5qlbcfqjhhn2smk2h9aw8b4l74qncz4xsfvb2hs4"))
 
+(define rust-rustls-webpki-0.103.17
+  (crate-source "rustls-webpki" "0.103.17"
+                "1m9zhn7hxx8xkn16833cd6634z6l045rf72sr8zq453wi057d873"))
+
 (define rust-rustls-webpki-0.103.3
   (crate-source "rustls-webpki" "0.103.3"
                 "0ddl9qxx94iyichk05r7l30d9dxfd35ybffhsxpsr9pppki2z9z4"))
@@ -32281,6 +32289,10 @@
 (define rust-url-2.5.8
   (crate-source "url" "2.5.8"
                 "1v8f7nx3hpr1qh76if0a04sj08k86amsq4h8cvpw6wvk76jahrzz"))
+
+(define rust-url-2.5.9
+  (crate-source "url" "2.5.9"
+                "06ivkcv3ljdrp34vlr8n2byyzk7m43q4r3g8ggqhwb5lgd0d437h"))
 
 (define rust-urlencoding-2.1.3
   (crate-source "urlencoding" "2.1.3"
@@ -44181,7 +44193,7 @@
                      rust-foreign-types-0.5.0
                      rust-foreign-types-macros-0.2.4
                      rust-foreign-types-shared-0.3.1
-                     rust-form-urlencoded-1.2.2
+                     rust-form-urlencoded-1.2.3
                      rust-futures-0.3.34
                      rust-futures-channel-0.3.34
                      rust-futures-core-0.3.34
@@ -44372,10 +44384,10 @@
                      rust-rustc-hash-2.1.3
                      rust-rustc-version-0.4.1
                      rust-rustix-0.38.44
-                     rust-rustix-1.1.4
-                     rust-rustls-0.23.43
+                     rust-rustix-1.1.6
+                     rust-rustls-0.23.46
                      rust-rustls-pki-types-1.15.1
-                     rust-rustls-webpki-0.103.15
+                     rust-rustls-webpki-0.103.17
                      rust-rustversion-1.0.23
                      rust-rustybuzz-0.20.1
                      rust-ryu-1.0.23
@@ -44438,7 +44450,7 @@
                      rust-tinystr-0.8.4
                      rust-tinyvec-1.13.2
                      rust-tinyvec-macros-0.1.1
-                     rust-tokio-1.53.1
+                     rust-tokio-1.54.1
                      rust-tokio-macros-2.7.2
                      rust-tokio-stream-0.1.19
                      rust-tokio-util-0.7.19
@@ -44463,7 +44475,7 @@
                      rust-unicode-width-0.2.2
                      rust-untrusted-0.9.0
                      rust-ureq-2.12.1
-                     rust-url-2.5.8
+                     rust-url-2.5.9
                      rust-usvg-0.45.1
                      rust-utf8-iter-1.0.4
                      rust-utf8parse-0.2.2
@@ -44492,7 +44504,7 @@
                      rust-web-sys-0.3.105
                      rust-web-time-1.1.0
                      rust-webpki-roots-0.26.11
-                     rust-webpki-roots-1.0.9
+                     rust-webpki-roots-1.0.12
                      rust-weezl-0.1.12
                      rust-wgpu-27.0.1
                      rust-wgpu-core-27.0.3
