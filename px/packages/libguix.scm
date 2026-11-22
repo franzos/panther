@@ -70,10 +70,36 @@
 </policyconfig>
 ")
 
+(define %libguix-system-upgrade-policy
+  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE policyconfig PUBLIC
+ \"-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN\"
+ \"http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd\">
+<policyconfig>
+
+  <vendor>libguix</vendor>
+  <vendor_url>https://github.com/franzos/guix-rs</vendor_url>
+
+  <action id=\"org.libguix.system-upgrade\">
+    <description>Update the Guix system</description>
+    <message>Authentication is required to update the Guix system.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key=\"org.freedesktop.policykit.exec.path\">/run/current-system/profile/bin/guix</annotate>
+    <annotate key=\"org.freedesktop.policykit.exec.argv1\">time-machine</annotate>
+    <annotate key=\"org.freedesktop.policykit.exec.allow_gui\">true</annotate>
+  </action>
+
+</policyconfig>
+")
+
 (define-public libguix-polkit
   (package
     (name "libguix-polkit")
-    (version "0.0.3")
+    (version "0.0.4")
     (source #f)
     (build-system trivial-build-system)
     (inputs
@@ -82,7 +108,10 @@
                      %libguix-system-reconfigure-policy))
        ("pull-policy"
         ,(plain-file "org.libguix.system-pull.policy"
-                     %libguix-system-pull-policy))))
+                     %libguix-system-pull-policy))
+       ("upgrade-policy"
+        ,(plain-file "org.libguix.system-upgrade.policy"
+                     %libguix-system-upgrade-policy))))
     (arguments
      `(#:modules ((guix build utils))
        #:builder
@@ -90,6 +119,7 @@
          (use-modules (guix build utils))
          (let* ((reconf (assoc-ref %build-inputs "reconfigure-policy"))
                 (pull   (assoc-ref %build-inputs "pull-policy"))
+                (upgrade (assoc-ref %build-inputs "upgrade-policy"))
                 (out    (assoc-ref %outputs "out"))
                 (dst    (string-append out "/share/polkit-1/actions")))
            (mkdir-p dst)
@@ -98,12 +128,16 @@
                                      "/org.libguix.system-reconfigure.policy"))
            (copy-file pull
                       (string-append dst
-                                     "/org.libguix.system-pull.policy"))))))
-    (synopsis "Polkit actions for libguix system reconfigure and pull")
+                                     "/org.libguix.system-pull.policy"))
+           (copy-file upgrade
+                      (string-append dst
+                                     "/org.libguix.system-upgrade.policy"))))))
+    (synopsis "Polkit actions for libguix system reconfigure, pull and upgrade")
     (description
-     "Installs two polkit actions that allow desktop tools built on
-@code{libguix} to invoke @command{guix system reconfigure} and
-@command{guix pull} via @command{pkexec}.  Both actions are keyed on
+     "Installs three polkit actions that allow desktop tools built on
+@code{libguix} to invoke @command{guix system reconfigure},
+@command{guix pull} and @command{guix time-machine} via
+@command{pkexec}.  All actions are keyed on
 the system Guix at @file{/run/current-system/profile/bin/guix} and
 argv-constrained to their respective subcommand.  They use
 @code{auth_admin_keep} so successive invocations within a few minutes
