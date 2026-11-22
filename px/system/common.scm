@@ -109,7 +109,7 @@
                           (() %pantherx-default-channels)
                           (channels channels)))))
     (match (and=> (current-profile) canonicalize-path)
-      ((? direct-store-path? profile)
+      ((and (? string?) (? direct-store-path?) profile)
        (package
          (inherit from-channels)
          (build-system (profile-build-system profile))))
