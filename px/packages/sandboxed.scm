@@ -799,6 +799,20 @@
               (gpu? #t)
               (dbus-rules %portal-open-dbus-rules))))
 
+(define-public vlc-sandboxed
+  (sandboxed vlc
+             (sandbox-policy
+              (read-only-paths '("Music" "Videos" ".cache/fontconfig"))
+              (writable-paths '(".config/vlc" ".local/share/vlc" ".cache/vlc"))
+              (file-arguments? #t)
+              ;; The Qt interface is X11 only.
+              (x11? #t)
+              (gpu? #t)
+              (audio? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=org.mpris.MediaPlayer2.vlc"))))))
+
 (define-public zoom-sandboxed
   (sandboxed zoom
              (sandbox-policy
