@@ -18,6 +18,7 @@
   #:use-module (gnu packages messaging)
   #:use-module (gnu packages photo)
   #:use-module (gnu packages telegram)
+  #:use-module ((gnu packages telephony) #:select (mumble))
   #:use-module (gnu packages tor-browsers)
   #:use-module (gnu packages video)
   #:use-module ((gnu packages web) #:select (kiwix-desktop))
@@ -431,6 +432,24 @@
                          "--own=net.mullvad.mullvadbrowser.*"
                          "--own=org.mpris.MediaPlayer2.firefox.*"
                          "--talk=org.freedesktop.Notifications"))))))
+
+(define-public mumble-sandboxed
+  (sandboxed mumble
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/Mumble" ".local/share/Mumble"))
+              (network? #t)
+              (wayland? #t)
+              (x11? #t)
+              (gpu? #t)
+              (audio? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=net.sourceforge.mumble.mumble"
+                         ;; Qt appends its PID, always 2 in the sandbox.
+                         "--own=org.kde.StatusNotifierItem-2-1"
+                         "--talk=org.freedesktop.Notifications"
+                         "--talk=org.kde.StatusNotifierWatcher"))))))
 
 (define-public nheko-sandboxed
   (sandboxed nheko
