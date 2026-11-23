@@ -575,6 +575,24 @@
                        '("--own=org.nicotine_plus.Nicotine"
                          "--talk=org.freedesktop.Notifications"))))))
 
+(define-public obs-sandboxed
+  (sandboxed obs
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/obs-studio" "Videos"))
+              (network? #t)
+              (wayland? #t)
+              (x11? #t)
+              (gpu? #t)
+              (audio? #t)
+              (camera? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       %portal-screencast-dbus-rules
+                       '(;; Qt appends its PID, always 2 in the sandbox.
+                         "--own=org.kde.StatusNotifierItem-2-1"
+                         "--talk=org.kde.StatusNotifierWatcher"))))))
+
 (define-public obsidian-sandboxed
   (sandboxed obsidian
              (sandbox-policy
