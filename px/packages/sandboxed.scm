@@ -765,6 +765,23 @@
               (gpu? #t)
               (dbus-rules %portal-open-dbus-rules))))
 
+(define-public zoom-sandboxed
+  (sandboxed zoom
+             (sandbox-policy
+              (read-only-paths '(".config/zoomus.conf" ".cache/fontconfig"))
+              (writable-paths '(".zoom" ".cache/zoom" "Downloads"))
+              (network? #t)
+              ;; The Wayland platform plugin doesn't load.
+              (x11? #t)
+              (gpu? #t)
+              (audio? #t)
+              (camera? #t)
+              (user-namespaces? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       %portal-screencast-dbus-rules
+                       '("--talk=org.freedesktop.Notifications"))))))
+
 (define-public zotero-sandboxed
   (sandboxed zotero
              (sandbox-policy
