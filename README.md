@@ -1222,7 +1222,10 @@ Everything is off by default, so `(sandboxed curl)` has no network and sees no f
 
 ```bash
 ls -A /proc/$(pgrep -n bwrap)/root/home/$USER   # what the newest sandbox sees of your home
+cat ~/.guix-profile/share/sandbox/vitrine.scm   # the policy of the installed variant
 ```
+
+The same data (original package, its output and the policy) is on the package as the `sandbox` property, so a package manager can show it before installing.
 
 **Limits:**
 

@@ -309,6 +309,25 @@ ctl.!default { type pulse }~%"
 each program running BASE's under bubblewrap as POLICY allows."
   (sandboxed-package base output policy))
 
+;; Read by package managers, from the package and from the built output.
+(define (sandbox-metadata base base-output policy)
+  (match-record policy <sandbox-policy>
+    (read-only-paths writable-paths network? wayland? x11? gpu? audio? camera?
+     user-namespaces? file-arguments? dbus-rules)
+    `((base . ,(package-name base))
+      (output . ,base-output)
+      (policy . ((read-only-paths . ,read-only-paths)
+                 (writable-paths . ,writable-paths)
+                 (network? . ,network?)
+                 (wayland? . ,wayland?)
+                 (x11? . ,x11?)
+                 (gpu? . ,gpu?)
+                 (audio? . ,audio?)
+                 (camera? . ,camera?)
+                 (user-namespaces? . ,user-namespaces?)
+                 (file-arguments? . ,file-arguments?)
+                 (dbus-rules . ,dbus-rules))))))
+
 ;; Not named OUTPUT, which would shadow the builder's #$output.
 (define (sandboxed-package base base-output policy)
   (package
@@ -351,7 +370,14 @@ each program running BASE's under bubblewrap as POLICY allows."
                                 applications)
               (substitute* (find-files applications "\\.desktop$")
                 (((regexp-quote (string-append (ungexp base base-output) "/bin/")))
-                 (string-append bin "/"))))))))
+                 (string-append bin "/"))))
+            (mkdir-p (string-append share "/sandbox"))
+            (call-with-output-file
+                (string-append share "/sandbox/" #$(package-name base) ".scm")
+              (lambda (port)
+                (write '#$(sandbox-metadata base base-output policy) port)
+                (newline port)))))))
+    (properties `((sandbox . ,(sandbox-metadata base base-output policy))))
     (home-page (package-home-page base))
     (synopsis (string-append (package-synopsis base) " (sandboxed)"))
     (description
