@@ -15,6 +15,7 @@
   #:use-module (gnu packages inkscape)
   #:use-module (gnu packages kodi)
   #:use-module ((gnu packages kde-graphics) #:select (okular))
+  #:use-module ((gnu packages kde-multimedia) #:select (kdenlive))
   #:use-module ((gnu packages libreoffice) #:select (libreoffice))
   #:use-module ((gnu packages mail) #:select (claws-mail))
   #:use-module (gnu packages librewolf)
@@ -378,6 +379,22 @@
               (dbus-rules
                (append %portal-settings-dbus-rules
                        '("--own=org.inkscape.Inkscape"))))))
+
+(define-public kdenlive-sandboxed
+  (sandboxed kdenlive
+             (sandbox-policy
+              (read-only-paths '(".config/kdenliverc" ".cache/fontconfig"))
+              (writable-paths '(".local/share/kdenlive" ".cache/kdenlive"
+                                "Videos"))
+              (file-arguments? #t)
+              (wayland? #t)
+              (x11? #t)
+              (gpu? #t)
+              (audio? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '(;; KDE appends its PID, always 2 in the sandbox.
+                         "--own=org.kde.kdenlive-2"))))))
 
 (define-public kiwix-desktop-sandboxed
   (sandboxed kiwix-desktop
