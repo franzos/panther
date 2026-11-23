@@ -410,6 +410,28 @@
               (gpu? #t)
               (audio? #t))))
 
+(define-public mullvadbrowser-sandboxed
+  (sandboxed mullvadbrowser
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".mullvad/mullvadbrowser"
+                                ".cache/mullvad/mullvadbrowser" "Downloads"))
+              (file-arguments? #t)
+              (network? #t)
+              (wayland? #t)
+              (x11? #t)
+              (gpu? #t)
+              (audio? #t)
+              (camera? #t)
+              (user-namespaces? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       %portal-screencast-dbus-rules
+                       '(;; Remote control by later launches, to open links.
+                         "--own=net.mullvad.mullvadbrowser.*"
+                         "--own=org.mpris.MediaPlayer2.firefox.*"
+                         "--talk=org.freedesktop.Notifications"))))))
+
 (define-public nheko-sandboxed
   (sandboxed nheko
              (sandbox-policy
