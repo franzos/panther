@@ -856,6 +856,19 @@
                (append %portal-settings-dbus-rules
                        '("--own=org.mpris.MediaPlayer2.vlc"))))))
 
+(define-public xournalpp-sandboxed
+  (sandboxed xournalpp
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/xournalpp" ".cache/xournalpp"
+                                ".local/state/xournalpp" "Documents"))
+              (file-arguments? #t)
+              (wayland? #t)
+              (x11? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=com.github.xournalpp.xournalpp"))))))
+
 (define-public zathura-sandboxed
   (sandboxed zathura
              (sandbox-policy
