@@ -8,6 +8,7 @@
   #:use-module (gnu packages ebook)
   #:use-module (gnu packages fediverse)
   #:use-module (gnu packages gimp)
+  #:use-module ((gnu packages gnuzilla) #:select (icecat))
   #:use-module ((gnu packages gnome) #:select (fractal loupe rhythmbox))
   #:use-module (gnu packages gnome-circle)
   #:use-module (gnu packages inkscape)
@@ -283,6 +284,28 @@
                          "--talk=org.freedesktop.Notifications"
                          ;; Passwords and cookies are encrypted with a key kept here.
                          "--talk=org.freedesktop.secrets"))))))
+
+(define-public icecat-sandboxed
+  (sandboxed icecat
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".mozilla/icecat" ".cache/mozilla/icecat"
+                                "Downloads"))
+              (file-arguments? #t)
+              (network? #t)
+              (wayland? #t)
+              (x11? #t)
+              (gpu? #t)
+              (audio? #t)
+              (camera? #t)
+              (user-namespaces? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       %portal-screencast-dbus-rules
+                       '(;; Remote control by later launches, to open links.
+                         "--own=org.mozilla.icecat.*"
+                         "--own=org.mpris.MediaPlayer2.icecat.*"
+                         "--talk=org.freedesktop.Notifications"))))))
 
 (define-public inkscape-sandboxed
   (sandboxed inkscape
