@@ -18,6 +18,7 @@
   #:use-module ((gnu packages mail) #:select (claws-mail))
   #:use-module (gnu packages librewolf)
   #:use-module (gnu packages messaging)
+  #:use-module (gnu packages nicotine)
   #:use-module (gnu packages photo)
   #:use-module (gnu packages telegram)
   #:use-module ((gnu packages telephony) #:select (mumble))
@@ -499,6 +500,23 @@
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.kde.StatusNotifierWatcher"
                          "--talk=org.freedesktop.secrets"))))))
+
+(define-public nicotine+-sandboxed
+  (sandboxed nicotine+
+             (sandbox-policy
+              ;; Music can be shared, not changed.
+              (read-only-paths '("Music" ".cache/fontconfig"))
+              (writable-paths '(".config/nicotine" ".local/share/nicotine"
+                                "Downloads"))
+              (network? #t)
+              (wayland? #t)
+              (x11? #t)
+              (gpu? #t)
+              (audio? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=org.nicotine_plus.Nicotine"
+                         "--talk=org.freedesktop.Notifications"))))))
 
 (define-public obsidian-sandboxed
   (sandboxed obsidian
