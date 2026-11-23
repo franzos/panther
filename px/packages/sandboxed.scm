@@ -7,6 +7,7 @@
   #:use-module ((gnu packages chromium) #:select (ungoogled-chromium))
   #:use-module (gnu packages ebook)
   #:use-module (gnu packages fediverse)
+  #:use-module ((gnu packages finance) #:select (electrum))
   #:use-module (gnu packages gimp)
   #:use-module ((gnu packages gnuzilla) #:select (icecat))
   #:use-module ((gnu packages gnome) #:select (eog fractal loupe rhythmbox))
@@ -189,6 +190,22 @@
                (append %portal-settings-dbus-rules
                        '("--own=im.dino.Dino"
                          "--talk=org.freedesktop.Notifications"))))))
+
+(define-public electrum-sandboxed
+  (sandboxed electrum
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              ;; Wallets are in here too.
+              (writable-paths '(".electrum"))
+              (network? #t)
+              (wayland? #t)
+              (x11? #t)
+              (gpu? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '(;; Qt appends its PID, always 2 in the sandbox.
+                         "--own=org.kde.StatusNotifierItem-2-1"
+                         "--talk=org.kde.StatusNotifierWatcher"))))))
 
 (define-public element-desktop-sandboxed
   (sandboxed element-desktop
