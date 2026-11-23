@@ -36,6 +36,7 @@
               (read-only-paths '("Music" ".cache/fontconfig"))
               (file-arguments? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (dbus-rules
@@ -50,6 +51,7 @@
               (writable-paths '(".config/anytype" "Downloads"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (user-namespaces? #t)
               (dbus-rules
@@ -68,6 +70,7 @@
                                 ".local/state/audacity" "Music"))
               (file-arguments? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (dbus-rules %portal-settings-dbus-rules))))
@@ -79,6 +82,7 @@
               (writable-paths '(".config/Bitwarden" "Downloads"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (user-namespaces? #t)
               (dbus-rules
@@ -98,6 +102,7 @@
               (file-arguments? #t)
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (user-namespaces? #t)
               (dbus-rules
@@ -112,6 +117,7 @@
                                 ".local/state/mpv"))
               (file-arguments? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (dbus-rules
@@ -127,6 +133,7 @@
                                 "Pictures"))
               (file-arguments? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (dbus-rules %portal-settings-dbus-rules))))
 
@@ -137,6 +144,7 @@
               (writable-paths '(".local/share/dino" "Downloads"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (camera? #t)
@@ -152,6 +160,7 @@
               (writable-paths '(".config/Element" "Downloads"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (camera? #t)
@@ -173,6 +182,7 @@
               (file-arguments? #t)
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (camera? #t)
@@ -193,6 +203,7 @@
                                 "Downloads"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (dbus-rules
@@ -209,6 +220,7 @@
                                 ".cache/gajim" "Downloads"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (dbus-rules
@@ -225,6 +237,7 @@
               (file-arguments? #t)
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (dbus-rules
                (append %portal-settings-dbus-rules
@@ -239,6 +252,7 @@
               (writable-paths '(".config/GIMP" ".cache/gimp" "Pictures"))
               (file-arguments? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (dbus-rules
                (append %portal-settings-dbus-rules
@@ -251,6 +265,7 @@
               (writable-paths '(".config/inkscape" ".cache/inkscape" "Pictures"))
               (file-arguments? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (dbus-rules
                (append %portal-settings-dbus-rules
@@ -265,6 +280,7 @@
               (file-arguments? #t)
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (user-namespaces? #t)
@@ -277,6 +293,7 @@
               (writable-paths '(".local/share/komikku" ".cache/komikku"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (dbus-rules
                (append %portal-settings-dbus-rules
@@ -291,6 +308,7 @@
               (writable-paths '(".config/libreoffice" "Documents"))
               (file-arguments? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (dbus-rules %portal-settings-dbus-rules))))
 
@@ -300,6 +318,7 @@
               (read-only-paths '("Pictures" ".cache/fontconfig"))
               (file-arguments? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               ;; glycin runs its image loaders in their own sandbox.
               (user-namespaces? #t)
@@ -314,6 +333,7 @@
               (writable-paths '(".cache/mpv" ".local/state/mpv"))
               (file-arguments? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t))))
 
@@ -325,6 +345,7 @@
                                 ".cache/nheko" "Downloads"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (camera? #t)
@@ -345,6 +366,7 @@
               (writable-paths '(".config/obsidian" "Obsidian Vault"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (user-namespaces? #t)
               (dbus-rules %portal-settings-dbus-rules))))
@@ -356,6 +378,7 @@
               (writable-paths '(".local/share/okular"))
               (file-arguments? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (dbus-rules
                (append %portal-settings-dbus-rules
@@ -368,6 +391,7 @@
               (read-only-paths '(".cache/fontconfig"))
               (file-arguments? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (dbus-rules %portal-settings-dbus-rules))))
 
@@ -380,6 +404,7 @@
               (file-arguments? #t)
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (dbus-rules
                (append %portal-settings-dbus-rules
@@ -396,6 +421,7 @@
               (writable-paths '(".config/qalculate" ".local/share/qalculate"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (dbus-rules
                (append %portal-settings-dbus-rules
                        '("--own=io.github.Qalculate"))))))
@@ -409,6 +435,7 @@
                                 "Pictures"))
               (file-arguments? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (dbus-rules %portal-settings-dbus-rules))))
 
@@ -421,6 +448,7 @@
               (file-arguments? #t)
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (dbus-rules
@@ -436,6 +464,7 @@
               (writable-paths '(".config/Signal" "Downloads"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (camera? #t)
@@ -456,6 +485,7 @@
               (writable-paths '(".config/Slack" "Downloads"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (camera? #t)
@@ -478,6 +508,7 @@
                                 ".cache/spotifast" "$XDG_RUNTIME_DIR/spotifast"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (dbus-rules
@@ -497,6 +528,7 @@
               (file-arguments? #t)
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (dbus-rules
@@ -512,6 +544,7 @@
               (writable-paths '(".local/share/TelegramDesktop" "Downloads"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (camera? #t)
@@ -531,6 +564,7 @@
               (writable-paths '(".thunderbird" ".cache/thunderbird" "Downloads"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (dbus-rules
@@ -545,6 +579,7 @@
               (writable-paths '(".config/tidal-hifi"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (user-namespaces? #t)
@@ -564,6 +599,7 @@
               (file-arguments? #t)
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (dbus-rules
                (append %portal-settings-dbus-rules
@@ -578,6 +614,7 @@
               (writable-paths '(".cache/dev.geopjr.Tuba" "Downloads"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (dbus-rules
@@ -594,6 +631,7 @@
               (file-arguments? #t)
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (camera? #t)
@@ -613,6 +651,7 @@
               (read-only-paths '(".config/vitrine" "Pictures"))
               (writable-paths '(".local/share/vitrine" ".cache/vitrine"))
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (dbus-rules %portal-open-dbus-rules))))
 
@@ -623,6 +662,7 @@
               (writable-paths '(".zotero" ".cache/zotero" "Zotero" "Downloads"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (dbus-rules %portal-settings-dbus-rules))))
 
@@ -633,6 +673,7 @@
               (writable-paths '(".config/Zulip" "Downloads"))
               (network? #t)
               (wayland? #t)
+              (x11? #t)
               (gpu? #t)
               (audio? #t)
               (user-namespaces? #t)

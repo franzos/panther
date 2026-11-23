@@ -35,6 +35,10 @@
             (default #f))
   (wayland? sandbox-policy-wayland?
             (default #f))
+  ;; Used when no Wayland socket is bound.  X11 clients can watch and drive
+  ;; each other.
+  (x11? sandbox-policy-x11?
+        (default #f))
   (gpu? sandbox-policy-gpu?
         (default #f))
   ;; The PulseAudio socket; PipeWire serves it through pipewire-pulse.
@@ -113,7 +117,7 @@ ctl.!default { type pulse }~%"
 
 (define (sandbox-launcher base base-output policy)
   (match-record policy <sandbox-policy>
-    (read-only-paths writable-paths network? wayland? gpu? audio? camera?
+    (read-only-paths writable-paths network? wayland? x11? gpu? audio? camera?
      user-namespaces? file-arguments? dbus-rules)
     (program-file
      (string-append (package-name base) "-sandbox-launcher")
@@ -121,6 +125,7 @@ ctl.!default { type pulse }~%"
        #~(begin
            (use-modules (guix build utils)
                         (ice-9 ftw)
+                        (ice-9 regex)
                         (srfi srfi-1)
                         (srfi srfi-26)
                         (web uri))
@@ -138,6 +143,18 @@ ctl.!default { type pulse }~%"
                           (lambda (path)
                             (let ((path (absolute path)))
                               (list option path path)))))
+                  (wayland-socket
+                   (let ((socket (string-append
+                                  runtime "/"
+                                  (or (getenv "WAYLAND_DISPLAY") "wayland-0"))))
+                     (and #$wayland? (file-exists? socket) socket)))
+                  ;; Local displays only.
+                  (x11-display
+                   (and #$x11? (not wayland-socket)
+                        (string-match "^(unix)?:([0-9]+)"
+                                      (or (getenv "DISPLAY") ""))))
+                  (x11-authority (or (getenv "XAUTHORITY")
+                                     (string-append home "/.Xauthority")))
                   (profile (lambda (path)
                              (let ((path (absolute path)))
                                (if (file-exists? path)
@@ -229,11 +246,17 @@ ctl.!default { type pulse }~%"
                                             (if network?
                                                 '("SSL_CERT_FILE" "SSL_CERT_DIR")
                                                 '())))
-                     (if #$wayland?
-                         ((bind "--ro-bind")
-                          (string-append runtime "/"
-                                         (or (getenv "WAYLAND_DISPLAY")
-                                             "wayland-0")))
+                     (if wayland-socket
+                         ((bind "--ro-bind") wayland-socket)
+                         '())
+                     (if x11-display
+                         (append
+                          (list "--setenv" "DISPLAY" (getenv "DISPLAY")
+                                "--setenv" "XAUTHORITY" x11-authority)
+                          ((bind "--ro-bind")
+                           (string-append "/tmp/.X11-unix/X"
+                                          (match:substring x11-display 2)))
+                          ((bind "--ro-bind-try") x11-authority))
                          '())
                      (if #$audio?
                          (cons* "--ro-bind" #$%sandbox-asound-conf

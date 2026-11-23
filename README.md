@@ -1198,6 +1198,7 @@ To run the original once, without changing your profile: `guix shell vitrine -- 
             (read-only-paths '(".config/vitrine" "/mnt/photos"))
             (writable-paths '(".local/share/vitrine" ".cache/vitrine"))
             (wayland? #t)
+            (x11? #t)
             (gpu? #t)))
 ```
 
@@ -1208,7 +1209,8 @@ Everything is off by default, so `(sandboxed curl)` has no network and sees no f
 | `read-only-paths` | `'()` | Paths bound read-only; relative ones are under `$HOME`, and a leading `$XDG_RUNTIME_DIR/` is expanded. Missing paths are skipped |
 | `writable-paths` | `'()` | Directories bound writable; relative ones are under `$HOME`, and a leading `$XDG_RUNTIME_DIR/` is expanded. Created on the host before launch |
 | `network?` | `#f` | Share the host network, with `/etc/resolv.conf`, `/etc/hosts` and `/etc/ssl` |
-| `wayland?` | `#f` | Bind the Wayland socket |
+| `wayland?` | `#f` | Bind the Wayland socket, if there is one |
+| `x11?` | `#f` | Bind the X11 socket of `$DISPLAY` and the `XAUTHORITY` file, unless the Wayland socket was bound. With `wayland?` this is the fallback for X11 sessions; on its own it's always X11 |
 | `gpu?` | `#f` | Bind `/dev/dri` and the `/sys` entries Mesa needs to find the driver |
 | `audio?` | `#f` | Bind the PulseAudio socket (served by `pipewire-pulse` on PipeWire systems). This allows recording as well as playback |
 | `camera?` | `#f` | Bind the `/dev/video*` devices present at launch, and the `/sys` entries that describe them |
@@ -1226,6 +1228,7 @@ ls -A /proc/$(pgrep -n bwrap)/root/home/$USER   # what the newest sandbox sees o
 
 - The kernel has to allow unprivileged user namespaces.
 - The whole store is readable, not just the program's closure, and there's no seccomp filter.
+- On an X11 session the sandbox still covers files and network, but not the display: any X11 client can read the keyboard, the screen and the clipboard of every other one, and send them input. Wayland sessions don't have this problem.
 - An AppArmor profile that attaches to the original program by store path also confines it in the sandbox, and needs `flags=(attach_disconnected)` there; without it, the program can't reach its sockets.
 - `papers-sandboxed`: the "Open" dialog only sees the sandbox, so pass the file on the command line or open it from your file manager. Links in a document don't open.
 - `vitrine-sandboxed`: `vitrine faces fetch` and `vitrine geo fetch` need the network, so run those with the original. The external viewer and "show in file manager" don't work.
