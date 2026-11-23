@@ -9,7 +9,7 @@
   #:use-module (gnu packages fediverse)
   #:use-module (gnu packages gimp)
   #:use-module ((gnu packages gnuzilla) #:select (icecat))
-  #:use-module ((gnu packages gnome) #:select (fractal loupe rhythmbox))
+  #:use-module ((gnu packages gnome) #:select (eog fractal loupe rhythmbox))
   #:use-module (gnu packages gnome-circle)
   #:use-module (gnu packages inkscape)
   #:use-module (gnu packages kodi)
@@ -19,7 +19,7 @@
   #:use-module (gnu packages librewolf)
   #:use-module (gnu packages messaging)
   #:use-module (gnu packages nicotine)
-  #:use-module ((gnu packages pdf) #:select (zathura))
+  #:use-module ((gnu packages pdf) #:select (xournalpp zathura))
   #:use-module (gnu packages photo)
   #:use-module (gnu packages telegram)
   #:use-module ((gnu packages telephony) #:select (mumble))
@@ -195,6 +195,17 @@
                          "--own=org.freedesktop.StatusNotifierItem-2-1"
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.kde.StatusNotifierWatcher"))))))
+
+(define-public eog-sandboxed
+  (sandboxed eog
+             (sandbox-policy
+              (read-only-paths '("Pictures" ".cache/fontconfig"))
+              (file-arguments? #t)
+              (wayland? #t)
+              (x11? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--own=org.gnome.eog"))))))
 
 (define-public firefox-sandboxed
   (sandboxed firefox
