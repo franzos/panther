@@ -18,6 +18,7 @@
   #:use-module (gnu packages telegram)
   #:use-module (gnu packages video)
   #:use-module ((gnu packages web) #:select (kiwix-desktop))
+  #:use-module ((nongnu packages chrome) #:select (google-chrome-stable))
   #:use-module (nongnu packages messaging)
   #:use-module ((nongnu packages mozilla) #:select (firefox))
   #:use-module (nongnu packages password-utils)
@@ -257,6 +258,30 @@
               (dbus-rules
                (append %portal-settings-dbus-rules
                        '("--own=org.gimp.GIMP.*"))))))
+
+(define-public google-chrome-stable-sandboxed
+  (sandboxed google-chrome-stable
+             (sandbox-policy
+              ;; Managed policies are read from /etc/opt/chrome.
+              (read-only-paths '("/etc/opt/chrome" ".cache/fontconfig"))
+              (writable-paths '(".config/google-chrome" ".cache/google-chrome"
+                                "Downloads"))
+              (file-arguments? #t)
+              (network? #t)
+              (wayland? #t)
+              (x11? #t)
+              (gpu? #t)
+              (audio? #t)
+              (camera? #t)
+              (user-namespaces? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       %portal-screencast-dbus-rules
+                       '(;; Chromium appends its PID, always 2 in the sandbox.
+                         "--own=org.mpris.MediaPlayer2.chromium.instance2"
+                         "--talk=org.freedesktop.Notifications"
+                         ;; Passwords and cookies are encrypted with a key kept here.
+                         "--talk=org.freedesktop.secrets"))))))
 
 (define-public inkscape-sandboxed
   (sandboxed inkscape
