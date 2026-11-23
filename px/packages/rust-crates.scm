@@ -24091,6 +24091,10 @@
   (crate-source "rand_pcg" "0.10.2"
                 "0sp817pvwb3d2nxb1ww1y0f8x3kc4w198j2iqvs742hwgq9z986a"))
 
+(define rust-rand-pcg-0.10.3
+  (crate-source "rand_pcg" "0.10.3"
+                "1psj03xmmg8qv87dxy1f0bkcyg19c6r4p659mrljqihl3qm8i5gb"))
+
 (define rust-rand-pcg-0.9.0
   (crate-source "rand_pcg" "0.9.0"
                 "1xr04g5zrzqi9n7vyzjznnyrmy55i8k34ripsb2gmdxazzvw72ml"))
@@ -43472,7 +43476,7 @@
                  rust-android-build-0.1.3
                  rust-android-properties-0.2.2
                  rust-android-system-properties-0.1.5
-                 rust-anyhow-1.0.102
+                 rust-anyhow-1.0.103
                  rust-arbitrary-1.4.2
                  rust-arc-swap-1.9.1
                  rust-arg-enum-proc-macro-0.3.4
@@ -43522,6 +43526,7 @@
                  rust-cc-1.2.62
                  rust-cfg-if-1.0.4
                  rust-cfg-aliases-0.2.1
+                 rust-chacha20-0.10.2
                  rust-clipboard-win-5.4.1
                  rust-clipboard-macos-0.1.1
                  rust-clipboard-wayland-0.2.2
@@ -43539,9 +43544,10 @@
                  rust-core-maths-0.1.1
                  rust-cosmic-text-0.15.0
                  rust-cpufeatures-0.2.17
+                 rust-cpufeatures-0.3.1
                  rust-crc32fast-1.5.0
                  rust-crossbeam-deque-0.8.6
-                 rust-crossbeam-epoch-0.9.18
+                 rust-crossbeam-epoch-0.9.21
                  rust-crossbeam-utils-0.8.21
                  rust-crunchy-0.2.4
                  rust-cryoglyph-0.1.0
@@ -43571,7 +43577,7 @@
                  rust-error-code-3.3.2
                  rust-etagere-0.2.15
                  rust-euclid-0.22.14
-                 rust-event-listener-5.4.1
+                 rust-event-listener-5.4.2
                  rust-event-listener-strategy-0.5.4
                  rust-exr-1.74.0
                  rust-fastrand-2.4.1
@@ -43597,7 +43603,7 @@
                  rust-foreign-types-0.5.0
                  rust-foreign-types-macros-0.2.3
                  rust-foreign-types-shared-0.3.1
-                 rust-form-urlencoded-1.2.2
+                 rust-form-urlencoded-1.2.3
                  rust-futures-0.3.32
                  rust-futures-channel-0.3.32
                  rust-futures-core-0.3.32
@@ -43716,7 +43722,7 @@
                  rust-matchers-0.2.0
                  rust-maybe-rayon-0.1.1
                  rust-memchr-2.8.0
-                 rust-memmap2-0.9.10
+                 rust-memmap2-0.9.11
                  rust-memoffset-0.9.1
                  rust-metal-0.32.0
                  rust-miniz-oxide-0.8.9
@@ -43811,14 +43817,17 @@
                  rust-quick-error-2.0.1
                  rust-quick-xml-0.39.4
                  rust-quinn-0.11.9
-                 rust-quinn-proto-0.11.14
-                 rust-quinn-udp-0.5.14
+                 rust-quinn-proto-0.11.19
+                 rust-quinn-udp-0.5.16
                  rust-quote-1.0.45
                  rust-r-efi-5.3.0
                  rust-r-efi-6.0.0
                  rust-rand-0.9.4
+                 rust-rand-0.10.4
                  rust-rand-chacha-0.9.0
                  rust-rand-core-0.9.5
+                 rust-rand-core-0.10.1
+                 rust-rand-pcg-0.10.3
                  rust-range-alloc-0.1.5
                  rust-rangemap-1.7.1
                  rust-rav1e-0.8.1
@@ -43847,10 +43856,10 @@
                  rust-rustc-hash-2.1.2
                  rust-rustc-version-0.4.1
                  rust-rustix-0.38.44
-                 rust-rustix-1.1.4
-                 rust-rustls-0.23.40
+                 rust-rustix-1.1.6
+                 rust-rustls-0.23.46
                  rust-rustls-pki-types-1.14.1
-                 rust-rustls-webpki-0.103.13
+                 rust-rustls-webpki-0.103.17
                  rust-rustversion-1.0.22
                  rust-rustybuzz-0.20.1
                  rust-ryu-1.0.23
@@ -43915,7 +43924,7 @@
                  rust-tinystr-0.8.3
                  rust-tinyvec-1.11.0
                  rust-tinyvec-macros-0.1.1
-                 rust-tokio-1.52.3
+                 rust-tokio-1.54.1
                  rust-tokio-macros-2.7.0
                  rust-tokio-rustls-0.26.4
                  rust-tokio-stream-0.1.18
@@ -43953,7 +43962,7 @@
                  rust-unicode-width-0.2.2
                  rust-unicode-xid-0.2.6
                  rust-untrusted-0.9.0
-                 rust-url-2.5.8
+                 rust-url-2.5.9
                  rust-usvg-0.45.1
                  rust-utf8-iter-1.0.4
                  rust-uuid-1.23.1
@@ -43989,7 +43998,7 @@
                  rust-wayland-sys-0.31.11
                  rust-web-sys-0.3.98
                  rust-web-time-1.1.0
-                 rust-webpki-roots-1.0.7
+                 rust-webpki-roots-1.0.12
                  rust-weezl-0.1.12
                  rust-wgpu-27.0.1
                  rust-wgpu-core-27.0.3
