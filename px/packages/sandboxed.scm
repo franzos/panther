@@ -12,6 +12,7 @@
   #:use-module ((gnu packages gnome) #:select (fractal loupe rhythmbox))
   #:use-module (gnu packages gnome-circle)
   #:use-module (gnu packages inkscape)
+  #:use-module (gnu packages kodi)
   #:use-module ((gnu packages kde-graphics) #:select (okular))
   #:use-module ((gnu packages libreoffice) #:select (libreoffice))
   #:use-module ((gnu packages mail) #:select (claws-mail))
@@ -351,6 +352,18 @@
               (audio? #t)
               (user-namespaces? #t)
               (dbus-rules %portal-settings-dbus-rules))))
+
+(define-public kodi-sandboxed
+  (sandboxed kodi
+             (sandbox-policy
+              (read-only-paths '("Music" "Pictures" "Videos"
+                                 ".cache/fontconfig"))
+              (writable-paths '(".kodi"))
+              (network? #t)
+              ;; Built for X11 only.
+              (x11? #t)
+              (gpu? #t)
+              (audio? #t))))
 
 (define-public komikku-sandboxed
   (sandboxed komikku
