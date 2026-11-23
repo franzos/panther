@@ -11,6 +11,7 @@
   #:use-module ((gnu packages gnuzilla) #:select (icecat))
   #:use-module ((gnu packages gnome) #:select (eog fractal loupe rhythmbox))
   #:use-module (gnu packages gnome-circle)
+  #:use-module ((gnu packages graphics) #:select (blender))
   #:use-module (gnu packages inkscape)
   #:use-module (gnu packages kodi)
   #:use-module ((gnu packages kde-graphics) #:select (okular))
@@ -102,6 +103,17 @@
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.kde.StatusNotifierWatcher"
                          "--talk=org.freedesktop.secrets"))))))
+
+(define-public blender-sandboxed
+  (sandboxed blender
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/blender" ".cache/blender" "Documents"))
+              (file-arguments? #t)
+              ;; Built for X11 only.
+              (x11? #t)
+              (gpu? #t)
+              (audio? #t))))
 
 (define-public calibre-sandboxed
   (sandboxed calibre
