@@ -37,6 +37,7 @@
   #:use-module (px packages graphics)
   #:use-module (px packages maths)
   #:use-module (px packages music)
+  #:use-module ((px packages networking) #:select (halloy))
   #:use-module (px sandbox))
 
 (define-public amberol-sandboxed
@@ -337,6 +338,21 @@
                          "--own=org.mozilla.icecat.*"
                          "--own=org.mpris.MediaPlayer2.icecat.*"
                          "--talk=org.freedesktop.Notifications"))))))
+
+(define-public halloy-sandboxed
+  (sandboxed halloy
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              (writable-paths '(".config/halloy" ".local/share/halloy"
+                                "Downloads"))
+              (network? #t)
+              (wayland? #t)
+              (x11? #t)
+              (gpu? #t)
+              (audio? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--talk=org.freedesktop.Notifications"))))))
 
 (define-public inkscape-sandboxed
   (sandboxed inkscape
