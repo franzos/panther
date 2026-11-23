@@ -14,6 +14,7 @@
   #:use-module (gnu packages inkscape)
   #:use-module ((gnu packages kde-graphics) #:select (okular))
   #:use-module ((gnu packages libreoffice) #:select (libreoffice))
+  #:use-module ((gnu packages mail) #:select (claws-mail))
   #:use-module (gnu packages librewolf)
   #:use-module (gnu packages messaging)
   #:use-module (gnu packages photo)
@@ -129,6 +130,20 @@
                (append %portal-settings-dbus-rules
                        '("--own=io.github.celluloid_player.Celluloid"
                          "--own=org.mpris.MediaPlayer2.io.github.celluloid_player.Celluloid"))))))
+
+(define-public claws-mail-sandboxed
+  (sandboxed claws-mail
+             (sandbox-policy
+              (read-only-paths '(".config/gtk-3.0/settings.ini"
+                                 ".cache/fontconfig"))
+              ;; Local folders are in ~/Mail by default.
+              (writable-paths '(".claws-mail" "Mail" "Downloads"))
+              (network? #t)
+              (wayland? #t)
+              (x11? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '("--talk=org.freedesktop.Notifications"))))))
 
 (define-public darktable-sandboxed
   (sandboxed darktable
