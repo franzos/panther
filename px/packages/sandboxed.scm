@@ -13,6 +13,7 @@
   #:use-module (gnu packages inkscape)
   #:use-module ((gnu packages kde-graphics) #:select (okular))
   #:use-module ((gnu packages libreoffice) #:select (libreoffice))
+  #:use-module (gnu packages librewolf)
   #:use-module (gnu packages messaging)
   #:use-module (gnu packages photo)
   #:use-module (gnu packages telegram)
@@ -336,6 +337,29 @@
               (x11? #t)
               (gpu? #t)
               (dbus-rules %portal-settings-dbus-rules))))
+
+(define-public librewolf-sandboxed
+  (sandboxed librewolf
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              ;; Profiles are in ~/.librewolf if it has any, else in ~/.config.
+              (writable-paths '(".librewolf" ".config/librewolf"
+                                ".cache/librewolf" "Downloads"))
+              (file-arguments? #t)
+              (network? #t)
+              (wayland? #t)
+              (x11? #t)
+              (gpu? #t)
+              (audio? #t)
+              (camera? #t)
+              (user-namespaces? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       %portal-screencast-dbus-rules
+                       '(;; Remote control by later launches, to open links.
+                         "--own=io.gitlab.librewolf.*"
+                         "--own=org.mpris.MediaPlayer2.firefox.*"
+                         "--talk=org.freedesktop.Notifications"))))))
 
 (define-public loupe-sandboxed
   (sandboxed loupe
