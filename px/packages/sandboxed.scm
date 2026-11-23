@@ -19,6 +19,7 @@
   #:use-module (gnu packages librewolf)
   #:use-module (gnu packages messaging)
   #:use-module (gnu packages nicotine)
+  #:use-module ((gnu packages pdf) #:select (zathura))
   #:use-module (gnu packages photo)
   #:use-module (gnu packages telegram)
   #:use-module ((gnu packages telephony) #:select (mumble))
@@ -843,6 +844,19 @@
               (dbus-rules
                (append %portal-settings-dbus-rules
                        '("--own=org.mpris.MediaPlayer2.vlc"))))))
+
+(define-public zathura-sandboxed
+  (sandboxed zathura
+             (sandbox-policy
+              (read-only-paths '(".config/zathura" ".cache/fontconfig"))
+              (writable-paths '(".local/share/zathura"))
+              (file-arguments? #t)
+              (wayland? #t)
+              (x11? #t)
+              (dbus-rules
+               (append %portal-settings-dbus-rules
+                       '(;; zathura appends its PID, always 2 in the sandbox.
+                         "--own=org.pwmt.zathura.PID-2"))))))
 
 (define-public zoom-sandboxed
   (sandboxed zoom
