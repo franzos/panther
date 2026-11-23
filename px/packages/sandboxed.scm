@@ -18,6 +18,7 @@
   #:use-module (gnu packages messaging)
   #:use-module (gnu packages photo)
   #:use-module (gnu packages telegram)
+  #:use-module (gnu packages tor-browsers)
   #:use-module (gnu packages video)
   #:use-module ((gnu packages web) #:select (kiwix-desktop))
   #:use-module ((nongnu packages chrome) #:select (google-chrome-stable))
@@ -662,6 +663,21 @@
                          "--own=org.freedesktop.StatusNotifierItem-2-1"
                          "--talk=org.freedesktop.Notifications"
                          "--talk=org.kde.StatusNotifierWatcher"))))))
+
+(define-public torbrowser-sandboxed
+  (sandboxed torbrowser
+             (sandbox-policy
+              (read-only-paths '(".cache/fontconfig"))
+              ;; The profile and the state of its tor daemon.
+              (writable-paths '(".tor project" ".cache/tor project"
+                                "Downloads"))
+              (network? #t)
+              (wayland? #t)
+              (x11? #t)
+              (gpu? #t)
+              (audio? #t)
+              (user-namespaces? #t)
+              (dbus-rules %portal-settings-dbus-rules))))
 
 (define-public transmission-sandboxed
   (sandboxed transmission
