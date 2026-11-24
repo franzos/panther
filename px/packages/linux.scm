@@ -586,3 +586,27 @@ against nonguix's @code{linux} instead of linux-libre."
 
 (define-public v4l2loopback-linux-module-nongnu
   (linux-module->nongnu v4l2loopback-linux-module))
+
+(define-public gusb-0.3.10
+  (package
+    (inherit (@ (gnu packages gnome) gusb-minimal))
+    (version "0.3.10")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/hughsie/libgusb")
+             (commit version)))
+       (file-name (git-file-name "gusb" version))
+       (sha256
+        (base32 "040nr7mjddh7mrnaa3mnq893sgsig9my0iiipkdajpqr45f303ld"))))))
+
+;; fwupd drops every USB device plugin unless gusb is 0.3.8 or newer.
+(define-public fwupd-nonfree-usb
+  (let ((base (@ (nongnu packages firmware) fwupd-nonfree)))
+    (package
+      (inherit base)
+      (name "fwupd-nonfree-usb")
+      (propagated-inputs
+       (modify-inputs (package-propagated-inputs base)
+         (replace "gusb" gusb-0.3.10))))))
