@@ -1233,6 +1233,9 @@ The same data (original package, its output and the policy) is on the package as
 - The whole store is readable, not just the program's closure, and there's no seccomp filter.
 - On an X11 session the sandbox still covers files and network, but not the display: any X11 client can read the keyboard, the screen and the clipboard of every other one, and send them input. Wayland sessions don't have this problem.
 - An AppArmor profile that attaches to the original program by store path also confines it in the sandbox, and needs `flags=(attach_disconnected)` there; without it, the program can't reach its sockets.
+- `zoom-sandboxed`, `vlc-sandboxed`, `kodi-sandboxed`, `blender-sandboxed`: X11 only, because these builds have no working Wayland backend. A Wayland session needs Xwayland for them, and the X11 limit above applies.
+- `zoom-sandboxed`, `kdenlive-sandboxed`: `~/.config/zoomus.conf` and `~/.config/kdenliverc` are bound read-only, so settings changed in the sandbox are gone when the program exits. Change them with the original.
+- `vlc-sandboxed`, `blender-sandboxed`: no network, so no streams in VLC and no online extensions in Blender.
 - `papers-sandboxed`: the "Open" dialog only sees the sandbox, so pass the file on the command line or open it from your file manager. Links in a document don't open.
 - `vitrine-sandboxed`: `vitrine faces fetch` and `vitrine geo fetch` need the network, so run those with the original. The external viewer and "show in file manager" don't work.
 
