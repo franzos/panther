@@ -355,7 +355,7 @@ Linux support is currently a preview; Computer Use is not available on it.")
 (define-public orca-ide
   (package
     (name "orca-ide")
-    (version "1.4.253")
+    (version "1.4.274")
     (source
      (origin
        (method url-fetch)
@@ -363,7 +363,7 @@ Linux support is currently a preview; Computer Use is not available on it.")
                            version "/orca-ide_" version "_amd64.deb"))
        (file-name (string-append name "-" version ".deb"))
        (sha256
-        (base32 "0wnmcdr7j6b9c3pcddb677n5xdghrbms3fcnc3k8pp0531dw4bwq"))))
+        (base32 "1221ll6fbjnfgaai26srs7335l2bmp6ph1i8zqw17j1a2zbsp8ln"))))
     (build-system chromium-binary-build-system)
     (arguments
      (list
@@ -372,25 +372,40 @@ Linux support is currently a preview; Computer Use is not available on it.")
       ;; orcad-template ships unpatched runtimes that get copied to remote hosts.
       #:validate-runpath? #f
       #:wrapper-plan
-      #~(map (lambda (file)
-               (string-append "opt/Orca/" file))
-             '("orca-ide"
-               "chrome-sandbox"
-               "chrome_crashpad_handler"
-               "libEGL.so"
-               "libGLESv2.so"
-               "libffmpeg.so"
-               "libvk_swiftshader.so"
-               "libvulkan.so.1"
-               "resources/agent-browser-linux-x64"
-               "resources/bin/orca-wayland-clipboard"
-               "resources/node_modules/@parcel/watcher-linux-x64-glibc/watcher.node"
-               "resources/node_modules/node-pty/build/Release/pty.node"
-               "resources/node_modules/node-pty/bin/linux-x64-148/node-pty.node"
-               "resources/node_modules/sherpa-onnx-linux-x64/sherpa-onnx.node"
-               "resources/node_modules/sherpa-onnx-linux-x64/libonnxruntime.so"
-               "resources/node_modules/sherpa-onnx-linux-x64/libsherpa-onnx-c-api.so"
-               "resources/node_modules/sherpa-onnx-linux-x64/libsherpa-onnx-cxx-api.so"))
+      #~(append
+         (map (lambda (file)
+                (string-append "opt/Orca/" file))
+              '("orca-ide"
+                "chrome-sandbox"
+                "chrome_crashpad_handler"
+                "libEGL.so"
+                "libGLESv2.so"
+                "libffmpeg.so"
+                "libvk_swiftshader.so"
+                "libvulkan.so.1"
+                "resources/agent-browser-linux-x64"
+                "resources/bin/orca-wayland-clipboard"
+                "resources/node_modules/@parcel/watcher-linux-x64-glibc/watcher.node"
+                "resources/node_modules/node-pty/build/Release/pty.node"
+                "resources/node_modules/node-pty/bin/linux-x64-148/node-pty.node"
+                "resources/node_modules/@koromix/koffi-linux-x64/linux_x64/koffi.node"
+                "resources/bin/orca-provider-exec"
+                "resources/bin/journal-file-lock"))
+         ;; Patching drops $ORIGIN; the ggml backends load their siblings.
+         (let ((dir "resources/node_modules/@transcribe-cpp/linux-x64-cpu-vulkan/"))
+           (map (lambda (lib)
+                  (list (string-append "opt/Orca/" dir lib)
+                        `(("out" ,(string-append "/share/orca-ide/" dir))
+                          ("out" "/share/orca-ide"))))
+                '("libtranscribe.so" "libggml.so" "libggml-base.so"
+                  "libggml-vulkan.so" "libggml-cpu-x64.so"
+                  "libggml-cpu-sse42.so" "libggml-cpu-sandybridge.so"
+                  "libggml-cpu-ivybridge.so" "libggml-cpu-piledriver.so"
+                  "libggml-cpu-haswell.so" "libggml-cpu-skylakex.so"
+                  "libggml-cpu-cannonlake.so" "libggml-cpu-cascadelake.so"
+                  "libggml-cpu-icelake.so" "libggml-cpu-cooperlake.so"
+                  "libggml-cpu-zen4.so" "libggml-cpu-alderlake.so"
+                  "libggml-cpu-sapphirerapids.so"))))
       #:install-plan
       #~'(("opt/Orca/" "/share/orca-ide")
           ("usr/share/applications/" "/share/applications")
