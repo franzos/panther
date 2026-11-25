@@ -396,7 +396,7 @@ integration with various productivity tools.")
 (define-public appflowy
   (package
     (name "appflowy")
-    (version "0.15.0")
+    (version "0.15.1")
     (source
      (origin
        (method url-fetch)
@@ -404,7 +404,7 @@ integration with various productivity tools.")
              "https://github.com/AppFlowy-IO/AppFlowy/releases/download/"
              version "/AppFlowy-" version "-linux-x86_64.deb"))
        (sha256
-        (base32 "1v8qy57zy9aygcaf1b9ldb524n3bcfc5j8ld1cb9l2m9m59fwsqq"))))
+        (base32 "01qdy7sddwywdmqirlqjsap30svv3jsyw3xgnmifbnxhpihad01m"))))
     (supported-systems '("x86_64-linux"))
     (build-system binary-build-system)
     (arguments
