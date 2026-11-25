@@ -227,7 +227,7 @@ Linux support is currently in beta.")
 (define-public chatgpt
   (package
     (name "chatgpt")
-    (version "26.1111.21308")
+    (version "26.1120.50957")
     (source
      (origin
        (method url-fetch)
@@ -241,8 +241,8 @@ Linux support is currently in beta.")
        (sha256
         (base32
          (match (or (%current-system) (%current-target-system))
-           ("x86_64-linux" "0li3an5smnyklna7qkyrnngkrsn90zibmwf27ccin2imaz2kni2b")
-           ("aarch64-linux" "09cskndmvbjcxca8hxjhh9y9v23l6g8d7bkwn8l7mvv8144smif5"))))))
+           ("x86_64-linux" "1lk4wskg1cqrmvnyjadm7cj2hxv3j1j60ajqskahy1ynjvgkiaz8")
+           ("aarch64-linux" "129xc1lmm2a37875aa43jyd6is7hg8h28nc82kswa6yj2fddn6ni"))))))
     (build-system chromium-binary-build-system)
     (arguments
      (list
@@ -280,7 +280,7 @@ Linux support is currently in beta.")
                                     arch "/" napi)
                      (string-append "resources/plugins/openai-bundled/plugins/browser/node_modules/classic-level/prebuilds/linux-"
                                     arch "/" level)
-                     (string-append "resources/plugins/openai-bundled/plugins/chrome/node_modules/classic-level/prebuilds/linux-"
+                     (string-append "resources/cua_node/lib/node_modules/classic-level/prebuilds/linux-"
                                     arch "/" level)
                      (string-append "resources/plugins/openai-bundled/plugins/chrome/extension-host/linux/"
                                     arch "/extension-host")
@@ -288,6 +288,8 @@ Linux support is currently in beta.")
                      "resources/cua_node/bin/node_repl"
                      (string-append "resources/cua_node/lib/node_modules/.bin/sky_linux_" arch)
                      (string-append "resources/cua_node/lib/node_modules/@oai/sky/bin/linux/sky_linux_"
+                                    arch)
+                     (string-append "resources/cua_node/lib/node_modules/@oai/cua/bin/linux/sky_linux_"
                                     arch)
                      (string-append "resources/cua_node/lib/node_modules/@img/sharp-libvips-linux-"
                                     arch "/lib/libvips-cpp.so.8.18.7")
