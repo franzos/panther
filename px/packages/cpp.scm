@@ -333,8 +333,8 @@ backends.")
                    (delete-file-recursively "src/gumbo"))))))))
 
 (define-public litebrowser
-  (let ((commit "af87f9b7616b5c4f4340b56486071a127360605f")
-        (revision "1"))
+  (let ((commit "c88503501f3063e6f0cce0f4b993a0169043cf3f")
+        (revision "2"))
     (package
       (name "litebrowser")
       (version (git-version "0.0.0" revision commit))
@@ -347,11 +347,13 @@ backends.")
                (recursive? #t)))
          (file-name (git-file-name name version))
          (sha256
-          (base32 "0a94j3gqvp3yrg1wli5s1jnwirx3grfqxp786l8vvpp6gbz6gswv"))))
+          (base32 "0xi8p6ivf893v17dvk1a1rkbliz1sgnd3wib2m8frdp917vlvna5"))))
       (build-system cmake-build-system)
       (arguments
        (list
         #:tests? #f
+        ;; render2png is unused by litebrowser and needs GTK 3.
+        #:configure-flags #~(list "-DLITEHTML_BUILD_RENDER2PNG=OFF")
         #:phases
         #~(modify-phases %standard-phases
             (add-after 'install 'install-binary
