@@ -29,13 +29,14 @@
 (define-public chkrootkit
   (package
     (name "chkrootkit")
-    (version "0.59")
+    (version "0.60")
     (source
      (origin
        (method url-fetch)
-       (uri "ftp://ftp.chkrootkit.org/pub/seg/pac/chkrootkit.tar.gz")
+       (uri (string-append "ftp://ftp.chkrootkit.org/pub/seg/pac/chkrootkit-"
+                           version ".tar.gz"))
        (sha256
-        (base32 "1vn5r35iai62v9vp7x8x23fdgh7pinw6pbf7v1nsm8j3ypbz2f5x"))))
+        (base32 "0a6yqp2y3x04baxgw41hz0ydx9fnhmglx6k2ik99svcxz4kx4hxz"))))
     (build-system gnu-build-system)
     (arguments
      (list
