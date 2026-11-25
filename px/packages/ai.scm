@@ -90,7 +90,7 @@ handle entire workflows.  This package disables auto-updates.")
 (define-public opencode
   (package
     (name "opencode")
-    (version "1.19.5")
+    (version "1.19.6")
     (source
      (origin
        (method url-fetch)
@@ -98,7 +98,7 @@ handle entire workflows.  This package disables auto-updates.")
              "https://github.com/anomalyco/opencode/releases/download/v"
              version "/opencode-linux-x64.tar.gz"))
        (sha256
-        (base32 "0yk4q4zfyl9ndkbg635dz8z4b7b7dyr2a0izdgrrsfzs6sii10sq"))))
+        (base32 "0mx014nkjh102893l8a3lx5asxpdxsgnvyxzl0icqc4bjq44wws7"))))
     (build-system binary-build-system)
     (arguments
      (list
