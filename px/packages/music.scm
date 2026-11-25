@@ -223,7 +223,7 @@ Discord integration, and media key support.")
 (define-public spotifast
   (package
     (name "spotifast")
-    (version "0.17.1")
+    (version "0.17.2")
     (source
      (origin
        (method git-fetch)
@@ -232,7 +232,7 @@ Discord integration, and media key support.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0262kli2vl13011y9vm9gd80l6sadhdwazsgks829igl7cb6j4p8"))))
+        (base32 "0a1wln504mcgxrqs1dvs60sqn5w2vq3l5978dwrpd870n5n1ihvi"))))
     (build-system cargo-build-system)
     (arguments
      (list
@@ -258,7 +258,7 @@ Discord integration, and media key support.")
                       (dst (string-append "guix-git/" repo)))
                   (copy-recursively src dst #:keep-permissions? #f)))
               (checkout "egui" "rust-egui-0.36.2")
-              (checkout "fastframe" "rust-fastframe-text-0.15.4")
+              (checkout "fastframe" "rust-fastframe-text-0.16.1")
               (checkout "winit" "rust-winit-0.30.13")
               (checkout "librespot" "rust-librespot-core-0.8.0")
               (checkout "hyper-proxy2" "rust-hyper-proxy2-0.1.0")
