@@ -683,14 +683,14 @@ project it finds.")
 (define-public cargo-deny
   (package
     (name "cargo-deny")
-    (version "0.21.0")
+    (version "0.22.1")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "cargo-deny" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "1db9nb8l44a09yrmq03gz3bz6ngzraj5y9cwb93dq0xb1387l58z"))))
+        (base32 "0rc3pgh77jpwkjsl0mixs6ljds3b5gcamlx46ilbmgmxq8315ggd"))))
     (build-system cargo-build-system)
     (arguments
      (list
