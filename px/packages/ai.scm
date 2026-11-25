@@ -456,7 +456,7 @@ Chromium runtime for the Guix store.")
 (define-public maple
   (package
     (name "maple")
-    (version "3.4.8")
+    (version "3.4.10")
     (source
      (origin
        (method url-fetch)
@@ -464,7 +464,7 @@ Chromium runtime for the Guix store.")
              "https://github.com/MaplePrivacyLabs/Maple/releases/download/v"
              version "/Maple_" version "_amd64.deb"))
        (sha256
-        (base32 "0p1cpx62c5ay2d9fs9glyxnw1f3ky7vv6ivrdk8z8sypj77jcjgp"))))
+        (base32 "1pzi0sw9l81nv0r8rsfbzqaylh0zppvh7y2757y9smwv29gd48ws"))))
     (supported-systems '("x86_64-linux"))
     (build-system binary-build-system)
     (arguments
