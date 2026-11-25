@@ -488,14 +488,14 @@ reconciles the system to a desired provider state (@code{none}, @code{mullvad},
 (define-public oha
   (package
     (name "oha")
-    (version "1.16.0")
+    (version "1.17.0")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "oha" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "15m4y0lc34bh87nvvn95j1pc0s72yiqk2xcwzps9qrdiwhp8rnmq"))))
+        (base32 "1a1avipxf0k0z13ghhak50i9sgzdwk7w0yp9rf7bk4iqphybad0q"))))
     (build-system cargo-build-system)
     (arguments
      `(#:install-source? #f
