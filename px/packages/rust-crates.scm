@@ -43694,7 +43694,7 @@
                       rust-proc-macro2-1.0.107
                       rust-quinn-0.11.11
                       rust-quinn-proto-0.11.19
-                      rust-quinn-udp-0.5.15
+                      rust-quinn-udp-0.5.16
                       rust-quote-1.0.47
                       rust-r-efi-6.0.0
                       rust-rand-0.10.2
@@ -43710,7 +43710,7 @@
                       rust-rusqlite-0.41.1
                       rust-rustc-hash-2.1.3
                       rust-rustc-version-0.4.1
-                      rust-rustix-1.1.4
+                      rust-rustix-1.1.6
                       rust-rustls-0.23.46
                       rust-rustls-native-certs-0.8.4
                       rust-rustls-pki-types-1.15.1
