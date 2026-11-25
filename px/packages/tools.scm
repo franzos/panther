@@ -505,14 +505,14 @@ Service, and it includes AI agent skills.")
 (define-public google-cloud-cli
   (package
     (name "google-cloud-cli")
-    (version "593.0.0")
+    (version "594.0.1")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "https://storage.googleapis.com/cloud-sdk-release/"
                            "google-cloud-cli-" version "-linux-x86_64.tar.gz"))
        (sha256
-        (base32 "09mqss69jmy9s2dpzx2m6zskg52iq134a4kgrwgzf4n7adsjphs2"))))
+        (base32 "079avwc0kbirrz8ngndgkk7sy21d25laaxq2z18qahiq0vyriiwg"))))
     (build-system copy-build-system)
     (arguments
      (list
