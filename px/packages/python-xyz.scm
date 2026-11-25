@@ -475,13 +475,13 @@ the CSS counterpart to jsbeautifier.")
 (define-public djlint
   (package
     (name "djlint")
-    (version "1.50.0")
+    (version "1.54.0")
     (source
      (origin
        (method url-fetch)
        (uri (pypi-uri "djlint" version))
        (sha256
-        (base32 "1mdyk5dfj3p18rf3pgy7pnjrd90vcwygx58289v5g77q4wfwhszz"))))
+        (base32 "06zhk4p2ajipgy6macpqnkgnkg39fh0xc5ayb4h2rxqs2lzbi1i0"))))
     (build-system pyproject-build-system)
     (arguments
      (list
