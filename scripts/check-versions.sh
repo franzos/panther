@@ -267,7 +267,9 @@ compare() {
     else
         printf "  ${RED}%-30s %s -> %s${NC}\n" "$name" "$current" "$latest"
         outdated=$((outdated + 1))
-        [ "$TSV" = 1 ] && printf '%s\t%s\t%s\toutdated\t\n' "$name" "$current" "$latest" >&3
+        if [ "$TSV" = 1 ]; then
+            printf '%s\t%s\t%s\toutdated\t\n' "$name" "$current" "$latest" >&3
+        fi
     fi
 }
 
@@ -460,6 +462,7 @@ gh_release "shiftkey/desktop" "github-desktop"
 gh_release "reviu-dev/reviu" "reviu"
 gh_release "MaplePrivacyLabs/Maple" "maple"
 gh_release "anomalyco/opencode" "opencode"
+gh_release "stablyai/orca" "orca-ide"
 echo ""
 
 # --- Source Builds (GitHub) ---
@@ -574,6 +577,8 @@ gh_release "strongswan/strongswan" "strongswan"
 gh_release "hfg-gmuend/openmoji" "font-openmoji"
 gh_release "danielrobbins/keychain" "keychain"
 gh_release "inotify-tools/inotify-tools" "inotify-tools"
+gh_release "LadybirdBrowser/ladybird" "ladybird"
+gh_release "duxlabs-dev/dux-shell" "dux-shell"
 # hunspell-dict-en and -en-us take their version from scowl-hunspell-dictionary.
 compare "hunspell-dict-en" \
     "$(grep -A4 '^(define (scowl-hunspell-dictionary' "$PKG_DIR/document.scm" | grep -oP '\(version "\K[^"]+')" \
@@ -593,6 +598,7 @@ crate_release "netavark"
 crate_release "aardvark-dns"
 crate_release "crunch-app" "crunch"
 crate_release "cargo-sweep"
+crate_release "cargo-deny"
 echo ""
 
 # --- Other APIs (npm, GitLab, Forgejo) ---
@@ -621,7 +627,9 @@ manual() {
     [ -z "$current" ] && return
     checked=$((checked + 1))
     printf "  ${YELLOW}%-30s %-14s %s${NC}\n" "$pkg" "$current" "$url"
-    [ "$TSV" = 1 ] && printf '%s\t%s\t\tmanual\t%s\n' "$pkg" "$current" "$url" >&3
+    if [ "$TSV" = 1 ]; then
+        printf '%s\t%s\t\tmanual\t%s\n' "$pkg" "$current" "$url" >&3
+    fi
 }
 
 manual "claude-desktop"  "https://claude.ai/download (apt index returns 403; only the pool debs are public)"
