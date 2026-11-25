@@ -160,17 +160,17 @@ optimizations (thinLTO, PGO, AVX2), all codecs enabled (including HEVC), Widevin
 DRM support, and VA-API hardware video acceleration patches.")
     (license license:bsd-3)))
 
-(define ladybird-commit "4e9acf4c02ca23239fe32224a303dcea4614562b")
+(define ladybird-commit "0be55a57cc07ed258362c631a13a10bb4f6d707a")
 
 (define ladybird-source
   (origin
     (method git-fetch)
     (uri (git-reference
           (url "https://github.com/LadybirdBrowser/ladybird")
-          (commit "2026.47.7")))
-    (file-name (git-file-name "ladybird" "2026.47.7"))
+          (commit "2026.47.8")))
+    (file-name (git-file-name "ladybird" "2026.47.8"))
     (sha256
-     (base32 "0048xigghx1770nhwsizkicp44ljf11pps68zw8w1v406517l8k5"))))
+     (base32 "1l490jh24hmamh2qhqh2p4rhl17pmlv4g7vri0c0gyw8c922b318"))))
 
 (define-public zmij
   (package
@@ -643,7 +643,7 @@ with only the decoders and parsers Ladybird uses.  Its libraries carry a
 (define-public ladybird
   (package
     (name "ladybird")
-    (version "2026.47.7")
+    (version "2026.47.8")
     (source ladybird-source)
     (build-system qt-build-system)
     (arguments
