@@ -2525,6 +2525,10 @@
   (crate-source "brotli" "9.1.1"
                 "10ax9w52cmnlw96lv7mn00cj7ldd836hzac7w3yfmw3q0pxpqyv2"))
 
+(define rust-brotli-9.1.2
+  (crate-source "brotli" "9.1.2"
+                "1p07i8wy0bh212vbmqj86ijql2sqm7259592az0znz2ghm7i9q05"))
+
 (define rust-brotli-9.1.3
   (crate-source "brotli" "9.1.3"
                 "04qaj60msilmczfch5m260prws77bppsmavmsqvlzw3qxn2z4wch"))
@@ -2652,6 +2656,10 @@
 (define rust-bumpalo-3.20.3
   (crate-source "bumpalo" "3.20.3"
                 "0jc6va3nwcqikm7chnpdv1s87my3gs2j7g1sc7g3k91brg3arxbj"))
+
+(define rust-bumpalo-3.20.4
+  (crate-source "bumpalo" "3.20.4"
+                "1nrq69ym33pmydashsxw1447a0r3v1q87drch9xzpchyzmkcz847"))
 
 (define rust-by-address-1.2.1
   (crate-source "by_address" "1.2.1"
@@ -3093,6 +3101,10 @@
 (define rust-cc-1.11.1
   (crate-source "cc" "1.11.1"
                 "0mgicvynjmz4xan2nbdi1dr62pjqb9kikml0j21qq3zzdw9aiwjg"))
+
+(define rust-cc-1.11.2
+  (crate-source "cc" "1.11.2"
+                "0i8xv6psbly5zn2vpmv283cnl402jwlw3x6gjmx5r92lh4z9xvrk"))
 
 (define rust-cc-1.2.10
   (crate-source "cc" "1.2.10"
@@ -19416,6 +19428,10 @@
   (crate-source "lz4_flex" "0.13.1"
                 "0zmrvmrcwnwgypldakvca19z5a2a11wch3dhds1giy39hvnx9w3y"))
 
+(define rust-lz4-flex-0.13.2
+  (crate-source "lz4_flex" "0.13.2"
+                "1r9dbl7h7b9d28pn3ix7dlizdrzv7s702p1v2asdpi6k5bypw0ka"))
+
 (define rust-lzma-rs-0.3.0
   (crate-source "lzma-rs" "0.3.0"
                 "0phif4pnjrn28zcxgz3a7z86hhx5gdajmkrndfw4vrkahd682zi9"))
@@ -20102,6 +20118,10 @@
 (define rust-mio-1.2.4
   (crate-source "mio" "1.2.4"
                 "1vl6px9zy0pwhlwnw3cknsqyzkg8bcpiwiq4cgicf2fwgywfv20p"))
+
+(define rust-mio-1.2.5
+  (crate-source "mio" "1.2.5"
+                "0jlwrib8a3yp5h4j9s8z6qyh9k50lp8fjh38rmrsbc027y81lli0"))
 
 (define rust-miow-0.5.0
   (crate-source "miow" "0.5.0"
@@ -24883,6 +24903,10 @@
 (define rust-redb-4.5.0
   (crate-source "redb" "4.5.0"
                 "16x3j9zf1ypvs2ch579d95f16jljmwp57axzxy8n13z1h7v7wccb"))
+
+(define rust-redb-4.6.0
+  (crate-source "redb" "4.6.0"
+                "1vrm0piah5qz2p1lv98ff75ynwyzxapkma96b8m9qg05xkaissq9"))
 
 (define rust-redox-syscall-0.2.16
   (crate-source "redox_syscall" "0.2.16"
@@ -36096,6 +36120,10 @@
   (crate-source "xxhash-rust" "0.8.19"
                 "1xvsfnqr67nkji3dczj3m8l4n9pz9fwc7maj7hwnlj321f9jn2jm"))
 
+(define rust-xxhash-rust-0.8.21
+  (crate-source "xxhash-rust" "0.8.21"
+                "1mgs121s7ji96jgqb39pzj55g4ni1a203v311p0bqgjjpcyi5pj0"))
+
 (define rust-y4m-0.8.0
   (crate-source "y4m" "0.8.0"
                 "0j24y2zf60lpxwd7kyg737hqfyqx16y32s0fjyi6fax6w4hlnnks"))
@@ -38932,10 +38960,10 @@
                rust-block-buffer-0.12.1
                rust-bon-3.10.3
                rust-bon-macros-3.10.3
-               rust-brotli-9.1.1
+               rust-brotli-9.1.2
                rust-brotli-decompressor-6.3.1
                rust-bstr-1.13.1
-               rust-bumpalo-3.20.3
+               rust-bumpalo-3.20.4
                rust-bytecount-0.6.9
                rust-bytemuck-1.25.2
                rust-byteorder-1.5.0
@@ -38946,7 +38974,7 @@
                rust-cargo-platform-0.1.9
                rust-cargo-metadata-0.14.2
                rust-cast-0.3.0
-               rust-cc-1.11.1
+               rust-cc-1.11.2
                rust-census-0.4.2
                rust-cfg-if-1.0.5
                rust-cfg-aliases-0.2.2
@@ -39135,7 +39163,7 @@
                rust-lru-cache-0.1.2
                rust-lru-slab-0.1.3
                rust-lsm-tree-3.1.10
-               rust-lz4-flex-0.13.1
+               rust-lz4-flex-0.13.2
                rust-mail-auth-0.12.1
                rust-mail-builder-0.4.4
                rust-mail-builder-0.5.0
@@ -39153,7 +39181,7 @@
                rust-mime-guess-2.0.5
                rust-minimal-lexical-0.2.1
                rust-miniz-oxide-0.9.1
-               rust-mio-1.2.4
+               rust-mio-1.2.5
                rust-moka-0.12.16
                rust-multer-3.1.0
                rust-multiversion-no-op-1.0.0
@@ -39265,7 +39293,7 @@
                rust-rcgen-0.14.10
                rust-redb-1.5.1
                rust-redb-2.6.4
-               rust-redb-4.5.0
+               rust-redb-4.6.0
                rust-redox-syscall-0.5.18
                rust-regex-1.13.1
                rust-regex-automata-0.4.18
@@ -39290,7 +39318,7 @@
                rust-rustls-pki-types-1.16.0
                rust-rustls-platform-verifier-0.7.1
                rust-rustls-platform-verifier-android-0.2.0
-               rust-rustls-webpki-0.103.16
+               rust-rustls-webpki-0.103.17
                rust-rustversion-1.0.23
                rust-ryu-1.0.23
                rust-same-file-1.0.6
@@ -39477,7 +39505,7 @@
                rust-wit-bindgen-0.57.1
                rust-writeable-0.6.4
                rust-x509-parser-0.18.1
-               rust-xxhash-rust-0.8.19
+               rust-xxhash-rust-0.8.21
                rust-yasna-0.6.0
                rust-yoke-0.8.4
                rust-yoke-derive-0.8.4
