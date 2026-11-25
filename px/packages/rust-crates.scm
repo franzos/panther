@@ -13171,6 +13171,10 @@
     (file-name (git-file-name "rust-heic-rs" "0.1.4.5a8e714"))
     (sha256 (base32 "1i1s05nwvaj2grqyb3hwcn039bmrdw1fphhcqr3i4kldqhxjml65"))))
 
+(define rust-heic-rs-0.1.5
+  (crate-source "heic-rs" "0.1.5"
+                "0j66l02vbyb9m5k07x2ay2nsw8fz43mq0y11g98cnbgskal1b6yl"))
+
 (define rust-hermit-abi-0.1.19
   (crate-source "hermit-abi" "0.1.19"
                 "0cxcm8093nf5fyn114w8vxbrbcyvv91d4015rdnlgfll7cs6gd32"))
@@ -52225,7 +52229,7 @@
                       rust-hashbrown-0.17.1
                       rust-hayro-jpeg2000-0.3.5
                       rust-heck-0.5.0
-                      rust-heic-rs-0.1.4.5a8e714
+                      rust-heic-rs-0.1.5
                       rust-hermit-abi-0.5.3
                       rust-hex-0.4.3
                       rust-iana-time-zone-0.1.65

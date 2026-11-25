@@ -253,12 +253,12 @@ images.")
 
 (define-public oculante-next
   ;; Development branch tracking the egui 0.36 / Rust 2024 rewrite.
-  (let ((revision "1")
-        (commit "be5f790fc2de9a7eeb52928c412a515c0f0cd4f7"))
+  (let ((revision "0")
+        (commit "b4ba8c18919a41ea90060d411461e970d527b77e"))
     (package
       (inherit oculante)
       (name "oculante-next")
-      (version (git-version "1.0.0-rc.3" revision commit))
+      (version (git-version "1.0.0-rc.4" revision commit))
       (source
        (origin
          (method git-fetch)
@@ -267,7 +267,7 @@ images.")
                (commit commit)))
          (file-name (git-file-name name version))
          (sha256
-          (base32 "1n0q3s1aw9j9gz3mqjqmzy6yxiq70hlf213xhb03382inmilbq6q"))))
+          (base32 "0ygmqswcnh0gbra5a03fkmchhz6bb1pd73vnks580yhf2sbiy0p7"))))
       (arguments
        `(#:install-source? #f
          #:tests? #f
@@ -285,7 +285,7 @@ images.")
                     (substitute* "Cargo.toml"
                       (((string-append "^" crate " = \\{ git = [^}]+\\}"))
                        (string-append crate " = { path = \"" dir "\" }")))))
-                '("heic-rs" "avif-parse"))))
+                '("avif-parse"))))
            (add-before 'build 'set-cmake-policy
              (lambda _
                ;; Workaround for bundled glslang having old cmake_minimum_required
