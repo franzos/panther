@@ -32,3 +32,17 @@ Configurations built on upstream `%desktop-services` don't get the fix. Use `gdm
 ```
 
 **Remove when:** upstream GDM shows the login prompt again without the patch. Delete the three pieces above and this entry.
+
+## GDM doesn't start on MATE and LXQt
+
+- **Since:** Guix commit `c5157bf58bc` (2026-11-18), `gnome-session-shepherd` 1.2
+- **Affects:** any system that uses GDM without `gsettings-desktop-schemas` in the system profile; GNOME, KDE Plasma and Xfce bring it themselves
+- **Upstream report:** none yet
+
+The machine boots to the tty1 login prompt and the keyboard does nothing, because GDM has crashed on tty7. `/var/log/gdm/greeter.log` says `Settings schema 'org.gnome.desktop.session' is not installed`.
+
+`gnome-session-shepherd` reads that schema when it starts the greeter, but its wrapper doesn't put `gsettings-desktop-schemas` on `XDG_DATA_DIRS`, so it only finds it when the system profile happens to carry it.
+
+**Workaround in this channel:** the patched `gnome-session-shepherd` behind `gdm/greeter-mode` (`px/packages/gnome.scm`) adds the schemas to its wrappers. On upstream `%desktop-services`, either use `gdm/greeter-mode` as shown above or add `gsettings-desktop-schemas` to the system packages.
+
+**Remove when:** upstream `gnome-session-shepherd` finds its schemas by itself. Delete the `wrap-schemas` phase and this entry.
